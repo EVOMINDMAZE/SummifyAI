@@ -14,6 +14,12 @@ export default {
     },
     extend: {
       colors: {
+        // SummifyAI brand colors
+        brand: {
+          yellow: "#FFFD63",
+          "yellow-dark": "#E6E459",
+          "yellow-light": "#FFFF8A",
+        },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

@@ -24,11 +24,13 @@ export default function Index() {
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
       <div className="bg-[#FFFD63] relative">
-        <div className="max-w-6xl mx-auto px-6 pt-20 pb-32">
+        <div className="max-w-6xl mx-auto px-6 pt-20 pb-32 -mb-1">
           <div className="text-center">
             {/* Main Heading */}
             <h1 className="text-5xl md:text-7xl font-black text-[#0A0B1E] leading-tight mb-8">
-              Get instant book summaries.
+              <span className="-mt-0.5 inline-block">
+                Get instant book summaries.
+              </span>
               <br />
               <span className="text-[#0A0B1E]">Discover better insights.</span>
             </h1>
@@ -115,7 +117,7 @@ export default function Index() {
         </div>
 
         {/* Large Quote */}
-        <div className="max-w-5xl mx-auto px-6 py-20 text-center">
+        <div className="max-w-5xl mx-auto px-6 pt-12 pb-20 text-center">
           <div className="relative">
             <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 w-32 h-8 bg-[#FFFD63] rounded-full"></div>
             <h2 className="text-4xl md:text-5xl font-normal text-[#0A0B1E] leading-tight relative z-10">

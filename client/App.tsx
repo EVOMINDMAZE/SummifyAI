@@ -30,8 +30,9 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <AuthProvider>
-        <BrowserRouter>
+            <ThemeProvider>
+        <AuthProvider>
+          <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/signin" element={<SignIn />} />
@@ -43,7 +44,7 @@ const App = () => (
             <Route path="/how-it-works" element={<HowItWorks />} />
             <Route path="/insights-demo" element={<InsightsDemo />} />
             <Route path="/results" element={<Results />} />
-            <Route path="/account-settings" element={<AccountSettings />} />
+                                    <Route path="/account-settings" element={<AccountSettings />} />
             <Route path="/summary-showcase" element={<SummaryShowcase />} />
             <Route path="/library-showcase" element={<LibraryShowcase />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

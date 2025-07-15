@@ -80,10 +80,11 @@ export default function Index() {
                   </Link>
                   <Link
                     to="/signin"
-                    className="text-[#0A0B1E] hover:text-[#0A0B1E]/80 font-medium"
+                    className="text-[#0A0B1E] dark:text-white hover:text-[#0A0B1E]/80 dark:hover:text-white/80 font-medium"
                   >
                     Sign In
                   </Link>
+                  <ThemeToggle />
                   <Link
                     to="/signup"
                     className="bg-[#0A0B1E] hover:bg-[#0A0B1E]/90 text-[#FFFD63] px-4 py-2 rounded-lg font-medium transition-colors"

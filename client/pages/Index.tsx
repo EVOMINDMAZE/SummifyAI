@@ -147,9 +147,12 @@ export default function Index() {
                     and our AI searches through thousands of books to find the
                     most relevant ones with high-quality content.
                   </p>
-                  <button className="bg-blue-200 hover:bg-blue-300 text-[#0A0B1E] px-6 py-3 rounded-xl font-medium transition-colors border-2 border-[#0A0B1E]">
+                  <Link
+                    to="/how-it-works"
+                    className="bg-blue-200 hover:bg-blue-300 text-[#0A0B1E] px-6 py-3 rounded-xl font-medium transition-colors border-2 border-[#0A0B1E] inline-block"
+                  >
                     Learn more
-                  </button>
+                  </Link>
                 </div>
                 <div className="flex justify-center">
                   <div className="w-80 h-80 bg-gradient-to-br from-blue-200 to-blue-300 rounded-2xl flex items-center justify-center border-2 border-dashed border-blue-400">
@@ -212,9 +215,12 @@ export default function Index() {
                     contrasting opinions, and synthesizes them into coherent
                     comparisons.
                   </p>
-                  <button className="bg-green-200 hover:bg-green-300 text-[#0A0B1E] px-6 py-3 rounded-xl font-medium transition-colors border-2 border-[#0A0B1E]">
+                  <Link
+                    to="/insights-demo"
+                    className="bg-green-200 hover:bg-green-300 text-[#0A0B1E] px-6 py-3 rounded-xl font-medium transition-colors border-2 border-[#0A0B1E] inline-block"
+                  >
                     Show me the insights
-                  </button>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -239,9 +245,12 @@ export default function Index() {
                     Amazon purchase links, and actionable takeaways—all from one
                     beautiful interface.
                   </p>
-                  <button className="bg-orange-200 hover:bg-orange-300 text-[#0A0B1E] px-6 py-3 rounded-xl font-medium transition-colors border-2 border-[#0A0B1E]">
+                  <Link
+                    to="/results"
+                    className="bg-orange-200 hover:bg-orange-300 text-[#0A0B1E] px-6 py-3 rounded-xl font-medium transition-colors border-2 border-[#0A0B1E] inline-block"
+                  >
                     Take a look
-                  </button>
+                  </Link>
                 </div>
                 <div className="flex justify-center">
                   <div className="w-80 h-80 bg-gradient-to-br from-orange-200 to-orange-300 rounded-2xl flex items-center justify-center border-2 border-dashed border-orange-400">
@@ -306,9 +315,12 @@ export default function Index() {
                     Build your personal library and help friends discover great
                     books.
                   </p>
-                  <button className="bg-pink-200 hover:bg-pink-300 text-[#0A0B1E] px-6 py-3 rounded-xl font-medium transition-colors border-2 border-[#0A0B1E]">
+                  <Link
+                    to="/team-workspace"
+                    className="bg-pink-200 hover:bg-pink-300 text-[#0A0B1E] px-6 py-3 rounded-xl font-medium transition-colors border-2 border-[#0A0B1E] inline-block"
+                  >
                     Create workspace
-                  </button>
+                  </Link>
                 </div>
               </div>
             </div>

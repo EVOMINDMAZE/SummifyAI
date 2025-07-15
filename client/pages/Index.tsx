@@ -35,12 +35,37 @@ export default function Index() {
             </span>
           </div>
           <div className="flex items-center gap-4">
-            <button className="text-gray-600 hover:text-gray-900 font-medium">
-              Sign in
-            </button>
-            <button className="bg-yellow-400 hover:bg-yellow-500 text-black px-4 py-2 rounded-lg font-medium transition-colors">
-              Get Started
-            </button>
+            {user ? (
+              <>
+                <Link
+                  to="/dashboard"
+                  className="text-gray-600 hover:text-gray-900 font-medium"
+                >
+                  Dashboard
+                </Link>
+                <Link
+                  to="/generate"
+                  className="bg-yellow-400 hover:bg-yellow-500 text-black px-4 py-2 rounded-lg font-medium transition-colors"
+                >
+                  Generate Summary
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/signin"
+                  className="text-gray-600 hover:text-gray-900 font-medium"
+                >
+                  Sign in
+                </Link>
+                <Link
+                  to="/signup"
+                  className="bg-yellow-400 hover:bg-yellow-500 text-black px-4 py-2 rounded-lg font-medium transition-colors"
+                >
+                  Get Started
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </nav>

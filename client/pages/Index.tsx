@@ -192,7 +192,10 @@ export default function Index() {
         {/* Demo Section */}
         <div className="relative -mb-20">
           <div className="max-w-4xl mx-auto px-6">
-                        <div className="bg-gradient-to-br from-yellow-100 to-orange-100 rounded-3xl shadow-2xl border border-yellow-200" style={{padding: \"22px 40px 40px\", marginBottom: \"-2px\"}}>
+            <div
+              className="bg-gradient-to-br from-yellow-100 to-orange-100 rounded-3xl shadow-2xl border border-yellow-200"
+              style={{ padding: "22px 40px 40px", marginBottom: "-2px" }}
+            >
               <div className="flex items-center justify-center">
                 <button className="flex items-center gap-4 bg-white px-8 py-4 rounded-full shadow-lg hover:shadow-xl transition-shadow">
                   <div className="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center">

@@ -30,7 +30,7 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-            <ThemeProvider>
+                  <ThemeProvider>
         <AuthProvider>
           <BrowserRouter>
           <Routes>

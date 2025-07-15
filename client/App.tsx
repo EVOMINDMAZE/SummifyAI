@@ -49,6 +49,8 @@ const App = () => (
               <Route path="/account-settings" element={<AccountSettings />} />
               <Route path="/summary-showcase" element={<SummaryShowcase />} />
               <Route path="/library-showcase" element={<LibraryShowcase />} />
+              <Route path="/settings" element={<Settings />} />
+              <Route path="/support" element={<Support />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

@@ -42,13 +42,13 @@ export default function Index() {
                 <>
                   <Link
                     to="/dashboard"
-                    className="text-[#0A0B1E] hover:text-[#0A0B1E]/80 font-medium"
+                    className="text-[#0A0B1E] dark:text-white hover:text-[#0A0B1E]/80 dark:hover:text-white/80 font-medium"
                   >
                     Dashboard
                   </Link>
                   <Link
                     to="/generate"
-                    className="text-[#0A0B1E] hover:text-[#0A0B1E]/80 font-medium"
+                    className="text-[#0A0B1E] dark:text-white hover:text-[#0A0B1E]/80 dark:hover:text-white/80 font-medium"
                   >
                     Generate
                   </Link>
@@ -70,13 +70,13 @@ export default function Index() {
                 <>
                   <Link
                     to="/how-it-works"
-                    className="text-[#0A0B1E] hover:text-[#0A0B1E]/80 font-medium"
+                    className="text-[#0A0B1E] dark:text-white hover:text-[#0A0B1E]/80 dark:hover:text-white/80 font-medium"
                   >
                     How it Works
                   </Link>
                   <Link
                     to="/pricing"
-                    className="text-[#0A0B1E] hover:text-[#0A0B1E]/80 font-medium"
+                    className="text-[#0A0B1E] dark:text-white hover:text-[#0A0B1E]/80 dark:hover:text-white/80 font-medium"
                   >
                     Pricing
                   </Link>
@@ -232,11 +232,21 @@ export default function Index() {
         {/* Logo Section */}
         <div className="py-16 overflow-hidden">
           <div className="flex items-center justify-center gap-12 opacity-60">
-            <span className="text-2xl font-bold text-gray-400">AMAZON</span>
-            <span className="text-2xl font-bold text-gray-400">GOODREADS</span>
-            <span className="text-2xl font-bold text-gray-400">PENGUIN</span>
-            <span className="text-2xl font-bold text-gray-400">HARPER</span>
-            <span className="text-2xl font-bold text-gray-400">MACMILLAN</span>
+            <span className="text-2xl font-bold text-gray-400 dark:text-gray-500">
+              AMAZON
+            </span>
+            <span className="text-2xl font-bold text-gray-400 dark:text-gray-500">
+              GOODREADS
+            </span>
+            <span className="text-2xl font-bold text-gray-400 dark:text-gray-500">
+              PENGUIN
+            </span>
+            <span className="text-2xl font-bold text-gray-400 dark:text-gray-500">
+              HARPER
+            </span>
+            <span className="text-2xl font-bold text-gray-400 dark:text-gray-500">
+              MACMILLAN
+            </span>
           </div>
         </div>
 
@@ -246,9 +256,9 @@ export default function Index() {
           style={{ padding: "15px 30px 100px" }}
         >
           <div className="relative">
-            <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 w-32 h-8 bg-[#FFFD63] rounded-full"></div>
+            <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 w-32 h-8 bg-[#FFFD63] dark:bg-yellow-500 rounded-full"></div>
             <h2
-              className="text-4xl md:text-5xl font-normal text-[#0A0B1E] leading-tight relative z-10"
+              className="text-4xl md:text-5xl font-normal text-[#0A0B1E] dark:text-white leading-tight relative z-10"
               style={{ paddingTop: "23px" }}
             >
               All your favorite books in one place. Stop reading everything
@@ -262,31 +272,31 @@ export default function Index() {
           {/* Search Section */}
           <div className="relative">
             <div className="absolute -top-12 left-0 transform -rotate-12">
-              <h3 className="text-8xl font-black text-[#0A0B1E] opacity-20">
+              <h3 className="text-8xl font-black text-[#0A0B1E] dark:text-white opacity-20">
                 Search.
               </h3>
             </div>
-            <div className="bg-blue-100 rounded-3xl p-12 relative overflow-hidden">
+            <div className="bg-blue-100 dark:bg-blue-900/30 rounded-3xl p-12 relative overflow-hidden">
               <div className="grid lg:grid-cols-2 gap-12 items-center">
                 <div>
-                  <h4 className="text-3xl font-bold text-[#0A0B1E] mb-6">
+                  <h4 className="text-3xl font-bold text-[#0A0B1E] dark:text-white mb-6">
                     Find books that practically teach themselves
                   </h4>
-                  <p className="text-lg text-[#0A0B1E]/70 mb-8 leading-relaxed">
+                  <p className="text-lg text-[#0A0B1E]/70 dark:text-gray-300 mb-8 leading-relaxed">
                     Smart discovery leads to better outcomes. Enter any topic
                     and our AI searches through thousands of books to find the
                     most relevant ones with high-quality content.
                   </p>
                   <Link
                     to="/how-it-works"
-                    className="bg-blue-200 hover:bg-blue-300 text-[#0A0B1E] px-6 py-3 rounded-xl font-medium transition-colors border-2 border-[#0A0B1E] inline-block"
+                    className="bg-blue-200 dark:bg-blue-700 hover:bg-blue-300 dark:hover:bg-blue-600 text-[#0A0B1E] dark:text-white px-6 py-3 rounded-xl font-medium transition-colors border-2 border-[#0A0B1E] dark:border-white inline-block"
                   >
                     Learn more
                   </Link>
                 </div>
                 <div className="flex justify-center">
-                  <div className="w-80 h-80 bg-gradient-to-br from-blue-200 to-blue-300 rounded-2xl flex items-center justify-center border-2 border-dashed border-blue-400">
-                    <div className="text-center text-blue-600">
+                  <div className="w-80 h-80 bg-gradient-to-br from-blue-200 to-blue-300 dark:from-blue-800 dark:to-blue-700 rounded-2xl flex items-center justify-center border-2 border-dashed border-blue-400 dark:border-blue-500">
+                    <div className="text-center text-blue-600 dark:text-blue-300">
                       <svg
                         className="w-16 h-16 mx-auto mb-4"
                         fill="currentColor"
@@ -312,15 +322,15 @@ export default function Index() {
           {/* Analyze Section */}
           <div className="relative">
             <div className="absolute -top-12 right-0 transform rotate-12">
-              <h3 className="text-8xl font-black text-[#0A0B1E] opacity-20">
+              <h3 className="text-8xl font-black text-[#0A0B1E] dark:text-white opacity-20">
                 Analyze.
               </h3>
             </div>
-            <div className="bg-green-100 rounded-3xl p-12">
+            <div className="bg-green-100 dark:bg-green-900/30 rounded-3xl p-12">
               <div className="grid lg:grid-cols-2 gap-12 items-center">
                 <div className="order-2 lg:order-1 flex justify-center">
-                  <div className="w-80 h-80 bg-gradient-to-br from-green-200 to-green-300 rounded-2xl flex items-center justify-center border-2 border-dashed border-green-400">
-                    <div className="text-center text-green-600">
+                  <div className="w-80 h-80 bg-gradient-to-br from-green-200 to-green-300 dark:from-green-800 dark:to-green-700 rounded-2xl flex items-center justify-center border-2 border-dashed border-green-400 dark:border-green-500">
+                    <div className="text-center text-green-600 dark:text-green-300">
                       <svg
                         className="w-16 h-16 mx-auto mb-4"
                         fill="currentColor"
@@ -336,10 +346,10 @@ export default function Index() {
                   </div>
                 </div>
                 <div className="order-1 lg:order-2">
-                  <h4 className="text-3xl font-bold text-[#0A0B1E] mb-6">
+                  <h4 className="text-3xl font-bold text-[#0A0B1E] dark:text-white mb-6">
                     Compare different perspectives
                   </h4>
-                  <p className="text-lg text-[#0A0B1E]/70 mb-8 leading-relaxed">
+                  <p className="text-lg text-[#0A0B1E]/70 dark:text-gray-300 mb-8 leading-relaxed">
                     Say goodbye to surface-level summaries. Get deep insights.
                     AI analyzes multiple viewpoints, extracts key themes,
                     contrasting opinions, and synthesizes them into coherent
@@ -347,7 +357,7 @@ export default function Index() {
                   </p>
                   <Link
                     to="/summary-showcase"
-                    className="bg-green-200 hover:bg-green-300 text-[#0A0B1E] px-6 py-3 rounded-xl font-medium transition-colors border-2 border-[#0A0B1E] inline-block"
+                    className="bg-green-200 dark:bg-green-700 hover:bg-green-300 dark:hover:bg-green-600 text-[#0A0B1E] dark:text-white px-6 py-3 rounded-xl font-medium transition-colors border-2 border-[#0A0B1E] dark:border-white inline-block"
                   >
                     Show me the insights
                   </Link>
@@ -359,17 +369,17 @@ export default function Index() {
           {/* Generate Section */}
           <div className="relative">
             <div className="absolute -top-12 left-0 transform -rotate-12">
-              <h3 className="text-8xl font-black text-[#0A0B1E] opacity-20">
+              <h3 className="text-8xl font-black text-[#0A0B1E] dark:text-white opacity-20">
                 Generate.
               </h3>
             </div>
-            <div className="bg-orange-100 rounded-3xl p-12">
+            <div className="bg-orange-100 dark:bg-orange-900/30 rounded-3xl p-12">
               <div className="grid lg:grid-cols-2 gap-12 items-center">
                 <div>
-                  <h4 className="text-3xl font-bold text-[#0A0B1E] mb-6">
+                  <h4 className="text-3xl font-bold text-[#0A0B1E] dark:text-white mb-6">
                     Get your perfect summary
                   </h4>
-                  <p className="text-lg text-[#0A0B1E]/70 mb-8 leading-relaxed">
+                  <p className="text-lg text-[#0A0B1E]/70 dark:text-gray-300 mb-8 leading-relaxed">
                     Summarize your learning and capture insights in seconds.
                     Access your 300-word comparative analysis, key quotes,
                     Amazon purchase links, and actionable takeaways—all from one
@@ -377,14 +387,14 @@ export default function Index() {
                   </p>
                   <Link
                     to={user ? "/results" : "/signin"}
-                    className="bg-orange-200 hover:bg-orange-300 text-[#0A0B1E] px-6 py-3 rounded-xl font-medium transition-colors border-2 border-[#0A0B1E] inline-block"
+                    className="bg-orange-200 dark:bg-orange-700 hover:bg-orange-300 dark:hover:bg-orange-600 text-[#0A0B1E] dark:text-white px-6 py-3 rounded-xl font-medium transition-colors border-2 border-[#0A0B1E] dark:border-white inline-block"
                   >
                     {user ? "View Your Results" : "Sign in to see results"}
                   </Link>
                 </div>
                 <div className="flex justify-center">
-                  <div className="w-80 h-80 bg-gradient-to-br from-orange-200 to-orange-300 rounded-2xl flex items-center justify-center border-2 border-dashed border-orange-400">
-                    <div className="text-center text-orange-600">
+                  <div className="w-80 h-80 bg-gradient-to-br from-orange-200 to-orange-300 dark:from-orange-800 dark:to-orange-700 rounded-2xl flex items-center justify-center border-2 border-dashed border-orange-400 dark:border-orange-500">
+                    <div className="text-center text-orange-600 dark:text-orange-300">
                       <svg
                         className="w-16 h-16 mx-auto mb-4"
                         fill="currentColor"
@@ -412,15 +422,15 @@ export default function Index() {
           {/* Share Section */}
           <div className="relative">
             <div className="absolute -top-12 right-0 transform rotate-12">
-              <h3 className="text-8xl font-black text-[#0A0B1E] opacity-20">
+              <h3 className="text-8xl font-black text-[#0A0B1E] dark:text-white opacity-20">
                 Share.
               </h3>
             </div>
-            <div className="bg-pink-100 rounded-3xl p-12">
+            <div className="bg-pink-100 dark:bg-pink-900/30 rounded-3xl p-12">
               <div className="grid lg:grid-cols-2 gap-12 items-center">
                 <div className="order-2 lg:order-1 flex justify-center">
-                  <div className="w-80 h-80 bg-gradient-to-br from-pink-200 to-pink-300 rounded-2xl flex items-center justify-center border-2 border-dashed border-pink-400">
-                    <div className="text-center text-pink-600">
+                  <div className="w-80 h-80 bg-gradient-to-br from-pink-200 to-pink-300 dark:from-pink-800 dark:to-pink-700 rounded-2xl flex items-center justify-center border-2 border-dashed border-pink-400 dark:border-pink-500">
+                    <div className="text-center text-pink-600 dark:text-pink-300">
                       <svg
                         className="w-16 h-16 mx-auto mb-4"
                         fill="currentColor"
@@ -438,10 +448,10 @@ export default function Index() {
                   </div>
                 </div>
                 <div className="order-1 lg:order-2">
-                  <h4 className="text-3xl font-bold text-[#0A0B1E] mb-6">
+                  <h4 className="text-3xl font-bold text-[#0A0B1E] dark:text-white mb-6">
                     Your personal library of insights
                   </h4>
-                  <p className="text-lg text-[#0A0B1E]/70 mb-8 leading-relaxed">
+                  <p className="text-lg text-[#0A0B1E]/70 dark:text-gray-300 mb-8 leading-relaxed">
                     Your SummifyAI account gives you one place to save
                     summaries, share insights, and track your reading journey.
                     Build your personal library and help friends discover great
@@ -449,7 +459,7 @@ export default function Index() {
                   </p>
                   <Link
                     to={user ? "/results" : "/library-showcase"}
-                    className="bg-pink-200 hover:bg-pink-300 text-[#0A0B1E] px-6 py-3 rounded-xl font-medium transition-colors border-2 border-[#0A0B1E] inline-block"
+                    className="bg-pink-200 dark:bg-pink-700 hover:bg-pink-300 dark:hover:bg-pink-600 text-[#0A0B1E] dark:text-white px-6 py-3 rounded-xl font-medium transition-colors border-2 border-[#0A0B1E] dark:border-white inline-block"
                   >
                     {user ? "View Your Library" : "See Your Library"}
                   </Link>
@@ -461,7 +471,7 @@ export default function Index() {
 
         {/* Testimonials */}
         <div className="max-w-7xl mx-auto px-6 py-20">
-          <h2 className="text-4xl font-bold text-[#0A0B1E] text-center mb-16">
+          <h2 className="text-4xl font-bold text-[#0A0B1E] dark:text-white text-center mb-16">
             Loved by readers everywhere
           </h2>
 
@@ -485,20 +495,20 @@ export default function Index() {
             ].map((testimonial, index) => (
               <div
                 key={index}
-                className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100"
+                className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700"
               >
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 bg-gray-200 rounded-full"></div>
+                  <div className="w-12 h-12 bg-gray-200 dark:bg-gray-600 rounded-full"></div>
                   <div>
-                    <div className="font-semibold text-[#0A0B1E]">
+                    <div className="font-semibold text-[#0A0B1E] dark:text-white">
                       {testimonial.name}
                     </div>
-                    <div className="text-gray-600 text-sm">
+                    <div className="text-gray-600 dark:text-gray-400 text-sm">
                       {testimonial.role}
                     </div>
                   </div>
                 </div>
-                <p className="text-gray-700 leading-relaxed">
+                <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
                   "{testimonial.text}"
                 </p>
               </div>

@@ -321,49 +321,93 @@ export default function Settings() {
                   Email Notifications
                 </h2>
                 <div className="space-y-6">
-                  {[
-                    {
-                      title: "Weekly Summary Report",
-                      description:
-                        "Get a weekly digest of your activity and new features",
-                      defaultChecked: true,
-                    },
-                    {
-                      title: "Credit Updates",
-                      description: "Notifications when you earn or use credits",
-                      defaultChecked: true,
-                    },
-                    {
-                      title: "New Feature Announcements",
-                      description:
-                        "Be the first to know about new SummifyAI features",
-                      defaultChecked: false,
-                    },
-                    {
-                      title: "Marketing Emails",
-                      description: "Tips, insights, and special offers",
-                      defaultChecked: false,
-                    },
-                  ].map((item, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center justify-between"
-                    >
-                      <div>
-                        <div className="font-medium text-gray-900 dark:text-white">
-                          {item.title}
-                        </div>
-                        <div className="text-sm text-gray-600 dark:text-gray-400">
-                          {item.description}
-                        </div>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="font-medium text-gray-900 dark:text-white">
+                        Weekly Summary Report
                       </div>
-                      <input
-                        type="checkbox"
-                        defaultChecked={item.defaultChecked}
-                        className="h-4 w-4 text-[#FFFD63] focus:ring-[#FFFD63] border-gray-300 dark:border-gray-600 rounded"
-                      />
+                      <div className="text-sm text-gray-600 dark:text-gray-400">
+                        Get a weekly digest of your activity and new features
+                      </div>
                     </div>
-                  ))}
+                    <input
+                      type="checkbox"
+                      checked={settings.notifications.emailWeeklyReport}
+                      onChange={(e) =>
+                        handleSettingChange(
+                          "notifications.emailWeeklyReport",
+                          e.target.checked,
+                        )
+                      }
+                      className="h-4 w-4 text-[#FFFD63] focus:ring-[#FFFD63] border-gray-300 dark:border-gray-600 rounded"
+                    />
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="font-medium text-gray-900 dark:text-white">
+                        Credit Updates
+                      </div>
+                      <div className="text-sm text-gray-600 dark:text-gray-400">
+                        Notifications when you earn or use credits
+                      </div>
+                    </div>
+                    <input
+                      type="checkbox"
+                      checked={settings.notifications.emailCreditUpdates}
+                      onChange={(e) =>
+                        handleSettingChange(
+                          "notifications.emailCreditUpdates",
+                          e.target.checked,
+                        )
+                      }
+                      className="h-4 w-4 text-[#FFFD63] focus:ring-[#FFFD63] border-gray-300 dark:border-gray-600 rounded"
+                    />
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="font-medium text-gray-900 dark:text-white">
+                        New Feature Announcements
+                      </div>
+                      <div className="text-sm text-gray-600 dark:text-gray-400">
+                        Be the first to know about new SummifyAI features
+                      </div>
+                    </div>
+                    <input
+                      type="checkbox"
+                      checked={settings.notifications.emailFeatureUpdates}
+                      onChange={(e) =>
+                        handleSettingChange(
+                          "notifications.emailFeatureUpdates",
+                          e.target.checked,
+                        )
+                      }
+                      className="h-4 w-4 text-[#FFFD63] focus:ring-[#FFFD63] border-gray-300 dark:border-gray-600 rounded"
+                    />
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="font-medium text-gray-900 dark:text-white">
+                        Marketing Emails
+                      </div>
+                      <div className="text-sm text-gray-600 dark:text-gray-400">
+                        Tips, insights, and special offers
+                      </div>
+                    </div>
+                    <input
+                      type="checkbox"
+                      checked={settings.notifications.emailMarketing}
+                      onChange={(e) =>
+                        handleSettingChange(
+                          "notifications.emailMarketing",
+                          e.target.checked,
+                        )
+                      }
+                      className="h-4 w-4 text-[#FFFD63] focus:ring-[#FFFD63] border-gray-300 dark:border-gray-600 rounded"
+                    />
+                  </div>
                 </div>
               </div>
 

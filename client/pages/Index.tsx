@@ -321,7 +321,7 @@ export default function Index() {
                     comparisons.
                   </p>
                   <Link
-                    to="/insights-demo"
+                    to="/summary-showcase"
                     className="bg-green-200 hover:bg-green-300 text-[#0A0B1E] px-6 py-3 rounded-xl font-medium transition-colors border-2 border-[#0A0B1E] inline-block"
                   >
                     Show me the insights

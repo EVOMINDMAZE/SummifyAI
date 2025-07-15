@@ -33,25 +33,26 @@ const App = () => (
       <ThemeProvider>
         <AuthProvider>
           <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/signin" element={<SignIn />} />
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/generate" element={<Generate />} />
-            <Route path="/pricing" element={<Pricing />} />
-            <Route path="/admin" element={<Admin />} />
-            <Route path="/how-it-works" element={<HowItWorks />} />
-            <Route path="/insights-demo" element={<InsightsDemo />} />
-            <Route path="/results" element={<Results />} />
-                                    <Route path="/account-settings" element={<AccountSettings />} />
-            <Route path="/summary-showcase" element={<SummaryShowcase />} />
-            <Route path="/library-showcase" element={<LibraryShowcase />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </AuthProvider>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/signin" element={<SignIn />} />
+              <Route path="/signup" element={<SignUp />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/generate" element={<Generate />} />
+              <Route path="/pricing" element={<Pricing />} />
+              <Route path="/admin" element={<Admin />} />
+              <Route path="/how-it-works" element={<HowItWorks />} />
+              <Route path="/insights-demo" element={<InsightsDemo />} />
+              <Route path="/results" element={<Results />} />
+              <Route path="/account-settings" element={<AccountSettings />} />
+              <Route path="/summary-showcase" element={<SummaryShowcase />} />
+              <Route path="/library-showcase" element={<LibraryShowcase />} />
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </AuthProvider>
+      </ThemeProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );

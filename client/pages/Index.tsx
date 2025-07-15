@@ -218,7 +218,7 @@ export default function Index() {
       </div>
 
       {/* Main Content */}
-      <div className="bg-white pt-32 pb-20">
+      <div className="bg-white" style={{ padding: "118px 0 100px" }}>
         {/* Logo Section */}
         <div className="py-16 overflow-hidden">
           <div className="flex items-center justify-center gap-12 opacity-60">
@@ -231,10 +231,16 @@ export default function Index() {
         </div>
 
         {/* Large Quote */}
-        <div className="max-w-5xl mx-auto px-6 pt-12 pb-20 text-center">
+        <div
+          className="max-w-5xl mx-auto px-6 text-center"
+          style={{ padding: "15px 30px 100px" }}
+        >
           <div className="relative">
             <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 w-32 h-8 bg-[#FFFD63] rounded-full"></div>
-            <h2 className="text-4xl md:text-5xl font-normal text-[#0A0B1E] leading-tight relative z-10">
+            <h2
+              className="text-4xl md:text-5xl font-normal text-[#0A0B1E] leading-tight relative z-10"
+              style={{ paddingTop: "23px" }}
+            >
               All your favorite books in one place. Stop reading everything
               separately. Start comparing insights effectively.
             </h2>

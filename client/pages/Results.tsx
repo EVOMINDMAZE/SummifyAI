@@ -107,7 +107,7 @@ export default function Results() {
   // Redirect to login if not authenticated
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
+      <div className="min-h-screen bg-white dark:bg-gray-900 flex items-center justify-center">
         <div className="max-w-md mx-auto text-center px-6">
           <div className="w-16 h-16 bg-[#FFFD63] rounded-lg flex items-center justify-center mx-auto mb-6">
             <svg
@@ -124,10 +124,10 @@ export default function Results() {
               />
             </svg>
           </div>
-          <h1 className="text-2xl font-bold text-[#0A0B1E] mb-4">
+          <h1 className="text-2xl font-bold text-[#0A0B1E] dark:text-white mb-4">
             Access Required
           </h1>
-          <p className="text-gray-600 mb-6">
+          <p className="text-gray-600 dark:text-gray-400 mb-6">
             Please sign in to view your search results and generated summaries.
           </p>
           <Link

@@ -373,7 +373,26 @@ export default function AccountSettings() {
                   </div>
                 </div>
                 <div className="mt-6">
-                  <button className="bg-[#FFFD63] hover:bg-yellow-300 text-[#0A0B1E] px-4 py-2 rounded-lg font-medium transition-colors">
+                  <button
+                    onClick={() => {
+                      if (useCredits(2)) {
+                        alert(
+                          "Used 2 credits! You now have 1 additional search available.",
+                        );
+                        // In a real app, this would update the user's query limit
+                      } else {
+                        alert(
+                          "Not enough credits! You need at least 2 credits.",
+                        );
+                      }
+                    }}
+                    disabled={(user?.credits || 0) < 2}
+                    className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                      (user?.credits || 0) >= 2
+                        ? "bg-[#FFFD63] hover:bg-yellow-300 text-[#0A0B1E]"
+                        : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                    }`}
+                  >
                     Use 2 Credits for 1 Search
                   </button>
                 </div>

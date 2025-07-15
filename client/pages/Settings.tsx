@@ -274,11 +274,18 @@ export default function Settings() {
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Default Summary Length
                     </label>
-                    <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#FFFD63] focus:border-transparent">
+                    <select
+                      value={settings.defaultSummaryLength}
+                      onChange={(e) =>
+                        handleSettingChange(
+                          "defaultSummaryLength",
+                          e.target.value,
+                        )
+                      }
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#FFFD63] focus:border-transparent"
+                    >
                       <option value="short">Short (150-200 words)</option>
-                      <option value="medium" selected>
-                        Medium (250-300 words)
-                      </option>
+                      <option value="medium">Medium (250-300 words)</option>
                       <option value="long">Long (400-500 words)</option>
                     </select>
                   </div>

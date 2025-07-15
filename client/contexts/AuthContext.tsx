@@ -271,15 +271,38 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     return false;
   };
 
-  const shareContent = (type: "summary" | "referral", contentId?: string) => {
+  const shareContent = async (
+    type: "summary" | "referral",
+    contentId?: string,
+  ) => {
     if (!user) return;
 
-    if (type === "summary") {
-      // Award 1 credit for sharing a summary
-      addCredits(1, "Shared a summary");
+    if (type === "summary" && contentId) {
+      try {
+        const response = await fetch("/api/shares", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            userId: user.id,
+            summaryId: contentId,
+            shareType: "social_share",
+          }),
+        });
 
-      // In a real app, this would track the share and award credits when someone clicks
-      console.log(`Shared summary ${contentId}`);
+        if (response.ok) {
+          const data = await response.json();
+          setUser({ ...user, credits: data.newBalance });
+          console.log(
+            `Shared summary ${contentId}, earned ${data.creditsAwarded} credits`,
+          );
+        } else {
+          throw new Error("Failed to record share");
+        }
+      } catch (error) {
+        // Fallback to local update
+        console.warn("Share API failed, using local update:", error);
+        addCredits(1, "Shared a summary");
+      }
     } else if (type === "referral") {
       // Award 3 credits for successful referral (would be called when friend signs up)
       addCredits(3, "Friend signed up with your referral code");

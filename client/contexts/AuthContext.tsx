@@ -198,33 +198,48 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  const addCredits = (amount: number, reason: string) => {
+  const addCredits = async (amount: number, reason: string) => {
     if (user) {
-      const newCredits = user.credits + amount;
-      setUser({ ...user, credits: newCredits });
+      try {
+        const response = await fetch(`/api/users/${user.id}/credits`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ amount, type: "earned", reason }),
+        });
 
-      // In a real app, this would be an API call
-      console.log(
-        `Added ${amount} credits: ${reason}. New balance: ${newCredits}`,
-      );
+        if (response.ok) {
+          const data = await response.json();
+          setUser({ ...user, credits: data.newBalance });
+          console.log(
+            `Added ${amount} credits: ${reason}. New balance: ${data.newBalance}`,
+          );
+        } else {
+          throw new Error("Failed to add credits");
+        }
+      } catch (error) {
+        // Fallback to local update for demo
+        console.warn("Credit API failed, using local update:", error);
+        const newCredits = user.credits + amount;
+        setUser({ ...user, credits: newCredits });
 
-      // Store the transaction for history
-      const transaction = {
-        type: "earned",
-        amount,
-        reason,
-        timestamp: new Date().toISOString(),
-        balance: newCredits,
-      };
+        // Store the transaction for history
+        const transaction = {
+          type: "earned",
+          amount,
+          reason,
+          timestamp: new Date().toISOString(),
+          balance: newCredits,
+        };
 
-      const existingTransactions = JSON.parse(
-        localStorage.getItem("credit_transactions") || "[]",
-      );
-      existingTransactions.push(transaction);
-      localStorage.setItem(
-        "credit_transactions",
-        JSON.stringify(existingTransactions),
-      );
+        const existingTransactions = JSON.parse(
+          localStorage.getItem("credit_transactions") || "[]",
+        );
+        existingTransactions.push(transaction);
+        localStorage.setItem(
+          "credit_transactions",
+          JSON.stringify(existingTransactions),
+        );
+      }
     }
   };
 

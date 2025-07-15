@@ -64,7 +64,7 @@ export default function Support() {
         },
         {
           q: "How many searches do I get?",
-          a: `Free users get ${user.queryLimit} searches per month. Premium users get unlimited searches plus additional features like priority generation and PDF exports.`,
+          a: `Free users get ${user.queriesLimit} searches per month. Premium users get unlimited searches plus additional features like priority generation and PDF exports.`,
         },
       ],
     },

@@ -18,6 +18,28 @@ export interface User {
   createdAt: string;
   referralCode: string;
   referralsCount: number;
+  settings?: {
+    theme?: "light" | "dark" | "system";
+    language?: string;
+    timezone?: string;
+    defaultSummaryLength?: "short" | "medium" | "long";
+    autoSave?: boolean;
+    notifications?: {
+      emailWeeklyReport?: boolean;
+      emailCreditUpdates?: boolean;
+      emailFeatureUpdates?: boolean;
+      emailMarketing?: boolean;
+      browserSummaryComplete?: boolean;
+    };
+    privacy?: {
+      allowAnalytics?: boolean;
+      saveSearchHistory?: boolean;
+    };
+    advanced?: {
+      developerMode?: boolean;
+      betaFeatures?: boolean;
+    };
+  };
 }
 
 interface AuthContextType {

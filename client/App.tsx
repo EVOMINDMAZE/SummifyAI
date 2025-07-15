@@ -21,6 +21,8 @@ import Results from "./pages/Results";
 import AccountSettings from "./pages/AccountSettings";
 import SummaryShowcase from "./pages/SummaryShowcase";
 import LibraryShowcase from "./pages/LibraryShowcase";
+import Settings from "./pages/Settings";
+import Support from "./pages/Support";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();

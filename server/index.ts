@@ -1,6 +1,14 @@
 import express from "express";
 import cors from "cors";
 import { handleDemo } from "./routes/demo";
+import {
+  handleNeonExecute,
+  handleUserSignIn,
+  handleUserSignUp,
+  handleGetUserSummaries,
+  handleUpdateCredits,
+  handleRecordShare,
+} from "./routes/neon";
 
 export function createServer() {
   const app = express();

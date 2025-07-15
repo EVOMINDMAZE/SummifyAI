@@ -22,16 +22,18 @@ export default function Index() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white dark:bg-gray-900">
       {/* Navigation */}
-      <nav className="bg-[#FFFD63] relative z-10">
+      <nav className="bg-[#FFFD63] dark:bg-gray-900 relative z-10">
         <div className="max-w-6xl mx-auto px-6">
           <div className="flex justify-between items-center h-16">
             <Link to="/" className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-[#0A0B1E] rounded-lg flex items-center justify-center">
-                <span className="text-[#FFFD63] font-bold text-lg">S</span>
+              <div className="w-8 h-8 bg-[#0A0B1E] dark:bg-[#FFFD63] rounded-lg flex items-center justify-center">
+                <span className="text-[#FFFD63] dark:text-[#0A0B1E] font-bold text-lg">
+                  S
+                </span>
               </div>
-              <span className="text-xl font-bold text-[#0A0B1E]">
+              <span className="text-xl font-bold text-[#0A0B1E] dark:text-white">
                 SummifyAI
               </span>
             </Link>

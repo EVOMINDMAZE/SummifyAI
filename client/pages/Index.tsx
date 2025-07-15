@@ -246,10 +246,10 @@ export default function Index() {
                     beautiful interface.
                   </p>
                   <Link
-                    to="/results"
+                    to={user ? "/results" : "/signin"}
                     className="bg-orange-200 hover:bg-orange-300 text-[#0A0B1E] px-6 py-3 rounded-xl font-medium transition-colors border-2 border-[#0A0B1E] inline-block"
                   >
-                    Take a look
+                    {user ? "View Your Results" : "Sign in to see results"}
                   </Link>
                 </div>
                 <div className="flex justify-center">
@@ -298,28 +298,30 @@ export default function Index() {
                       >
                         <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" />
                       </svg>
-                      <div className="font-medium text-lg">Team Workspace</div>
+                      <div className="font-medium text-lg">
+                        Personal Library
+                      </div>
                       <div className="text-sm mt-2">
-                        Collaborate and share insights
+                        Save and manage insights
                       </div>
                     </div>
                   </div>
                 </div>
                 <div className="order-1 lg:order-2">
                   <h4 className="text-3xl font-bold text-[#0A0B1E] mb-6">
-                    One workspace for all your insights
+                    Your personal library of insights
                   </h4>
                   <p className="text-lg text-[#0A0B1E]/70 mb-8 leading-relaxed">
-                    Your SummifyAI workspace gives you one place to save
+                    Your SummifyAI account gives you one place to save
                     summaries, share insights, and track your reading journey.
                     Build your personal library and help friends discover great
                     books.
                   </p>
                   <Link
-                    to="/team-workspace"
+                    to={user ? "/account-settings" : "/signin"}
                     className="bg-pink-200 hover:bg-pink-300 text-[#0A0B1E] px-6 py-3 rounded-xl font-medium transition-colors border-2 border-[#0A0B1E] inline-block"
                   >
-                    Create workspace
+                    {user ? "Manage Account" : "Sign in to access"}
                   </Link>
                 </div>
               </div>

@@ -173,6 +173,10 @@ export default function Dashboard() {
                     </div>
                   </div>
                 )}
+                {/* Theme Toggle */}
+                <div className="ml-4">
+                  <ThemeToggle />
+                </div>
               </div>
             </div>
           </div>

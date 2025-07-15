@@ -578,6 +578,13 @@ export default function Settings() {
                     </div>
                     <input
                       type="checkbox"
+                      checked={settings.advanced.developerMode}
+                      onChange={(e) =>
+                        handleSettingChange(
+                          "advanced.developerMode",
+                          e.target.checked,
+                        )
+                      }
                       className="h-4 w-4 text-[#FFFD63] focus:ring-[#FFFD63] border-gray-300 dark:border-gray-600 rounded"
                     />
                   </div>

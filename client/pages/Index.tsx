@@ -271,8 +271,8 @@ export default function Index() {
         <div className="max-w-7xl mx-auto px-6 space-y-32">
           {/* Search Section */}
           <div className="relative">
-            <div className="absolute -top-12 left-0 transform -rotate-12">
-              <h3 className="text-8xl font-black text-[#0A0B1E] dark:text-white opacity-20">
+            <div className="absolute -top-12 left-0 transform -rotate-12 z-30">
+              <h3 className="text-8xl font-black text-[#0A0B1E] dark:text-white opacity-35">
                 Search.
               </h3>
             </div>

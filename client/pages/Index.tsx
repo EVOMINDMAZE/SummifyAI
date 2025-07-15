@@ -21,714 +21,362 @@ export default function Index() {
   };
 
   return (
-    <div className="min-h-screen bg-white font-['Inter'] antialiased">
-      {/* Hero Section - Exact match to Figma */}
-      <div className="bg-[#FFFD63] relative min-h-[660px] flex justify-center items-start px-20 pt-[184px] pb-[120px]">
-        <div className="w-full max-w-[1280px] flex flex-col justify-center items-center gap-[23px] relative">
-          {/* Main Heading */}
-          <h1 className="text-[71px] font-black leading-[80px] text-center text-[#0A0B1E] flex w-full max-w-[1280px] px-[117px] justify-center items-start">
-            Get instant book summaries. Discover better insights.
-          </h1>
+    <div className="min-h-screen bg-white">
+      {/* Hero Section */}
+      <div className="bg-[#FFFD63] relative">
+        <div className="max-w-6xl mx-auto px-6 pt-20 pb-32">
+          <div className="text-center">
+            {/* Main Heading */}
+            <h1 className="text-5xl md:text-7xl font-black text-[#0A0B1E] leading-tight mb-8">
+              Get instant book summaries.
+              <br />
+              <span className="text-[#0A0B1E]">Discover better insights.</span>
+            </h1>
 
-          {/* Subheading */}
-          <p className="text-[18px] font-light leading-[28px] text-center text-[#0A0B1E] flex max-w-[690px] px-6 justify-center items-start">
-            Enter any topic and get comparative insights from the top 5 books,
-            complete with key quotes, Amazon affiliate links, and actionable
-            takeaways—all powered by AI.
-          </p>
+            {/* Subheading */}
+            <p className="text-lg md:text-xl text-[#0A0B1E]/80 max-w-3xl mx-auto mb-12 leading-relaxed">
+              Enter any topic and get comparative insights from the top 5 books,
+              complete with key quotes, Amazon affiliate links, and actionable
+              takeaways—all powered by AI.
+            </p>
 
-          {/* CTA Buttons */}
-          <div className="flex items-start gap-4">
-            {/* Google Sign Up Button */}
-            <Link
-              to="/signup"
-              className="flex max-w-[429px] px-[26px] py-5 justify-center items-start gap-2 rounded-2xl bg-[#0A0B1E] shadow-[0px_1px_3px_0px_rgba(10,11,31,0.08),-1px_0px_0px_0px_rgba(0,0,0,0.10)_inset] cursor-pointer"
-            >
-              <svg className="w-6 h-6" viewBox="0 0 25 24" fill="none">
-                <path
-                  d="M22.8445 12.2527C22.8445 11.5049 22.7839 10.7532 22.6546 10.0176H12.2793V14.2533H18.2207C17.9742 15.6195 17.182 16.828 16.022 17.5959V20.3443H19.5667C21.6482 18.4285 22.8445 15.5993 22.8445 12.2527Z"
-                  fill="#4285F4"
-                />
-                <path
-                  d="M12.2808 22.9998C15.2474 22.9998 17.7493 22.0257 19.5722 20.3444L16.0275 17.5959C15.0413 18.2669 13.7681 18.6469 12.2848 18.6469C9.41513 18.6469 6.98201 16.7108 6.10895 14.1079H2.45117V16.9412C4.31847 20.6556 8.12177 22.9998 12.2808 22.9998Z"
-                  fill="#34A853"
-                />
-                <path
-                  d="M6.10318 14.1083C5.6424 12.7422 5.6424 11.2629 6.10318 9.89674V7.06348H2.44939C0.889265 10.1716 0.889265 13.8335 2.44939 16.9416L6.10318 14.1083Z"
-                  fill="#FBBC04"
-                />
-                <path
-                  d="M12.2808 5.35374C13.849 5.32949 15.3647 5.91959 16.5004 7.00276L19.6409 3.86232C17.6523 1.99502 15.013 0.968407 12.2808 1.00074C8.12177 1.00074 4.31847 3.34497 2.45117 7.06342L6.10493 9.89668C6.97391 7.28974 9.41111 5.35374 12.2808 5.35374Z"
-                  fill="#EA4335"
-                />
-              </svg>
-              <div className="text-white font-normal text-base leading-5 flex px-[6.75px] items-start">
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <Link
+                to="/signup"
+                className="flex items-center gap-3 bg-[#0A0B1E] text-white px-8 py-4 rounded-2xl font-medium hover:bg-[#0A0B1E]/90 transition-colors shadow-lg"
+              >
+                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                    fill="#4285F4"
+                  />
+                  <path
+                    d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                    fill="#34A853"
+                  />
+                  <path
+                    d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                    fill="#FBBC04"
+                  />
+                  <path
+                    d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                    fill="#EA4335"
+                  />
+                </svg>
                 Sign up with Google
-              </div>
-            </Link>
-
-            {/* Free Sign Up Button */}
-            <Link
-              to="/signup"
-              className="text-black font-normal text-base leading-5 flex max-w-[429px] px-7 py-[21px] items-center rounded-2xl bg-white shadow-[0px_1px_3px_0px_rgba(10,11,31,0.08),-1px_0px_0px_0px_rgba(0,0,0,0.10)_inset] cursor-pointer"
-            >
-              Sign up for free
-            </Link>
+              </Link>
+              <Link
+                to="/signup"
+                className="bg-white text-[#0A0B1E] px-8 py-4 rounded-2xl font-medium hover:bg-gray-50 transition-colors shadow-lg border border-gray-200"
+              >
+                Sign up for free
+              </Link>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Video/Demo Section */}
-      <div className="bg-[#FFFD63] flex w-full px-20 justify-center items-start relative h-[717px]">
-        <div className="absolute bottom-0 w-full h-[537.59px] bg-white"></div>
-        <div className="flex w-full max-w-[1272px] px-[420px] py-[295px] justify-center items-start rounded-3xl bg-[#FFFD6A] shadow-[0px_4px_8px_0px_rgba(10,11,30,0.06),0px_48px_0px_0px_rgba(10,11,30,0.08)] relative z-10">
-          <img
-            src="https://cdn.builder.io/api/v1/image/assets%2Fce6d23c5183744ad9e38b6730a7e5a8d%2F7ce5ae4255c54d58afbdbebcd7099427?format=webp&width=800"
-            alt="SummifyAI Demo"
-            className="absolute inset-0 w-full h-[717px] opacity-[0.98] rounded-3xl object-cover"
-          />
-          <div className="flex px-12 py-9 items-center gap-5 rounded-[50px] bg-white relative z-20 cursor-pointer">
-            <img
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/2af035ca0d690ea0b80f16992497f9d6c916b1ad?width=108"
-              alt="Play button"
-              className="w-[54px] h-[54px]"
-            />
-            <div className="text-[#0A0B1E] font-bold text-[31px] leading-10">
-              Take a 2 min. tour
+        {/* Demo Section */}
+        <div className="relative -mb-20">
+          <div className="max-w-4xl mx-auto px-6">
+            <div className="bg-gradient-to-br from-yellow-100 to-orange-100 rounded-3xl p-8 shadow-2xl border border-yellow-200">
+              <div className="flex items-center justify-center">
+                <button className="flex items-center gap-4 bg-white px-8 py-4 rounded-full shadow-lg hover:shadow-xl transition-shadow">
+                  <div className="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center">
+                    <svg
+                      className="w-6 h-6 text-white"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  </div>
+                  <span className="text-[#0A0B1E] font-bold text-xl">
+                    Take a 2 min. tour
+                  </span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Scrolling Logo Section */}
-      <div className="bg-white flex w-full px-0 py-16 justify-center items-start overflow-hidden">
-        <div className="flex px-[876px] items-center gap-12 animate-[scroll_30s_linear_infinite]">
-          <div className="min-w-[200px] h-[112px] flex items-center justify-center">
+      {/* Main Content */}
+      <div className="bg-white pt-32 pb-20">
+        {/* Logo Section */}
+        <div className="py-16 overflow-hidden">
+          <div className="flex items-center justify-center gap-12 opacity-60">
             <span className="text-2xl font-bold text-gray-400">AMAZON</span>
-          </div>
-          <div className="min-w-[200px] h-[112px] flex items-center justify-center">
             <span className="text-2xl font-bold text-gray-400">GOODREADS</span>
-          </div>
-          <div className="min-w-[200px] h-[112px] flex items-center justify-center">
             <span className="text-2xl font-bold text-gray-400">PENGUIN</span>
-          </div>
-          <div className="min-w-[200px] h-[112px] flex items-center justify-center">
             <span className="text-2xl font-bold text-gray-400">HARPER</span>
-          </div>
-          <div className="min-w-[200px] h-[112px] flex items-center justify-center">
             <span className="text-2xl font-bold text-gray-400">MACMILLAN</span>
           </div>
         </div>
-      </div>
 
-      {/* Large Quote Section */}
-      <div className="bg-white flex w-full px-0 py-[120px] justify-center items-start">
-        <div className="w-full max-w-[1280px] relative">
-          <div className="absolute left-1/2 top-0 transform -translate-x-1/2 -translate-y-1/2 w-[405px] h-[83px] bg-[#FFFD63] z-10"></div>
-          <div className="text-[#0A0B1E] font-normal text-[53px] leading-[69.12px] text-center relative z-20">
-            All your team's facilitation tools in one place. Stop hosting
-            snoozefests. Start collaborating effectively. SummifyAI brings
-            structure, energy, and joy to your book discovery, summary creation,
-            and learning sessions.
+        {/* Large Quote */}
+        <div className="max-w-5xl mx-auto px-6 py-20 text-center">
+          <div className="relative">
+            <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 w-32 h-8 bg-[#FFFD63] rounded-full"></div>
+            <h2 className="text-4xl md:text-5xl font-normal text-[#0A0B1E] leading-tight relative z-10">
+              All your favorite books in one place. Stop reading everything
+              separately. Start comparing insights effectively.
+            </h2>
           </div>
         </div>
-      </div>
 
-      {/* Process Sections Container */}
-      <div className="flex w-full justify-center items-start bg-white">
-        <div className="w-full max-w-[1440px]">
-          {/* Plan Section */}
-          <div className="flex w-full max-w-[1280px] mx-auto pb-[75px] justify-center items-start relative">
-            <div className="w-full relative">
-              <div className="w-full pt-[240px] relative">
-                <div className="flex w-full items-center rounded-[80px] bg-[#C7D0FF] relative -mt-9 min-h-[780px]">
-                  {/* Top Curve */}
-                  <svg
-                    className="absolute -top-[134px] flex w-full px-0 py-[48px] items-start"
-                    viewBox="0 0 1280 108"
-                    fill="none"
-                  >
-                    <path
-                      d="M1280 48.6785C1280 48.6785 1280.56 48.6785 1225.5 48.6785C1170.43 48.6785 868.164 59.1875 637.892 59.1875C407.62 59.1875 100.309 48.6785 50.2857 48.6785C0.273255 48.6785 4.62532e-05 48.6785 4.62532e-05 48.6785"
-                      stroke="white"
-                      strokeWidth="95.6322"
-                    />
-                  </svg>
-
-                  {/* Bottom Curve */}
-                  <svg
-                    className="absolute -bottom-[134px] flex w-full px-0 py-[48px] items-start"
-                    viewBox="0 0 1280 108"
-                    fill="none"
-                  >
-                    <path
-                      d="M0.000228097 58.989C0.000228097 58.989 -0.564498 58.989 54.5049 58.989C109.575 58.989 411.836 48.48 642.108 48.48C872.38 48.48 1179.69 58.989 1229.71 58.989C1279.73 58.989 1280 58.989 1280 58.989"
-                      stroke="white"
-                      strokeWidth="95.6322"
-                    />
-                  </svg>
-
-                  <div className="flex px-20 py-[150px] justify-between items-center w-full">
-                    {/* Animation Block */}
-                    <div className="flex max-w-[520px] px-[18px] flex-col justify-center items-start flex-1">
-                      <div className="w-[484px] max-w-[520px] flex-1 relative">
-                        <div className="w-full h-[400px] bg-gradient-to-br from-yellow-100 to-orange-100 rounded-2xl flex items-center justify-center border-2 border-dashed border-yellow-300">
-                          <div className="text-center text-yellow-600 p-8">
-                            <svg
-                              className="w-16 h-16 mx-auto mb-4"
-                              fill="currentColor"
-                              viewBox="0 0 20 20"
-                            >
-                              <path
-                                fillRule="evenodd"
-                                d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
-                            <div className="font-medium text-lg">
-                              AI Topic Search
-                            </div>
-                            <div className="text-sm mt-2">
-                              Searching through millions of books
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Description */}
-                    <div className="w-[520px] max-w-[520px]">
-                      <div className="flex w-[520px] pr-[13px] items-start mb-5">
-                        <h3 className="text-[39px] font-bold leading-[48.4px] text-[#0A0B1E] flex px-0 py-[1px] items-start">
-                          Prepare sessions that practically run themselves
-                        </h3>
-                      </div>
-                      <p className="text-[19px] font-light leading-[30.8px] text-[#0A0B1E] flex w-[520px] px-0 py-0 pr-[22px] items-start mb-[30px]">
-                        Structured discovery leads to better outcomes. Set up
-                        the perfect research flow with AI-powered book
-                        selection, pre-loaded insights, and a reusable summary
-                        library.
-                      </p>
-                      <button className="text-[#0A0B1E] font-normal text-sm leading-[19.2px] inline-flex max-w-[134px] px-8 py-[18px] justify-center items-center rounded-2xl border-2 border-[#0A0B1E] bg-[#C7D0FF] cursor-pointer">
-                        Learn more
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Plan Heading */}
-                <div className="absolute left-[60px] -top-[43px] flex w-[442px] transform -rotate-12 items-start gap-0">
-                  <h2 className="text-[179px] font-black leading-[200px] text-[#0A0B1E] flex px-0 py-10 items-start">
-                    Plan
-                  </h2>
-                  <h2 className="text-[200px] font-black leading-[200px] text-[#0A0B1E] flex px-0 py-10 items-start">
-                    .
-                  </h2>
-                </div>
-              </div>
+        {/* Process Sections */}
+        <div className="max-w-7xl mx-auto px-6 space-y-32">
+          {/* Search Section */}
+          <div className="relative">
+            <div className="absolute -top-12 left-0 transform -rotate-12">
+              <h3 className="text-8xl font-black text-[#0A0B1E] opacity-20">
+                Search.
+              </h3>
             </div>
-          </div>
-
-          {/* Run Section */}
-          <div className="inline-flex flex-col items-start gap-[-35px] w-full max-w-[1280px] mx-auto">
-            <div className="w-full relative">
-              <div className="flex w-full flex-col items-start gap-[-9px] pt-[106px]">
-                {/* Top Curve */}
-                <svg
-                  className="flex w-full px-0 py-[48px] items-start"
-                  viewBox="0 0 1280 108"
-                  fill="none"
-                >
-                  <path
-                    d="M1280 49.1467C1280 49.1467 1280.56 49.1467 1225.5 49.1467C1170.43 49.1467 868.164 59.6558 637.892 59.6558C407.62 59.6558 100.309 49.1467 50.2857 49.1467C0.273255 49.1467 4.62532e-05 49.1467 4.62532e-05 49.1467"
-                    stroke="white"
-                    strokeWidth="95.6322"
-                  />
-                </svg>
-
-                <div className="flex w-full flex-col items-center rounded-t-[80px] bg-[#BFF9EA]">
-                  <div className="flex w-full px-20 py-[150px] justify-between items-center">
-                    {/* Description */}
-                    <div className="w-[520px] max-w-[520px]">
-                      <h3 className="text-[40px] font-bold leading-[48.4px] text-[#0A0B1E] flex w-[399px] px-0 py-0 pr-[6px] items-start mb-5">
-                        Bump up the energy
-                      </h3>
-                      <p className="text-[19px] font-light leading-[30.8px] text-[#0A0B1E] flex w-[520px] px-0 py-0 pr-[66px] items-start mb-[30px]">
-                        Say goodbye to research fatigue. Say hello to instant
-                        insights. Keep everyone engaged with AI-powered
-                        summaries, interactive quotes, affiliate earnings, and
-                        shareable content.
-                      </p>
-                      <button className="text-[#0A0B1E] font-normal text-sm leading-[19.2px] inline-flex max-w-[196px] px-8 py-[18px] justify-center items-center rounded-2xl border-2 border-[#0A0B1E] bg-[#BFF9EA] cursor-pointer">
-                        Show me the energy
-                      </button>
-                    </div>
-
-                    {/* Animation Block */}
-                    <div className="h-[451px] max-w-[520px] flex-1 relative">
-                      <div className="w-[484px] h-[452px] absolute left-[18px] top-0">
-                        <div className="w-full h-full bg-gradient-to-br from-green-100 to-teal-100 rounded-2xl flex items-center justify-center border-2 border-dashed border-green-300">
-                          <div className="text-center text-green-600 p-8">
-                            <svg
-                              className="w-16 h-16 mx-auto mb-4"
-                              fill="currentColor"
-                              viewBox="0 0 20 20"
-                            >
-                              <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            <div className="font-medium text-lg">
-                              AI Analysis
-                            </div>
-                            <div className="text-sm mt-2">
-                              Extracting insights and themes
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+            <div className="bg-blue-100 rounded-3xl p-12 relative overflow-hidden">
+              <div className="grid lg:grid-cols-2 gap-12 items-center">
+                <div>
+                  <h4 className="text-3xl font-bold text-[#0A0B1E] mb-6">
+                    Find books that practically teach themselves
+                  </h4>
+                  <p className="text-lg text-[#0A0B1E]/70 mb-8 leading-relaxed">
+                    Smart discovery leads to better outcomes. Enter any topic
+                    and our AI searches through thousands of books to find the
+                    most relevant ones with high-quality content.
+                  </p>
+                  <button className="bg-blue-200 hover:bg-blue-300 text-[#0A0B1E] px-6 py-3 rounded-xl font-medium transition-colors border-2 border-[#0A0B1E]">
+                    Learn more
+                  </button>
                 </div>
-
-                {/* Run Heading */}
-                <div className="absolute right-[80px] -top-[38px] flex w-[389px] transform rotate-12 items-start">
-                  <h2 className="text-[173px] font-black leading-[200px] text-[#0A0B1E] flex px-0 py-10 items-start">
-                    Run
-                  </h2>
-                  <h2 className="text-[200px] font-black leading-[200px] text-[#0A0B1E] flex px-0 py-10 items-start">
-                    .
-                  </h2>
-                </div>
-              </div>
-            </div>
-
-            {/* Tools Section */}
-            <div className="flex w-full max-w-[1280px] mx-auto pb-[111px] justify-end items-start">
-              <div className="flex flex-col items-start gap-[-11px] flex-1">
-                <div className="flex w-full flex-col items-center rounded-b-[80px] bg-[#BFF9EA]">
-                  <div className="flex w-full px-20 py-[150px] justify-between items-center">
-                    {/* Animation Block */}
-                    <div className="flex max-w-[520px] px-[18px] flex-col justify-center items-start flex-1">
-                      <div className="w-[484px] max-w-[520px] flex-1 relative">
-                        <div className="w-full h-[400px] bg-gradient-to-br from-teal-100 to-blue-100 rounded-2xl flex items-center justify-center border-2 border-dashed border-teal-300">
-                          <div className="text-center text-teal-600 p-8">
-                            <svg
-                              className="w-16 h-16 mx-auto mb-4"
-                              fill="currentColor"
-                              viewBox="0 0 20 20"
-                            >
-                              <path
-                                fillRule="evenodd"
-                                d="M3 4a1 1 0 011-1h4a1 1 0 010 2H6.414l2.293 2.293a1 1 0 11-1.414 1.414L5 6.414V8a1 1 0 01-2 0V4zm9 1a1 1 0 010-2h4a1 1 0 011 1v4a1 1 0 01-2 0V6.414l-2.293 2.293a1 1 0 11-1.414-1.414L13.586 5H12zm-9 7a1 1 0 012 0v1.586l2.293-2.293a1 1 0 111.414 1.414L6.414 15H8a1 1 0 010 2H4a1 1 0 01-1-1v-4zm13-1a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 010-2h1.586l-2.293-2.293a1 1 0 111.414-1.414L15 13.586V12a1 1 0 011-1z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
-                            <div className="font-medium text-lg">
-                              Integrations
-                            </div>
-                            <div className="text-sm mt-2">
-                              All your favorite book sources
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Description */}
-                    <div className="w-[520px] max-w-[520px]">
-                      <div className="flex w-[520px] pr-[6px] flex-col items-start gap-[-49px] mb-5">
-                        <h3 className="text-[40px] font-bold leading-[48.4px] text-[#0A0B1E]">
-                          All your favorite facilitation tools
-                        </h3>
-                        <div className="w-[513px] relative">
-                          <div className="absolute right-0 top-[1px] w-[194px] text-[40px] font-bold leading-[48.4px] text-[#0A0B1E]">
-                            , minus all
-                          </div>
-                          <div className="absolute left-0 top-[49px] w-[157px] text-[39px] font-bold leading-[48.4px] text-[#0A0B1E]">
-                            the tabs
-                          </div>
-                        </div>
-                      </div>
-                      <p className="text-[20px] font-light leading-[30.8px] text-[#0A0B1E] flex w-[520px] px-0 py-0 pr-2 items-start mb-[30px]">
-                        Stop juggling countless apps and sources. Keep everyone
-                        focused on one window and one outcome. Access Amazon,
-                        Goodreads, Google Books, and more—all inside the
-                        SummifyAI interface.
-                      </p>
-                      <button className="text-[#0A0B1E] font-normal text-sm leading-[19.2px] inline-flex max-w-[186px] px-8 py-[18px] justify-center items-center rounded-2xl border-2 border-[#0A0B1E] bg-[#BFF9EA] cursor-pointer">
-                        See all integrations
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Bottom Curve */}
-                <svg
-                  className="flex w-full px-0 py-[48px] items-start"
-                  viewBox="0 0 1280 108"
-                  fill="none"
-                >
-                  <path
-                    d="M0.000228097 59.6594C0.000228097 59.6594 -0.564498 59.6594 54.5049 59.6594C109.575 59.6594 411.836 49.1504 642.108 49.1504C872.38 49.1504 1179.69 59.6594 1229.71 59.6594C1279.73 59.6594 1280 59.6594 1280 59.6594"
-                    stroke="white"
-                    strokeWidth="95.6322"
-                  />
-                </svg>
-              </div>
-            </div>
-          </div>
-
-          {/* Recap Section */}
-          <div className="flex w-full max-w-[1280px] mx-auto pb-[75px] justify-center items-start relative">
-            <div className="w-full relative">
-              <div className="w-full pt-[240px] relative">
-                <div className="flex w-full items-center rounded-[80px] bg-[#FFD8AA] relative -mt-9 min-h-[690px]">
-                  {/* Top Curve */}
-                  <svg
-                    className="absolute -top-[134px] flex w-full px-0 py-[48px] items-start"
-                    viewBox="0 0 1280 109"
-                    fill="none"
-                  >
-                    <path
-                      d="M1279.99 49.1709C1279.99 49.1709 1280.55 49.1709 1225.48 49.1709C1170.42 49.1709 868.16 59.6797 637.893 59.6797C407.626 59.6797 100.32 49.1709 50.2983 49.1709C0.286795 49.1709 0.0135918 49.1709 0.0135918 49.1709"
-                      stroke="white"
-                      strokeWidth="95.6303"
-                    />
-                  </svg>
-
-                  {/* Bottom Curve */}
-                  <svg
-                    className="absolute -bottom-[134px] flex w-full px-0 py-[48px] items-start"
-                    viewBox="0 0 1280 108"
-                    fill="none"
-                  >
-                    <path
-                      d="M0.000228097 59.4895C0.000228097 59.4895 -0.564498 59.4895 54.5049 59.4895C109.575 59.4895 411.836 48.9805 642.108 48.9805C872.38 48.9805 1179.69 59.4895 1229.71 59.4895C1279.73 59.4895 1280 59.4895 1280 59.4895"
-                      stroke="white"
-                      strokeWidth="95.6322"
-                    />
-                  </svg>
-
-                  <div className="flex px-20 py-[150px] justify-between items-center w-full">
-                    {/* Description */}
-                    <div className="w-[520px] max-w-[520px]">
-                      <h3 className="text-[40px] font-bold leading-[48.4px] text-[#0A0B1E] flex w-[520px] px-0 py-0 pr-[189px] items-start mb-5">
-                        Don't forget your takeaways
-                      </h3>
-                      <p className="text-[20px] font-light leading-[30.8px] text-[#0A0B1E] flex w-[520px] px-0 py-0 pr-[15px] items-start mb-[30px]">
-                        Summarize your sessions and capture outcomes in seconds.
-                        Access and share your recordings, personal notes, key
-                        quotes, and affiliate earnings—all from one dashboard.
-                      </p>
-                      <button className="text-[#0A0B1E] font-normal text-sm leading-[19.2px] inline-flex max-w-[135px] px-8 py-[18px] justify-center items-center rounded-2xl border-2 border-[#0A0B1E] bg-[#FFD8AA] cursor-pointer">
-                        Take a look
-                      </button>
-                    </div>
-
-                    {/* Animation Block */}
-                    <div className="flex max-w-[520px] px-16 flex-col justify-center items-start flex-1">
-                      <div className="w-[390px] h-[390px] relative">
-                        <div className="w-full h-full bg-gradient-to-br from-orange-100 to-amber-100 rounded-2xl flex items-center justify-center border-2 border-dashed border-orange-300">
-                          <div className="text-center text-orange-600 p-8">
-                            <svg
-                              className="w-16 h-16 mx-auto mb-4"
-                              fill="currentColor"
-                              viewBox="0 0 20 20"
-                            >
-                              <path
-                                fillRule="evenodd"
-                                d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
-                            <div className="font-medium text-lg">
-                              Export & Share
-                            </div>
-                            <div className="text-sm mt-2">
-                              PDFs, links, and summaries
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Recap Heading */}
-                <div className="absolute left-[62px] -top-[59px] flex w-[591px] transform -rotate-12 items-start">
-                  <h2 className="text-[174px] font-black leading-[200px] text-[#0A0B1E] flex px-0 py-10 items-start">
-                    Recap
-                  </h2>
-                  <h2 className="text-[200px] font-black leading-[200px] text-[#0A0B1E] flex px-0 py-10 items-start">
-                    .
-                  </h2>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Collaborate Section */}
-          <div className="flex w-full max-w-[1280px] mx-auto pb-[75px] justify-center items-start relative">
-            <div className="w-full relative">
-              <div className="w-full pt-[240px] relative">
-                <div className="flex w-full flex-col items-center rounded-[80px] bg-[#FFD5D5] relative -mt-9 min-h-[699px]">
-                  {/* Top Curve */}
-                  <svg
-                    className="absolute -top-[134px] flex w-full px-0 py-[48px] items-start"
-                    viewBox="0 0 1280 109"
-                    fill="none"
-                  >
-                    <path
-                      d="M1280 49.1677C1280 49.1677 1280.56 49.1677 1225.5 49.1677C1170.43 49.1677 868.164 59.6768 637.892 59.6768C407.62 59.6768 100.309 49.1677 50.2857 49.1677C0.273255 49.1677 4.62532e-05 49.1677 4.62532e-05 49.1677"
-                      stroke="white"
-                      strokeWidth="95.6322"
-                    />
-                  </svg>
-
-                  {/* Bottom Curve */}
-                  <svg
-                    className="absolute -bottom-[134px] flex w-full px-0 py-[48px] items-start"
-                    viewBox="0 0 1280 87"
-                    fill="none"
-                  >
-                    <path
-                      d="M0.000228097 59.1497C0.000228097 59.1497 -0.564498 59.1497 54.5049 59.1497C109.575 59.1497 411.836 48.6406 642.108 48.6406C872.38 48.6406 1179.69 59.1497 1229.71 59.1497C1279.73 59.1497 1280 59.1497 1280 59.1497"
-                      stroke="white"
-                      strokeWidth="95.6322"
-                    />
-                  </svg>
-
-                  <div className="flex w-full px-20 py-[150px] justify-between items-center">
-                    {/* Animation Block */}
-                    <div className="flex max-w-[520px] pl-[130px] flex-col justify-center items-end flex-1">
-                      <div className="w-[390px] h-[390px] relative">
-                        <div className="w-full h-full bg-gradient-to-br from-pink-100 to-rose-100 rounded-2xl flex items-center justify-center border-2 border-dashed border-pink-300">
-                          <div className="text-center text-pink-600 p-8">
-                            <svg
-                              className="w-16 h-16 mx-auto mb-4"
-                              fill="currentColor"
-                              viewBox="0 0 20 20"
-                            >
-                              <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z" />
-                            </svg>
-                            <div className="font-medium text-lg">
-                              Team Workspace
-                            </div>
-                            <div className="text-sm mt-2">
-                              Collaborate and share insights
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Description */}
-                    <div className="w-[520px] max-w-[520px]">
-                      <div className="flex w-[520px] pr-[90px] items-start mb-5">
-                        <h3 className="text-[40px] font-bold leading-[48.4px] text-[#0A0B1E] flex px-0 py-[1px] items-start">
-                          One workspace for all your team's sessions
-                        </h3>
-                      </div>
-                      <p className="text-[20px] font-light leading-[30.8px] text-[#0A0B1E] flex w-[520px] px-0 py-0 pr-8 items-start mb-[30px]">
-                        Your SummifyAI workspace gives your team one place to
-                        create summaries, share insights, and access research.
-                        Save on setup time, create team-wide consistency, and
-                        keep tabs on your team's reading progress.
-                      </p>
-                      <button className="text-[#0A0B1E] font-normal text-sm leading-[19.2px] inline-flex max-w-[179px] px-8 py-[18px] justify-center items-center rounded-2xl border-2 border-[#0A0B1E] bg-[#FFD5D5] cursor-pointer">
-                        Create workspace
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Collaborate Heading */}
-                <div className="absolute left-[92px] -top-[111px] flex w-[1095px] transform rotate-12 pb-[0.005px] items-start">
-                  <h2 className="text-[178px] font-black leading-[200px] text-[#0A0B1E] flex px-0 py-10 items-start">
-                    Collaborate
-                  </h2>
-                  <h2 className="text-[200px] font-black leading-[180px] text-[#0A0B1E] flex px-0 py-5 items-start">
-                    .
-                  </h2>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Testimonials Section */}
-      <div className="bg-white flex w-full justify-center items-start px-0 py-20">
-        <div className="w-full max-w-[1440px] px-20">
-          <h2 className="text-[57px] font-bold leading-[69.12px] text-[#0A0B1E] flex w-full max-w-[1280px] px-0 py-0 pr-[370px] items-start mb-20">
-            Loved by facilitators everywhere
-          </h2>
-
-          {/* Testimonials Grid */}
-          <div className="inline-flex h-[834px] pl-[2px] justify-end items-center w-full max-w-[1280px]">
-            <div className="w-full h-[834px] grid grid-cols-4 gap-[18px] grid-rows-[min-content]">
-              {/* Testimonial 1 */}
-              <div className="flex w-[306px] items-start rounded-2xl bg-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.07)] h-[411px] col-span-1 row-span-1">
-                <div className="flex w-full p-[17px] items-start rounded-2xl border border-[#E6E6E6] bg-transparent shadow-[0px_1px_2px_0px_rgba(0,0,0,0.07)]">
-                  <div className="flex w-full flex-col items-start gap-2">
-                    <div className="flex pr-4 items-center gap-3 w-full mb-2">
-                      <div className="flex flex-col items-start flex-1">
-                        <div className="text-[#0A0B1E] font-medium text-base leading-6">
-                          Rob H.
-                        </div>
-                        <div className="text-[#171945] font-normal text-sm leading-5">
-                          Founder
-                        </div>
-                      </div>
-                      <div className="flex items-start w-[42px] h-[42px]">
-                        <div className="flex w-[42px] items-start rounded-full bg-black/5">
-                          <div className="w-[42px] h-[42px] rounded-full bg-gray-300"></div>
-                        </div>
-                      </div>
-                    </div>
-                    <h3 className="text-[#0A0B1E] font-medium text-sm leading-6 tracking-[-0.4px] flex w-full pr-[82px] items-start mb-2">
-                      SummifyAI's LEGENDARY Product
-                    </h3>
-                    <div className="flex w-full flex-col items-start gap-2 opacity-90">
-                      <div className="flex flex-col justify-end items-start gap-[23px]">
-                        <p className="flex flex-col justify-center text-[#0A0B1E] font-normal text-base leading-6 tracking-[-0.4px]">
-                          SummifyAI will forever change how you approach book
-                          research and discovery - from the reader to the
-                          learner; this unique tool will add efficiency, insight
-                          and discipline for more engaging learning sessions.
-                        </p>
-                      </div>
-                    </div>
-                    <div className="text-gray-500 text-xs">Feb 16, 2024</div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Testimonial 2 */}
-              <div className="flex w-[306px] items-start rounded-2xl bg-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.07)] h-[399px] col-span-1 row-span-1">
-                <div className="flex w-full p-[17px] items-start rounded-2xl border border-[#E6E6E6] bg-transparent shadow-[0px_1px_2px_0px_rgba(0,0,0,0.07)]">
-                  <div className="flex w-full flex-col items-start gap-2">
-                    <div className="flex pr-4 items-center gap-3 w-full mb-2">
-                      <div className="flex items-start w-[42px] h-[42px]">
-                        <div className="flex w-[42px] items-start rounded-full bg-black/5">
-                          <div className="w-[42px] h-[42px] rounded-full bg-gray-300"></div>
-                        </div>
-                      </div>
-                      <div className="flex flex-col items-start flex-1">
-                        <div className="text-[#0A0B1E] font-medium text-base leading-6">
-                          Jessica Campbell
-                        </div>
-                        <div className="text-[#171945] font-normal text-sm leading-5 flex px-0 py-[1px] items-start">
-                          Program Manager in EdTech
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex w-full flex-col items-start gap-2 opacity-90">
-                      <p className="flex flex-col justify-end text-[#0A0B1E] font-normal text-base leading-6 tracking-[-0.4px] items-start gap-[23px]">
-                        SummifyAI is such an amazing tool! Not only is the UI
-                        perfect but the entire experience is so thoughtfully
-                        designed for discovering book insights. The comparative
-                        analysis feature helps me understand different
-                        perspectives quickly.
-                      </p>
-                    </div>
-                    <div className="text-gray-500 text-xs">Feb 8, 2024</div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Testimonial 3 */}
-              <div className="flex w-[306px] items-start rounded-2xl bg-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.07)] h-[399px] col-span-1 row-span-1">
-                <div className="flex w-full p-[17px] items-start rounded-2xl border border-[#E6E6E6] bg-transparent shadow-[0px_1px_2px_0px_rgba(0,0,0,0.07)]">
-                  <div className="flex w-full flex-col items-start gap-2">
-                    <div className="flex pr-4 items-center gap-3 w-full mb-2">
-                      <div className="flex items-start w-[42px] h-[42px]">
-                        <div className="flex w-[42px] items-start rounded-full bg-black/5">
-                          <div className="w-[42px] h-[42px] rounded-full bg-gray-300"></div>
-                        </div>
-                      </div>
-                      <div className="flex flex-col items-start flex-1">
-                        <div className="text-[#0A0B1E] font-medium text-base leading-6">
-                          Natalie Pearce
-                        </div>
-                        <div className="text-[#171945] font-normal text-sm leading-5 flex px-0 py-[1px] items-start">
-                          Learning & Development
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex w-full flex-col items-start gap-2 opacity-90">
-                      <p className="flex flex-col justify-end text-[#0A0B1E] font-normal text-base leading-6 tracking-[-0.4px] items-start gap-[23px]">
-                        I absolutely LOVE SummifyAI! This beautiful platform has
-                        changed how we approach learning by enabling us to
-                        discover book insights in ways we'd only dreamed of. The
-                        affiliate system is a bonus!
-                      </p>
-                    </div>
-                    <div className="text-gray-500 text-xs">Feb 7, 2024</div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Testimonial 4 */}
-              <div className="flex w-[306px] items-start rounded-2xl bg-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.07)] h-[186px] col-span-1 row-span-1">
-                <div className="flex w-full p-[17px] items-start rounded-2xl border border-[#E6E6E6] bg-transparent shadow-[0px_1px_2px_0px_rgba(0,0,0,0.07)]">
-                  <div className="flex w-full flex-col items-start gap-2">
-                    <div className="flex pr-4 items-center gap-3 w-full mb-2">
-                      <div className="flex flex-col items-start flex-1">
-                        <div className="text-[#0A0B1E] font-medium text-base leading-6">
-                          Sarah K. 📚 Book Lover
-                        </div>
-                        <div className="text-gray-600 text-sm">
-                          @bookworm_sarah
-                        </div>
-                      </div>
-                      <div className="flex items-start w-[42px] h-[42px]">
-                        <div className="flex w-[42px] items-start rounded-full bg-black/5">
-                          <div className="w-[42px] h-[42px] rounded-full bg-gray-300"></div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex w-full flex-col items-start gap-2 opacity-90 text-sm">
-                      SummifyAI beats every other book summary tool out there
-                    </div>
-                    <div className="text-gray-500 text-xs flex items-center gap-2">
+                <div className="flex justify-center">
+                  <div className="w-80 h-80 bg-gradient-to-br from-blue-200 to-blue-300 rounded-2xl flex items-center justify-center border-2 border-dashed border-blue-400">
+                    <div className="text-center text-blue-600">
                       <svg
-                        className="w-4 h-4"
+                        className="w-16 h-16 mx-auto mb-4"
                         fill="currentColor"
                         viewBox="0 0 20 20"
                       >
                         <path
                           fillRule="evenodd"
-                          d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+                          d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
                           clipRule="evenodd"
                         />
                       </svg>
-                      <span>2</span>
-                      <span>Jan 29, 2024</span>
+                      <div className="font-medium text-lg">AI Topic Search</div>
+                      <div className="text-sm mt-2">
+                        Searching millions of books
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
 
-      {/* CTA Section */}
-      <div className="bg-[#0A0B1E] text-white py-20 px-20">
-        <div className="w-full max-w-[1280px] mx-auto text-center">
-          <h2 className="text-4xl font-bold mb-6">
-            Ready to run better research? Unlock better insights?
+          {/* Analyze Section */}
+          <div className="relative">
+            <div className="absolute -top-12 right-0 transform rotate-12">
+              <h3 className="text-8xl font-black text-[#0A0B1E] opacity-20">
+                Analyze.
+              </h3>
+            </div>
+            <div className="bg-green-100 rounded-3xl p-12">
+              <div className="grid lg:grid-cols-2 gap-12 items-center">
+                <div className="order-2 lg:order-1 flex justify-center">
+                  <div className="w-80 h-80 bg-gradient-to-br from-green-200 to-green-300 rounded-2xl flex items-center justify-center border-2 border-dashed border-green-400">
+                    <div className="text-center text-green-600">
+                      <svg
+                        className="w-16 h-16 mx-auto mb-4"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <div className="font-medium text-lg">AI Analysis</div>
+                      <div className="text-sm mt-2">
+                        Extracting insights and themes
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="order-1 lg:order-2">
+                  <h4 className="text-3xl font-bold text-[#0A0B1E] mb-6">
+                    Compare different perspectives
+                  </h4>
+                  <p className="text-lg text-[#0A0B1E]/70 mb-8 leading-relaxed">
+                    Say goodbye to surface-level summaries. Get deep insights.
+                    AI analyzes multiple viewpoints, extracts key themes,
+                    contrasting opinions, and synthesizes them into coherent
+                    comparisons.
+                  </p>
+                  <button className="bg-green-200 hover:bg-green-300 text-[#0A0B1E] px-6 py-3 rounded-xl font-medium transition-colors border-2 border-[#0A0B1E]">
+                    Show me the insights
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Generate Section */}
+          <div className="relative">
+            <div className="absolute -top-12 left-0 transform -rotate-12">
+              <h3 className="text-8xl font-black text-[#0A0B1E] opacity-20">
+                Generate.
+              </h3>
+            </div>
+            <div className="bg-orange-100 rounded-3xl p-12">
+              <div className="grid lg:grid-cols-2 gap-12 items-center">
+                <div>
+                  <h4 className="text-3xl font-bold text-[#0A0B1E] mb-6">
+                    Get your perfect summary
+                  </h4>
+                  <p className="text-lg text-[#0A0B1E]/70 mb-8 leading-relaxed">
+                    Summarize your learning and capture insights in seconds.
+                    Access your 300-word comparative analysis, key quotes,
+                    Amazon purchase links, and actionable takeaways—all from one
+                    beautiful interface.
+                  </p>
+                  <button className="bg-orange-200 hover:bg-orange-300 text-[#0A0B1E] px-6 py-3 rounded-xl font-medium transition-colors border-2 border-[#0A0B1E]">
+                    Take a look
+                  </button>
+                </div>
+                <div className="flex justify-center">
+                  <div className="w-80 h-80 bg-gradient-to-br from-orange-200 to-orange-300 rounded-2xl flex items-center justify-center border-2 border-dashed border-orange-400">
+                    <div className="text-center text-orange-600">
+                      <svg
+                        className="w-16 h-16 mx-auto mb-4"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 0v12h8V4H6z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                      <div className="font-medium text-lg">
+                        Beautiful Summary
+                      </div>
+                      <div className="text-sm mt-2">
+                        With quotes and affiliate links
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Share Section */}
+          <div className="relative">
+            <div className="absolute -top-12 right-0 transform rotate-12">
+              <h3 className="text-8xl font-black text-[#0A0B1E] opacity-20">
+                Share.
+              </h3>
+            </div>
+            <div className="bg-pink-100 rounded-3xl p-12">
+              <div className="grid lg:grid-cols-2 gap-12 items-center">
+                <div className="order-2 lg:order-1 flex justify-center">
+                  <div className="w-80 h-80 bg-gradient-to-br from-pink-200 to-pink-300 rounded-2xl flex items-center justify-center border-2 border-dashed border-pink-400">
+                    <div className="text-center text-pink-600">
+                      <svg
+                        className="w-16 h-16 mx-auto mb-4"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" />
+                      </svg>
+                      <div className="font-medium text-lg">Team Workspace</div>
+                      <div className="text-sm mt-2">
+                        Collaborate and share insights
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="order-1 lg:order-2">
+                  <h4 className="text-3xl font-bold text-[#0A0B1E] mb-6">
+                    One workspace for all your insights
+                  </h4>
+                  <p className="text-lg text-[#0A0B1E]/70 mb-8 leading-relaxed">
+                    Your SummifyAI workspace gives you one place to save
+                    summaries, share insights, and track your reading journey.
+                    Build your personal library and help friends discover great
+                    books.
+                  </p>
+                  <button className="bg-pink-200 hover:bg-pink-300 text-[#0A0B1E] px-6 py-3 rounded-xl font-medium transition-colors border-2 border-[#0A0B1E]">
+                    Create workspace
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Testimonials */}
+        <div className="max-w-7xl mx-auto px-6 py-20">
+          <h2 className="text-4xl font-bold text-[#0A0B1E] text-center mb-16">
+            Loved by readers everywhere
           </h2>
-          <p className="text-xl text-gray-300 mb-8">
-            Join thousands of readers who use SummifyAI to discover, compare,
-            and share book insights.
-          </p>
-          <Link
-            to="/signup"
-            className="inline-flex px-8 py-4 bg-[#FFFD63] text-[#0A0B1E] rounded-2xl font-semibold text-lg hover:bg-yellow-300 transition-colors"
-          >
-            Get started for free
-          </Link>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[
+              {
+                name: "Sarah K.",
+                role: "Product Manager",
+                text: "SummifyAI has completely changed how I discover and consume book insights. The comparative summaries save me hours of research.",
+              },
+              {
+                name: "Mike R.",
+                role: "Entrepreneur",
+                text: "The affiliate earning feature is genius. I share summaries with my team and actually earn money from the books they purchase. Win-win!",
+              },
+              {
+                name: "Lisa Chen",
+                role: "VP of Learning",
+                text: "Finally, a tool that doesn't just summarize books but actually helps me understand different perspectives on the same topic. Brilliant!",
+              },
+            ].map((testimonial, index) => (
+              <div
+                key={index}
+                className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100"
+              >
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-12 h-12 bg-gray-200 rounded-full"></div>
+                  <div>
+                    <div className="font-semibold text-[#0A0B1E]">
+                      {testimonial.name}
+                    </div>
+                    <div className="text-gray-600 text-sm">
+                      {testimonial.role}
+                    </div>
+                  </div>
+                </div>
+                <p className="text-gray-700 leading-relaxed">
+                  "{testimonial.text}"
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* CTA Section */}
+        <div className="bg-[#0A0B1E] text-white py-20">
+          <div className="max-w-4xl mx-auto px-6 text-center">
+            <h2 className="text-4xl font-bold mb-6">
+              Ready to discover better insights?
+            </h2>
+            <p className="text-xl text-gray-300 mb-8 leading-relaxed">
+              Join thousands of readers who use SummifyAI to discover, compare,
+              and share book insights.
+            </p>
+            <Link
+              to="/signup"
+              className="inline-block bg-[#FFFD63] text-[#0A0B1E] px-8 py-4 rounded-2xl font-bold text-lg hover:bg-yellow-300 transition-colors"
+            >
+              Get started for free
+            </Link>
+          </div>
         </div>
       </div>
     </div>

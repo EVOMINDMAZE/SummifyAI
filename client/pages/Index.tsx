@@ -52,10 +52,11 @@ export default function Index() {
                   </Link>
                   <Link
                     to="/results"
-                    className="text-[#0A0B1E] hover:text-[#0A0B1E]/80 font-medium"
+                    className="text-[#0A0B1E] dark:text-white hover:text-[#0A0B1E]/80 dark:hover:text-white/80 font-medium"
                   >
                     Results
                   </Link>
+                  <ThemeToggle />
                   <Link
                     to="/generate"
                     className="bg-[#0A0B1E] hover:bg-[#0A0B1E]/90 text-[#FFFD63] px-4 py-2 rounded-lg font-medium transition-colors"

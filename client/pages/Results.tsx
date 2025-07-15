@@ -1,9 +1,10 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { AuthContext } from "../contexts/AuthContext";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function Results() {
-  const { user, isAuthenticated } = useContext(AuthContext);
+  const { user, shareContent } = useAuth();
+  const isAuthenticated = !!user;
   const [activeTab, setActiveTab] = useState<"recent" | "saved" | "history">(
     "recent",
   );

@@ -331,6 +331,60 @@ export class SummifyAPI {
       throw error;
     }
   }
+  // User settings/preferences management
+  static async updateUserSettings(userId: number, settings: any) {
+    try {
+      const sql = `
+        UPDATE users
+        SET settings = $1, updated_at = CURRENT_TIMESTAMP
+        WHERE id = $2
+        RETURNING *
+      `;
+
+      const response = await fetch("/api/neon/execute", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...DATABASE_CONFIG,
+          sql,
+          params: [JSON.stringify(settings), userId],
+        }),
+      });
+
+      if (!response.ok) throw new Error("Failed to update user settings");
+
+      const result = await response.json();
+      return result.rows[0];
+    } catch (error) {
+      console.error("Error updating user settings:", error);
+      throw error;
+    }
+  }
+
+  static async getUserSettings(userId: number) {
+    try {
+      const sql = `SELECT settings FROM users WHERE id = $1`;
+
+      const response = await fetch("/api/neon/execute", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...DATABASE_CONFIG,
+          sql,
+          params: [userId],
+        }),
+      });
+
+      if (!response.ok) throw new Error("Failed to get user settings");
+
+      const result = await response.json();
+      const settings = result.rows[0]?.settings;
+      return settings ? JSON.parse(settings) : {};
+    } catch (error) {
+      console.error("Error getting user settings:", error);
+      throw error;
+    }
+  }
 }
 
 // Fallback mock data for development/demo

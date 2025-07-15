@@ -109,6 +109,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         tier: "free",
         queriesUsed: 0,
         queriesLimit: 3,
+        credits: 3,
+        referralCode: `${email.split("@")[0].toUpperCase()}123`,
+        referralsCount: 0,
         createdAt: new Date().toISOString(),
       };
       localStorage.setItem("auth_token", "demo_token");

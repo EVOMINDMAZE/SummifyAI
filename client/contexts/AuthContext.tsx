@@ -221,6 +221,36 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
+  const updateUserSettings = async (settings: any) => {
+    if (!user) return;
+
+    try {
+      // Import SummifyAPI here to avoid circular dependencies
+      const { SummifyAPI } = await import("../utils/api");
+      await SummifyAPI.updateUserSettings(parseInt(user.id), settings);
+
+      // Update local user state
+      setUser({
+        ...user,
+        settings: { ...user.settings, ...settings },
+      });
+    } catch (error) {
+      console.warn("Settings API failed, using local storage:", error);
+      // Fallback to localStorage for demo
+      const currentSettings = user.settings || {};
+      const newSettings = { ...currentSettings, ...settings };
+      localStorage.setItem(
+        `user_settings_${user.id}`,
+        JSON.stringify(newSettings),
+      );
+
+      setUser({
+        ...user,
+        settings: newSettings,
+      });
+    }
+  };
+
   const addCredits = async (amount: number, reason: string) => {
     if (user) {
       try {

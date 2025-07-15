@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import ThemeToggle from "../components/ThemeToggle";
 
 export default function Results() {
   const { user, shareContent } = useAuth();

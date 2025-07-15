@@ -23,11 +23,19 @@ interface GeneratedSummary {
 export default function Generate() {
   const { user, updateUser } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [topic, setTopic] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedSummary, setGeneratedSummary] =
     useState<GeneratedSummary | null>(null);
   const [showUpgrade, setShowUpgrade] = useState(false);
+
+  useEffect(() => {
+    const topicParam = searchParams.get("topic");
+    if (topicParam) {
+      setTopic(topicParam);
+    }
+  }, [searchParams]);
 
   const mockBooks: Book[] = [
     {

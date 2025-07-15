@@ -397,6 +397,79 @@ export default function AccountSettings() {
                   </button>
                 </div>
               </div>
+
+              {/* Referral System */}
+              <div className="bg-white rounded-xl border border-gray-200 p-8">
+                <h2 className="text-xl font-bold text-[#0A0B1E] mb-6">
+                  Refer Friends & Earn Credits
+                </h2>
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <h3 className="font-semibold text-[#0A0B1E] mb-3">
+                      Your Referral Code
+                    </h3>
+                    <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg border">
+                      <code className="flex-1 font-mono text-lg font-bold text-blue-600">
+                        {user?.referralCode}
+                      </code>
+                      <button
+                        onClick={() => {
+                          navigator.clipboard.writeText(
+                            user?.referralCode || "",
+                          );
+                          alert("Referral code copied to clipboard!");
+                        }}
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm"
+                      >
+                        Copy
+                      </button>
+                    </div>
+                    <p className="text-sm text-gray-600 mt-2">
+                      Share this code with friends to earn 3 credits when they
+                      sign up!
+                    </p>
+                  </div>
+
+                  <div>
+                    <h3 className="font-semibold text-[#0A0B1E] mb-3">
+                      Referral Stats
+                    </h3>
+                    <div className="space-y-3">
+                      <div className="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+                        <span className="text-green-800 font-medium">
+                          Friends Referred
+                        </span>
+                        <span className="text-2xl font-bold text-green-600">
+                          {user?.referralsCount || 0}
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center p-3 bg-blue-50 rounded-lg">
+                        <span className="text-blue-800 font-medium">
+                          Credits Earned
+                        </span>
+                        <span className="text-2xl font-bold text-blue-600">
+                          {(user?.referralsCount || 0) * 3}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                  <h4 className="font-semibold text-yellow-800 mb-2">
+                    How it works:
+                  </h4>
+                  <ul className="text-sm text-yellow-700 space-y-1">
+                    <li>• Share your referral code with friends</li>
+                    <li>• They sign up using your code</li>
+                    <li>• You both earn 3 credits immediately!</li>
+                    <li>
+                      • Use credits for additional searches when you hit your
+                      limit
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </div>
           )}
 

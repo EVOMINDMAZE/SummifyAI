@@ -101,7 +101,7 @@ export default function Index() {
       </nav>
 
       {/* Hero Section */}
-      <div className="bg-[#FFFD63] relative">
+      <div className="bg-[#FFFD63] dark:bg-gray-800 relative z-20">
         <div
           className="max-w-6xl mx-auto px-6 pt-20 pb-32 mb-px flex flex-row justify-start overflow-auto"
           style={{ padding: "98px 30px 38px" }}

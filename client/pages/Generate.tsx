@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import ThemeToggle from "@/components/ThemeToggle";
 
 interface Book {
   id: string;
@@ -148,9 +149,9 @@ Sinek's "Leaders Eat Last" introduces the concept of the "Circle of Safety," whe
 
   if (!user) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
             Please sign in to continue
           </h2>
           <Link
@@ -165,9 +166,9 @@ Sinek's "Leaders Eat Last" introduces the concept of the "Circle of Safety," whe
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Navigation */}
-      <nav className="bg-white shadow-sm">
+      <nav className="bg-white dark:bg-gray-800 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex">
@@ -175,32 +176,33 @@ Sinek's "Leaders Eat Last" introduces the concept of the "Circle of Safety," whe
                 <div className="w-8 h-8 bg-yellow-400 rounded-lg flex items-center justify-center">
                   <span className="text-black font-bold text-lg">S</span>
                 </div>
-                <span className="ml-2 text-xl font-semibold text-gray-900">
+                <span className="ml-2 text-xl font-semibold text-gray-900 dark:text-white">
                   SummifyAI
                 </span>
               </Link>
               <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
                 <Link
                   to="/dashboard"
-                  className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+                  className="border-transparent text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:hover:text-white hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
                 >
                   Dashboard
                 </Link>
                 <Link
                   to="/generate"
-                  className="border-yellow-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+                  className="border-yellow-500 text-gray-900 dark:text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
                 >
                   Generate Summary
                 </Link>
               </div>
             </div>
             <div className="flex items-center space-x-4">
-              <span className="text-sm text-gray-600">
+              <ThemeToggle />
+              <span className="text-sm text-gray-600 dark:text-gray-400">
                 {user.queriesUsed}/{user.queriesLimit} queries used
               </span>
               <Link
                 to="/dashboard"
-                className="text-gray-600 hover:text-gray-900"
+                className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
               >
                 Back to Dashboard
               </Link>
@@ -212,23 +214,23 @@ Sinek's "Leaders Eat Last" introduces the concept of the "Circle of Safety," whe
       <div className="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
             Generate Book Summary
           </h1>
-          <p className="text-lg text-gray-600">
+          <p className="text-lg text-gray-600 dark:text-gray-400">
             Enter any topic to get insights from the top 5 relevant books
           </p>
         </div>
 
         {/* Generation Form */}
-        <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-8">
           <div className="flex flex-col sm:flex-row gap-4">
             <input
               type="text"
               value={topic}
               onChange={(e) => setTopic(e.target.value)}
               placeholder="Enter a topic (e.g., leadership, productivity, marketing)"
-              className="flex-1 px-4 py-3 text-lg border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
+              className="flex-1 px-4 py-3 text-lg border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent"
               disabled={isGenerating}
             />
             <button
@@ -314,7 +316,7 @@ Sinek's "Leaders Eat Last" introduces the concept of the "Circle of Safety," whe
 
         {/* Loading State */}
         {isGenerating && (
-          <div className="bg-white rounded-lg shadow-lg p-8 text-center">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 text-center">
             <div className="max-w-md mx-auto">
               <div className="flex justify-center mb-4">
                 <svg
@@ -337,14 +339,14 @@ Sinek's "Leaders Eat Last" introduces the concept of the "Circle of Safety," whe
                   />
                 </svg>
               </div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">
+              <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
                 Analyzing books on "{topic}"
               </h3>
-              <p className="text-gray-600">
+              <p className="text-gray-600 dark:text-gray-400">
                 Searching through thousands of books and generating your
                 comparative summary...
               </p>
-              <div className="mt-4 space-y-2 text-sm text-gray-500">
+              <div className="mt-4 space-y-2 text-sm text-gray-500 dark:text-gray-400">
                 <p>🔍 Finding top 5 relevant books...</p>
                 <p>📖 Analyzing key insights and themes...</p>
                 <p>✨ Generating comparative summary...</p>
@@ -357,8 +359,8 @@ Sinek's "Leaders Eat Last" introduces the concept of the "Circle of Safety," whe
         {generatedSummary && !isGenerating && (
           <div className="space-y-8">
             {/* Books Section */}
-            <div className="bg-white rounded-lg shadow-lg p-6">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
                 Top 5 Books on "{generatedSummary.topic}"
               </h2>
               <div className="grid md:grid-cols-5 gap-6">
@@ -376,10 +378,12 @@ Sinek's "Leaders Eat Last" introduces the concept of the "Circle of Safety," whe
                         </div>
                       )}
                     </div>
-                    <h3 className="font-semibold text-sm text-gray-900 mb-1 line-clamp-2">
+                    <h3 className="font-semibold text-sm text-gray-900 dark:text-white mb-1 line-clamp-2">
                       {book.title}
                     </h3>
-                    <p className="text-xs text-gray-600 mb-3">{book.author}</p>
+                    <p className="text-xs text-gray-600 dark:text-gray-400 mb-3">
+                      {book.author}
+                    </p>
                     <a
                       href={book.amazonLink}
                       target="_blank"
@@ -388,7 +392,7 @@ Sinek's "Leaders Eat Last" introduces the concept of the "Circle of Safety," whe
                     >
                       Buy on Amazon
                     </a>
-                    <p className="text-xs text-gray-500 mt-1">
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                       {book.commission}% commission
                     </p>
                   </div>
@@ -397,9 +401,9 @@ Sinek's "Leaders Eat Last" introduces the concept of the "Circle of Safety," whe
             </div>
 
             {/* Summary Section */}
-            <div className="bg-white rounded-lg shadow-lg p-6">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
                   Comparative Summary
                 </h2>
                 <div className="flex space-x-2">
@@ -429,24 +433,26 @@ Sinek's "Leaders Eat Last" introduces the concept of the "Circle of Safety," whe
               </div>
 
               <div className="prose max-w-none">
-                <div className="whitespace-pre-line text-gray-700 leading-relaxed">
+                <div className="whitespace-pre-line text-gray-700 dark:text-gray-300 leading-relaxed">
                   {generatedSummary.summary}
                 </div>
               </div>
             </div>
 
             {/* Key Quotes Section */}
-            <div className="bg-white rounded-lg shadow-lg p-6">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">
+            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
                 Key Quotes
               </h2>
               <div className="space-y-4">
                 {generatedSummary.quotes.map((quote, index) => (
                   <blockquote
                     key={index}
-                    className="border-l-4 border-yellow-400 pl-4 py-2 bg-yellow-50 rounded-r-lg"
+                    className="border-l-4 border-yellow-400 pl-4 py-2 bg-yellow-50 dark:bg-yellow-900/20 rounded-r-lg"
                   >
-                    <p className="text-gray-700 italic">{quote}</p>
+                    <p className="text-gray-700 dark:text-gray-300 italic">
+                      {quote}
+                    </p>
                   </blockquote>
                 ))}
               </div>
@@ -476,18 +482,18 @@ Sinek's "Leaders Eat Last" introduces the concept of the "Circle of Safety," whe
         {/* Upgrade Modal */}
         {showUpgrade && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-            <div className="bg-white rounded-lg max-w-md w-full p-6">
-              <h3 className="text-lg font-bold text-gray-900 mb-4">
+            <div className="bg-white dark:bg-gray-800 rounded-lg max-w-md w-full p-6">
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">
                 Upgrade to Premium
               </h3>
-              <p className="text-gray-600 mb-6">
+              <p className="text-gray-600 dark:text-gray-400 mb-6">
                 You've used all your free queries this month. Upgrade to Premium
                 for unlimited summaries and exclusive features.
               </p>
               <div className="flex gap-3">
                 <button
                   onClick={() => setShowUpgrade(false)}
-                  className="flex-1 bg-gray-200 text-gray-800 px-4 py-2 rounded-md font-medium hover:bg-gray-300"
+                  className="flex-1 bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200 px-4 py-2 rounded-md font-medium hover:bg-gray-300 dark:hover:bg-gray-500"
                 >
                   Maybe Later
                 </button>

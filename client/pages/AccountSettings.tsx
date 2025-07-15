@@ -346,7 +346,9 @@ export default function AccountSettings() {
                       Earn credits by sharing summaries and referring friends
                     </p>
                   </div>
-                  <div className="text-3xl font-bold text-green-600">5</div>
+                  <div className="text-3xl font-bold text-green-600">
+                    {user?.credits || 0}
+                  </div>
                 </div>
                 <div className="space-y-3">
                   <div className="flex items-center justify-between text-sm">

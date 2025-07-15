@@ -18,6 +18,8 @@ import HowItWorks from "./pages/HowItWorks";
 import InsightsDemo from "./pages/InsightsDemo";
 import Results from "./pages/Results";
 import AccountSettings from "./pages/AccountSettings";
+import SummaryShowcase from "./pages/SummaryShowcase";
+import LibraryShowcase from "./pages/LibraryShowcase";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();

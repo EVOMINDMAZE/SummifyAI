@@ -13,8 +13,11 @@ export interface User {
   tier: "free" | "premium";
   queriesUsed: number;
   queriesLimit: number;
+  credits: number;
   subscriptionId?: string;
   createdAt: string;
+  referralCode: string;
+  referralsCount: number;
 }
 
 interface AuthContextType {

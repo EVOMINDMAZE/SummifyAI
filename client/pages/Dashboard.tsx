@@ -94,54 +94,43 @@ export default function Dashboard() {
                 <div className="w-8 h-8 bg-yellow-400 rounded-lg flex items-center justify-center">
                   <span className="text-black font-bold text-lg">S</span>
                 </div>
-                <span className="ml-2 text-xl font-semibold text-gray-900">
+                <span className="ml-2 text-xl font-semibold text-gray-900 dark:text-white">
                   SummifyAI
                 </span>
               </Link>
               <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
                 <Link
                   to="/dashboard"
-                  className="border-yellow-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+                  className="border-yellow-500 text-gray-900 dark:text-white inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
                 >
                   Dashboard
                 </Link>
                 <Link
                   to="/generate"
-                  className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+                  className="border-transparent text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:hover:text-white hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
                 >
                   Generate Summary
                 </Link>
                 <Link
                   to="/results"
-                  className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+                  className="border-transparent text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:hover:text-white hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
                 >
                   Results
                 </Link>
                 <Link
-                  to="/settings"
-                  className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
-                >
-                  Settings
-                </Link>
-                <Link
                   to="/support"
-                  className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+                  className="border-transparent text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:hover:text-white hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
                 >
                   Support
-                </Link>
-                <Link
-                  to="/pricing"
-                  className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
-                >
-                  Pricing
                 </Link>
               </div>
             </div>
             <div className="hidden sm:ml-6 sm:flex sm:items-center">
-              <div className="relative">
+              <ThemeToggle />
+              <div className="relative ml-4">
                 <button
                   onClick={() => setIsMenuOpen(!isMenuOpen)}
-                  className="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
+                  className="bg-white dark:bg-gray-700 p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
                 >
                   <span className="sr-only">Open user menu</span>
                   <div className="h-8 w-8 rounded-full bg-yellow-100 flex items-center justify-center">
@@ -152,31 +141,29 @@ export default function Dashboard() {
                 </button>
 
                 {isMenuOpen && (
-                  <div className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                  <div className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5">
                     <div className="py-1">
-                      <div className="px-4 py-2 text-sm text-gray-700 border-b">
+                      <div className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 border-b border-gray-200 dark:border-gray-600">
                         <div className="font-medium">{user.name}</div>
-                        <div className="text-gray-500">{user.email}</div>
+                        <div className="text-gray-500 dark:text-gray-400">
+                          {user.email}
+                        </div>
                       </div>
                       <Link
                         to="/settings"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                       >
                         Settings
                       </Link>
                       <button
                         onClick={handleSignOut}
-                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                       >
                         Sign out
                       </button>
                     </div>
                   </div>
                 )}
-                {/* Theme Toggle */}
-                <div className="ml-4">
-                  <ThemeToggle />
-                </div>
               </div>
             </div>
           </div>
@@ -206,12 +193,12 @@ export default function Dashboard() {
         <div className="mt-8">
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {/* Queries Used */}
-            <div className="bg-white overflow-hidden shadow rounded-lg">
+            <div className="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg relative">
               <div className="p-5">
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
                     <svg
-                      className="h-6 w-6 text-gray-400"
+                      className="h-6 w-6 text-gray-400 dark:text-gray-300"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -224,25 +211,25 @@ export default function Dashboard() {
                       />
                     </svg>
                   </div>
-                  <div className="ml-5 w-0 flex-1">
+                  <div className="ml-5 w-0 flex-1 relative z-10">
                     <dl>
-                      <dt className="text-sm font-medium text-gray-500 truncate">
+                      <dt className="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
                         Queries Used
                       </dt>
-                      <dd className="text-lg font-medium text-gray-900">
+                      <dd className="text-lg font-medium text-gray-900 dark:text-white">
                         {user.queriesUsed} / {user.queriesLimit}
                       </dd>
                     </dl>
                   </div>
                 </div>
               </div>
-              <div className="bg-gray-50 px-5 py-3">
+              <div className="bg-gray-50 dark:bg-gray-700 px-5 py-3">
                 <div className="text-sm">
                   <span
                     className={`font-medium ${
                       user.tier === "premium"
-                        ? "text-green-600"
-                        : "text-yellow-600"
+                        ? "text-green-600 dark:text-green-400"
+                        : "text-yellow-600 dark:text-yellow-400"
                     }`}
                   >
                     {user.tier === "premium" ? "Unlimited" : "Free Plan"}
@@ -252,12 +239,12 @@ export default function Dashboard() {
             </div>
 
             {/* Affiliate Earnings */}
-            <div className="bg-white overflow-hidden shadow rounded-lg">
+            <div className="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
               <div className="p-5">
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
                     <svg
-                      className="h-6 w-6 text-gray-400"
+                      className="h-6 w-6 text-gray-400 dark:text-gray-300"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -272,19 +259,19 @@ export default function Dashboard() {
                   </div>
                   <div className="ml-5 w-0 flex-1">
                     <dl>
-                      <dt className="text-sm font-medium text-gray-500 truncate">
+                      <dt className="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
                         This Month
                       </dt>
-                      <dd className="text-lg font-medium text-gray-900">
+                      <dd className="text-lg font-medium text-gray-900 dark:text-white">
                         ${affiliateEarnings.thisMonth.toFixed(2)}
                       </dd>
                     </dl>
                   </div>
                 </div>
               </div>
-              <div className="bg-gray-50 px-5 py-3">
+              <div className="bg-gray-50 dark:bg-gray-700 px-5 py-3">
                 <div className="text-sm">
-                  <span className="font-medium text-green-600">
+                  <span className="font-medium text-green-600 dark:text-green-400">
                     ${affiliateEarnings.total.toFixed(2)} total
                   </span>
                 </div>
@@ -292,12 +279,12 @@ export default function Dashboard() {
             </div>
 
             {/* Clicks */}
-            <div className="bg-white overflow-hidden shadow rounded-lg">
+            <div className="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
               <div className="p-5">
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
                     <svg
-                      className="h-6 w-6 text-gray-400"
+                      className="h-6 w-6 text-gray-400 dark:text-gray-300"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -312,19 +299,19 @@ export default function Dashboard() {
                   </div>
                   <div className="ml-5 w-0 flex-1">
                     <dl>
-                      <dt className="text-sm font-medium text-gray-500 truncate">
+                      <dt className="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
                         Clicks
                       </dt>
-                      <dd className="text-lg font-medium text-gray-900">
+                      <dd className="text-lg font-medium text-gray-900 dark:text-white">
                         {affiliateEarnings.clicks}
                       </dd>
                     </dl>
                   </div>
                 </div>
               </div>
-              <div className="bg-gray-50 px-5 py-3">
+              <div className="bg-gray-50 dark:bg-gray-700 px-5 py-3">
                 <div className="text-sm">
-                  <span className="font-medium text-gray-600">
+                  <span className="font-medium text-gray-600 dark:text-gray-300">
                     {affiliateEarnings.conversions} conversions
                   </span>
                 </div>
@@ -332,12 +319,12 @@ export default function Dashboard() {
             </div>
 
             {/* Account Status */}
-            <div className="bg-white overflow-hidden shadow rounded-lg">
+            <div className="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
               <div className="p-5">
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
                     <svg
-                      className="h-6 w-6 text-gray-400"
+                      className="h-6 w-6 text-gray-400 dark:text-gray-300"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -352,28 +339,21 @@ export default function Dashboard() {
                   </div>
                   <div className="ml-5 w-0 flex-1">
                     <dl>
-                      <dt className="text-sm font-medium text-gray-500 truncate">
+                      <dt className="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
                         Account
                       </dt>
-                      <dd className="text-lg font-medium text-gray-900 capitalize">
+                      <dd className="text-lg font-medium text-gray-900 dark:text-white capitalize">
                         {user.tier}
                       </dd>
                     </dl>
                   </div>
                 </div>
               </div>
-              <div className="bg-gray-50 px-5 py-3">
+              <div className="bg-gray-50 dark:bg-gray-700 px-5 py-3">
                 <div className="text-sm">
-                  {user.tier === "free" ? (
-                    <Link
-                      to="/pricing"
-                      className="font-medium text-yellow-600 hover:text-yellow-500"
-                    >
-                      Upgrade to Premium
-                    </Link>
-                  ) : (
-                    <span className="font-medium text-green-600">Active</span>
-                  )}
+                  <span className="font-medium text-green-600 dark:text-green-400">
+                    Active
+                  </span>
                 </div>
               </div>
             </div>
@@ -382,12 +362,12 @@ export default function Dashboard() {
 
         {/* Recent Summaries */}
         <div className="mt-8">
-          <div className="bg-white shadow overflow-hidden sm:rounded-md">
+          <div className="bg-white dark:bg-gray-800 shadow overflow-hidden sm:rounded-md">
             <div className="px-4 py-5 sm:px-6">
-              <h3 className="text-lg leading-6 font-medium text-gray-900">
+              <h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-white">
                 Recent Summaries
               </h3>
-              <p className="mt-1 max-w-2xl text-sm text-gray-500">
+              <p className="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-400">
                 Your latest book summaries and analysis
               </p>
             </div>
@@ -395,13 +375,13 @@ export default function Dashboard() {
               {recentSummaries.length > 0 ? (
                 recentSummaries.map((summary) => (
                   <li key={summary.id}>
-                    <div className="px-4 py-4 sm:px-6 hover:bg-gray-50">
+                    <div className="px-4 py-4 sm:px-6 hover:bg-gray-50 dark:hover:bg-gray-700">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center">
                           <div className="flex-shrink-0 h-10 w-10">
-                            <div className="h-10 w-10 rounded-full bg-yellow-100 flex items-center justify-center">
+                            <div className="h-10 w-10 rounded-full bg-yellow-100 flex items-center justify-center relative">
                               <svg
-                                className="h-6 w-6 text-yellow-600"
+                                className="h-6 w-6 text-yellow-600 relative z-10"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -413,13 +393,16 @@ export default function Dashboard() {
                                   d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
                                 />
                               </svg>
+                              <span className="absolute inset-0 flex items-center justify-center text-xs font-bold text-yellow-800 z-20">
+                                {summary.topic.charAt(0).toUpperCase()}
+                              </span>
                             </div>
                           </div>
                           <div className="ml-4">
-                            <div className="text-sm font-medium text-gray-900">
+                            <div className="text-sm font-medium text-gray-900 dark:text-white">
                               {summary.topic}
                             </div>
-                            <div className="text-sm text-gray-500">
+                            <div className="text-sm text-gray-500 dark:text-gray-400">
                               {new Date(summary.createdAt).toLocaleDateString()}
                               {" • "}
                               {summary.books.length} books analyzed
@@ -430,7 +413,7 @@ export default function Dashboard() {
                           <button className="text-yellow-600 hover:text-yellow-500 text-sm font-medium">
                             View Summary
                           </button>
-                          <button className="text-gray-400 hover:text-gray-500">
+                          <button className="text-gray-400 dark:text-gray-300 hover:text-gray-500 dark:hover:text-gray-200">
                             <svg
                               className="h-5 w-5"
                               fill="none"
@@ -453,9 +436,9 @@ export default function Dashboard() {
               ) : (
                 <li>
                   <div className="px-4 py-8 text-center">
-                    <div className="text-gray-500">
+                    <div className="text-gray-500 dark:text-gray-400">
                       <svg
-                        className="mx-auto h-12 w-12 text-gray-400"
+                        className="mx-auto h-12 w-12 text-gray-400 dark:text-gray-300"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -467,10 +450,10 @@ export default function Dashboard() {
                           d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
                         />
                       </svg>
-                      <h3 className="mt-2 text-sm font-medium text-gray-900">
+                      <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-white">
                         No summaries yet
                       </h3>
-                      <p className="mt-1 text-sm text-gray-500">
+                      <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
                         Get started by generating your first book summary.
                       </p>
                       <div className="mt-6">

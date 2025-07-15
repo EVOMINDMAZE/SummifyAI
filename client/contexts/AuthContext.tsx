@@ -86,7 +86,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const signIn = async (email: string, password: string) => {
     try {
       setIsLoading(true);
-      // TODO: Replace with actual API call
       const response = await fetch("/api/auth/signin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -94,14 +93,27 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       });
 
       if (!response.ok) {
-        throw new Error("Sign in failed");
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Sign in failed");
       }
 
       const data = await response.json();
       localStorage.setItem("auth_token", data.token);
-      setUser(data.user);
+      setUser({
+        id: data.user.id.toString(),
+        email: data.user.email,
+        name: data.user.name,
+        tier: data.user.tier,
+        queriesUsed: data.user.queriesUsed,
+        queriesLimit: data.user.queryLimit,
+        credits: data.user.credits,
+        referralCode: data.user.referralCode,
+        referralsCount: data.user.referralsCount,
+        createdAt: data.user.createdAt,
+      });
     } catch (error) {
-      // For demo purposes, create a mock user
+      // Fall back to demo user for development
+      console.warn("Auth failed, using demo user:", error);
       const mockUser: User = {
         id: "1",
         email,

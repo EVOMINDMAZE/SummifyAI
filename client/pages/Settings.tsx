@@ -4,10 +4,76 @@ import { useAuth } from "../contexts/AuthContext";
 import { ThemeSelector } from "../components/ThemeToggle";
 
 export default function Settings() {
-  const { user } = useAuth();
+  const { user, updateUserSettings } = useAuth();
   const [activeTab, setActiveTab] = useState<
     "general" | "notifications" | "privacy" | "advanced"
   >("general");
+
+  // Local settings state
+  const [settings, setSettings] = useState({
+    language: "en",
+    timezone: "UTC-8",
+    defaultSummaryLength: "medium",
+    autoSave: true,
+    notifications: {
+      emailWeeklyReport: true,
+      emailCreditUpdates: true,
+      emailFeatureUpdates: false,
+      emailMarketing: false,
+      browserSummaryComplete: true,
+    },
+    privacy: {
+      allowAnalytics: true,
+      saveSearchHistory: true,
+    },
+    advanced: {
+      developerMode: false,
+      betaFeatures: false,
+    },
+  });
+
+  // Load user settings on mount
+  useEffect(() => {
+    if (user?.settings) {
+      setSettings((prev) => ({
+        ...prev,
+        ...user.settings,
+        notifications: {
+          ...prev.notifications,
+          ...user.settings.notifications,
+        },
+        privacy: { ...prev.privacy, ...user.settings.privacy },
+        advanced: { ...prev.advanced, ...user.settings.advanced },
+      }));
+    }
+  }, [user]);
+
+  // Handle settings updates
+  const handleSettingChange = async (path: string, value: any) => {
+    const keys = path.split(".");
+    let newSettings = { ...settings };
+
+    if (keys.length === 1) {
+      newSettings = { ...newSettings, [keys[0]]: value };
+    } else if (keys.length === 2) {
+      newSettings = {
+        ...newSettings,
+        [keys[0]]: {
+          ...newSettings[keys[0] as keyof typeof settings],
+          [keys[1]]: value,
+        },
+      };
+    }
+
+    setSettings(newSettings);
+
+    // Save to backend
+    try {
+      await updateUserSettings(newSettings);
+    } catch (error) {
+      console.error("Failed to save settings:", error);
+    }
+  };
 
   if (!user) {
     return (

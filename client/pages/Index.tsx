@@ -423,10 +423,10 @@ export default function Index() {
                     books.
                   </p>
                   <Link
-                    to={user ? "/account-settings" : "/signin"}
+                    to={user ? "/results" : "/library-showcase"}
                     className="bg-pink-200 hover:bg-pink-300 text-[#0A0B1E] px-6 py-3 rounded-xl font-medium transition-colors border-2 border-[#0A0B1E] inline-block"
                   >
-                    {user ? "Manage Account" : "Sign in to access"}
+                    {user ? "View Your Library" : "See Your Library"}
                   </Link>
                 </div>
               </div>

@@ -1,16 +1,24 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function Index() {
   const [topic, setTopic] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!topic.trim()) return;
 
-    setIsLoading(true);
-    // TODO: Implement summary generation
-    setTimeout(() => setIsLoading(false), 2000);
+    if (!user) {
+      navigate("/signup");
+      return;
+    }
+
+    // Redirect to generation page with topic
+    navigate(`/generate?topic=${encodeURIComponent(topic)}`);
   };
 
   return (

@@ -225,7 +225,10 @@ export default function Index() {
       </div>
 
       {/* Main Content */}
-      <div className="bg-white" style={{ padding: "118px 0 100px" }}>
+      <div
+        className="bg-white dark:bg-gray-900"
+        style={{ padding: "118px 0 100px" }}
+      >
         {/* Logo Section */}
         <div className="py-16 overflow-hidden">
           <div className="flex items-center justify-center gap-12 opacity-60">

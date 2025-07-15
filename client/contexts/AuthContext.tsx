@@ -65,6 +65,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             tier: "free",
             queriesUsed: 1,
             queriesLimit: 3,
+            credits: 5,
+            referralCode: "JOHN123",
+            referralsCount: 2,
             createdAt: new Date().toISOString(),
           };
           setUser(mockUser);

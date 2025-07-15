@@ -17,7 +17,7 @@ import Admin from "./pages/Admin";
 import HowItWorks from "./pages/HowItWorks";
 import InsightsDemo from "./pages/InsightsDemo";
 import Results from "./pages/Results";
-import TeamWorkspace from "./pages/TeamWorkspace";
+import AccountSettings from "./pages/AccountSettings";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();

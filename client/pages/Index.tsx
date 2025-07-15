@@ -108,7 +108,7 @@ export default function Index() {
         >
           <div className="text-center" style={{ margin: "-1px 0 25px" }}>
             {/* Main Heading */}
-            <h1 className="text-5xl md:text-7xl font-black text-[#0A0B1E] leading-tight mb-8">
+            <h1 className="text-5xl md:text-7xl font-black text-[#0A0B1E] dark:text-white leading-tight mb-8">
               <span
                 className="-mt-0.5 inline-block"
                 style={{ marginTop: "-2.5px" }}
@@ -116,11 +116,13 @@ export default function Index() {
                 Get instant book summaries.
               </span>
               <br />
-              <span className="text-[#0A0B1E]">Discover better insights.</span>
+              <span className="text-[#0A0B1E] dark:text-white">
+                Discover better insights.
+              </span>
             </h1>
 
             {/* Subheading */}
-            <p className="text-lg md:text-xl text-[#0A0B1E]/80 max-w-3xl mx-auto mb-12 leading-relaxed">
+            <p className="text-lg md:text-xl text-[#0A0B1E]/80 dark:text-gray-300 max-w-3xl mx-auto mb-12 leading-relaxed">
               Enter any topic and get comparative insights from the top 5 books,
               complete with key quotes, Amazon affiliate links, and actionable
               takeaways—all powered by AI.

@@ -22,6 +22,79 @@ export default function Index() {
 
   return (
     <div className="min-h-screen bg-white">
+      {/* Navigation */}
+      <nav className="bg-[#FFFD63] relative z-10">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="flex justify-between items-center h-16">
+            <Link to="/" className="flex items-center gap-2">
+              <div className="w-8 h-8 bg-[#0A0B1E] rounded-lg flex items-center justify-center">
+                <span className="text-[#FFFD63] font-bold text-lg">S</span>
+              </div>
+              <span className="text-xl font-bold text-[#0A0B1E]">
+                SummifyAI
+              </span>
+            </Link>
+            <div className="flex items-center gap-4">
+              {user ? (
+                <>
+                  <Link
+                    to="/dashboard"
+                    className="text-[#0A0B1E] hover:text-[#0A0B1E]/80 font-medium"
+                  >
+                    Dashboard
+                  </Link>
+                  <Link
+                    to="/generate"
+                    className="text-[#0A0B1E] hover:text-[#0A0B1E]/80 font-medium"
+                  >
+                    Generate
+                  </Link>
+                  <Link
+                    to="/results"
+                    className="text-[#0A0B1E] hover:text-[#0A0B1E]/80 font-medium"
+                  >
+                    Results
+                  </Link>
+                  <Link
+                    to="/generate"
+                    className="bg-[#0A0B1E] hover:bg-[#0A0B1E]/90 text-[#FFFD63] px-4 py-2 rounded-lg font-medium transition-colors"
+                  >
+                    New Search
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link
+                    to="/how-it-works"
+                    className="text-[#0A0B1E] hover:text-[#0A0B1E]/80 font-medium"
+                  >
+                    How it Works
+                  </Link>
+                  <Link
+                    to="/pricing"
+                    className="text-[#0A0B1E] hover:text-[#0A0B1E]/80 font-medium"
+                  >
+                    Pricing
+                  </Link>
+                  <Link
+                    to="/signin"
+                    className="text-[#0A0B1E] hover:text-[#0A0B1E]/80 font-medium"
+                  >
+                    Sign In
+                  </Link>
+                  <Link
+                    to="/signup"
+                    className="bg-[#0A0B1E] hover:bg-[#0A0B1E]/90 text-[#FFFD63] px-4 py-2 rounded-lg font-medium transition-colors"
+                  >
+                    Sign Up
+                  </Link>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      </nav>
+
       {/* Hero Section */}
       <div className="bg-[#FFFD63] relative">
         <div className="max-w-6xl mx-auto px-6 pt-20 pb-32 -mb-1">

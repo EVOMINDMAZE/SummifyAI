@@ -175,6 +175,84 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
+  const addCredits = (amount: number, reason: string) => {
+    if (user) {
+      const newCredits = user.credits + amount;
+      setUser({ ...user, credits: newCredits });
+
+      // In a real app, this would be an API call
+      console.log(
+        `Added ${amount} credits: ${reason}. New balance: ${newCredits}`,
+      );
+
+      // Store the transaction for history
+      const transaction = {
+        type: "earned",
+        amount,
+        reason,
+        timestamp: new Date().toISOString(),
+        balance: newCredits,
+      };
+
+      const existingTransactions = JSON.parse(
+        localStorage.getItem("credit_transactions") || "[]",
+      );
+      existingTransactions.push(transaction);
+      localStorage.setItem(
+        "credit_transactions",
+        JSON.stringify(existingTransactions),
+      );
+    }
+  };
+
+  const useCredits = (amount: number): boolean => {
+    if (user && user.credits >= amount) {
+      const newCredits = user.credits - amount;
+      setUser({ ...user, credits: newCredits });
+
+      // Store the transaction
+      const transaction = {
+        type: "spent",
+        amount,
+        reason: "Used for additional search",
+        timestamp: new Date().toISOString(),
+        balance: newCredits,
+      };
+
+      const existingTransactions = JSON.parse(
+        localStorage.getItem("credit_transactions") || "[]",
+      );
+      existingTransactions.push(transaction);
+      localStorage.setItem(
+        "credit_transactions",
+        JSON.stringify(existingTransactions),
+      );
+
+      return true;
+    }
+    return false;
+  };
+
+  const shareContent = (type: "summary" | "referral", contentId?: string) => {
+    if (!user) return;
+
+    if (type === "summary") {
+      // Award 1 credit for sharing a summary
+      addCredits(1, "Shared a summary");
+
+      // In a real app, this would track the share and award credits when someone clicks
+      console.log(`Shared summary ${contentId}`);
+    } else if (type === "referral") {
+      // Award 3 credits for successful referral (would be called when friend signs up)
+      addCredits(3, "Friend signed up with your referral code");
+
+      // Update referral count
+      setUser({ ...user, referralsCount: user.referralsCount + 1 });
+
+      console.log(`Referral successful via code ${user.referralCode}`);
+    }
+  };
+
   const value = {
     user,
     isLoading,

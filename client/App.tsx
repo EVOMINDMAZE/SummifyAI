@@ -14,6 +14,10 @@ import Dashboard from "./pages/Dashboard";
 import Generate from "./pages/Generate";
 import Pricing from "./pages/Pricing";
 import Admin from "./pages/Admin";
+import HowItWorks from "./pages/HowItWorks";
+import InsightsDemo from "./pages/InsightsDemo";
+import Results from "./pages/Results";
+import TeamWorkspace from "./pages/TeamWorkspace";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();

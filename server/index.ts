@@ -25,5 +25,13 @@ export function createServer() {
 
   app.get("/api/demo", handleDemo);
 
+  // Neon database routes
+  app.post("/api/neon/execute", handleNeonExecute);
+  app.post("/api/auth/signin", handleUserSignIn);
+  app.post("/api/auth/signup", handleUserSignUp);
+  app.get("/api/users/:userId/summaries", handleGetUserSummaries);
+  app.post("/api/users/:userId/credits", handleUpdateCredits);
+  app.post("/api/shares", handleRecordShare);
+
   return app;
 }

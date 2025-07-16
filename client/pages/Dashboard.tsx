@@ -1251,6 +1251,7 @@ export default function Dashboard() {
                   fontSize={12}
                   axisLine={true}
                   tickLine={true}
+                  type="number"
                 />
                 <Tooltip
                   contentStyle={{

@@ -803,6 +803,318 @@ export default function Settings() {
             </div>
           )}
 
+          {activeTab === "security" && (
+            <div className="space-y-8">
+              {/* Two-Factor Authentication */}
+              <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-8">
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                      🛡️ Two-Factor Authentication
+                    </h2>
+                    <p className="text-gray-600 dark:text-gray-400 mt-1">
+                      Add an extra layer of security to your account
+                    </p>
+                  </div>
+                  <div
+                    className={`px-3 py-1 rounded-full text-sm font-medium ${
+                      settings.security.twoFactorEnabled
+                        ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+                        : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
+                    }`}
+                  >
+                    {settings.security.twoFactorEnabled
+                      ? "Enabled"
+                      : "Disabled"}
+                  </div>
+                </div>
+
+                {!settings.security.twoFactorEnabled &&
+                  !totpSetup.isSettingUp && (
+                    <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-6">
+                      <div className="flex items-start gap-4">
+                        <div className="w-8 h-8 bg-yellow-100 dark:bg-yellow-900 rounded-full flex items-center justify-center flex-shrink-0">
+                          <svg
+                            className="w-5 h-5 text-yellow-600 dark:text-yellow-400"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L5.082 16.5c-.77.833.192 2.5 1.732 2.5z"
+                            />
+                          </svg>
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
+                            Secure your account with 2FA
+                          </h3>
+                          <p className="text-gray-700 dark:text-gray-300 mb-4">
+                            Two-factor authentication adds an extra layer of
+                            security by requiring both your password and a
+                            verification code from your phone.
+                          </p>
+                          <button
+                            onClick={generateTOTPSecret}
+                            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                          >
+                            Enable 2FA
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                {totpSetup.isSettingUp && (
+                  <div className="space-y-6">
+                    <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-6">
+                      <h3 className="font-semibold text-gray-900 dark:text-white mb-4">
+                        Set up 2FA with your authenticator app
+                      </h3>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                          <h4 className="font-medium text-gray-900 dark:text-white mb-3">
+                            1. Scan QR Code
+                          </h4>
+                          <div className="bg-white p-4 rounded-lg border">
+                            <div className="w-48 h-48 bg-gray-100 rounded-lg flex items-center justify-center mx-auto">
+                              <div className="text-center">
+                                <div className="text-4xl mb-2">📱</div>
+                                <p className="text-sm text-gray-600">QR Code</p>
+                                <p className="text-xs text-gray-500 mt-1">
+                                  Scan with your authenticator app
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                          <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
+                            Or manually enter this key:{" "}
+                            <code className="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-xs">
+                              {totpSetup.secret}
+                            </code>
+                          </p>
+                        </div>
+
+                        <div>
+                          <h4 className="font-medium text-gray-900 dark:text-white mb-3">
+                            2. Enter verification code
+                          </h4>
+                          <input
+                            type="text"
+                            placeholder="Enter 6-digit code"
+                            maxLength={6}
+                            value={totpSetup.verificationCode}
+                            onChange={(e) =>
+                              setTotpSetup({
+                                ...totpSetup,
+                                verificationCode: e.target.value.replace(
+                                  /\D/g,
+                                  "",
+                                ),
+                              })
+                            }
+                            className="w-full px-4 py-3 text-center text-2xl font-mono border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          />
+                          <div className="mt-4 space-x-3">
+                            <button
+                              onClick={verifyTOTPCode}
+                              disabled={totpSetup.verificationCode.length !== 6}
+                              className="bg-green-500 hover:bg-green-600 disabled:bg-gray-400 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                            >
+                              Verify & Enable
+                            </button>
+                            <button
+                              onClick={() =>
+                                setTotpSetup({
+                                  ...totpSetup,
+                                  isSettingUp: false,
+                                })
+                              }
+                              className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {settings.security.twoFactorEnabled && (
+                  <div className="space-y-6">
+                    <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-6">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
+                            2FA is enabled ✅
+                          </h3>
+                          <p className="text-gray-700 dark:text-gray-300">
+                            Your account is protected with two-factor
+                            authentication
+                          </p>
+                        </div>
+                        <button
+                          onClick={disable2FA}
+                          className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                        >
+                          Disable 2FA
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Backup Codes */}
+                    <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-6">
+                      <div className="flex items-center justify-between mb-4">
+                        <h3 className="font-semibold text-gray-900 dark:text-white">
+                          Recovery Backup Codes
+                        </h3>
+                        <button
+                          onClick={regenerateBackupCodes}
+                          className="bg-gray-500 hover:bg-gray-600 text-white px-3 py-1 rounded text-sm transition-colors"
+                        >
+                          Regenerate
+                        </button>
+                      </div>
+                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                        Save these backup codes in a safe place. You can use
+                        them to access your account if you lose your phone.
+                      </p>
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                        {settings.security.backupCodes.map((code, index) => (
+                          <div
+                            key={index}
+                            className="bg-gray-100 dark:bg-gray-700 p-2 rounded font-mono text-sm text-center"
+                          >
+                            {code}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Active Sessions */}
+              <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-8">
+                <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
+                  🖥️ Active Sessions
+                </h2>
+                <p className="text-gray-600 dark:text-gray-400 mb-6">
+                  Manage where you're signed in. If you see an unfamiliar
+                  location, you should terminate that session.
+                </p>
+                <div className="space-y-4">
+                  {settings.security.activeSessions.map((session) => (
+                    <div
+                      key={session.id}
+                      className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-600 rounded-lg"
+                    >
+                      <div className="flex items-center gap-4">
+                        <div className="w-10 h-10 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center">
+                          <svg
+                            className="w-5 h-5 text-gray-600 dark:text-gray-400"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                            />
+                          </svg>
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <h4 className="font-medium text-gray-900 dark:text-white">
+                              {session.device}
+                            </h4>
+                            {session.current && (
+                              <span className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 text-xs px-2 py-1 rounded-full">
+                                Current
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">
+                            {session.location} • Last active{" "}
+                            {new Date(session.lastActive).toLocaleDateString()}
+                          </p>
+                        </div>
+                      </div>
+                      {!session.current && (
+                        <button
+                          onClick={() => terminateSession(session.id)}
+                          className="bg-red-100 hover:bg-red-200 text-red-700 px-3 py-1 rounded text-sm transition-colors"
+                        >
+                          Terminate
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Security Notifications */}
+              <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-8">
+                <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
+                  🔔 Security Notifications
+                </h2>
+                <div className="space-y-6">
+                  <div className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-600 rounded-lg">
+                    <div>
+                      <h3 className="font-medium text-gray-900 dark:text-white">
+                        Login alerts
+                      </h3>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                        Get notified of new sign-ins from unrecognized devices
+                      </p>
+                    </div>
+                    <label className="relative inline-flex items-center cursor-pointer">
+                      <input
+                        type="checkbox"
+                        className="sr-only peer"
+                        checked={settings.security.loginAlerts}
+                        onChange={(e) =>
+                          setSettings((prev) => ({
+                            ...prev,
+                            security: {
+                              ...prev.security,
+                              loginAlerts: e.target.checked,
+                            },
+                          }))
+                        }
+                      />
+                      <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                    </label>
+                  </div>
+
+                  <div className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-600 rounded-lg">
+                    <div>
+                      <h3 className="font-medium text-gray-900 dark:text-white">
+                        Password change confirmation
+                      </h3>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                        Last changed on{" "}
+                        {new Date(
+                          settings.security.lastPasswordChange,
+                        ).toLocaleDateString()}
+                      </p>
+                    </div>
+                    <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+                      Change Password
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           {activeTab === "team" && (
             <div className="space-y-8">
               {/* Team Overview */}
@@ -1232,7 +1544,7 @@ export default function Settings() {
                             Searches
                           </span>
                           <span className="font-medium text-green-600 dark:text-green-400">
-                            Unlimited ✅
+                            Unlimited ��
                           </span>
                         </div>
                         <div className="flex justify-between">

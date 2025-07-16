@@ -92,7 +92,7 @@ export default function Index() {
                         />
                       </svg>
                     </button>
-                    <div className="absolute top-full left-0 mt-2 w-60 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-[9999] transform group-hover:translate-y-0 translate-y-2">
+                    <div className="absolute top-full left-0 mt-2 w-60 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-[99999] transform group-hover:translate-y-0 translate-y-2">
                       <div className="p-2">
                         <Link
                           to="/search-demo"
@@ -735,7 +735,7 @@ export default function Index() {
             {/* Value Proposition */}
             <div className="grid md:grid-cols-3 gap-6 mb-12">
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
-                <div className="text-[#FFFD63] text-2xl mb-2">💰</div>
+                <div className="text-[#FFFD63] text-2xl mb-2">��</div>
                 <h3 className="font-bold mb-2">Earn While You Learn</h3>
                 <p className="text-gray-300 text-sm">
                   Get affiliate commissions from every book purchase

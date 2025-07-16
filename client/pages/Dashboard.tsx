@@ -162,6 +162,12 @@ export default function Dashboard() {
                 >
                   Library
                 </Link>
+                <Link
+                  to="/support"
+                  className="text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 px-4 py-2 rounded-xl text-sm font-medium transition-colors"
+                >
+                  Support
+                </Link>
               </div>
             </div>
 

@@ -1379,8 +1379,8 @@ export default function Dashboard() {
           </div>
 
           <div className="divide-y divide-gray-200 dark:divide-gray-700">
-            {recentSummaries.length > 0 ? (
-              recentSummaries.map((summary) => (
+            {filteredAndSortedSummaries().length > 0 ? (
+              filteredAndSortedSummaries().map((summary) => (
                 <div
                   key={summary.id}
                   className="p-6 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"

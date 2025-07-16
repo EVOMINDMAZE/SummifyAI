@@ -265,7 +265,7 @@ export default function Pricing() {
       </div>
 
       {/* Pricing Cards - Clean and Focused */}
-      <div className="py-20 bg-gray-50 dark:bg-gray-800">
+      <div className="py-20 bg-gray-50 dark:bg-gray-900">
         <div className="max-w-6xl mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-12 max-w-5xl mx-auto">
             {/* Free Plan - Improved Design */}

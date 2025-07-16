@@ -370,8 +370,8 @@ export default function Index() {
               className="text-4xl md:text-5xl font-normal text-[#0A0B1E] dark:text-white leading-tight relative z-10 mb-12"
               style={{ paddingTop: "23px" }}
             >
-              All your favorite books in one place. Stop reading everything
-              separately. Start comparing insights effectively.
+              Find exactly what you need from any book. Stop searching through
+              entire books. Start locating precise chapters instantly.
             </h2>
 
             {/* Social Proof & Trust Signals */}

@@ -468,39 +468,85 @@ export default function Dashboard() {
       title: "Recent Chapter Discoveries",
       defaultProps: { w: 4, h: 4, x: 0, y: 5, minW: 3, minH: 3 },
       component: (
-        <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 h-full">
-          <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">
-            📖 Recent Chapter Discoveries
-          </h3>
-          <div className="space-y-4 h-full overflow-y-auto">
-            {recentSummaries.slice(0, 5).map((summary) => (
-              <div
-                key={summary.id}
-                className="border-l-4 border-[#4361EE] pl-4 py-2"
+        <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 h-full flex flex-col">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-bold text-gray-900 dark:text-white">
+              📖 Recent Chapter Discoveries
+            </h3>
+            <span className="text-xs text-gray-500">
+              {filteredAndSortedSummaries().length} results
+            </span>
+          </div>
+
+          {/* Compact Filters */}
+          <div className="mb-4 space-y-2">
+            <div className="flex gap-2">
+              <input
+                type="text"
+                placeholder="Search topics or books..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="flex-1 px-3 py-1 text-sm border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+              />
+              <select
+                value={sortBy}
+                onChange={(e) =>
+                  setSortBy(e.target.value as "date" | "topic" | "books")
+                }
+                className="px-2 py-1 text-sm border rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white"
               >
-                <h4 className="font-semibold text-gray-900 dark:text-white">
-                  {summary.topic}
-                </h4>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                  {new Date(summary.createdAt).toLocaleDateString()}
-                </p>
-                <div className="flex flex-wrap gap-1">
-                  {summary.books.slice(0, 3).map((book, index) => (
-                    <span
-                      key={index}
-                      className="text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 px-2 py-1 rounded"
-                    >
-                      {book.title}
-                    </span>
-                  ))}
-                  {summary.books.length > 3 && (
-                    <span className="text-xs text-gray-500">
-                      +{summary.books.length - 3} more
-                    </span>
-                  )}
+                <option value="date">Date</option>
+                <option value="topic">Topic</option>
+                <option value="books">Books</option>
+              </select>
+              <button
+                onClick={() =>
+                  setSortOrder(sortOrder === "asc" ? "desc" : "asc")
+                }
+                className="px-2 py-1 text-sm bg-gray-100 dark:bg-gray-600 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-500"
+              >
+                {sortOrder === "asc" ? "↑" : "↓"}
+              </button>
+            </div>
+          </div>
+
+          <div className="flex-1 space-y-3 overflow-y-auto">
+            {filteredAndSortedSummaries()
+              .slice(0, 5)
+              .map((summary) => (
+                <div
+                  key={summary.id}
+                  className="border-l-4 border-[#4361EE] pl-4 py-2"
+                >
+                  <h4 className="font-semibold text-gray-900 dark:text-white text-sm">
+                    {summary.topic}
+                  </h4>
+                  <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">
+                    {new Date(summary.createdAt).toLocaleDateString()}
+                  </p>
+                  <div className="flex flex-wrap gap-1">
+                    {summary.books.slice(0, 2).map((book, index) => (
+                      <span
+                        key={index}
+                        className="text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 px-2 py-1 rounded"
+                      >
+                        {book.title}
+                      </span>
+                    ))}
+                    {summary.books.length > 2 && (
+                      <span className="text-xs text-gray-500">
+                        +{summary.books.length - 2} more
+                      </span>
+                    )}
+                  </div>
                 </div>
+              ))}
+            {filteredAndSortedSummaries().length === 0 && (
+              <div className="text-center text-gray-500 dark:text-gray-400 py-8">
+                <p className="text-sm">No summaries found</p>
+                <p className="text-xs">Try adjusting your search or filters</p>
               </div>
-            ))}
+            )}
           </div>
         </div>
       ),

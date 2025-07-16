@@ -371,7 +371,7 @@ Kouzes and Posner's extensive research in "The Leadership Challenge" provides th
                           d="M13 10V3L4 14h7v7l9-11h-7z"
                         />
                       </svg>
-                      Generate Summary
+                      Find Chapters
                     </>
                   )}
                 </button>

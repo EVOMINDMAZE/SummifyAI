@@ -644,12 +644,15 @@ export default function Dashboard() {
                     color: "#fff",
                   }}
                   formatter={(value) => [`${value} searches`, "Total"]}
+                  animationDuration={200}
+                  isAnimationActive={true}
                 />
                 <Legend
                   verticalAlign="bottom"
                   height={36}
                   iconType="circle"
                   wrapperStyle={{ fontSize: "12px" }}
+                  align="center"
                 />
               </PieChart>
             </ResponsiveContainer>
@@ -712,6 +715,8 @@ export default function Dashboard() {
                     borderRadius: "12px",
                     color: "#fff",
                   }}
+                  animationDuration={200}
+                  isAnimationActive={true}
                 />
                 <Bar
                   dataKey="searches"

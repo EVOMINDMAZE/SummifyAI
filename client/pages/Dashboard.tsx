@@ -430,6 +430,8 @@ export default function Dashboard() {
                 stroke="#666"
                 axisLine={false}
                 type="number"
+                domain={["auto", "auto"]}
+                allowDataOverflow={false}
               />
               <Tooltip
                 contentStyle={{

@@ -22,6 +22,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import Navigation from "@/components/Navigation";
 
 interface Summary {
   id: string;

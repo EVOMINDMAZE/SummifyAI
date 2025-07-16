@@ -2,6 +2,23 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import ThemeToggle from "@/components/ThemeToggle";
+import {
+  LineChart,
+  Line,
+  AreaChart,
+  Area,
+  BarChart,
+  Bar,
+  PieChart,
+  Pie,
+  Cell,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 
 interface Summary {
   id: string;
@@ -86,6 +103,41 @@ export default function Dashboard() {
     clicks: 142,
     conversions: 18,
   };
+
+  // Mock analytics data
+  const earningsData = [
+    { month: "Jan", earnings: 120, clicks: 89, conversions: 12 },
+    { month: "Feb", earnings: 180, clicks: 105, conversions: 15 },
+    { month: "Mar", earnings: 210, clicks: 134, conversions: 18 },
+    { month: "Apr", earnings: 190, clicks: 118, conversions: 16 },
+    { month: "May", earnings: 230, clicks: 156, conversions: 22 },
+    { month: "Jun", earnings: 248, clicks: 142, conversions: 18 },
+  ];
+
+  const topicsData = [
+    { name: "Leadership", searches: 45, color: "#4361EE" },
+    { name: "Productivity", searches: 38, color: "#7B2CBF" },
+    { name: "Finance", searches: 32, color: "#FFFD63" },
+    { name: "Health", searches: 28, color: "#F72585" },
+    { name: "Technology", searches: 25, color: "#4CC9F0" },
+  ];
+
+  const activityData = [
+    { day: "Mon", searches: 8, summaries: 6 },
+    { day: "Tue", searches: 12, summaries: 9 },
+    { day: "Wed", searches: 15, summaries: 11 },
+    { day: "Thu", searches: 10, summaries: 8 },
+    { day: "Fri", searches: 18, summaries: 14 },
+    { day: "Sat", searches: 5, summaries: 4 },
+    { day: "Sun", searches: 7, summaries: 5 },
+  ];
+
+  const performanceData = [
+    { metric: "Click Rate", value: 12.7, target: 15 },
+    { metric: "Conversion Rate", value: 8.4, target: 10 },
+    { metric: "Revenue/Click", value: 1.74, target: 2.0 },
+    { metric: "Avg Session", value: 4.2, target: 5.0 },
+  ];
 
   const handleSignOut = async () => {
     await signOut();
@@ -473,6 +525,213 @@ export default function Dashboard() {
                   />
                 </svg>
               </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Analytics Charts Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          {/* Earnings Trend Chart */}
+          <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                  Earnings Trend
+                </h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Monthly performance overview
+                </p>
+              </div>
+              <div className="flex items-center space-x-2">
+                <div className="w-3 h-3 bg-[#4361EE] rounded-full"></div>
+                <span className="text-sm text-gray-600 dark:text-gray-400">
+                  Earnings
+                </span>
+              </div>
+            </div>
+            <ResponsiveContainer width="100%" height={300}>
+              <AreaChart data={earningsData}>
+                <defs>
+                  <linearGradient
+                    id="earningsGradient"
+                    x1="0"
+                    y1="0"
+                    x2="0"
+                    y2="1"
+                  >
+                    <stop offset="5%" stopColor="#4361EE" stopOpacity={0.8} />
+                    <stop offset="95%" stopColor="#4361EE" stopOpacity={0.1} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                <XAxis dataKey="month" stroke="#6b7280" />
+                <YAxis stroke="#6b7280" />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "#1f2937",
+                    border: "none",
+                    borderRadius: "12px",
+                    color: "#fff",
+                  }}
+                  formatter={(value) => [`$${value}`, "Earnings"]}
+                />
+                <Area
+                  type="monotone"
+                  dataKey="earnings"
+                  stroke="#4361EE"
+                  fillOpacity={1}
+                  fill="url(#earningsGradient)"
+                  strokeWidth={3}
+                />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
+
+          {/* Top Topics Pie Chart */}
+          <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                  Popular Topics
+                </h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Your most searched subjects
+                </p>
+              </div>
+            </div>
+            <ResponsiveContainer width="100%" height={300}>
+              <PieChart>
+                <Pie
+                  data={topicsData}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={60}
+                  outerRadius={100}
+                  paddingAngle={5}
+                  dataKey="searches"
+                >
+                  {topicsData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Pie>
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "#1f2937",
+                    border: "none",
+                    borderRadius: "12px",
+                    color: "#fff",
+                  }}
+                  formatter={(value) => [`${value} searches`, "Total"]}
+                />
+                <Legend
+                  verticalAlign="bottom"
+                  height={36}
+                  iconType="circle"
+                  wrapperStyle={{ fontSize: "12px" }}
+                />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        {/* Additional Analytics */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          {/* Weekly Activity */}
+          <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                  Weekly Activity
+                </h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Searches vs summaries generated
+                </p>
+              </div>
+              <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-2">
+                  <div className="w-3 h-3 bg-[#4361EE] rounded-full"></div>
+                  <span className="text-sm text-gray-600 dark:text-gray-400">
+                    Searches
+                  </span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-3 h-3 bg-[#FFFD63] rounded-full"></div>
+                  <span className="text-sm text-gray-600 dark:text-gray-400">
+                    Summaries
+                  </span>
+                </div>
+              </div>
+            </div>
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={activityData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                <XAxis dataKey="day" stroke="#6b7280" />
+                <YAxis stroke="#6b7280" />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "#1f2937",
+                    border: "none",
+                    borderRadius: "12px",
+                    color: "#fff",
+                  }}
+                />
+                <Bar dataKey="searches" fill="#4361EE" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="summaries" fill="#FFFD63" radius={[4, 4, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+
+          {/* Performance Metrics */}
+          <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                  Performance Metrics
+                </h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Key performance indicators
+                </p>
+              </div>
+            </div>
+            <div className="space-y-6">
+              {performanceData.map((item, index) => {
+                const percentage = (item.value / item.target) * 100;
+                return (
+                  <div key={index}>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm font-medium text-gray-900 dark:text-white">
+                        {item.metric}
+                      </span>
+                      <span className="text-sm text-gray-600 dark:text-gray-400">
+                        {item.value}
+                        {item.metric.includes("Rate")
+                          ? "%"
+                          : item.metric.includes("Revenue")
+                            ? "$"
+                            : "min"}{" "}
+                        / {item.target}
+                        {item.metric.includes("Rate")
+                          ? "%"
+                          : item.metric.includes("Revenue")
+                            ? "$"
+                            : "min"}
+                      </span>
+                    </div>
+                    <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                      <div
+                        className={`h-2 rounded-full transition-all duration-500 ${
+                          percentage >= 80
+                            ? "bg-green-500"
+                            : percentage >= 60
+                              ? "bg-yellow-500"
+                              : "bg-red-500"
+                        }`}
+                        style={{ width: `${Math.min(percentage, 100)}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>

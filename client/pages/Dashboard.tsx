@@ -421,6 +421,8 @@ export default function Dashboard() {
                 stroke="#666"
                 axisLine={false}
                 type="category"
+                interval={0}
+                allowDuplicatedCategory={false}
               />
               <YAxis
                 tick={{ fontSize: 12 }}

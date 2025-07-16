@@ -304,12 +304,13 @@ export default function SearchDemo() {
             <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-32 translate-x-32"></div>
             <div className="relative z-10">
               <h1 className="text-4xl md:text-6xl font-bold mb-4">
-                🔍 Smart Book Discovery
+                🔍 Smart Chapter Discovery
               </h1>
               <p className="text-xl text-white/90 max-w-3xl mx-auto mb-6">
                 Experience how our AI searches through 2.5 million books to find
-                the perfect matches for any topic. See relevance scoring,
-                quality filtering, and intelligent ranking in action.
+                the exact chapters and pages that answer your specific
+                questions. See chapter relevance scoring, page number
+                identification, and intelligent ranking in action.
               </p>
               <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-4 max-w-2xl mx-auto">
                 <p className="text-white/80 text-sm mb-2">

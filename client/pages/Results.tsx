@@ -445,9 +445,10 @@ export default function Results() {
 
         {/* Content */}
         <div className="pb-12">
-          {activeTab === "recent" && (
+                    {activeTab === "recent" && (
             <div className="space-y-8">
-              {mockSearchResults.slice(0, 2).map((result) => (
+              {filteredAndSortedResults().length > 0 ? (
+                filteredAndSortedResults().map((result) => (
                 <div
                   key={result.id}
                   className="bg-white rounded-xl border border-gray-200 p-8"

@@ -75,6 +75,52 @@ export default function Index() {
                   >
                     How it Works
                   </Link>
+                  <div className="relative group">
+                    <button className="text-[#0A0B1E] dark:text-white hover:text-[#0A0B1E]/80 dark:hover:text-white/80 font-medium flex items-center">
+                      Live Demos
+                      <svg
+                        className="w-4 h-4 ml-1"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M19 9l-7 7-7-7"
+                        />
+                      </svg>
+                    </button>
+                    <div className="absolute top-full left-0 mt-2 w-56 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
+                      <div className="p-2">
+                        <Link
+                          to="/search-demo"
+                          className="block px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-xl transition-colors"
+                        >
+                          🔍 Smart Search Demo
+                        </Link>
+                        <Link
+                          to="/analysis-demo"
+                          className="block px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-green-50 dark:hover:bg-green-900/20 rounded-xl transition-colors"
+                        >
+                          🧠 Deep Analysis Demo
+                        </Link>
+                        <Link
+                          to="/summary-showcase"
+                          className="block px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-orange-50 dark:hover:bg-orange-900/20 rounded-xl transition-colors"
+                        >
+                          ✨ Summary Showcase
+                        </Link>
+                        <Link
+                          to="/library-showcase"
+                          className="block px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-pink-50 dark:hover:bg-pink-900/20 rounded-xl transition-colors"
+                        >
+                          📚 Library & Sharing
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
                   <Link
                     to="/pricing"
                     className="text-[#0A0B1E] dark:text-white hover:text-[#0A0B1E]/80 dark:hover:text-white/80 font-medium"

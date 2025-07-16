@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { ThemeSelector } from "../components/ThemeToggle";
 import ThemeToggle from "@/components/ThemeToggle";
+import Navigation from "../components/Navigation";
+import { showNotification } from "../utils/actions";
 
 export default function Settings() {
   const { user, updateUserSettings } = useAuth();
@@ -126,8 +128,12 @@ export default function Settings() {
     // Save to backend
     try {
       await updateUserSettings(newSettings);
+      showNotification("Settings saved successfully!", "success");
     } catch (error) {
       console.error("Failed to save settings:", error);
+      showNotification("Failed to save settings. Please try again.", "error");
+      // Revert the settings on error
+      setSettings((prev) => prev);
     }
   };
 

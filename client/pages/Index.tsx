@@ -338,24 +338,78 @@ export default function Index() {
         className="bg-white dark:bg-gray-900"
         style={{ padding: "118px 0 100px" }}
       >
-        {/* Logo Section */}
+        {/* Trust Signals Section */}
         <div className="py-16 overflow-hidden">
-          <div className="flex items-center justify-center gap-12 opacity-60">
-            <span className="text-2xl font-bold text-gray-400 dark:text-gray-500">
-              AMAZON
-            </span>
-            <span className="text-2xl font-bold text-gray-400 dark:text-gray-500">
-              GOODREADS
-            </span>
-            <span className="text-2xl font-bold text-gray-400 dark:text-gray-500">
-              PENGUIN
-            </span>
-            <span className="text-2xl font-bold text-gray-400 dark:text-gray-500">
-              HARPER
-            </span>
-            <span className="text-2xl font-bold text-gray-400 dark:text-gray-500">
-              MACMILLAN
-            </span>
+          <div className="text-center mb-8">
+            <p className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+              Powered by Enterprise-Grade Technology
+            </p>
+          </div>
+          <div className="flex flex-wrap items-center justify-center gap-8 opacity-60">
+            <div className="flex items-center gap-2">
+              <svg
+                className="w-5 h-5 text-blue-500"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                MILLION+ BOOK RECORDS
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              <svg
+                className="w-5 h-5 text-green-500"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z" />
+              </svg>
+              <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                VERIFIED PUBLISHERS
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              <svg
+                className="w-5 h-5 text-purple-500"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" />
+              </svg>
+              <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                REAL-TIME SEARCH
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              <svg
+                className="w-5 h-5 text-orange-500"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+              </svg>
+              <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                AI-POWERED ANALYSIS
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              <svg
+                className="w-5 h-5 text-red-500"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM4.332 8.027a6.012 6.012 0 011.912-2.706C6.512 5.73 6.974 6 7.5 6A1.5 1.5 0 019 7.5V8a2 2 0 004 0 2 2 0 011.523-1.943A5.977 5.977 0 0116 10c0 .34-.028.675-.083 1H15a2 2 0 00-2 2v2.197A5.973 5.973 0 0110 16v-2a2 2 0 00-2-2 2 2 0 01-2-2 2 2 0 00-1.668-1.973z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                GLOBAL COVERAGE
+              </span>
+            </div>
           </div>
         </div>
 

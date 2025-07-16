@@ -342,6 +342,107 @@ export default function Results() {
           </nav>
         </div>
 
+        {/* Search and Filter Controls */}
+        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 mb-8">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+              Search & Filter Results
+            </h3>
+            <span className="text-sm text-gray-500 dark:text-gray-400">
+              {filteredAndSortedResults().length} results found
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+            {/* Search Input */}
+            <div className="lg:col-span-2">
+              <input
+                type="text"
+                placeholder="Search topics, books, authors, or insights..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-[#FFFD63] focus:border-transparent"
+              />
+            </div>
+
+            {/* Author Filter */}
+            <div>
+              <select
+                value={filterByAuthor}
+                onChange={(e) => setFilterByAuthor(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#FFFD63] focus:border-transparent"
+              >
+                <option value="">All Authors</option>
+                {getUniqueAuthors().map((author) => (
+                  <option key={author} value={author}>
+                    {author}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Rating Filter */}
+            <div>
+              <select
+                value={filterByRating}
+                onChange={(e) => setFilterByRating(Number(e.target.value))}
+                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#FFFD63] focus:border-transparent"
+              >
+                <option value={0}>All Ratings</option>
+                <option value={4.5}>4.5+ Stars</option>
+                <option value={4.0}>4.0+ Stars</option>
+                <option value={3.5}>3.5+ Stars</option>
+                <option value={3.0}>3.0+ Stars</option>
+              </select>
+            </div>
+
+            {/* Sort Controls */}
+            <div className="flex gap-2">
+              <select
+                value={sortBy}
+                onChange={(e) =>
+                  setSortBy(
+                    e.target.value as "date" | "topic" | "books" | "rating",
+                  )
+                }
+                className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#FFFD63] focus:border-transparent text-sm"
+              >
+                <option value="date">Date</option>
+                <option value="topic">Topic</option>
+                <option value="books">Books</option>
+                <option value="rating">Rating</option>
+              </select>
+              <button
+                onClick={() =>
+                  setSortOrder(sortOrder === "asc" ? "desc" : "asc")
+                }
+                className="px-3 py-2 bg-gray-100 dark:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-500 transition-colors font-medium text-sm"
+                title={`Sort ${sortOrder === "asc" ? "Descending" : "Ascending"}`}
+              >
+                {sortOrder === "asc" ? "↑" : "↓"}
+              </button>
+            </div>
+          </div>
+
+          {/* Clear Filters */}
+          {(searchQuery || filterByAuthor || filterByRating > 0) && (
+            <div className="mt-4 flex justify-end">
+              <button
+                onClick={() => {
+                  setSearchQuery("");
+                  setFilterByAuthor("");
+                  setFilterByRating(0);
+                  setSortBy("date");
+                  setSortOrder("desc");
+                }}
+                className="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors font-medium text-sm"
+              >
+                🔄 Clear Filters
+              </button>
+            </div>
+          )}
+        </div>
+
         {/* Content */}
         <div className="pb-12">
           {activeTab === "recent" && (

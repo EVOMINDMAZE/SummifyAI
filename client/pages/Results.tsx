@@ -1,10 +1,20 @@
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import ThemeToggle from "../components/ThemeToggle";
+import Navigation from "../components/Navigation";
+import {
+  shareResult,
+  exportToPDF,
+  toggleSaveResult,
+  shareOnTwitter,
+  shareOnLinkedIn,
+  shareOnFacebook,
+  showNotification,
+  SearchResult,
+} from "../utils/actions";
 
 export default function Results() {
-  const { user, shareContent } = useAuth();
+  const { user } = useAuth();
   const { id } = useParams();
   const isAuthenticated = !!user;
   const [activeTab, setActiveTab] = useState<"recent" | "saved" | "history">(
@@ -17,6 +27,9 @@ export default function Results() {
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [filterByRating, setFilterByRating] = useState<number>(0);
   const [filterByAuthor, setFilterByAuthor] = useState<string>("");
+  const [savedResults, setSavedResults] = useState<string[]>(
+    JSON.parse(localStorage.getItem("savedResults") || "[]"),
+  );
 
   // Mock user search results - this would come from backend
   const mockSearchResults = [

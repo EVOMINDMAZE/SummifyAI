@@ -112,7 +112,7 @@ export default function Settings() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-white dark:bg-gray-900">
       {/* Navigation */}
       <nav className="bg-[#FFFD63] dark:bg-gray-900 relative z-50">
         <div className="max-w-6xl mx-auto px-6">

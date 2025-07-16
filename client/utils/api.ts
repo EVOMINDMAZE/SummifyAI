@@ -334,27 +334,18 @@ export class SummifyAPI {
   // User settings/preferences management
   static async updateUserSettings(userId: number, settings: any) {
     try {
-      const sql = `
-        UPDATE users
-        SET settings = $1, updated_at = CURRENT_TIMESTAMP
-        WHERE id = $2
-        RETURNING *
-      `;
-
-      const response = await fetch("/api/neon/execute", {
-        method: "POST",
+      const response = await fetch(`/api/users/${userId}/settings`, {
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          ...DATABASE_CONFIG,
-          sql,
-          params: [JSON.stringify(settings), userId],
+          settings,
         }),
       });
 
       if (!response.ok) throw new Error("Failed to update user settings");
 
       const result = await response.json();
-      return result.rows[0];
+      return result.user;
     } catch (error) {
       console.error("Error updating user settings:", error);
       throw error;

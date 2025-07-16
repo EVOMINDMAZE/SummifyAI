@@ -123,11 +123,71 @@ export default function Index() {
             </h1>
 
             {/* Subheading */}
-            <p className="text-lg md:text-xl text-[#0A0B1E]/80 dark:text-gray-300 max-w-3xl mx-auto mb-12 leading-relaxed">
+            <p className="text-lg md:text-xl text-[#0A0B1E]/80 dark:text-gray-300 max-w-3xl mx-auto mb-8 leading-relaxed">
               Enter any topic and get comparative insights from the top 5 books,
               complete with key quotes, Amazon affiliate links, and actionable
               takeaways—all powered by AI.
             </p>
+
+            {/* Premium Features Highlight */}
+            <div className="flex flex-wrap justify-center gap-6 mb-12 text-sm">
+              <div className="flex items-center gap-2 text-[#0A0B1E]/70 dark:text-gray-400">
+                <svg
+                  className="w-4 h-4 text-green-500"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <span>5 Books Analysis</span>
+              </div>
+              <div className="flex items-center gap-2 text-[#0A0B1E]/70 dark:text-gray-400">
+                <svg
+                  className="w-4 h-4 text-green-500"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <span>Affiliate Earnings</span>
+              </div>
+              <div className="flex items-center gap-2 text-[#0A0B1E]/70 dark:text-gray-400">
+                <svg
+                  className="w-4 h-4 text-green-500"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <span>Personal Library</span>
+              </div>
+              <div className="flex items-center gap-2 text-[#0A0B1E]/70 dark:text-gray-400">
+                <svg
+                  className="w-4 h-4 text-green-500"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <span>Free Forever</span>
+              </div>
+            </div>
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -163,34 +223,35 @@ export default function Index() {
                 <>
                   <Link
                     to="/signup"
-                    className="flex items-center gap-3 bg-[#0A0B1E] text-white px-8 py-4 rounded-2xl font-medium hover:bg-[#0A0B1E]/90 transition-colors shadow-lg"
+                    className="flex items-center gap-3 bg-gradient-to-r from-[#0A0B1E] to-gray-800 text-white px-8 py-4 rounded-2xl font-bold hover:from-gray-800 hover:to-[#0A0B1E] transition-all shadow-xl transform hover:scale-105 border-2 border-transparent hover:border-[#FFFD63]"
                   >
-                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none">
+                    <svg
+                      className="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
                       <path
-                        d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                        fill="#4285F4"
-                      />
-                      <path
-                        d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                        fill="#34A853"
-                      />
-                      <path
-                        d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                        fill="#FBBC04"
-                      />
-                      <path
-                        d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                        fill="#EA4335"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M13 10V3L4 14h7v7l9-11h-7z"
                       />
                     </svg>
-                    Sign up with Google
+                    Start Free — Unlock Premium Features
                   </Link>
-                  <Link
-                    to="/signup"
-                    className="bg-white text-[#0A0B1E] px-8 py-4 rounded-2xl font-medium hover:bg-gray-50 transition-colors shadow-lg border border-gray-200"
-                  >
-                    Sign up for free
-                  </Link>
+                  <div className="text-center">
+                    <Link
+                      to="/signup"
+                      className="bg-white text-[#0A0B1E] px-8 py-4 rounded-2xl font-medium hover:bg-gray-50 transition-colors shadow-lg border border-gray-200"
+                    >
+                      Get Started Now
+                    </Link>
+                    <p className="text-xs text-[#0A0B1E]/60 dark:text-gray-500 mt-2">
+                      No credit card required • 5 free summaries • Instant
+                      access
+                    </p>
+                  </div>
                 </>
               )}
             </div>
@@ -253,18 +314,48 @@ export default function Index() {
 
         {/* Large Quote */}
         <div
-          className="max-w-5xl mx-auto px-6 text-center"
-          style={{ padding: "15px 30px 100px" }}
+          className="max-w-6xl mx-auto px-6 text-center"
+          style={{ padding: "15px 30px 80px" }}
         >
           <div className="relative">
             <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 w-32 h-8 bg-[#FFFD63] dark:bg-yellow-500 rounded-full"></div>
             <h2
-              className="text-4xl md:text-5xl font-normal text-[#0A0B1E] dark:text-white leading-tight relative z-10"
+              className="text-4xl md:text-5xl font-normal text-[#0A0B1E] dark:text-white leading-tight relative z-10 mb-12"
               style={{ paddingTop: "23px" }}
             >
               All your favorite books in one place. Stop reading everything
               separately. Start comparing insights effectively.
             </h2>
+
+            {/* Social Proof & Trust Signals */}
+            <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-2xl p-8 max-w-4xl mx-auto border border-gray-200 dark:border-gray-700 shadow-lg">
+              <div className="grid md:grid-cols-3 gap-8 text-center">
+                <div>
+                  <div className="text-3xl font-bold text-[#0A0B1E] dark:text-white mb-2">
+                    10,000+
+                  </div>
+                  <div className="text-gray-600 dark:text-gray-400 text-sm">
+                    Book summaries generated
+                  </div>
+                </div>
+                <div>
+                  <div className="text-3xl font-bold text-[#0A0B1E] dark:text-white mb-2">
+                    $50K+
+                  </div>
+                  <div className="text-gray-600 dark:text-gray-400 text-sm">
+                    Earned by our users
+                  </div>
+                </div>
+                <div>
+                  <div className="text-3xl font-bold text-[#0A0B1E] dark:text-white mb-2">
+                    99.9%
+                  </div>
+                  <div className="text-gray-600 dark:text-gray-400 text-sm">
+                    Uptime guarantee
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -570,21 +661,65 @@ export default function Index() {
         </div>
 
         {/* CTA Section */}
-        <div className="bg-[#0A0B1E] text-white py-20">
-          <div className="max-w-4xl mx-auto px-6 text-center">
-            <h2 className="text-4xl font-bold mb-6">
-              Ready to discover better insights?
+        <div className="bg-gradient-to-br from-[#0A0B1E] via-gray-900 to-[#0A0B1E] text-white py-20 relative overflow-hidden">
+          {/* Background Pattern */}
+          <div className="absolute inset-0 opacity-10">
+            <div className="absolute top-0 left-0 w-64 h-64 bg-[#FFFD63] rounded-full -translate-x-32 -translate-y-32"></div>
+            <div className="absolute bottom-0 right-0 w-96 h-96 bg-blue-500 rounded-full translate-x-48 translate-y-48"></div>
+          </div>
+
+          <div className="max-w-5xl mx-auto px-6 text-center relative z-10">
+            <div className="mb-8">
+              <span className="bg-[#FFFD63] text-[#0A0B1E] px-4 py-2 rounded-full text-sm font-bold uppercase tracking-wide">
+                Limited Time Offer
+              </span>
+            </div>
+            <h2 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+              Transform Your Reading Today
             </h2>
-            <p className="text-xl text-gray-300 mb-8 leading-relaxed">
-              Join thousands of readers who use SummifyAI to discover, compare,
-              and share book insights.
+            <p className="text-xl text-gray-300 mb-8 leading-relaxed max-w-3xl mx-auto">
+              Join thousands of smart readers who use SummifyAI to discover,
+              compare, and monetize book insights. Start earning while you
+              learn.
             </p>
-            <Link
-              to="/signup"
-              className="inline-block bg-[#FFFD63] text-[#0A0B1E] px-8 py-4 rounded-2xl font-bold text-lg hover:bg-yellow-300 transition-colors"
-            >
-              Get started for free
-            </Link>
+
+            {/* Value Proposition */}
+            <div className="grid md:grid-cols-3 gap-6 mb-12">
+              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
+                <div className="text-[#FFFD63] text-2xl mb-2">💰</div>
+                <h3 className="font-bold mb-2">Earn While You Learn</h3>
+                <p className="text-gray-300 text-sm">
+                  Get affiliate commissions from every book purchase
+                </p>
+              </div>
+              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
+                <div className="text-[#FFFD63] text-2xl mb-2">⚡</div>
+                <h3 className="font-bold mb-2">5x Faster Learning</h3>
+                <p className="text-gray-300 text-sm">
+                  Compare 5 books in the time it takes to read one
+                </p>
+              </div>
+              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
+                <div className="text-[#FFFD63] text-2xl mb-2">📚</div>
+                <h3 className="font-bold mb-2">Premium Insights</h3>
+                <p className="text-gray-300 text-sm">
+                  Deep analysis with quotes and takeaways
+                </p>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <Link
+                to="/signup"
+                className="inline-block bg-gradient-to-r from-[#FFFD63] to-yellow-400 text-[#0A0B1E] px-12 py-5 rounded-2xl font-bold text-xl hover:from-yellow-400 hover:to-[#FFFD63] transition-all shadow-2xl transform hover:scale-105 border-2 border-transparent hover:border-white"
+              >
+                🚀 Start Your Free Trial — Unlock Premium
+              </Link>
+              <p className="text-gray-400 text-sm">
+                ✅ No credit card required • ✅ 5 free summaries • ✅ Cancel
+                anytime
+              </p>
+            </div>
           </div>
         </div>
       </div>

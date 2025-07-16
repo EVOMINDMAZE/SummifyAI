@@ -32,6 +32,7 @@ export function createServer() {
   app.post("/api/auth/signup", handleUserSignUp);
   app.get("/api/users/:userId/summaries", handleGetUserSummaries);
   app.post("/api/users/:userId/credits", handleUpdateCredits);
+  app.put("/api/users/:userId/settings", handleUpdateUserSettings);
   app.post("/api/shares", handleRecordShare);
 
   return app;

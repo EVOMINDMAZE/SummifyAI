@@ -925,12 +925,12 @@ export default function Dashboard() {
                   Searches
                 </p>
                 <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                  {user.queriesUsed}
+                  {user?.queriesUsed || 0}
                 </p>
                 <p className="text-xs text-gray-500 dark:text-gray-500">
-                  {user.tier === "premium"
+                  {user?.tier === "premium"
                     ? "Unlimited"
-                    : `${user.queriesLimit - user.queriesUsed} remaining`}
+                    : `${(user?.queriesLimit || 10) - (user?.queriesUsed || 0)} remaining`}
                 </p>
               </div>
               <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center">

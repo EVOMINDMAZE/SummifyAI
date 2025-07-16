@@ -150,7 +150,7 @@ export default function Index() {
       {/* Hero Section */}
       <div className="bg-[#FFFD63] dark:bg-gray-800 relative z-10">
         <div className="max-w-6xl mx-auto px-6 pt-20 pb-32">
-          <div className="text-center" style={{ margin: "-1px 0 25px" }}>
+          <div className="text-center">
             {/* Main Heading */}
             <h1 className="text-5xl md:text-7xl font-black text-[#0A0B1E] dark:text-white leading-tight mb-8">
               <span

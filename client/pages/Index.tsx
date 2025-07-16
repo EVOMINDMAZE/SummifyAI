@@ -59,6 +59,12 @@ export default function Index() {
                   >
                     Results
                   </Link>
+                  <Link
+                    to="/support"
+                    className="text-[#0A0B1E] dark:text-white hover:text-[#0A0B1E]/80 dark:hover:text-white/80 font-medium"
+                  >
+                    Support
+                  </Link>
                   <ThemeToggle />
                   <Link
                     to="/generate"

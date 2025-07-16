@@ -563,7 +563,12 @@ export default function Dashboard() {
                     <stop offset="95%" stopColor="#4361EE" stopOpacity={0.1} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  stroke="#e5e7eb"
+                  horizontal={true}
+                  vertical={true}
+                />
                 <XAxis
                   dataKey="month"
                   stroke="#6b7280"
@@ -585,6 +590,8 @@ export default function Dashboard() {
                     color: "#fff",
                   }}
                   formatter={(value) => [`$${value}`, "Earnings"]}
+                  animationDuration={200}
+                  isAnimationActive={true}
                 />
                 <Area
                   type="monotone"
@@ -593,6 +600,8 @@ export default function Dashboard() {
                   fillOpacity={1}
                   fill="url(#earningsGradient)"
                   strokeWidth={3}
+                  isAnimationActive={true}
+                  animationDuration={1000}
                 />
               </AreaChart>
             </ResponsiveContainer>
@@ -620,6 +629,8 @@ export default function Dashboard() {
                   outerRadius={100}
                   paddingAngle={5}
                   dataKey="searches"
+                  isAnimationActive={true}
+                  animationDuration={1000}
                 >
                   {topicsData.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={entry.color} />
@@ -675,7 +686,12 @@ export default function Dashboard() {
             </div>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={activityData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  stroke="#e5e7eb"
+                  horizontal={true}
+                  vertical={true}
+                />
                 <XAxis
                   dataKey="day"
                   stroke="#6b7280"
@@ -697,8 +713,20 @@ export default function Dashboard() {
                     color: "#fff",
                   }}
                 />
-                <Bar dataKey="searches" fill="#4361EE" radius={[4, 4, 0, 0]} />
-                <Bar dataKey="summaries" fill="#FFFD63" radius={[4, 4, 0, 0]} />
+                <Bar
+                  dataKey="searches"
+                  fill="#4361EE"
+                  radius={[4, 4, 0, 0]}
+                  isAnimationActive={true}
+                  animationDuration={1000}
+                />
+                <Bar
+                  dataKey="summaries"
+                  fill="#FFFD63"
+                  radius={[4, 4, 0, 0]}
+                  isAnimationActive={true}
+                  animationDuration={1000}
+                />
               </BarChart>
             </ResponsiveContainer>
           </div>

@@ -175,6 +175,7 @@ export default function Settings() {
               { id: "general", name: "General", icon: "⚙️" },
               { id: "notifications", name: "Notifications", icon: "🔔" },
               { id: "privacy", name: "Privacy", icon: "🔒" },
+              { id: "team", name: "Team", icon: "👥" },
               { id: "advanced", name: "Advanced", icon: "🔧" },
             ].map((tab) => (
               <button

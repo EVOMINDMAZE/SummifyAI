@@ -419,12 +419,13 @@ export default function Index() {
               <div className="grid lg:grid-cols-2 gap-12 items-center">
                 <div>
                   <h4 className="text-3xl font-bold text-[#0A0B1E] dark:text-white mb-6">
-                    Find books that practically teach themselves
+                    Discover exact chapters and pages instantly
                   </h4>
                   <p className="text-lg text-[#0A0B1E]/70 dark:text-gray-300 mb-8 leading-relaxed">
-                    Smart discovery leads to better outcomes. Enter any topic
+                    Precision search leads to targeted learning. Enter any topic
                     and our AI searches through thousands of books to find the
-                    most relevant ones with high-quality content.
+                    exact chapters and page numbers that address your specific
+                    question.
                   </p>
                   <div className="space-y-4">
                     <Link

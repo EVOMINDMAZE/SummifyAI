@@ -681,8 +681,8 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      {/* Premium Navigation */}
-      <nav className="bg-[#FFFD63] dark:bg-gray-900 relative z-50">
+            {/* Navigation */}
+      <Navigation />
         <div className="max-w-6xl mx-auto px-6">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">

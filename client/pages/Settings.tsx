@@ -109,6 +109,88 @@ export default function Settings() {
     }
   };
 
+  // Team management functions
+  const handleInviteMember = async () => {
+    if (!settings.team.inviteEmail) return;
+
+    try {
+      // In a real app, this would send an actual invitation
+      const newMember = {
+        id: Date.now().toString(),
+        email: settings.team.inviteEmail,
+        name: settings.team.inviteEmail.split("@")[0],
+        role: settings.team.inviteRole,
+        status: "Pending",
+        joinedAt: new Date().toISOString().split("T")[0],
+        lastActive: null,
+      };
+
+      setSettings((prev) => ({
+        ...prev,
+        team: {
+          ...prev.team,
+          members: [...prev.team.members, newMember],
+          inviteEmail: "",
+        },
+      }));
+
+      alert(`Invitation sent to ${settings.team.inviteEmail}!`);
+    } catch (error) {
+      console.error("Failed to invite member:", error);
+      alert("Failed to send invitation. Please try again.");
+    }
+  };
+
+  const handleRemoveMember = async (memberId: string) => {
+    if (!window.confirm("Are you sure you want to remove this team member?")) {
+      return;
+    }
+
+    try {
+      setSettings((prev) => ({
+        ...prev,
+        team: {
+          ...prev.team,
+          members: prev.team.members.filter((member) => member.id !== memberId),
+        },
+      }));
+
+      alert("Team member removed successfully.");
+    } catch (error) {
+      console.error("Failed to remove member:", error);
+      alert("Failed to remove team member. Please try again.");
+    }
+  };
+
+  const handleUpdateMemberRole = async (memberId: string, newRole: string) => {
+    try {
+      setSettings((prev) => ({
+        ...prev,
+        team: {
+          ...prev.team,
+          members: prev.team.members.map((member) =>
+            member.id === memberId ? { ...member, role: newRole } : member,
+          ),
+        },
+      }));
+
+      alert("Member role updated successfully.");
+    } catch (error) {
+      console.error("Failed to update member role:", error);
+      alert("Failed to update member role. Please try again.");
+    }
+  };
+
+  const handleResendInvitation = async (memberId: string) => {
+    try {
+      // In a real app, this would resend the invitation email
+      alert("Invitation resent successfully!");
+    } catch (error) {
+      console.error("Failed to resend invitation:", error);
+      alert("Failed to resend invitation. Please try again.");
+    }
+  };
+
   if (!user) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">

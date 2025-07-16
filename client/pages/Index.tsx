@@ -153,10 +153,7 @@ export default function Index() {
           <div className="text-center">
             {/* Main Heading */}
             <h1 className="text-5xl md:text-7xl font-black text-[#0A0B1E] dark:text-white leading-tight mb-8">
-              <span
-                className="-mt-0.5 inline-block"
-                style={{ marginTop: "-2.5px" }}
-              >
+              <span className="inline-block">
                 Find exact chapters instantly.
               </span>
               <br />

@@ -286,8 +286,8 @@ export default function Dashboard() {
                 Welcome back, {user.name}! 👋
               </h1>
               <p className="text-white/80 text-lg">
-                Ready to discover amazing insights? Let's dive into your
-                personalized reading journey.
+                Ready to discover exact chapters and pages? Let's find precisely
+                what you need to learn.
               </p>
               <div className="mt-6 flex flex-col sm:flex-row gap-4">
                 <Link

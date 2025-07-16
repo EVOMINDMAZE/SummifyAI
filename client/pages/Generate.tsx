@@ -208,47 +208,44 @@ Kouzes and Posner's extensive research in "The Leadership Challenge" provides th
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      {/* Premium Navigation */}
-      <nav className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-md shadow-lg border-b border-gray-200/50 dark:border-gray-700/50 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-20">
-            <div className="flex items-center">
-              <Link to="/" className="flex items-center group">
-                <div className="w-12 h-12 bg-gradient-to-r from-[#FFFD63] to-[#FFE066] rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all">
-                  <span className="text-[#0A0B1E] font-bold text-xl">S</span>
-                </div>
-                <span className="ml-3 text-2xl font-bold bg-gradient-to-r from-[#0A0B1E] to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
-                  SummifyAI
+      {/* Navigation */}
+      <nav className="bg-[#FFFD63] dark:bg-gray-900 relative z-50">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="flex justify-between items-center h-16">
+            <Link to="/" className="flex items-center gap-2">
+              <div className="w-8 h-8 bg-[#0A0B1E] dark:bg-[#FFFD63] rounded-lg flex items-center justify-center">
+                <span className="text-[#FFFD63] dark:text-[#0A0B1E] font-bold text-lg">
+                  S
                 </span>
-              </Link>
-              <div className="hidden lg:ml-10 lg:flex lg:space-x-1">
-                <Link
-                  to="/dashboard"
-                  className="text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 px-4 py-2 rounded-xl text-sm font-medium transition-colors"
-                >
-                  Dashboard
-                </Link>
-                <Link
-                  to="/generate"
-                  className="bg-gradient-to-r from-[#4361EE] to-[#7B2CBF] text-white px-4 py-2 rounded-xl text-sm font-medium shadow-lg"
-                >
-                  Generate
-                </Link>
-                <Link
-                  to="/results"
-                  className="text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 px-4 py-2 rounded-xl text-sm font-medium transition-colors"
-                >
-                  Library
-                </Link>
               </div>
-            </div>
-
-            <div className="flex items-center space-x-4">
-              <div className="hidden md:flex items-center space-x-2 bg-gray-100 dark:bg-gray-700 rounded-xl px-4 py-2">
+              <span className="text-xl font-bold text-[#0A0B1E] dark:text-white">
+                SummifyAI
+              </span>
+            </Link>
+            <div className="flex items-center gap-4">
+              <Link
+                to="/dashboard"
+                className="text-[#0A0B1E] dark:text-white hover:text-[#0A0B1E]/80 dark:hover:text-white/80 font-medium"
+              >
+                Dashboard
+              </Link>
+              <Link
+                to="/results"
+                className="text-[#0A0B1E] dark:text-white hover:text-[#0A0B1E]/80 dark:hover:text-white/80 font-medium"
+              >
+                Library
+              </Link>
+              <Link
+                to="/support"
+                className="text-[#0A0B1E] dark:text-white hover:text-[#0A0B1E]/80 dark:hover:text-white/80 font-medium"
+              >
+                Support
+              </Link>
+              <div className="hidden md:flex items-center space-x-2 bg-white/20 dark:bg-gray-700 rounded-lg px-3 py-1">
                 <div
                   className={`w-2 h-2 rounded-full ${user.tier === "premium" ? "bg-green-500" : "bg-yellow-500"}`}
                 ></div>
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                <span className="text-sm font-medium text-[#0A0B1E] dark:text-white">
                   {user.tier === "premium"
                     ? "Unlimited"
                     : `${user.queriesUsed}/${user.queriesLimit}`}
@@ -257,21 +254,9 @@ Kouzes and Posner's extensive research in "The Leadership Challenge" provides th
               <ThemeToggle />
               <Link
                 to="/dashboard"
-                className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+                className="bg-[#0A0B1E] hover:bg-[#0A0B1E]/90 text-[#FFFD63] px-4 py-2 rounded-lg font-medium transition-colors"
               >
-                <svg
-                  className="w-6 h-6"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M10 19l-7-7m0 0l7-7m-7 7h18"
-                  />
-                </svg>
+                Dashboard
               </Link>
             </div>
           </div>

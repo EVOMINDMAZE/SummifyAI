@@ -732,8 +732,76 @@ export default function Dashboard() {
           </div>
         </div>
 
+        {/* Dashboard Customization Controls */}
+        <div className="mb-6 flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+              Dashboard Analytics
+            </h2>
+            <button
+              onClick={() => setIsCustomizing(!isCustomizing)}
+              className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                isCustomizing
+                  ? "bg-green-500 hover:bg-green-600 text-white"
+                  : "bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300"
+              }`}
+            >
+              {isCustomizing ? "✅ Save Layout" : "⚙️ Customize"}
+            </button>
+            {isCustomizing && (
+              <button
+                onClick={resetLayouts}
+                className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg font-medium transition-all"
+              >
+                🔄 Reset
+              </button>
+            )}
+          </div>
+          {isCustomizing && (
+            <div className="text-sm text-gray-600 dark:text-gray-400">
+              💡 Drag and resize widgets to customize your dashboard
+            </div>
+          )}
+        </div>
+
+        {/* Customizable Dashboard Grid */}
+        <div className="mb-8">
+          <ResponsiveGridLayout
+            className="layout"
+            layouts={layouts}
+            onLayoutChange={onLayoutChange}
+            onBreakpointChange={onBreakpointChange}
+            breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480, xxs: 0 }}
+            cols={{ lg: 4, md: 3, sm: 2, xs: 1, xxs: 1 }}
+            rowHeight={80}
+            isDraggable={isCustomizing}
+            isResizable={isCustomizing}
+            compactType={compactType}
+            preventCollision={false}
+            margin={[16, 16]}
+            containerPadding={[0, 0]}
+          >
+            {widgets.map((widget) => (
+              <div
+                key={widget.id}
+                className={isCustomizing ? "cursor-move" : ""}
+              >
+                {widget.component}
+                {isCustomizing && (
+                  <div className="absolute top-2 right-2 bg-blue-500 text-white text-xs px-2 py-1 rounded opacity-75">
+                    {widget.title}
+                  </div>
+                )}
+              </div>
+            ))}
+          </ResponsiveGridLayout>
+        </div>
+
         {/* Premium Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8"
+          style={{ display: "none" }}
+        >
           {/* Summaries Generated */}
           <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-shadow">
             <div className="flex items-center justify-between">

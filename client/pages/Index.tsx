@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import ThemeToggle from "@/components/ThemeToggle";
+import AIChatDemo from "@/components/AIChatDemo";
 
 export default function Index() {
   const [topic, setTopic] = useState("");
@@ -267,7 +268,7 @@ export default function Index() {
           </div>
         </div>
 
-        {/* Process Sections */}
+        {/* Interactive Demo Sections */}
         <div className="max-w-7xl mx-auto px-6 space-y-32">
           {/* Search Section */}
           <div className="relative">
@@ -287,33 +288,45 @@ export default function Index() {
                     and our AI searches through thousands of books to find the
                     most relevant ones with high-quality content.
                   </p>
-                  <Link
-                    to="/how-it-works"
-                    className="bg-blue-200 dark:bg-blue-700 hover:bg-blue-300 dark:hover:bg-blue-600 text-[#0A0B1E] dark:text-white px-6 py-3 rounded-xl font-medium transition-colors border-2 border-[#0A0B1E] dark:border-white inline-block"
-                  >
-                    Learn more
-                  </Link>
+                  <div className="space-y-4">
+                    <Link
+                      to={user ? "/generate" : "/signup"}
+                      className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-medium transition-colors inline-block mr-4"
+                    >
+                      {user ? "Try Search Now" : "Start Free Trial"}
+                    </Link>
+                    <Link
+                      to="/how-it-works"
+                      className="bg-blue-200 dark:bg-blue-700 hover:bg-blue-300 dark:hover:bg-blue-600 text-[#0A0B1E] dark:text-white px-6 py-3 rounded-xl font-medium transition-colors border-2 border-[#0A0B1E] dark:border-white inline-block"
+                    >
+                      Learn more
+                    </Link>
+                  </div>
                 </div>
                 <div className="flex justify-center">
-                  <div className="w-80 h-80 bg-gradient-to-br from-blue-200 to-blue-300 dark:from-blue-800 dark:to-blue-700 rounded-2xl flex items-center justify-center border-2 border-dashed border-blue-400 dark:border-blue-500">
-                    <div className="text-center text-blue-600 dark:text-blue-300">
-                      <svg
-                        className="w-16 h-16 mx-auto mb-4"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      <div className="font-medium text-lg">AI Topic Search</div>
-                      <div className="text-sm mt-2">
-                        Searching millions of books
-                      </div>
-                    </div>
-                  </div>
+                  <AIChatDemo
+                    title="Smart Search"
+                    subtitle="Try asking about any topic to see how our AI finds the best books"
+                    demoType="search"
+                    initialMessages={[
+                      {
+                        id: "1",
+                        type: "ai",
+                        content:
+                          "Hi! I'm your book discovery assistant. What topic would you like to explore today?",
+                        timestamp: "12:30",
+                        status: "read",
+                      },
+                    ]}
+                    suggestedPrompts={[
+                      "Leadership",
+                      "Productivity",
+                      "AI & Technology",
+                      "Personal Finance",
+                    ]}
+                    ctaText={user ? "Try Search Now" : "Start Free Trial"}
+                    ctaLink={user ? "/generate" : "/signup"}
+                  />
                 </div>
               </div>
             </div>
@@ -329,21 +342,29 @@ export default function Index() {
             <div className="bg-green-100 dark:bg-green-900/30 rounded-3xl p-12">
               <div className="grid lg:grid-cols-2 gap-12 items-center">
                 <div className="order-2 lg:order-1 flex justify-center">
-                  <div className="w-80 h-80 bg-gradient-to-br from-green-200 to-green-300 dark:from-green-800 dark:to-green-700 rounded-2xl flex items-center justify-center border-2 border-dashed border-green-400 dark:border-green-500">
-                    <div className="text-center text-green-600 dark:text-green-300">
-                      <svg
-                        className="w-16 h-16 mx-auto mb-4"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                      <div className="font-medium text-lg">AI Analysis</div>
-                      <div className="text-sm mt-2">
-                        Extracting insights and themes
-                      </div>
-                    </div>
-                  </div>
+                  <AIChatDemo
+                    title="Deep Analysis"
+                    subtitle="Experience how our AI compares multiple book perspectives"
+                    demoType="analyze"
+                    initialMessages={[
+                      {
+                        id: "1",
+                        type: "ai",
+                        content:
+                          "Ready to dive deep? I can analyze multiple books on any topic and show you different perspectives. What interests you?",
+                        timestamp: "12:30",
+                        status: "read",
+                      },
+                    ]}
+                    suggestedPrompts={[
+                      "Innovation strategies",
+                      "Building habits",
+                      "Team management",
+                      "Entrepreneurship",
+                    ]}
+                    ctaText={user ? "Analyze Now" : "Start Free Trial"}
+                    ctaLink={user ? "/generate" : "/signup"}
+                  />
                 </div>
                 <div className="order-1 lg:order-2">
                   <h4 className="text-3xl font-bold text-[#0A0B1E] dark:text-white mb-6">
@@ -355,12 +376,20 @@ export default function Index() {
                     contrasting opinions, and synthesizes them into coherent
                     comparisons.
                   </p>
-                  <Link
-                    to="/summary-showcase"
-                    className="bg-green-200 dark:bg-green-700 hover:bg-green-300 dark:hover:bg-green-600 text-[#0A0B1E] dark:text-white px-6 py-3 rounded-xl font-medium transition-colors border-2 border-[#0A0B1E] dark:border-white inline-block"
-                  >
-                    Show me the insights
-                  </Link>
+                  <div className="space-y-4">
+                    <Link
+                      to={user ? "/generate" : "/signup"}
+                      className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl font-medium transition-colors inline-block mr-4"
+                    >
+                      {user ? "Try Analysis Now" : "Start Free Trial"}
+                    </Link>
+                    <Link
+                      to="/summary-showcase"
+                      className="bg-green-200 dark:bg-green-700 hover:bg-green-300 dark:hover:bg-green-600 text-[#0A0B1E] dark:text-white px-6 py-3 rounded-xl font-medium transition-colors border-2 border-[#0A0B1E] dark:border-white inline-block"
+                    >
+                      Show me insights
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>
@@ -385,35 +414,45 @@ export default function Index() {
                     Amazon purchase links, and actionable takeaways—all from one
                     beautiful interface.
                   </p>
-                  <Link
-                    to={user ? "/results" : "/signin"}
-                    className="bg-orange-200 dark:bg-orange-700 hover:bg-orange-300 dark:hover:bg-orange-600 text-[#0A0B1E] dark:text-white px-6 py-3 rounded-xl font-medium transition-colors border-2 border-[#0A0B1E] dark:border-white inline-block"
-                  >
-                    {user ? "View Your Results" : "Sign in to see results"}
-                  </Link>
+                  <div className="space-y-4">
+                    <Link
+                      to={user ? "/generate" : "/signup"}
+                      className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-xl font-medium transition-colors inline-block mr-4"
+                    >
+                      {user ? "Generate Summary" : "Start Free Trial"}
+                    </Link>
+                    <Link
+                      to={user ? "/results" : "/signin"}
+                      className="bg-orange-200 dark:bg-orange-700 hover:bg-orange-300 dark:hover:bg-orange-600 text-[#0A0B1E] dark:text-white px-6 py-3 rounded-xl font-medium transition-colors border-2 border-[#0A0B1E] dark:border-white inline-block"
+                    >
+                      {user ? "View Results" : "See Examples"}
+                    </Link>
+                  </div>
                 </div>
                 <div className="flex justify-center">
-                  <div className="w-80 h-80 bg-gradient-to-br from-orange-200 to-orange-300 dark:from-orange-800 dark:to-orange-700 rounded-2xl flex items-center justify-center border-2 border-dashed border-orange-400 dark:border-orange-500">
-                    <div className="text-center text-orange-600 dark:text-orange-300">
-                      <svg
-                        className="w-16 h-16 mx-auto mb-4"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 0v12h8V4H6z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      <div className="font-medium text-lg">
-                        Beautiful Summary
-                      </div>
-                      <div className="text-sm mt-2">
-                        With quotes and affiliate links
-                      </div>
-                    </div>
-                  </div>
+                  <AIChatDemo
+                    title="Summary Pro"
+                    subtitle="See how beautiful summaries are generated instantly"
+                    demoType="generate"
+                    initialMessages={[
+                      {
+                        id: "1",
+                        type: "ai",
+                        content:
+                          "I create beautiful, comprehensive summaries with quotes and purchase links. What would you like me to summarize?",
+                        timestamp: "12:30",
+                        status: "read",
+                      },
+                    ]}
+                    suggestedPrompts={[
+                      "Effective leadership",
+                      "Digital marketing",
+                      "Mindfulness",
+                      "Investment basics",
+                    ]}
+                    ctaText={user ? "Generate Summary" : "Start Free Trial"}
+                    ctaLink={user ? "/generate" : "/signup"}
+                  />
                 </div>
               </div>
             </div>
@@ -429,23 +468,29 @@ export default function Index() {
             <div className="bg-pink-100 dark:bg-pink-900/30 rounded-3xl p-12">
               <div className="grid lg:grid-cols-2 gap-12 items-center">
                 <div className="order-2 lg:order-1 flex justify-center">
-                  <div className="w-80 h-80 bg-gradient-to-br from-pink-200 to-pink-300 dark:from-pink-800 dark:to-pink-700 rounded-2xl flex items-center justify-center border-2 border-dashed border-pink-400 dark:border-pink-500">
-                    <div className="text-center text-pink-600 dark:text-pink-300">
-                      <svg
-                        className="w-16 h-16 mx-auto mb-4"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" />
-                      </svg>
-                      <div className="font-medium text-lg">
-                        Personal Library
-                      </div>
-                      <div className="text-sm mt-2">
-                        Save and manage insights
-                      </div>
-                    </div>
-                  </div>
+                  <AIChatDemo
+                    title="Share & Earn"
+                    subtitle="Discover how to share insights and earn affiliate commissions"
+                    demoType="share"
+                    initialMessages={[
+                      {
+                        id: "1",
+                        type: "ai",
+                        content:
+                          "Turn your insights into income! Share summaries and earn when friends buy books. What would you like to share first?",
+                        timestamp: "12:30",
+                        status: "read",
+                      },
+                    ]}
+                    suggestedPrompts={[
+                      "Leadership insights",
+                      "Business strategy",
+                      "Self-improvement",
+                      "Career growth",
+                    ]}
+                    ctaText={user ? "Start Sharing" : "Join & Start Earning"}
+                    ctaLink={user ? "/dashboard" : "/signup"}
+                  />
                 </div>
                 <div className="order-1 lg:order-2">
                   <h4 className="text-3xl font-bold text-[#0A0B1E] dark:text-white mb-6">
@@ -455,14 +500,22 @@ export default function Index() {
                     Your SummifyAI account gives you one place to save
                     summaries, share insights, and track your reading journey.
                     Build your personal library and help friends discover great
-                    books.
+                    books while earning affiliate commissions.
                   </p>
-                  <Link
-                    to={user ? "/results" : "/library-showcase"}
-                    className="bg-pink-200 dark:bg-pink-700 hover:bg-pink-300 dark:hover:bg-pink-600 text-[#0A0B1E] dark:text-white px-6 py-3 rounded-xl font-medium transition-colors border-2 border-[#0A0B1E] dark:border-white inline-block"
-                  >
-                    {user ? "View Your Library" : "See Your Library"}
-                  </Link>
+                  <div className="space-y-4">
+                    <Link
+                      to={user ? "/dashboard" : "/signup"}
+                      className="bg-pink-600 hover:bg-pink-700 text-white px-6 py-3 rounded-xl font-medium transition-colors inline-block mr-4"
+                    >
+                      {user ? "View Library" : "Start Earning"}
+                    </Link>
+                    <Link
+                      to={user ? "/results" : "/library-showcase"}
+                      className="bg-pink-200 dark:bg-pink-700 hover:bg-pink-300 dark:hover:bg-pink-600 text-[#0A0B1E] dark:text-white px-6 py-3 rounded-xl font-medium transition-colors border-2 border-[#0A0B1E] dark:border-white inline-block"
+                    >
+                      {user ? "View Results" : "See Examples"}
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>

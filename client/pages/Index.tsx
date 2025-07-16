@@ -700,7 +700,7 @@ export default function Index() {
                       to={user ? "/dashboard" : "/signup"}
                       className="bg-pink-600 hover:bg-pink-700 text-white px-6 py-3 rounded-xl font-medium transition-colors inline-block mr-4"
                     >
-                      {user ? "View Library" : "Start Earning"}
+                      {user ? "View Library" : "Start Free"}
                     </Link>
                     <Link
                       to="/library-showcase"

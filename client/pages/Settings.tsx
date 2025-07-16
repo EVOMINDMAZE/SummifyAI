@@ -640,6 +640,261 @@ export default function Settings() {
             </div>
           )}
 
+          {activeTab === "team" && (
+            <div className="space-y-8">
+              {/* Team Overview */}
+              <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-8">
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                      👥 Team Members
+                    </h2>
+                    <p className="text-gray-600 dark:text-gray-400 mt-1">
+                      Manage your team members and their access levels
+                    </p>
+                  </div>
+                  <div className="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-4 py-2 rounded-lg">
+                    {settings.team.members.length} members
+                  </div>
+                </div>
+
+                {/* Invite New Member */}
+                <div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-6 mb-6">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                    Invite New Member
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div className="md:col-span-2">
+                      <input
+                        type="email"
+                        placeholder="Enter email address"
+                        value={settings.team.inviteEmail}
+                        onChange={(e) =>
+                          setSettings((prev) => ({
+                            ...prev,
+                            team: { ...prev.team, inviteEmail: e.target.value },
+                          }))
+                        }
+                        className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
+                    </div>
+                    <div>
+                      <select
+                        value={settings.team.inviteRole}
+                        onChange={(e) =>
+                          setSettings((prev) => ({
+                            ...prev,
+                            team: { ...prev.team, inviteRole: e.target.value },
+                          }))
+                        }
+                        className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      >
+                        <option value="Member">Member</option>
+                        <option value="Admin">Admin</option>
+                        <option value="Viewer">Viewer</option>
+                      </select>
+                    </div>
+                    <div>
+                      <button
+                        onClick={handleInviteMember}
+                        disabled={!settings.team.inviteEmail}
+                        className="w-full px-4 py-2 bg-blue-500 hover:bg-blue-600 disabled:bg-gray-400 text-white rounded-lg font-medium transition-colors"
+                      >
+                        Send Invite
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Members List */}
+                <div className="space-y-4">
+                  {settings.team.members.map((member) => (
+                    <div
+                      key={member.id}
+                      className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+                    >
+                      <div className="flex items-center gap-4">
+                        <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                          <span className="text-white font-bold text-sm">
+                            {member.name.charAt(0).toUpperCase()}
+                          </span>
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <h4 className="font-medium text-gray-900 dark:text-white">
+                              {member.name}
+                            </h4>
+                            <span
+                              className={`px-2 py-1 text-xs rounded-full ${
+                                member.status === "Active"
+                                  ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+                                  : "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200"
+                              }`}
+                            >
+                              {member.status}
+                            </span>
+                          </div>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">
+                            {member.email}
+                          </p>
+                          <p className="text-xs text-gray-500 dark:text-gray-500">
+                            Joined{" "}
+                            {new Date(member.joinedAt).toLocaleDateString()}{" "}
+                            {member.lastActive && (
+                              <>
+                                • Last active{" "}
+                                {new Date(
+                                  member.lastActive,
+                                ).toLocaleDateString()}
+                              </>
+                            )}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-3">
+                        <select
+                          value={member.role}
+                          onChange={(e) =>
+                            handleUpdateMemberRole(member.id, e.target.value)
+                          }
+                          disabled={member.status === "Pending"}
+                          className="px-3 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-white disabled:bg-gray-100 dark:disabled:bg-gray-700"
+                        >
+                          <option value="Viewer">Viewer</option>
+                          <option value="Member">Member</option>
+                          <option value="Admin">Admin</option>
+                        </select>
+
+                        {member.status === "Pending" && (
+                          <button
+                            onClick={() => handleResendInvitation(member.id)}
+                            className="px-3 py-1 text-sm bg-blue-100 hover:bg-blue-200 text-blue-700 rounded transition-colors"
+                          >
+                            Resend
+                          </button>
+                        )}
+
+                        <button
+                          onClick={() => handleRemoveMember(member.id)}
+                          className="px-3 py-1 text-sm bg-red-100 hover:bg-red-200 text-red-700 rounded transition-colors"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Team Settings */}
+              <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-8">
+                <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
+                  Team Settings
+                </h2>
+                <div className="space-y-6">
+                  <div className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-600 rounded-lg">
+                    <div>
+                      <h3 className="font-medium text-gray-900 dark:text-white">
+                        Auto-share discoveries
+                      </h3>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                        Automatically share new chapter discoveries with team
+                        members
+                      </p>
+                    </div>
+                    <label className="relative inline-flex items-center cursor-pointer">
+                      <input
+                        type="checkbox"
+                        className="sr-only peer"
+                        defaultChecked={true}
+                      />
+                      <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                    </label>
+                  </div>
+
+                  <div className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-600 rounded-lg">
+                    <div>
+                      <h3 className="font-medium text-gray-900 dark:text-white">
+                        Team collaboration notifications
+                      </h3>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                        Get notified when team members invite you to collaborate
+                      </p>
+                    </div>
+                    <label className="relative inline-flex items-center cursor-pointer">
+                      <input
+                        type="checkbox"
+                        className="sr-only peer"
+                        defaultChecked={true}
+                      />
+                      <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                    </label>
+                  </div>
+
+                  <div className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-600 rounded-lg">
+                    <div>
+                      <h3 className="font-medium text-gray-900 dark:text-white">
+                        Default team member role
+                      </h3>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                        Set the default role for new team member invitations
+                      </p>
+                    </div>
+                    <select className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white">
+                      <option value="Viewer">Viewer</option>
+                      <option value="Member" selected>
+                        Member
+                      </option>
+                      <option value="Admin">Admin</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              {/* Role Permissions */}
+              <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-8">
+                <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
+                  Role Permissions
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-4">
+                    <h3 className="font-semibold text-gray-900 dark:text-white mb-3">
+                      👁️ Viewer
+                    </h3>
+                    <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+                      <li>• View shared summaries</li>
+                      <li>• Access team library</li>
+                      <li>• Join collaboration sessions</li>
+                    </ul>
+                  </div>
+                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-4">
+                    <h3 className="font-semibold text-gray-900 dark:text-white mb-3">
+                      👤 Member
+                    </h3>
+                    <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+                      <li>• All Viewer permissions</li>
+                      <li>• Create new summaries</li>
+                      <li>• Share discoveries</li>
+                      <li>• Start collaboration sessions</li>
+                    </ul>
+                  </div>
+                  <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-4">
+                    <h3 className="font-semibold text-gray-900 dark:text-white mb-3">
+                      👑 Admin
+                    </h3>
+                    <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+                      <li>• All Member permissions</li>
+                      <li>• Invite team members</li>
+                      <li>• Manage team settings</li>
+                      <li>• Remove team members</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           {activeTab === "advanced" && (
             <div className="space-y-8">
               {/* API Settings */}

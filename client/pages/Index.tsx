@@ -25,7 +25,7 @@ export default function Index() {
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900">
       {/* Navigation */}
-      <nav className="bg-[#FFFD63] dark:bg-gray-900 relative z-10">
+      <nav className="bg-[#FFFD63] dark:bg-gray-900 relative z-50">
         <div className="max-w-6xl mx-auto px-6">
           <div className="flex justify-between items-center h-16">
             <Link to="/" className="flex items-center gap-2">

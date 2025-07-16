@@ -380,3 +380,49 @@ export async function handleRecordShare(req: Request, res: Response) {
     });
   }
 }
+
+// Update user settings/profile
+export async function handleUpdateUserSettings(req: Request, res: Response) {
+  try {
+    const { userId } = req.params;
+    const { settings } = req.body;
+
+    if (!userId) {
+      return res.status(400).json({ error: "User ID is required" });
+    }
+
+    if (!settings) {
+      return res.status(400).json({ error: "Settings data is required" });
+    }
+
+    const client = await pool.connect();
+
+    try {
+      // Update user settings
+      const result = await client.query(
+        `UPDATE users
+         SET settings = $1, updated_at = CURRENT_TIMESTAMP
+         WHERE id = $2
+         RETURNING *`,
+        [JSON.stringify(settings), userId],
+      );
+
+      if (result.rows.length === 0) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
+      res.json({
+        success: true,
+        user: result.rows[0],
+      });
+    } finally {
+      client.release();
+    }
+  } catch (error) {
+    console.error("Update user settings error:", error);
+    res.status(500).json({
+      error: "Failed to update user settings",
+      details: error instanceof Error ? error.message : "Unknown error",
+    });
+  }
+}

@@ -53,5 +53,10 @@ export function createServer() {
   app.put("/api/users/:userId/settings", handleUpdateUserSettings);
   app.post("/api/shares", handleRecordShare);
 
+  // Generation API routes
+  app.post("/api/generate/start", handleGenerateStart);
+  app.get("/api/generate/progress/:sessionId", handleGenerateProgress);
+  app.get("/api/users/:userId/recent-summaries", handleGetRecentSummaries);
+
   return app;
 }

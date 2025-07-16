@@ -285,12 +285,12 @@ Kouzes and Posner's extensive research in "The Leadership Challenge" provides th
             <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-32 translate-x-32"></div>
             <div className="relative z-10">
               <h1 className="text-4xl md:text-5xl font-bold mb-4">
-                🚀 AI-Powered Book Analysis
+                🚀 AI-Powered Chapter Discovery
               </h1>
               <p className="text-xl text-white/90 max-w-3xl mx-auto">
-                Enter any topic and watch our AI analyze the top 5 books,
-                extract key insights, and create a beautiful comparative summary
-                in seconds.
+                Enter any topic and watch our AI find the exact chapters and
+                pages that address your question, analyze why each chapter is
+                relevant, and provide targeted insights in seconds.
               </p>
             </div>
           </div>

@@ -743,16 +743,16 @@ export default function Index() {
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
                 <div className="text-[#FFFD63] text-2xl mb-2">⚡</div>
-                <h3 className="font-bold mb-2">5x Faster Learning</h3>
+                <h3 className="font-bold mb-2">10x Faster Discovery</h3>
                 <p className="text-gray-300 text-sm">
-                  Compare 5 books in the time it takes to read one
+                  Find exact chapters instead of reading entire books
                 </p>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
                 <div className="text-[#FFFD63] text-2xl mb-2">📚</div>
-                <h3 className="font-bold mb-2">Premium Insights</h3>
+                <h3 className="font-bold mb-2">Precise Chapter Locations</h3>
                 <p className="text-gray-300 text-sm">
-                  Deep analysis with quotes and takeaways
+                  Get exact page numbers and why each chapter matters
                 </p>
               </div>
             </div>

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { ThemeSelector } from "../components/ThemeToggle";
+import ThemeToggle from "@/components/ThemeToggle";
 
 export default function Settings() {
   const { user, updateUserSettings } = useAuth();

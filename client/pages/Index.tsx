@@ -558,7 +558,7 @@ export default function Index() {
                       to={user ? "/generate" : "/signup"}
                       className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-xl font-medium transition-colors inline-block mr-4"
                     >
-                      {user ? "Generate Summary" : "Start Free Trial"}
+                      {user ? "Find Chapters" : "Start Free Trial"}
                     </Link>
                     <Link
                       to="/summary-showcase"

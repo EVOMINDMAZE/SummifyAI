@@ -63,6 +63,10 @@ export default function Dashboard() {
   const [compactType, setCompactType] = useState<
     "vertical" | "horizontal" | null
   >("vertical");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortBy, setSortBy] = useState<"date" | "topic" | "books">("date");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+  const [filterByBooks, setFilterByBooks] = useState<string>("");
 
   // Mock data - replace with real data
   const recentSummaries: Summary[] = [

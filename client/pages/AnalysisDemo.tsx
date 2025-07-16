@@ -293,12 +293,12 @@ Exceptional leadership emerges at the intersection of character (Covey), service
             <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-32 translate-x-32"></div>
             <div className="relative z-10">
               <h1 className="text-4xl md:text-6xl font-bold mb-4">
-                🧠 Deep Analysis Engine
+                🧠 Chapter Analysis Engine
               </h1>
               <p className="text-xl text-white/90 max-w-3xl mx-auto mb-6">
-                Watch our AI perform deep comparative analysis across multiple
-                books. See how we extract themes, identify contrasts, and
-                synthesize insights from different perspectives.
+                Watch our AI analyze why specific chapters are relevant to your
+                query. See how we evaluate chapter content, explain relevance,
+                and provide insights without violating copyright.
               </p>
               <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-4 max-w-2xl mx-auto">
                 <p className="text-white/80 text-sm mb-2">

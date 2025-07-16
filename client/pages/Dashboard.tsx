@@ -1465,18 +1465,37 @@ export default function Dashboard() {
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth={2}
-                      d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                      d={
+                        recentSummaries.length === 0
+                          ? "M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                          : "M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                      }
                     />
                   </svg>
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
-                  Ready to start your journey?
+                  {recentSummaries.length === 0
+                    ? "Ready to start your journey?"
+                    : "No results found"}
                 </h3>
                 <p className="text-gray-600 dark:text-gray-400 mb-8 max-w-md mx-auto">
-                  Generate your first book summary and unlock the power of
-                  comparative analysis. Discover insights from multiple
-                  perspectives in minutes.
+                  {recentSummaries.length === 0
+                    ? "Generate your first book summary and unlock the power of comparative analysis. Discover insights from multiple perspectives in minutes."
+                    : "No summaries match your current search criteria. Try adjusting your filters or search terms."}
                 </p>
+                {recentSummaries.length > 0 && (
+                  <button
+                    onClick={() => {
+                      setSearchQuery("");
+                      setFilterByBooks("");
+                      setSortBy("date");
+                      setSortOrder("desc");
+                    }}
+                    className="inline-flex items-center px-4 py-2 bg-[#4361EE] hover:bg-[#4361EE]/90 text-white rounded-lg font-medium transition-colors mr-4"
+                  >
+                    🔄 Clear Filters
+                  </button>
+                )}
                 <Link
                   to="/generate"
                   className="bg-gradient-to-r from-[#FFFD63] to-[#FFE066] hover:from-[#FFE066] hover:to-[#FFFD63] text-[#0A0B1E] px-8 py-4 rounded-2xl font-bold transition-all shadow-lg hover:shadow-xl transform hover:scale-105 inline-flex items-center"

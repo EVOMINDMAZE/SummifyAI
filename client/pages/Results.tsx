@@ -9,6 +9,13 @@ export default function Results() {
   const [activeTab, setActiveTab] = useState<"recent" | "saved" | "history">(
     "recent",
   );
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortBy, setSortBy] = useState<"date" | "topic" | "books" | "rating">(
+    "date",
+  );
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+  const [filterByRating, setFilterByRating] = useState<number>(0);
+  const [filterByAuthor, setFilterByAuthor] = useState<string>("");
 
   // Mock user search results - this would come from backend
   const mockSearchResults = [

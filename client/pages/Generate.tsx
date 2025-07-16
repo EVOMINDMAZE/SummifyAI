@@ -9,23 +9,8 @@ import { useCollaboration } from "@/contexts/CollaborationContext";
 import { GenerateAPI, GeneratedResult, Book } from "@/utils/generateApi";
 import { showNotification } from "@/utils/actions";
 
-interface Book {
-  id: string;
-  title: string;
-  author: string;
-  cover: string;
-  description: string;
-  amazonLink: string;
-  commission: number;
-}
-
-interface GeneratedSummary {
-  topic: string;
-  books: Book[];
-  summary: string;
-  quotes: string[];
-  generatedAt: string;
-}
+// Using types from generateApi
+type GeneratedSummary = GeneratedResult;
 
 export default function Generate() {
   const { user, updateUser } = useAuth();

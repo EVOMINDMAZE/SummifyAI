@@ -2,6 +2,18 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import ThemeToggle from "@/components/ThemeToggle";
+import { loadStripe } from "@stripe/stripe-js";
+import {
+  Elements,
+  CardElement,
+  useStripe,
+  useElements,
+} from "@stripe/react-stripe-js";
+
+// Initialize Stripe
+const stripePromise = loadStripe(
+  "pk_test_51234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef",
+); // Demo key
 
 export default function Pricing() {
   const { user, updateUser } = useAuth();
@@ -20,17 +32,22 @@ export default function Pricing() {
     setIsProcessing(true);
 
     try {
-      // TODO: Replace with actual Stripe integration
+      // Create Stripe Checkout Session
       const response = await fetch("/api/create-checkout-session", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("auth_token")}`,
         },
         body: JSON.stringify({
-          priceId: plan === "premium" ? "price_premium_monthly" : null,
+          priceId:
+            billingCycle === "monthly"
+              ? "price_1ABC123monthly"
+              : "price_1ABC123yearly",
           userId: user.id,
-          cycle: billingCycle,
+          successUrl: `${window.location.origin}/dashboard?success=true`,
+          cancelUrl: `${window.location.origin}/pricing`,
+          customerEmail: user.email,
+          mode: "subscription",
         }),
       });
 
@@ -38,18 +55,41 @@ export default function Pricing() {
         throw new Error("Failed to create checkout session");
       }
 
-      const { url } = await response.json();
-      window.location.href = url;
-    } catch (error) {
-      // For demo purposes, simulate successful subscription
-      updateUser({
-        tier: "premium",
-        queriesLimit: 999999,
-        subscriptionId: "sub_demo_123",
-      });
+      const { sessionId } = await response.json();
 
-      alert("Successfully upgraded to Premium! (Demo mode)");
-      navigate("/dashboard");
+      // Redirect to Stripe Checkout
+      const stripe = await stripePromise;
+      if (stripe) {
+        const { error } = await stripe.redirectToCheckout({ sessionId });
+        if (error) {
+          throw error;
+        }
+      }
+    } catch (error) {
+      console.error("Stripe error:", error);
+
+      // Demo mode fallback
+      const proceedWithDemo = confirm(
+        "Demo Mode: Stripe integration not configured.\n\nWould you like to simulate the subscription for testing purposes?",
+      );
+
+      if (proceedWithDemo) {
+        updateUser({
+          tier: "premium",
+          queriesLimit: 999999,
+          subscriptionId: "sub_demo_" + Date.now(),
+        });
+
+        alert(
+          "✅ Successfully upgraded to Premium! (Demo mode)\n\n" +
+            "In production, this would:\n" +
+            "• Process real payment via Stripe\n" +
+            "• Send confirmation email\n" +
+            "• Activate premium features\n" +
+            "• Set up recurring billing",
+        );
+        navigate("/dashboard");
+      }
     } finally {
       setIsProcessing(false);
     }

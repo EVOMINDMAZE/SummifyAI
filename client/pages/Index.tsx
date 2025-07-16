@@ -724,12 +724,12 @@ export default function Index() {
               </span>
             </div>
             <h2 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-              Transform Your Reading Today
+              Transform Your Learning Today
             </h2>
             <p className="text-xl text-gray-300 mb-8 leading-relaxed max-w-3xl mx-auto">
-              Join thousands of smart readers who use SummifyAI to discover,
-              compare, and monetize book insights. Start earning while you
-              learn.
+              Join thousands of smart learners who use SummifyAI to discover
+              exact chapters, understand precise insights, and earn through
+              affiliate links. Start finding exactly what you need.
             </p>
 
             {/* Value Proposition */}

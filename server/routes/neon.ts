@@ -398,6 +398,18 @@ export async function handleUpdateUserSettings(req: Request, res: Response) {
     const client = await pool.connect();
 
     try {
+      // First, try to ensure the settings column exists
+      await client.query(`
+        ALTER TABLE users
+        ADD COLUMN IF NOT EXISTS settings JSONB DEFAULT '{}'::jsonb
+      `);
+
+      // Also ensure updated_at column exists
+      await client.query(`
+        ALTER TABLE users
+        ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      `);
+
       // Update user settings
       const result = await client.query(
         `UPDATE users

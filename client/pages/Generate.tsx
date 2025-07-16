@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import ThemeToggle from "@/components/ThemeToggle";
+import Navigation from "@/components/Navigation";
 import { pdf } from "@react-pdf/renderer";
 import PDFTemplate from "@/components/PDFTemplate";
 import CollaborationPanel from "@/components/CollaborationPanel";
 import { useCollaboration } from "@/contexts/CollaborationContext";
+import { GenerateAPI, GeneratedResult, Book } from "@/utils/generateApi";
+import { showNotification } from "@/utils/actions";
 
 interface Book {
   id: string;

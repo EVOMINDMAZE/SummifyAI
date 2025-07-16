@@ -169,6 +169,322 @@ export default function Dashboard() {
     navigate("/");
   };
 
+  // Widget definitions
+  const generateWidgets = (): DashboardWidget[] => [
+    {
+      id: "searches",
+      title: "Searches",
+      defaultProps: { w: 1, h: 2, x: 0, y: 0, minW: 1, minH: 2 },
+      component: (
+        <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-shadow h-full">
+          <div className="flex items-center justify-between h-full">
+            <div>
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                Searches
+              </p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                {user.queriesUsed}
+              </p>
+              <p className="text-xs text-gray-500 dark:text-gray-500">
+                {user.tier === "premium"
+                  ? "Unlimited"
+                  : `${user.queriesLimit - user.queriesUsed} remaining`}
+              </p>
+            </div>
+            <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center">
+              <svg
+                className="w-6 h-6 text-blue-600 dark:text-blue-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: "monthly",
+      title: "Monthly Earnings",
+      defaultProps: { w: 1, h: 2, x: 1, y: 0, minW: 1, minH: 2 },
+      component: (
+        <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-shadow h-full">
+          <div className="flex items-center justify-between h-full">
+            <div>
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                This Month
+              </p>
+              <p className="text-2xl font-bold text-green-600 dark:text-green-400">
+                ${affiliateEarnings.thisMonth}
+              </p>
+              <p className="text-xs text-gray-500 dark:text-gray-500">
+                +{((affiliateEarnings.thisMonth / 200) * 100).toFixed(0)}% vs
+                last month
+              </p>
+            </div>
+            <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-xl flex items-center justify-center">
+              <svg
+                className="w-6 h-6 text-green-600 dark:text-green-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: "total",
+      title: "Total Earnings",
+      defaultProps: { w: 1, h: 2, x: 2, y: 0, minW: 1, minH: 2 },
+      component: (
+        <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-shadow h-full">
+          <div className="flex items-center justify-between h-full">
+            <div>
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                Total Earned
+              </p>
+              <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">
+                ${affiliateEarnings.total}
+              </p>
+              <p className="text-xs text-gray-500 dark:text-gray-500">
+                {affiliateEarnings.conversions} conversions
+              </p>
+            </div>
+            <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-xl flex items-center justify-center">
+              <svg
+                className="w-6 h-6 text-purple-600 dark:text-purple-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: "trending",
+      title: "Top Trending",
+      defaultProps: { w: 1, h: 2, x: 3, y: 0, minW: 1, minH: 2 },
+      component: (
+        <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-shadow h-full">
+          <div className="flex items-center justify-between h-full">
+            <div>
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                Top Trending
+              </p>
+              <p className="text-2xl font-bold text-orange-600 dark:text-orange-400">
+                Leadership
+              </p>
+              <p className="text-xs text-gray-500 dark:text-gray-500">
+                +247% searches
+              </p>
+            </div>
+            <div className="w-12 h-12 bg-orange-100 dark:bg-orange-900/30 rounded-xl flex items-center justify-center">
+              <svg
+                className="w-6 h-6 text-orange-600 dark:text-orange-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
+                />
+              </svg>
+            </div>
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: "earnings-chart",
+      title: "Earnings Trend",
+      defaultProps: { w: 2, h: 3, x: 0, y: 2, minW: 2, minH: 3 },
+      component: (
+        <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 h-full">
+          <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">
+            📈 Earnings Trend
+          </h3>
+          <ResponsiveContainer width="100%" height="85%">
+            <AreaChart data={earningsData}>
+              <defs>
+                <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#4361EE" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="#4361EE" stopOpacity={0} />
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
+              <XAxis
+                dataKey="month"
+                tick={{ fontSize: 12 }}
+                tickLine={false}
+                stroke="#666"
+              />
+              <YAxis tick={{ fontSize: 12 }} tickLine={false} stroke="#666" />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "rgba(255, 255, 255, 0.95)",
+                  border: "none",
+                  borderRadius: "12px",
+                  boxShadow: "0 8px 32px rgba(0,0,0,0.1)",
+                }}
+              />
+              <Area
+                type="monotone"
+                dataKey="earnings"
+                stroke="#4361EE"
+                strokeWidth={3}
+                fillOpacity={1}
+                fill="url(#colorRevenue)"
+              />
+            </AreaChart>
+          </ResponsiveContainer>
+        </div>
+      ),
+    },
+    {
+      id: "top-books",
+      title: "Top Converting Books",
+      defaultProps: { w: 2, h: 3, x: 2, y: 2, minW: 2, minH: 3 },
+      component: (
+        <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 h-full">
+          <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">
+            📚 Top Converting Books
+          </h3>
+          <ResponsiveContainer width="100%" height="85%">
+            <BarChart data={topBooksData}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
+              <XAxis
+                dataKey="title"
+                tick={{ fontSize: 10 }}
+                angle={-45}
+                textAnchor="end"
+                height={80}
+              />
+              <YAxis tick={{ fontSize: 12 }} tickLine={false} stroke="#666" />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "rgba(255, 255, 255, 0.95)",
+                  border: "none",
+                  borderRadius: "12px",
+                  boxShadow: "0 8px 32px rgba(0,0,0,0.1)",
+                }}
+              />
+              <Bar dataKey="sales" fill="#7B2CBF" radius={[4, 4, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      ),
+    },
+    {
+      id: "recent-summaries",
+      title: "Recent Chapter Discoveries",
+      defaultProps: { w: 4, h: 4, x: 0, y: 5, minW: 3, minH: 3 },
+      component: (
+        <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 h-full">
+          <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">
+            📖 Recent Chapter Discoveries
+          </h3>
+          <div className="space-y-4 h-full overflow-y-auto">
+            {recentSummaries.slice(0, 5).map((summary) => (
+              <div
+                key={summary.id}
+                className="border-l-4 border-[#4361EE] pl-4 py-2"
+              >
+                <h4 className="font-semibold text-gray-900 dark:text-white">
+                  {summary.topic}
+                </h4>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                  {new Date(summary.createdAt).toLocaleDateString()}
+                </p>
+                <div className="flex flex-wrap gap-1">
+                  {summary.books.slice(0, 3).map((book, index) => (
+                    <span
+                      key={index}
+                      className="text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 px-2 py-1 rounded"
+                    >
+                      {book.title}
+                    </span>
+                  ))}
+                  {summary.books.length > 3 && (
+                    <span className="text-xs text-gray-500">
+                      +{summary.books.length - 3} more
+                    </span>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ),
+    },
+  ];
+
+  const widgets = generateWidgets();
+
+  // Default layouts for different breakpoints
+  const getDefaultLayouts = () => {
+    const layouts: any = {};
+    ["lg", "md", "sm", "xs", "xxs"].forEach((breakpoint) => {
+      layouts[breakpoint] = widgets.map((widget) => ({
+        i: widget.id,
+        ...widget.defaultProps,
+      }));
+    });
+    return layouts;
+  };
+
+  // Load saved layouts from localStorage or use defaults
+  useEffect(() => {
+    const savedLayouts = localStorage.getItem("dashboard-layouts");
+    if (savedLayouts) {
+      setLayouts(JSON.parse(savedLayouts));
+    } else {
+      setLayouts(getDefaultLayouts());
+    }
+  }, []);
+
+  const onLayoutChange = (layout: any, layouts: any) => {
+    setLayouts(layouts);
+    localStorage.setItem("dashboard-layouts", JSON.stringify(layouts));
+  };
+
+  const onBreakpointChange = (breakpoint: string) => {
+    setCurrentBreakpoint(breakpoint);
+  };
+
+  const resetLayouts = () => {
+    const defaultLayouts = getDefaultLayouts();
+    setLayouts(defaultLayouts);
+    localStorage.setItem("dashboard-layouts", JSON.stringify(defaultLayouts));
+  };
+
   if (!user) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center">

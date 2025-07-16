@@ -231,8 +231,93 @@ Kouzes and Posner's extensive research in "The Leadership Challenge" provides th
     alert("🚀 Premium PDF export with beautiful formatting coming soon!");
   };
 
-  const handlePriorityGeneration = () => {
-    alert("⚡ Priority generation feature coming soon!");
+  const handlePriorityGeneration = async () => {
+    if (!topic.trim()) return;
+
+    const confirmed = window.confirm(
+      "Priority Generation ($1.99)\n\n⚡ Get your summary in 10 seconds with premium processing\n🚀 Skip the queue and get instant results\n🎆 Enhanced AI analysis with GPT-4\n\nProceed with payment?",
+    );
+
+    if (!confirmed) return;
+
+    setIsGenerating(true);
+    setGenerationStage(0);
+    setProgressPercent(0);
+    setCurrentOperation("Initializing priority queue...");
+
+    // Simulate priority processing (faster)
+    const priorityStages = [
+      { text: "⚡ Priority queue activated...", duration: 200, percent: 20 },
+      { text: "🚀 Advanced AI processing...", duration: 300, percent: 50 },
+      { text: "🎆 Premium analysis complete...", duration: 200, percent: 80 },
+      { text: "✨ Delivering results...", duration: 100, percent: 100 },
+    ];
+
+    let currentStageIndex = 0;
+    const processPriorityStage = () => {
+      if (currentStageIndex < priorityStages.length) {
+        const stage = priorityStages[currentStageIndex];
+        setGenerationStage(currentStageIndex);
+        setProgressPercent(stage.percent);
+        setEstimatedTimeLeft(Math.max(1, 10 - (stage.percent / 100) * 9));
+        setCurrentOperation(`Priority processing: ${stage.text}`);
+
+        setTimeout(() => {
+          currentStageIndex++;
+          processPriorityStage();
+        }, stage.duration);
+      }
+    };
+
+    processPriorityStage();
+
+    // Complete priority generation quickly
+    setTimeout(() => {
+      const summary: GeneratedSummary = {
+        topic: topic,
+        books: mockBooks,
+        summary: `**Priority Analysis: ${topic}** 🚀
+
+[Enhanced with GPT-4 Priority Processing]
+
+This premium analysis leverages advanced AI models for deeper insights. The synthesis below represents accelerated processing of millions of data points from authoritative sources.
+
+Effective leadership emerges from a synthesis of character-driven principles and strategic thinking. Collins' "Good to Great" research reveals that Level 5 leaders possess the paradoxical combination of personal humility and professional will—they channel their ego needs away from themselves into the larger goal of building a great company. This contrasts yet complements Covey's principle-centered approach in "The 7 Habits," which emphasizes character ethics over personality ethics, arguing that sustainable leadership comes from being rather than seeming.
+
+Sinek's "Leaders Eat Last" introduces the biological and anthropological foundations of leadership through the "Circle of Safety" concept, where leaders create an environment of trust by prioritizing their team's well-being. This scientific approach aligns beautifully with Brown's vulnerability-based leadership model in "Dare to Lead," which demonstrates that courage, compassion, and connection form the cornerstone of 21st-century leadership effectiveness.
+
+**Premium Insight:** The convergence analysis reveals that modern leadership requires balancing four critical dimensions: Authenticity (being genuine), Adaptability (responding to change), Accountability (taking responsibility), and Advocacy (championing others). Leaders who master this "4A Framework" consistently outperform peers by 340% in team engagement and 280% in organizational outcomes.
+
+**Exclusive Finding:** Cross-referencing with 50+ additional sources reveals that the most successful leaders spend 60% of their time developing others rather than directing tasks—a pattern consistent across all five analyzed books but emphasized most strongly in the latest research.`,
+        quotes: [
+          '"Level 5 leaders channel their ego needs away from themselves and into the larger goal of building a great company. It\'s not that Level 5 leaders have no ego or self-interest. Indeed, they are incredibly ambitious—but their ambition is first and foremost for the institution, not themselves." - Jim Collins',
+          '"Private victories precede public victories. Paradigms are powerful because they create the lens through which we see the world." - Stephen R. Covey',
+          '"Leadership is not about being in charge. Leadership is about taking care of those in your charge. Leaders are the ones who run headfirst into the unknown." - Simon Sinek',
+          '"Vulnerability is not winning or losing; it\'s having the courage to show up and be seen when we have no control over the outcome." - Brené Brown',
+          '"Leadership is everyone\'s business because everyone—at some level and at some time—is a leader." - James Kouzes & Barry Posner',
+          '"[Premium Insight] The future belongs to leaders who can hold paradox: being both confident and humble, decisive and collaborative, innovative and grounded." - SummifyAI Priority Analysis',
+        ],
+        generatedAt: new Date().toISOString(),
+      };
+
+      setGeneratedSummary(summary);
+
+      // Simulate payment processing
+      alert(
+        "💳 Payment successful! $1.99 charged for Priority Generation\n✨ Premium features unlocked for this summary",
+      );
+
+      // Update user's query count
+      if (user) {
+        updateUser({ queriesUsed: user.queriesUsed + 1 });
+      }
+
+      setIsGenerating(false);
+      setGenerationStage(0);
+      setProgressPercent(0);
+      setCurrentOperation("");
+      setEstimatedTimeLeft(60);
+    }, 1000);
   };
 
   if (!user) {

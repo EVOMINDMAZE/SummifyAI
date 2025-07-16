@@ -564,8 +564,19 @@ export default function Dashboard() {
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                <XAxis dataKey="month" stroke="#6b7280" />
-                <YAxis stroke="#6b7280" />
+                <XAxis
+                  dataKey="month"
+                  stroke="#6b7280"
+                  fontSize={12}
+                  axisLine={true}
+                  tickLine={true}
+                />
+                <YAxis
+                  stroke="#6b7280"
+                  fontSize={12}
+                  axisLine={true}
+                  tickLine={true}
+                />
                 <Tooltip
                   contentStyle={{
                     backgroundColor: "#1f2937",
@@ -665,8 +676,19 @@ export default function Dashboard() {
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={activityData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                <XAxis dataKey="day" stroke="#6b7280" />
-                <YAxis stroke="#6b7280" />
+                <XAxis
+                  dataKey="day"
+                  stroke="#6b7280"
+                  fontSize={12}
+                  axisLine={true}
+                  tickLine={true}
+                />
+                <YAxis
+                  stroke="#6b7280"
+                  fontSize={12}
+                  axisLine={true}
+                  tickLine={true}
+                />
                 <Tooltip
                   contentStyle={{
                     backgroundColor: "#1f2937",

@@ -690,16 +690,13 @@ export default function Dashboard() {
           <div className="bg-gradient-to-r from-[#4361EE] to-[#7B2CBF] rounded-3xl p-8 text-white relative overflow-hidden">
             <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-32 translate-x-32"></div>
             <div className="relative z-10">
-              <h1 className="text-3xl md:text-4xl font-bold mb-2">
+                            <h1 className="text-3xl md:text-4xl font-bold mb-2">
                 Welcome back, {user.name}! 👋
               </h1>
-                  <span className="text-[#0A0B1E] font-bold text-xl">S</span>
-                </div>
-                <span className="ml-3 text-2xl font-bold bg-gradient-to-r from-[#0A0B1E] to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
-                  SummifyAI
-                </span>
-              </Link>
-              <div className="hidden lg:ml-10 lg:flex lg:space-x-1">
+              <p className="text-white/80 text-lg">
+                Ready to discover exact chapters and pages? Let's find precisely
+                what you need to learn.
+              </p>
                 <Link
                   to="/dashboard"
                   className="bg-gradient-to-r from-[#4361EE] to-[#7B2CBF] text-white px-4 py-2 rounded-xl text-sm font-medium shadow-lg"

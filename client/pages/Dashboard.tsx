@@ -400,7 +400,7 @@ export default function Dashboard() {
           <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">
             📈 Earnings Trend
           </h3>
-          <ResponsiveContainer width="100%" height="85%">
+          <ResponsiveContainer width="100%" height="85%" aspect={undefined}>
             <AreaChart data={earningsData}>
               <defs>
                 <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
@@ -461,7 +461,7 @@ export default function Dashboard() {
           <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">
             📚 Top Converting Books
           </h3>
-          <ResponsiveContainer width="100%" height="85%">
+          <ResponsiveContainer width="100%" height="85%" aspect={undefined}>
             <BarChart data={topBooksData}>
               <CartesianGrid
                 strokeDasharray="3 3"
@@ -1108,7 +1108,7 @@ export default function Dashboard() {
                 </span>
               </div>
             </div>
-            <ResponsiveContainer width="100%" height={300}>
+            <ResponsiveContainer width="100%" height={300} aspect={undefined}>
               <AreaChart data={earningsData}>
                 <defs>
                   <linearGradient
@@ -1180,7 +1180,7 @@ export default function Dashboard() {
                 </p>
               </div>
             </div>
-            <ResponsiveContainer width="100%" height={300}>
+            <ResponsiveContainer width="100%" height={300} aspect={undefined}>
               <PieChart>
                 <Pie
                   data={topicsData}
@@ -1250,7 +1250,7 @@ export default function Dashboard() {
                 </div>
               </div>
             </div>
-            <ResponsiveContainer width="100%" height={300}>
+            <ResponsiveContainer width="100%" height={300} aspect={undefined}>
               <BarChart data={activityData}>
                 <CartesianGrid
                   strokeDasharray="3 3"

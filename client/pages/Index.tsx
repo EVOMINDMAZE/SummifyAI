@@ -190,7 +190,7 @@ export default function Index() {
                     clipRule="evenodd"
                   />
                 </svg>
-                <span>5 Books Analysis</span>
+                <span>Exact Chapter Locations</span>
               </div>
               <div className="flex items-center gap-2 text-[#0A0B1E]/70 dark:text-gray-400">
                 <svg
@@ -204,7 +204,7 @@ export default function Index() {
                     clipRule="evenodd"
                   />
                 </svg>
-                <span>Affiliate Earnings</span>
+                <span>Page Numbers & Context</span>
               </div>
               <div className="flex items-center gap-2 text-[#0A0B1E]/70 dark:text-gray-400">
                 <svg
@@ -218,7 +218,7 @@ export default function Index() {
                     clipRule="evenodd"
                   />
                 </svg>
-                <span>Personal Library</span>
+                <span>AI Chapter Analysis</span>
               </div>
               <div className="flex items-center gap-2 text-[#0A0B1E]/70 dark:text-gray-400">
                 <svg
@@ -232,7 +232,7 @@ export default function Index() {
                     clipRule="evenodd"
                   />
                 </svg>
-                <span>Free Forever</span>
+                <span>Affiliate Purchase Links</span>
               </div>
             </div>
 

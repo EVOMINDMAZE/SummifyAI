@@ -405,15 +405,53 @@ export default function Results() {
 
             {/* Actions */}
             <div className="flex flex-wrap gap-4">
-              <button className="bg-[#4361EE] hover:bg-[#4361EE]/90 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+              <button
+                onClick={() => handleExportPDF(currentResult)}
+                className="bg-[#4361EE] hover:bg-[#4361EE]/90 text-white px-6 py-2 rounded-lg font-medium transition-colors"
+              >
                 Export PDF
               </button>
-              <button className="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+              <button
+                onClick={() => handleShare(currentResult)}
+                className="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg font-medium transition-colors"
+              >
                 Share Result
               </button>
-              <button className="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg font-medium transition-colors">
-                Save to Library
+              <button
+                onClick={() => handleSave(currentResult)}
+                className={`px-6 py-2 rounded-lg font-medium transition-colors ${
+                  currentResult.saved
+                    ? "bg-yellow-500 hover:bg-yellow-600 text-white"
+                    : "bg-gray-500 hover:bg-gray-600 text-white"
+                }`}
+              >
+                {currentResult.saved ? "Saved ✓" : "Save to Library"}
               </button>
+
+              {/* Social sharing buttons */}
+              <div className="flex gap-2 ml-4">
+                <button
+                  onClick={() => shareOnTwitter(currentResult)}
+                  className="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-lg"
+                  title="Share on Twitter"
+                >
+                  🐦
+                </button>
+                <button
+                  onClick={() => shareOnLinkedIn(currentResult)}
+                  className="bg-blue-700 hover:bg-blue-800 text-white p-2 rounded-lg"
+                  title="Share on LinkedIn"
+                >
+                  💼
+                </button>
+                <button
+                  onClick={() => shareOnFacebook(currentResult)}
+                  className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-lg"
+                  title="Share on Facebook"
+                >
+                  📘
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -639,7 +677,7 @@ export default function Results() {
                 }}
                 className="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors font-medium text-sm"
               >
-                🔄 Clear Filters
+                ��� Clear Filters
               </button>
             </div>
           )}

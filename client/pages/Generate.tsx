@@ -42,6 +42,10 @@ export default function Generate() {
 
   const handleGenerate = async () => {
     if (!topic.trim()) return;
+    if (!user) {
+      showNotification("Please sign in to generate summaries", "error");
+      return;
+    }
 
     // Check if user has queries remaining
     if (user?.tier === "free" && user.queriesUsed >= user.queriesLimit) {
@@ -51,68 +55,75 @@ export default function Generate() {
 
     setIsGenerating(true);
     setGenerationStage(0);
+    setProgressPercent(0);
+    setCurrentOperation("Initializing...");
+    setError(null);
 
-    // Enhanced progressive generation with WebSocket simulation
-    let currentStageIndex = 0;
-    const processNextStage = () => {
-      if (currentStageIndex < generationStages.length) {
-        const stage = generationStages[currentStageIndex];
-        setGenerationStage(currentStageIndex);
-        setProgressPercent(stage.percent);
-        setEstimatedTimeLeft(Math.max(5, 60 - (stage.percent / 100) * 55));
+    try {
+      // Start real generation process
+      const response = await GenerateAPI.startGeneration(
+        topic,
+        parseInt(user.id),
+        5,
+      );
 
-        // Simulate WebSocket updates for current stage
-        const cleanup = simulateWebSocketUpdates((data) => {
-          setCurrentOperation(data.operation);
-        });
+      setSessionId(response.sessionId);
+      setEstimatedTimeLeft(response.estimatedTime);
+      showNotification("Generation started successfully!", "success");
 
-        setTimeout(() => {
-          cleanup();
-          currentStageIndex++;
-          processNextStage();
-        }, stage.duration);
-      }
-    };
+      // Start polling for progress
+      GenerateAPI.pollProgress(
+        response.sessionId,
+        (progress) => {
+          // Update progress
+          setProgressPercent(progress.progress);
+          setCurrentOperation(progress.currentOperation || "Processing...");
 
-    processNextStage();
+          if (progress.estimatedTimeLeft !== undefined) {
+            setEstimatedTimeLeft(progress.estimatedTimeLeft);
+          }
 
-    // Complete generation after all stages
-    setTimeout(() => {
-      const summary: GeneratedSummary = {
-        topic: topic,
-        books: mockBooks,
-        summary: `**Comparative Analysis: ${topic}**
+          // Map progress to stages for UI consistency
+          const stageIndex = Math.floor(
+            (progress.progress / 100) * generationStages.length,
+          );
+          setGenerationStage(Math.min(stageIndex, generationStages.length - 1));
+        },
+        (result) => {
+          // Generation completed successfully
+          setGeneratedSummary(result);
+          setIsGenerating(false);
+          setProgressPercent(100);
+          setCurrentOperation("Complete!");
+          setSessionId(null);
 
-Effective leadership emerges from a synthesis of character-driven principles and strategic thinking. Collins' "Good to Great" research reveals that Level 5 leaders possess the paradoxical combination of personal humility and professional will—they channel their ego needs away from themselves into the larger goal of building a great company. This contrasts yet complements Covey's principle-centered approach in "The 7 Habits," which emphasizes character ethics over personality ethics, arguing that sustainable leadership comes from being rather than seeming.
+          // Update user's query count locally
+          if (user) {
+            updateUser({ queriesUsed: user.queriesUsed + 1 });
+          }
 
-Sinek's "Leaders Eat Last" introduces the biological and anthropological foundations of leadership through the "Circle of Safety" concept, where leaders create an environment of trust by prioritizing their team's well-being. This scientific approach aligns beautifully with Brown's vulnerability-based leadership model in "Dare to Lead," which demonstrates that courage, compassion, and connection form the cornerstone of 21st-century leadership effectiveness.
-
-Kouzes and Posner's extensive research in "The Leadership Challenge" provides the practical framework through five exemplary leadership practices: modeling the way, inspiring a shared vision, challenging the process, enabling others to act, and encouraging the heart. These practices serve as the tactical implementation of the philosophical foundations laid by the other authors.
-
-**Synthesized Insight:** Exceptional leadership isn't about commanding authority but about serving others while maintaining unwavering commitment to principles and shared vision. The most effective leaders combine humility with fierce determination, create psychological safety for innovation, demonstrate vulnerability as strength, and consistently embody the values they expect from others. Modern leadership requires both the head (strategic thinking) and the heart (emotional intelligence) working in harmony.`,
-        quotes: [
-          '"Level 5 leaders channel their ego needs away from themselves and into the larger goal of building a great company. It\'s not that Level 5 leaders have no ego or self-interest. Indeed, they are incredibly ambitious—but their ambition is first and foremost for the institution, not themselves." - Jim Collins',
-          '"Private victories precede public victories. Paradigms are powerful because they create the lens through which we see the world." - Stephen R. Covey',
-          '"Leadership is not about being in charge. Leadership is about taking care of those in your charge. Leaders are the ones who run headfirst into the unknown. They rush toward the danger. They put their own interests aside to protect us or to pull us into the future." - Simon Sinek',
-          '"Vulnerability is not winning or losing; it\'s having the courage to show up and be seen when we have no control over the outcome." - Brené Brown',
-          '"Leadership is everyone\'s business because everyone—at some level and at some time—is a leader." - James Kouzes & Barry Posner',
-        ],
-        generatedAt: new Date().toISOString(),
-      };
-
-      setGeneratedSummary(summary);
-
-      // Update user's query count
-      if (user) {
-        updateUser({ queriesUsed: user.queriesUsed + 1 });
-      }
-
+          showNotification("Summary generated successfully!", "success");
+        },
+        (error) => {
+          // Generation failed
+          setError(error);
+          setIsGenerating(false);
+          setProgressPercent(0);
+          setCurrentOperation("");
+          setSessionId(null);
+          showNotification(`Generation failed: ${error}`, "error");
+        },
+      );
+    } catch (error) {
+      console.error("Generation start error:", error);
+      setError(
+        error instanceof Error ? error.message : "Failed to start generation",
+      );
       setIsGenerating(false);
-      setGenerationStage(0);
       setProgressPercent(0);
       setCurrentOperation("");
-      setEstimatedTimeLeft(60);
-    }, 4500);
+      showNotification("Failed to start generation", "error");
+    }
   };
 
   const handleExportTXT = () => {

@@ -26,6 +26,8 @@ export default function Generate() {
   const [currentOperation, setCurrentOperation] = useState("");
   const [estimatedTimeLeft, setEstimatedTimeLeft] = useState(60);
   const [isCollaborationOpen, setIsCollaborationOpen] = useState(false);
+  const [sessionId, setSessionId] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const { currentSession, shareBook } = useCollaboration();
 
   useEffect(() => {

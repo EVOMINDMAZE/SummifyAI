@@ -1277,6 +1277,8 @@ export default function Dashboard() {
                   axisLine={true}
                   tickLine={true}
                   type="category"
+                  interval={0}
+                  allowDuplicatedCategory={false}
                 />
                 <YAxis
                   stroke="#6b7280"
@@ -1284,6 +1286,8 @@ export default function Dashboard() {
                   axisLine={true}
                   tickLine={true}
                   type="number"
+                  domain={["auto", "auto"]}
+                  allowDataOverflow={false}
                 />
                 <Tooltip
                   contentStyle={{

@@ -11,6 +11,186 @@ export default function Index() {
   const { user } = useAuth();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    // Load Shepherd CSS
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href =
+      "https://cdn.jsdelivr.net/npm/shepherd.js@11.2.0/dist/css/shepherd.css";
+    document.head.appendChild(link);
+
+    return () => {
+      document.head.removeChild(link);
+    };
+  }, []);
+
+  const startGuidedTour = () => {
+    const tour = new Shepherd.Tour({
+      useModalOverlay: true,
+      defaultStepOptions: {
+        classes: "custom-shepherd-theme",
+        scrollTo: true,
+        modalOverlayOpeningPadding: 10,
+        cancelIcon: {
+          enabled: true,
+        },
+      },
+    });
+
+    tour.addStep({
+      title: "Welcome to SummifyAI!",
+      text: "Let me show you how to find exact chapters from any book in seconds. This quick tour takes just 2 minutes.",
+      buttons: [
+        {
+          text: "Skip Tour",
+          classes: "shepherd-button-secondary",
+          action: tour.cancel,
+        },
+        {
+          text: "Start Tour",
+          classes: "shepherd-button-primary",
+          action: tour.next,
+        },
+      ],
+    });
+
+    tour.addStep({
+      title: "Chapter Discovery",
+      text: "Instead of reading entire books, search any topic and find the exact chapters and page numbers that address your question.",
+      attachTo: {
+        element: "#features .group:first-child",
+        on: "bottom",
+      },
+      buttons: [
+        {
+          text: "Back",
+          classes: "shepherd-button-secondary",
+          action: tour.back,
+        },
+        {
+          text: "Next",
+          classes: "shepherd-button-primary",
+          action: tour.next,
+        },
+      ],
+    });
+
+    tour.addStep({
+      title: "AI-Powered Analysis",
+      text: "Our AI explains why each chapter is relevant to your query and what unique insights it provides.",
+      attachTo: {
+        element: "#features .group:nth-child(2)",
+        on: "bottom",
+      },
+      buttons: [
+        {
+          text: "Back",
+          classes: "shepherd-button-secondary",
+          action: tour.back,
+        },
+        {
+          text: "Next",
+          classes: "shepherd-button-primary",
+          action: tour.next,
+        },
+      ],
+    });
+
+    tour.addStep({
+      title: "Chapter Insights",
+      text: "Get comprehensive insights with context, quotes, and direct purchase links to the books.",
+      attachTo: {
+        element: "#features .group:nth-child(3)",
+        on: "bottom",
+      },
+      buttons: [
+        {
+          text: "Back",
+          classes: "shepherd-button-secondary",
+          action: tour.back,
+        },
+        {
+          text: "Next",
+          classes: "shepherd-button-primary",
+          action: tour.next,
+        },
+      ],
+    });
+
+    tour.addStep({
+      title: "Personal Library",
+      text: "Save your discoveries, organize them by topics, and share insights with friends.",
+      attachTo: {
+        element: "#features .group:nth-child(4)",
+        on: "bottom",
+      },
+      buttons: [
+        {
+          text: "Back",
+          classes: "shepherd-button-secondary",
+          action: tour.back,
+        },
+        {
+          text: "Next",
+          classes: "shepherd-button-primary",
+          action: tour.next,
+        },
+      ],
+    });
+
+    if (user) {
+      tour.addStep({
+        title: "Start Discovering!",
+        text: 'You\'re all set! Click "Find Chapters" to start discovering targeted insights from thousands of books.',
+        attachTo: {
+          element: 'nav a[href="/generate"]',
+          on: "bottom",
+        },
+        buttons: [
+          {
+            text: "Back",
+            classes: "shepherd-button-secondary",
+            action: tour.back,
+          },
+          {
+            text: "Start Discovering!",
+            classes: "shepherd-button-primary",
+            action: () => {
+              tour.complete();
+              navigate("/generate");
+            },
+          },
+        ],
+      });
+    } else {
+      tour.addStep({
+        title: "Ready to Start?",
+        text: "Sign up now to start your free trial and discover exact chapters from thousands of books!",
+        attachTo: {
+          element: 'nav a[href="/signup"]:last-of-type',
+          on: "bottom",
+        },
+        buttons: [
+          {
+            text: "Back",
+            classes: "shepherd-button-secondary",
+            action: tour.back,
+          },
+          {
+            text: "Sign Up Free!",
+            classes: "shepherd-button-primary",
+            action: () => {
+              tour.complete();
+              navigate("/signup");
+            },
+          },
+        ],
+      });
+    }
+
+    tour.start();
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!topic.trim()) return;

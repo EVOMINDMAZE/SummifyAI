@@ -507,13 +507,13 @@ export default function Index() {
                 </div>
                 <div className="order-1 lg:order-2">
                   <h4 className="text-3xl font-bold text-[#0A0B1E] dark:text-white mb-6">
-                    Compare different perspectives
+                    Analyze why each chapter matters
                   </h4>
                   <p className="text-lg text-[#0A0B1E]/70 dark:text-gray-300 mb-8 leading-relaxed">
-                    Say goodbye to surface-level summaries. Get deep insights.
-                    AI analyzes multiple viewpoints, extracts key themes,
-                    contrasting opinions, and synthesizes them into coherent
-                    comparisons.
+                    Go beyond just finding chapters. Our AI explains why each
+                    chapter is relevant to your query, what unique insights it
+                    provides, and how it addresses your specific needs without
+                    revealing copyrighted content.
                   </p>
                   <div className="space-y-4">
                     <Link

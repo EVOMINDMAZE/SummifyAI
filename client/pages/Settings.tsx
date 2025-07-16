@@ -114,27 +114,36 @@ export default function Settings() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Navigation */}
-      <nav className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-        <div className="max-w-7xl mx-auto px-6">
+      <nav className="bg-[#FFFD63] dark:bg-gray-900 relative z-50">
+        <div className="max-w-6xl mx-auto px-6">
           <div className="flex justify-between items-center h-16">
-            <Link to="/dashboard" className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-[#FFFD63] rounded-lg flex items-center justify-center">
-                <span className="text-[#0A0B1E] font-bold text-lg">S</span>
+            <Link to="/" className="flex items-center gap-2">
+              <div className="w-8 h-8 bg-[#0A0B1E] dark:bg-[#FFFD63] rounded-lg flex items-center justify-center">
+                <span className="text-[#FFFD63] dark:text-[#0A0B1E] font-bold text-lg">
+                  S
+                </span>
               </div>
-              <span className="text-xl font-bold text-gray-900 dark:text-white">
+              <span className="text-xl font-bold text-[#0A0B1E] dark:text-white">
                 SummifyAI
               </span>
             </Link>
             <div className="flex items-center gap-4">
               <Link
                 to="/dashboard"
-                className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium"
+                className="text-[#0A0B1E] dark:text-white hover:text-[#0A0B1E]/80 dark:hover:text-white/80 font-medium"
               >
                 Dashboard
               </Link>
               <Link
+                to="/support"
+                className="text-[#0A0B1E] dark:text-white hover:text-[#0A0B1E]/80 dark:hover:text-white/80 font-medium"
+              >
+                Support
+              </Link>
+              <ThemeToggle />
+              <Link
                 to="/generate"
-                className="bg-[#FFFD63] hover:bg-yellow-300 text-[#0A0B1E] px-4 py-2 rounded-lg font-medium transition-colors"
+                className="bg-[#0A0B1E] hover:bg-[#0A0B1E]/90 text-[#FFFD63] px-4 py-2 rounded-lg font-medium transition-colors"
               >
                 Generate
               </Link>

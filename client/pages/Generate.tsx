@@ -423,60 +423,7 @@ Sinek's "Leaders Eat Last" introduces the biological and anthropological foundat
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      {/* Navigation */}
-      <nav className="bg-[#FFFD63] dark:bg-gray-900 relative z-50">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="flex justify-between items-center h-16">
-            <Link to="/" className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-[#0A0B1E] dark:bg-[#FFFD63] rounded-lg flex items-center justify-center">
-                <span className="text-[#FFFD63] dark:text-[#0A0B1E] font-bold text-lg">
-                  S
-                </span>
-              </div>
-              <span className="text-xl font-bold text-[#0A0B1E] dark:text-white">
-                SummifyAI
-              </span>
-            </Link>
-            <div className="flex items-center gap-4">
-              <Link
-                to="/dashboard"
-                className="text-[#0A0B1E] dark:text-white hover:text-[#0A0B1E]/80 dark:hover:text-white/80 font-medium"
-              >
-                Dashboard
-              </Link>
-              <Link
-                to="/results"
-                className="text-[#0A0B1E] dark:text-white hover:text-[#0A0B1E]/80 dark:hover:text-white/80 font-medium"
-              >
-                Library
-              </Link>
-              <Link
-                to="/support"
-                className="text-[#0A0B1E] dark:text-white hover:text-[#0A0B1E]/80 dark:hover:text-white/80 font-medium"
-              >
-                Support
-              </Link>
-              <div className="hidden md:flex items-center space-x-2 bg-white/20 dark:bg-gray-700 rounded-lg px-3 py-1">
-                <div
-                  className={`w-2 h-2 rounded-full ${user.tier === "premium" ? "bg-green-500" : "bg-yellow-500"}`}
-                ></div>
-                <span className="text-sm font-medium text-[#0A0B1E] dark:text-white">
-                  {user.tier === "premium"
-                    ? "Unlimited"
-                    : `${user.queriesUsed}/${user.queriesLimit}`}
-                </span>
-              </div>
-              <ThemeToggle />
-              <Link
-                to="/dashboard"
-                className="bg-[#0A0B1E] hover:bg-[#0A0B1E]/90 text-[#FFFD63] px-4 py-2 rounded-lg font-medium transition-colors"
-              >
-                Dashboard
-              </Link>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <Navigation />
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header Section */}

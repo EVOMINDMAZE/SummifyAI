@@ -417,7 +417,13 @@ export default function Dashboard() {
                 axisLine={false}
                 type="category"
               />
-              <YAxis tick={{ fontSize: 12 }} tickLine={false} stroke="#666" />
+              <YAxis
+                tick={{ fontSize: 12 }}
+                tickLine={false}
+                stroke="#666"
+                axisLine={false}
+                type="number"
+              />
               <Tooltip
                 contentStyle={{
                   backgroundColor: "rgba(255, 255, 255, 0.95)",

@@ -444,8 +444,8 @@ export default function Index() {
                 </div>
                 <div className="flex justify-center">
                   <AIChatDemo
-                    title="Smart Search"
-                    subtitle="Try asking about any topic to see how our AI finds the best books"
+                    title="Chapter Discovery"
+                    subtitle="Try asking about any topic to see how our AI finds exact chapters and pages"
                     demoType="search"
                     initialMessages={[
                       {

@@ -1192,6 +1192,7 @@ export default function Dashboard() {
                   dataKey="searches"
                   isAnimationActive={true}
                   animationDuration={1000}
+                  animationBegin={0}
                 >
                   {topicsData.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={entry.color} />

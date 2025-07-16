@@ -111,6 +111,99 @@ export default function Results() {
     },
   ];
 
+  // Filter and sort search results
+  const filteredAndSortedResults = () => {
+    let filtered = mockSearchResults;
+
+    // Apply search filter
+    if (searchQuery) {
+      filtered = filtered.filter(
+        (result) =>
+          result.topic.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          result.books.some(
+            (book) =>
+              book.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+              book.author.toLowerCase().includes(searchQuery.toLowerCase()),
+          ) ||
+          result.summary.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          result.keyInsights.some((insight) =>
+            insight.toLowerCase().includes(searchQuery.toLowerCase()),
+          ),
+      );
+    }
+
+    // Apply rating filter
+    if (filterByRating > 0) {
+      filtered = filtered.filter((result) =>
+        result.books.some((book) => book.rating >= filterByRating),
+      );
+    }
+
+    // Apply author filter
+    if (filterByAuthor) {
+      filtered = filtered.filter((result) =>
+        result.books.some((book) =>
+          book.author.toLowerCase().includes(filterByAuthor.toLowerCase()),
+        ),
+      );
+    }
+
+    // Apply tab filter
+    switch (activeTab) {
+      case "saved":
+        filtered = filtered.filter((result) => result.saved);
+        break;
+      case "history":
+        // Show all results for history
+        break;
+      case "recent":
+      default:
+        // Show recent results (could add date filter here)
+        break;
+    }
+
+    // Apply sorting
+    filtered.sort((a, b) => {
+      let comparison = 0;
+
+      switch (sortBy) {
+        case "date":
+          comparison =
+            new Date(a.searchDate).getTime() - new Date(b.searchDate).getTime();
+          break;
+        case "topic":
+          comparison = a.topic.localeCompare(b.topic);
+          break;
+        case "books":
+          comparison = a.books.length - b.books.length;
+          break;
+        case "rating":
+          const avgRatingA =
+            a.books.reduce((sum, book) => sum + book.rating, 0) /
+            a.books.length;
+          const avgRatingB =
+            b.books.reduce((sum, book) => sum + book.rating, 0) /
+            b.books.length;
+          comparison = avgRatingA - avgRatingB;
+          break;
+        default:
+          comparison = 0;
+      }
+
+      return sortOrder === "asc" ? comparison : -comparison;
+    });
+
+    return filtered;
+  };
+
+  const getUniqueAuthors = () => {
+    const allAuthors = mockSearchResults.flatMap((result) =>
+      result.books.map((book) => book.author),
+    );
+    const uniqueAuthors = Array.from(new Set(allAuthors));
+    return uniqueAuthors.sort();
+  };
+
   // Redirect to login if not authenticated
   if (!isAuthenticated) {
     return (

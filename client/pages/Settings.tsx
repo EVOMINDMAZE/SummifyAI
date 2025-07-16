@@ -60,6 +60,28 @@ export default function Settings() {
       inviteEmail: "",
       inviteRole: "Member",
     },
+    security: {
+      twoFactorEnabled: false,
+      backupCodes: [],
+      lastPasswordChange: "2024-01-15",
+      activeSessions: [
+        {
+          id: "1",
+          device: "Chrome on MacBook Pro",
+          location: "San Francisco, CA",
+          lastActive: "2024-01-20T10:30:00Z",
+          current: true,
+        },
+        {
+          id: "2",
+          device: "Safari on iPhone",
+          location: "San Francisco, CA",
+          lastActive: "2024-01-19T14:20:00Z",
+          current: false,
+        },
+      ],
+      loginAlerts: true,
+    },
     advanced: {
       developerMode: false,
       betaFeatures: false,

@@ -521,10 +521,10 @@ export default function Index() {
                       {user ? "Try Analysis Now" : "Start Free Trial"}
                     </Link>
                     <Link
-                      to="/summary-showcase"
+                      to="/analysis-demo"
                       className="bg-green-200 dark:bg-green-700 hover:bg-green-300 dark:hover:bg-green-600 text-[#0A0B1E] dark:text-white px-6 py-3 rounded-xl font-medium transition-colors border-2 border-[#0A0B1E] dark:border-white inline-block"
                     >
-                      Show me insights
+                      Try Live Demo
                     </Link>
                   </div>
                 </div>

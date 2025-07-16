@@ -31,6 +31,39 @@ export default function Results() {
     JSON.parse(localStorage.getItem("savedResults") || "[]"),
   );
 
+  // Action handlers
+  const handleSave = async (result: SearchResult) => {
+    const newSavedState = await toggleSaveResult(
+      result.id,
+      savedResults.includes(result.id),
+    );
+    if (newSavedState) {
+      setSavedResults([...savedResults, result.id]);
+      showNotification("Result saved successfully!", "success");
+    } else {
+      setSavedResults(savedResults.filter((id) => id !== result.id));
+      showNotification("Result removed from saved!", "info");
+    }
+  };
+
+  const handleShare = async (result: SearchResult) => {
+    const success = await shareResult(result);
+    if (success) {
+      showNotification("Shared successfully!", "success");
+    } else {
+      showNotification("Failed to share", "error");
+    }
+  };
+
+  const handleExportPDF = async (result: SearchResult) => {
+    const success = await exportToPDF(result);
+    if (success) {
+      showNotification("PDF exported successfully!", "success");
+    } else {
+      showNotification("Failed to export PDF", "error");
+    }
+  };
+
   // Mock user search results - this would come from backend
   const mockSearchResults = [
     {

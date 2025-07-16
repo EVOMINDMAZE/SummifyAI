@@ -38,6 +38,8 @@ export default function Generate() {
   const [progressPercent, setProgressPercent] = useState(0);
   const [currentOperation, setCurrentOperation] = useState("");
   const [estimatedTimeLeft, setEstimatedTimeLeft] = useState(60);
+  const [isCollaborationOpen, setIsCollaborationOpen] = useState(false);
+  const { currentSession, shareBook } = useCollaboration();
 
   useEffect(() => {
     const topicParam = searchParams.get("topic");

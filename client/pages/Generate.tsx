@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import ThemeToggle from "@/components/ThemeToggle";
+import { pdf } from "@react-pdf/renderer";
+import PDFTemplate from "@/components/PDFTemplate";
 
 interface Book {
   id: string;
@@ -227,8 +229,66 @@ Kouzes and Posner's extensive research in "The Leadership Challenge" provides th
     }, 4500);
   };
 
-  const handleExportPDF = () => {
-    alert("🚀 Premium PDF export with beautiful formatting coming soon!");
+  const handleExportPDF = async () => {
+    if (!generatedSummary) {
+      alert("Please generate a summary first before exporting to PDF.");
+      return;
+    }
+
+    // Check if user has premium for full export
+    const isPremium = user?.plan === "premium";
+
+    if (!isPremium) {
+      const confirmed = window.confirm(
+        "PDF Export ($2.99)\n\n📄 Professional PDF format\n🎨 Beautiful SummifyAI branding\n📊 Complete analysis and quotes\n🔗 Clickable Amazon links\n\nNote: Free users get limited quotes. Upgrade for full export!\n\nProceed with export?",
+      );
+
+      if (!confirmed) return;
+
+      // Simulate payment for demo
+      alert("💳 Payment processed! Generating your PDF...");
+    }
+
+    try {
+      // Create PDF document with our template
+      const doc = (
+        <PDFTemplate
+          summary={{
+            topic: generatedSummary.topic,
+            books: generatedSummary.books,
+            summary: generatedSummary.summary,
+            quotes: generatedSummary.quotes,
+            generatedAt: new Date().toISOString(),
+          }}
+          userEmail={user?.email || "guest@summifyai.com"}
+          isPremium={isPremium}
+        />
+      );
+
+      // Generate PDF blob
+      const asPdf = pdf();
+      asPdf.updateContainer(doc);
+      const blob = await asPdf.toBlob();
+
+      // Create download link
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `SummifyAI_${generatedSummary.topic.replace(/[^a-zA-Z0-9]/g, "_")}_${new Date().toISOString().split("T")[0]}.pdf`;
+
+      // Trigger download
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      // Clean up
+      URL.revokeObjectURL(url);
+
+      alert("✅ PDF exported successfully! Check your downloads folder.");
+    } catch (error) {
+      console.error("PDF export failed:", error);
+      alert("❌ Failed to export PDF. Please try again.");
+    }
   };
 
   const handlePriorityGeneration = async () => {

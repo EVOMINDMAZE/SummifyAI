@@ -148,7 +148,7 @@ export default function Index() {
       </nav>
 
       {/* Hero Section */}
-      <div className="bg-[#FFFD63] dark:bg-gray-800 relative z-20">
+      <div className="bg-[#FFFD63] dark:bg-gray-800 relative z-10">
         <div
           className="max-w-6xl mx-auto px-6 pt-20 pb-32 mb-px flex flex-row justify-start overflow-auto"
           style={{ padding: "98px 30px 38px" }}
@@ -735,7 +735,7 @@ export default function Index() {
             {/* Value Proposition */}
             <div className="grid md:grid-cols-3 gap-6 mb-12">
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
-                <div className="text-[#FFFD63] text-2xl mb-2">��</div>
+                <div className="text-[#FFFD63] text-2xl mb-2">💰</div>
                 <h3 className="font-bold mb-2">Earn While You Learn</h3>
                 <p className="text-gray-300 text-sm">
                   Get affiliate commissions from every book purchase

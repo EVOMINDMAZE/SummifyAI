@@ -545,13 +545,13 @@ export default function Index() {
               <div className="grid lg:grid-cols-2 gap-12 items-center">
                 <div>
                   <h4 className="text-3xl font-bold text-[#0A0B1E] dark:text-white mb-6">
-                    Get your perfect summary
+                    Get precise chapter insights
                   </h4>
                   <p className="text-lg text-[#0A0B1E]/70 dark:text-gray-300 mb-8 leading-relaxed">
-                    Summarize your learning and capture insights in seconds.
-                    Access your 300-word comparative analysis, key quotes,
-                    Amazon purchase links, and actionable takeaways—all from one
-                    beautiful interface.
+                    Access targeted insights from each relevant chapter in
+                    seconds. Get AI analysis of why each chapter matters, page
+                    number references, affiliate purchase links, and actionable
+                    next steps—all organized in a beautiful interface.
                   </p>
                   <div className="space-y-4">
                     <Link

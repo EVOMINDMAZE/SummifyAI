@@ -482,8 +482,8 @@ export default function Index() {
               <div className="grid lg:grid-cols-2 gap-12 items-center">
                 <div className="order-2 lg:order-1 flex justify-center">
                   <AIChatDemo
-                    title="Deep Analysis"
-                    subtitle="Experience how our AI compares multiple book perspectives"
+                    title="Chapter Analysis"
+                    subtitle="See how our AI explains why each chapter is relevant to your query"
                     demoType="analyze"
                     initialMessages={[
                       {

@@ -300,7 +300,7 @@ Kouzes and Posner's extensive research in "The Leadership Challenge" provides th
         <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-8 mb-8 border border-gray-200 dark:border-gray-700">
           <div className="max-w-3xl mx-auto">
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 text-center">
-              What would you like to explore today?
+              What specific topic would you like to find chapters about?
             </h2>
 
             <div className="relative">

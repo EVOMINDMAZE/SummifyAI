@@ -8,6 +8,7 @@ import {
   handleGetUserSummaries,
   handleUpdateCredits,
   handleRecordShare,
+  handleUpdateUserSettings,
 } from "./routes/neon";
 
 export function createServer() {

@@ -32,23 +32,27 @@ export default function Dashboard() {
         {
           title: "Good to Great",
           author: "Jim Collins",
-          cover: "https://images-na.ssl-images-amazon.com/images/P/0066620996.01.L.jpg",
+          cover:
+            "https://images-na.ssl-images-amazon.com/images/P/0066620996.01.L.jpg",
           amazonLink: "#",
         },
         {
           title: "The 7 Habits of Highly Effective People",
           author: "Stephen Covey",
-          cover: "https://images-na.ssl-images-amazon.com/images/P/0743269519.01.L.jpg",
+          cover:
+            "https://images-na.ssl-images-amazon.com/images/P/0743269519.01.L.jpg",
           amazonLink: "#",
         },
         {
           title: "Leaders Eat Last",
           author: "Simon Sinek",
-          cover: "https://images-na.ssl-images-amazon.com/images/P/1591845327.01.L.jpg",
+          cover:
+            "https://images-na.ssl-images-amazon.com/images/P/1591845327.01.L.jpg",
           amazonLink: "#",
         },
       ],
-      summary: "Leadership excellence emerges from the intersection of humility and determination...",
+      summary:
+        "Leadership excellence emerges from the intersection of humility and determination...",
       quotes: [
         "Level 5 leaders channel their ego needs away from themselves...",
         "Begin with the end in mind.",
@@ -63,18 +67,22 @@ export default function Dashboard() {
         {
           title: "Deep Work",
           author: "Cal Newport",
-          cover: "https://images-na.ssl-images-amazon.com/images/P/1455586692.01.L.jpg",
+          cover:
+            "https://images-na.ssl-images-amazon.com/images/P/1455586692.01.L.jpg",
           amazonLink: "#",
         },
       ],
-      summary: "Deep work represents the ability to focus without distraction on cognitively demanding tasks...",
-      quotes: ["Human beings, it seems, are at their best when immersed deeply in something challenging."],
+      summary:
+        "Deep work represents the ability to focus without distraction on cognitively demanding tasks...",
+      quotes: [
+        "Human beings, it seems, are at their best when immersed deeply in something challenging.",
+      ],
     },
   ];
 
   const affiliateEarnings = {
     thisMonth: 247.85,
-    total: 1,568.40,
+    total: 1568.4,
     clicks: 142,
     conversions: 18,
   };
@@ -89,8 +97,18 @@ export default function Dashboard() {
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center">
         <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-12 text-center max-w-md">
           <div className="w-20 h-20 bg-gradient-to-r from-[#4361EE] to-[#7B2CBF] rounded-full flex items-center justify-center mx-auto mb-8">
-            <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            <svg
+              className="w-10 h-10 text-white"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+              />
             </svg>
           </div>
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
@@ -146,10 +164,10 @@ export default function Dashboard() {
                 </Link>
               </div>
             </div>
-            
+
             <div className="flex items-center space-x-4">
               <ThemeToggle />
-              
+
               {/* Premium User Profile */}
               <div className="relative">
                 <button
@@ -169,8 +187,18 @@ export default function Dashboard() {
                       {user.tier} Member
                     </div>
                   </div>
-                  <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  <svg
+                    className="w-4 h-4 text-gray-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 9l-7 7-7-7"
+                    />
                   </svg>
                 </button>
 
@@ -185,7 +213,9 @@ export default function Dashboard() {
                         </div>
                         <div>
                           <div className="font-bold">{user.name}</div>
-                          <div className="text-white/80 text-sm">{user.email}</div>
+                          <div className="text-white/80 text-sm">
+                            {user.email}
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -194,18 +224,45 @@ export default function Dashboard() {
                         to="/settings"
                         className="flex items-center space-x-3 px-4 py-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                       >
-                        <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <svg
+                          className="w-5 h-5 text-gray-500"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                          />
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                          />
                         </svg>
-                        <span className="text-gray-700 dark:text-gray-300">Settings</span>
+                        <span className="text-gray-700 dark:text-gray-300">
+                          Settings
+                        </span>
                       </Link>
                       <button
                         onClick={handleSignOut}
                         className="w-full flex items-center space-x-3 px-4 py-3 rounded-xl hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors text-red-600 dark:text-red-400"
                       >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                        <svg
+                          className="w-5 h-5"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                          />
                         </svg>
                         <span>Sign Out</span>
                       </button>
@@ -229,15 +286,26 @@ export default function Dashboard() {
                 Welcome back, {user.name}! 👋
               </h1>
               <p className="text-white/80 text-lg">
-                Ready to discover amazing insights? Let's dive into your personalized reading journey.
+                Ready to discover amazing insights? Let's dive into your
+                personalized reading journey.
               </p>
               <div className="mt-6 flex flex-col sm:flex-row gap-4">
                 <Link
                   to="/generate"
                   className="bg-[#FFFD63] hover:bg-[#FFE066] text-[#0A0B1E] px-6 py-3 rounded-2xl font-bold transition-all shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center"
                 >
-                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  <svg
+                    className="w-5 h-5 mr-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M13 10V3L4 14h7v7l9-11h-7z"
+                    />
                   </svg>
                   Generate New Summary
                 </Link>
@@ -245,8 +313,18 @@ export default function Dashboard() {
                   to="/results"
                   className="bg-white/20 hover:bg-white/30 text-white px-6 py-3 rounded-2xl font-medium transition-all border border-white/30 flex items-center justify-center"
                 >
-                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                  <svg
+                    className="w-5 h-5 mr-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+                    />
                   </svg>
                   View Library
                 </Link>
@@ -261,15 +339,31 @@ export default function Dashboard() {
           <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-shadow">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Summaries</p>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">{user.queriesUsed}</p>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                  Summaries
+                </p>
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                  {user.queriesUsed}
+                </p>
                 <p className="text-xs text-gray-500 dark:text-gray-500">
-                  {user.tier === "premium" ? "Unlimited" : `${user.queriesLimit - user.queriesUsed} remaining`}
+                  {user.tier === "premium"
+                    ? "Unlimited"
+                    : `${user.queriesLimit - user.queriesUsed} remaining`}
                 </p>
               </div>
               <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center">
-                <svg className="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                <svg
+                  className="w-6 h-6 text-blue-600 dark:text-blue-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  />
                 </svg>
               </div>
             </div>
@@ -279,13 +373,30 @@ export default function Dashboard() {
           <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-shadow">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">This Month</p>
-                <p className="text-2xl font-bold text-green-600 dark:text-green-400">${affiliateEarnings.thisMonth}</p>
-                <p className="text-xs text-gray-500 dark:text-gray-500">+{((affiliateEarnings.thisMonth / 200) * 100).toFixed(0)}% vs last month</p>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                  This Month
+                </p>
+                <p className="text-2xl font-bold text-green-600 dark:text-green-400">
+                  ${affiliateEarnings.thisMonth}
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-500">
+                  +{((affiliateEarnings.thisMonth / 200) * 100).toFixed(0)}% vs
+                  last month
+                </p>
               </div>
               <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-xl flex items-center justify-center">
-                <svg className="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+                <svg
+                  className="w-6 h-6 text-green-600 dark:text-green-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"
+                  />
                 </svg>
               </div>
             </div>
@@ -295,13 +406,29 @@ export default function Dashboard() {
           <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-shadow">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Earned</p>
-                <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">${affiliateEarnings.total}</p>
-                <p className="text-xs text-gray-500 dark:text-gray-500">{affiliateEarnings.conversions} conversions</p>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                  Total Earned
+                </p>
+                <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">
+                  ${affiliateEarnings.total}
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-500">
+                  {affiliateEarnings.conversions} conversions
+                </p>
               </div>
               <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-xl flex items-center justify-center">
-                <svg className="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                <svg
+                  className="w-6 h-6 text-purple-600 dark:text-purple-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"
+                  />
                 </svg>
               </div>
             </div>
@@ -311,13 +438,33 @@ export default function Dashboard() {
           <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl transition-shadow">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Click Rate</p>
-                <p className="text-2xl font-bold text-orange-600 dark:text-orange-400">{((affiliateEarnings.conversions / affiliateEarnings.clicks) * 100).toFixed(1)}%</p>
-                <p className="text-xs text-gray-500 dark:text-gray-500">{affiliateEarnings.clicks} total clicks</p>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                  Click Rate
+                </p>
+                <p className="text-2xl font-bold text-orange-600 dark:text-orange-400">
+                  {(
+                    (affiliateEarnings.conversions / affiliateEarnings.clicks) *
+                    100
+                  ).toFixed(1)}
+                  %
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-500">
+                  {affiliateEarnings.clicks} total clicks
+                </p>
               </div>
               <div className="w-12 h-12 bg-orange-100 dark:bg-orange-900/30 rounded-xl flex items-center justify-center">
-                <svg className="w-6 h-6 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" />
+                <svg
+                  className="w-6 h-6 text-orange-600 dark:text-orange-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"
+                  />
                 </svg>
               </div>
             </div>
@@ -329,8 +476,12 @@ export default function Dashboard() {
           <div className="px-6 py-5 border-b border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white">Recent Summaries</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Your latest book insights and analysis</p>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                  Recent Summaries
+                </h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Your latest book insights and analysis
+                </p>
               </div>
               <Link
                 to="/results"
@@ -340,11 +491,14 @@ export default function Dashboard() {
               </Link>
             </div>
           </div>
-          
+
           <div className="divide-y divide-gray-200 dark:divide-gray-700">
             {recentSummaries.length > 0 ? (
               recentSummaries.map((summary) => (
-                <div key={summary.id} className="p-6 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                <div
+                  key={summary.id}
+                  className="p-6 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+                >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">
                       <div className="w-16 h-16 bg-gradient-to-r from-[#4361EE] to-[#7B2CBF] rounded-2xl flex items-center justify-center flex-shrink-0">
@@ -357,11 +511,15 @@ export default function Dashboard() {
                           {summary.topic}
                         </h4>
                         <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                          {new Date(summary.createdAt).toLocaleDateString("en-US", {
-                            month: "long",
-                            day: "numeric",
-                            year: "numeric"
-                          })} • {summary.books.length} books analyzed
+                          {new Date(summary.createdAt).toLocaleDateString(
+                            "en-US",
+                            {
+                              month: "long",
+                              day: "numeric",
+                              year: "numeric",
+                            },
+                          )}{" "}
+                          • {summary.books.length} books analyzed
                         </p>
                         <div className="flex -space-x-2">
                           {summary.books.slice(0, 3).map((book, index) => (
@@ -390,8 +548,18 @@ export default function Dashboard() {
                         View Summary
                       </Link>
                       <button className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
+                        <svg
+                          className="w-5 h-5"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"
+                          />
                         </svg>
                       </button>
                     </div>
@@ -401,23 +569,44 @@ export default function Dashboard() {
             ) : (
               <div className="p-12 text-center">
                 <div className="w-24 h-24 bg-gradient-to-r from-[#4361EE] to-[#7B2CBF] rounded-3xl flex items-center justify-center mx-auto mb-6">
-                  <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                  <svg
+                    className="w-12 h-12 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                    />
                   </svg>
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
                   Ready to start your journey?
                 </h3>
                 <p className="text-gray-600 dark:text-gray-400 mb-8 max-w-md mx-auto">
-                  Generate your first book summary and unlock the power of comparative analysis. 
-                  Discover insights from multiple perspectives in minutes.
+                  Generate your first book summary and unlock the power of
+                  comparative analysis. Discover insights from multiple
+                  perspectives in minutes.
                 </p>
                 <Link
                   to="/generate"
                   className="bg-gradient-to-r from-[#FFFD63] to-[#FFE066] hover:from-[#FFE066] hover:to-[#FFFD63] text-[#0A0B1E] px-8 py-4 rounded-2xl font-bold transition-all shadow-lg hover:shadow-xl transform hover:scale-105 inline-flex items-center"
                 >
-                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  <svg
+                    className="w-5 h-5 mr-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M13 10V3L4 14h7v7l9-11h-7z"
+                    />
                   </svg>
                   Generate Your First Summary
                 </Link>

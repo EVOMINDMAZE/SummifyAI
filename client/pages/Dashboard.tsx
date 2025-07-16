@@ -408,7 +408,12 @@ export default function Dashboard() {
                   <stop offset="95%" stopColor="#4361EE" stopOpacity={0} />
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
+              <CartesianGrid
+                strokeDasharray="3 3"
+                stroke="#e0e0e0"
+                horizontal={true}
+                vertical={true}
+              />
               <XAxis
                 dataKey="month"
                 tick={{ fontSize: 12 }}
@@ -439,6 +444,8 @@ export default function Dashboard() {
                 strokeWidth={3}
                 fillOpacity={1}
                 fill="url(#colorRevenue)"
+                isAnimationActive={true}
+                animationDuration={1000}
               />
             </AreaChart>
           </ResponsiveContainer>

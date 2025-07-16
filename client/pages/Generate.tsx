@@ -310,7 +310,7 @@ Kouzes and Posner's extensive research in "The Leadership Challenge" provides th
                     type="text"
                     value={topic}
                     onChange={(e) => setTopic(e.target.value)}
-                    placeholder="Enter any topic (e.g., leadership, productivity, innovation)"
+                    placeholder="Enter a specific question or topic (e.g., how to build trust in teams)"
                     className="w-full px-6 py-4 text-lg border-2 border-gray-200 dark:border-gray-600 rounded-2xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-[#4361EE]/20 focus:border-[#4361EE] transition-all"
                     disabled={isGenerating}
                     onKeyPress={(e) => e.key === "Enter" && handleGenerate()}

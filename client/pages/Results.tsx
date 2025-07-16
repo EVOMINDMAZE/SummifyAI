@@ -300,36 +300,7 @@ export default function Results() {
   if (id && currentResult) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-        {/* Navigation */}
-        <nav className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="flex justify-between items-center h-16">
-              <Link to="/" className="flex items-center gap-2">
-                <div className="w-8 h-8 bg-[#FFFD63] rounded-lg flex items-center justify-center">
-                  <span className="text-[#0A0B1E] font-bold text-lg">S</span>
-                </div>
-                <span className="text-xl font-bold text-[#0A0B1E] dark:text-white">
-                  SummifyAI
-                </span>
-              </Link>
-              <div className="flex items-center gap-4">
-                <ThemeToggle />
-                <Link
-                  to="/results"
-                  className="text-gray-600 dark:text-gray-300 hover:text-[#0A0B1E] dark:hover:text-white font-medium"
-                >
-                  ← Back to Results
-                </Link>
-                <Link
-                  to="/dashboard"
-                  className="text-gray-600 dark:text-gray-300 hover:text-[#0A0B1E] dark:hover:text-white font-medium"
-                >
-                  Dashboard
-                </Link>
-              </div>
-            </div>
-          </div>
-        </nav>
+        <Navigation />
 
         {/* Individual Result Content */}
         <div className="max-w-6xl mx-auto px-6 py-12">

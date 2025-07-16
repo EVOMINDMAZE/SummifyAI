@@ -1310,13 +1310,14 @@ export default function Dashboard() {
         {/* Recent Summaries */}
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
           <div className="px-6 py-5 border-b border-gray-200 dark:border-gray-700">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between mb-4">
               <div>
                 <h3 className="text-xl font-bold text-gray-900 dark:text-white">
                   Recent Chapter Discoveries
                 </h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Your latest chapter findings and targeted insights
+                  Your latest chapter findings and targeted insights (
+                  {filteredAndSortedSummaries().length} results)
                 </p>
               </div>
               <Link
@@ -1325,6 +1326,55 @@ export default function Dashboard() {
               >
                 View All
               </Link>
+            </div>
+
+            {/* Advanced Filters */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="col-span-2">
+                <input
+                  type="text"
+                  placeholder="Search topics, books, or authors..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-[#4361EE] focus:border-transparent"
+                />
+              </div>
+              <div>
+                <select
+                  value={filterByBooks}
+                  onChange={(e) => setFilterByBooks(e.target.value)}
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#4361EE] focus:border-transparent"
+                >
+                  <option value="">All Books</option>
+                  {getUniqueBooks().map((bookTitle) => (
+                    <option key={bookTitle} value={bookTitle}>
+                      {bookTitle}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="flex gap-2">
+                <select
+                  value={sortBy}
+                  onChange={(e) =>
+                    setSortBy(e.target.value as "date" | "topic" | "books")
+                  }
+                  className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#4361EE] focus:border-transparent"
+                >
+                  <option value="date">Date</option>
+                  <option value="topic">Topic</option>
+                  <option value="books">Books</option>
+                </select>
+                <button
+                  onClick={() =>
+                    setSortOrder(sortOrder === "asc" ? "desc" : "asc")
+                  }
+                  className="px-3 py-2 bg-gray-100 dark:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-500 transition-colors font-medium"
+                  title={`Sort ${sortOrder === "asc" ? "Descending" : "Ascending"}`}
+                >
+                  {sortOrder === "asc" ? "↑" : "↓"}
+                </button>
+              </div>
             </div>
           </div>
 

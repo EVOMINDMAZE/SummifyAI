@@ -44,13 +44,17 @@ export default function SearchDemo() {
           "https://images-na.ssl-images-amazon.com/images/P/0066620996.01.L.jpg",
         rating: 4.8,
         relevanceScore: 98,
+        chapterTitle: "Level 5 Leadership",
+        pageRange: "Pages 17-40",
+        whyRelevant:
+          "Directly addresses the characteristics and behaviors that define exceptional leadership",
         keyTopics: [
           "Level 5 Leadership",
           "Hedgehog Concept",
           "Culture of Discipline",
         ],
         description:
-          "Timeless insights on what makes companies transition from good to great, focusing on leadership that builds enduring excellence.",
+          "This chapter reveals what makes companies transition from good to great, focusing on the specific leadership qualities that build enduring excellence.",
         amazonLink: "https://amazon.com/dp/0066620996?tag=summifyai-20",
         price: "$16.99",
       },

@@ -4,6 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import ThemeToggle from "@/components/ThemeToggle";
 import AIChatDemo from "@/components/AIChatDemo";
 import Shepherd from "shepherd.js";
+import "../styles/shepherd-custom.css";
 
 export default function Index() {
   const [topic, setTopic] = useState("");

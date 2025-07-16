@@ -463,6 +463,9 @@ export default function Dashboard() {
                 angle={-45}
                 textAnchor="end"
                 height={80}
+                tickLine={false}
+                axisLine={false}
+                type="category"
               />
               <YAxis tick={{ fontSize: 12 }} tickLine={false} stroke="#666" />
               <Tooltip

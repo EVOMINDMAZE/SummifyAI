@@ -477,10 +477,10 @@ export default function Dashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="text-xl font-bold text-gray-900 dark:text-white">
-                  Recent Summaries
+                  Recent Chapter Discoveries
                 </h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Your latest book insights and analysis
+                  Your latest chapter findings and targeted insights
                 </p>
               </div>
               <Link

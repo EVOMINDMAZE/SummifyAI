@@ -601,6 +601,231 @@ export default function Settings() {
               </div>
             </div>
           )}
+
+          {activeTab === "subscription" && (
+            <div className="space-y-8">
+              {/* Current Plan */}
+              <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-8">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                    Current Plan
+                  </h2>
+                  <div
+                    className={`px-4 py-2 rounded-full text-sm font-medium ${
+                      user.tier === "premium"
+                        ? "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200"
+                        : "bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-200"
+                    }`}
+                  >
+                    {user.tier === "premium"
+                      ? "💎 Premium Plan"
+                      : "🆓 Free Plan"}
+                  </div>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-8">
+                  {/* Plan Details */}
+                  <div>
+                    <h3 className="font-semibold text-gray-900 dark:text-white mb-4">
+                      Plan Details
+                    </h3>
+                    <div className="space-y-3">
+                      <div className="flex justify-between">
+                        <span className="text-gray-600 dark:text-gray-400">
+                          Monthly Searches
+                        </span>
+                        <span className="font-medium text-gray-900 dark:text-white">
+                          {user.tier === "premium"
+                            ? "Unlimited"
+                            : `${user.queriesUsed}/${user.queriesLimit}`}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600 dark:text-gray-400">
+                          PDF Exports
+                        </span>
+                        <span className="font-medium text-gray-900 dark:text-white">
+                          {user.tier === "premium"
+                            ? "✅ Included"
+                            : "❌ Upgrade Required"}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600 dark:text-gray-400">
+                          Priority Support
+                        </span>
+                        <span className="font-medium text-gray-900 dark:text-white">
+                          {user.tier === "premium"
+                            ? "✅ 24/7 Support"
+                            : "❌ Email Only"}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Usage Stats */}
+                  <div>
+                    <h3 className="font-semibold text-gray-900 dark:text-white mb-4">
+                      Usage This Month
+                    </h3>
+                    {user.tier === "free" ? (
+                      <div>
+                        <div className="flex justify-between mb-2">
+                          <span className="text-gray-600 dark:text-gray-400">
+                            Searches Used
+                          </span>
+                          <span className="font-medium text-gray-900 dark:text-white">
+                            {user.queriesUsed}/{user.queriesLimit}
+                          </span>
+                        </div>
+                        <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                          <div
+                            className="bg-gradient-to-r from-[#FFFD63] to-yellow-400 h-2 rounded-full transition-all"
+                            style={{
+                              width: `${(user.queriesUsed / user.queriesLimit) * 100}%`,
+                            }}
+                          ></div>
+                        </div>
+                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
+                          {user.queriesLimit - user.queriesUsed} searches
+                          remaining
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="space-y-3">
+                        <div className="flex justify-between">
+                          <span className="text-gray-600 dark:text-gray-400">
+                            Searches
+                          </span>
+                          <span className="font-medium text-green-600 dark:text-green-400">
+                            Unlimited ✅
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-600 dark:text-gray-400">
+                            PDF Exports
+                          </span>
+                          <span className="font-medium text-gray-900 dark:text-white">
+                            23 this month
+                          </span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-600 dark:text-gray-400">
+                            Priority Generations
+                          </span>
+                          <span className="font-medium text-gray-900 dark:text-white">
+                            5 this month
+                          </span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
+                  {user.tier === "free" ? (
+                    <div className="flex flex-col sm:flex-row gap-4">
+                      <Link
+                        to="/pricing"
+                        className="flex-1 bg-gradient-to-r from-[#FFFD63] to-yellow-400 hover:from-yellow-400 hover:to-[#FFFD63] text-[#0A0B1E] px-6 py-3 rounded-lg font-bold transition-all text-center"
+                      >
+                        🚀 Upgrade to Premium
+                      </Link>
+                      <Link
+                        to="/pricing"
+                        className="flex-1 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 px-6 py-3 rounded-lg font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-center"
+                      >
+                        Compare Plans
+                      </Link>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col sm:flex-row gap-4">
+                      <button className="flex-1 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 px-6 py-3 rounded-lg font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                        📄 View Billing History
+                      </button>
+                      <button
+                        onClick={() => {
+                          if (
+                            confirm(
+                              "Are you sure you want to cancel your subscription? You'll lose access to premium features at the end of your billing period.",
+                            )
+                          ) {
+                            alert(
+                              "Subscription cancelled. You'll retain access until Feb 15, 2024.",
+                            );
+                          }
+                        }}
+                        className="flex-1 border border-red-300 dark:border-red-600 text-red-600 dark:text-red-400 px-6 py-3 rounded-lg font-medium hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                      >
+                        ❌ Cancel Subscription
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Billing Information */}
+              {user.tier === "premium" && (
+                <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-8">
+                  <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
+                    💳 Billing Information
+                  </h2>
+
+                  <div className="grid md:grid-cols-2 gap-8">
+                    {/* Payment Method */}
+                    <div>
+                      <h3 className="font-semibold text-gray-900 dark:text-white mb-4">
+                        Payment Method
+                      </h3>
+                      <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-4">
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded flex items-center justify-center">
+                            <svg
+                              className="w-4 h-4 text-white"
+                              fill="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path d="M2 5c0-1.1.9-2 2-2h16c1.1 0 2 .9 2 2v14c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V5zm2 0v2h16V5H4zm0 4v8h16v-8H4z" />
+                            </svg>
+                          </div>
+                          <div>
+                            <div className="font-medium text-gray-900 dark:text-white">
+                              **** **** **** 4242
+                            </div>
+                            <div className="text-sm text-gray-600 dark:text-gray-400">
+                              Expires 12/25
+                            </div>
+                          </div>
+                        </div>
+                        <button className="mt-3 text-sm text-blue-600 dark:text-blue-400 hover:underline">
+                          🔄 Update Payment Method
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Next Billing */}
+                    <div>
+                      <h3 className="font-semibold text-gray-900 dark:text-white mb-4">
+                        Next Billing Date
+                      </h3>
+                      <div className="border border-gray-200 dark:border-gray-600 rounded-lg p-4">
+                        <div className="font-medium text-gray-900 dark:text-white mb-1">
+                          📅 February 15, 2024
+                        </div>
+                        <div className="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                          Premium Annual - $199.00
+                        </div>
+                        <button className="text-sm text-blue-600 dark:text-blue-400 hover:underline">
+                          🔄 Change Billing Cycle
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -161,6 +161,14 @@ export default function Dashboard() {
     { day: "Sun", searches: 7, summaries: 5 },
   ];
 
+  const topBooksData = [
+    { title: "Atomic Habits", sales: 42, author: "James Clear" },
+    { title: "Think and Grow Rich", sales: 38, author: "Napoleon Hill" },
+    { title: "The 7 Habits", sales: 35, author: "Stephen Covey" },
+    { title: "Good to Great", sales: 31, author: "Jim Collins" },
+    { title: "Leaders Eat Last", sales: 28, author: "Simon Sinek" },
+  ];
+
   const performanceData = [
     { metric: "Click Rate", value: 12.7, target: 15 },
     { metric: "Conversion Rate", value: 8.4, target: 10 },

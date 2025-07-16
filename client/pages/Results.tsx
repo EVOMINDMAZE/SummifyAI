@@ -205,6 +205,11 @@ export default function Results() {
     return uniqueAuthors.sort();
   };
 
+  // If viewing individual result, find it by ID
+  const currentResult = id
+    ? mockSearchResults.find((result) => result.id === id)
+    : null;
+
   // Redirect to login if not authenticated
   if (!isAuthenticated) {
     return (

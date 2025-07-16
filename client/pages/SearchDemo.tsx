@@ -574,6 +574,19 @@ export default function SearchDemo() {
                               {book.rating} stars
                             </span>
                           </div>
+
+                          {/* Chapter Information */}
+                          <div className="bg-gradient-to-r from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 rounded-lg p-3 mb-3">
+                            <h4 className="font-bold text-orange-800 dark:text-orange-200 text-sm mb-1">
+                              📖 Chapter: {book.chapterTitle}
+                            </h4>
+                            <p className="text-orange-700 dark:text-orange-300 text-xs mb-2">
+                              {book.pageRange}
+                            </p>
+                            <p className="text-orange-600 dark:text-orange-400 text-xs leading-relaxed">
+                              <strong>Why relevant:</strong> {book.whyRelevant}
+                            </p>
+                          </div>
                         </div>
 
                         <div className="text-right">

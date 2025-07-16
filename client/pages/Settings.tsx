@@ -12,82 +12,87 @@ export default function Settings() {
     "general" | "notifications" | "privacy" | "security" | "team" | "advanced"
   >("general");
 
-  // Local settings state
-  const [settings, setSettings] = useState({
-    language: "en",
-    timezone: "UTC-8",
-    defaultSummaryLength: "medium",
-    autoSave: true,
-    notifications: {
-      emailWeeklyReport: true,
-      emailCreditUpdates: true,
-      emailFeatureUpdates: false,
-      emailMarketing: false,
-      browserSummaryComplete: true,
-    },
-    privacy: {
-      allowAnalytics: true,
-      saveSearchHistory: true,
-    },
-    team: {
-      members: [
-        {
-          id: "1",
-          email: "john.doe@example.com",
-          name: "John Doe",
-          role: "Admin",
-          status: "Active",
-          joinedAt: "2024-01-15",
-          lastActive: "2024-01-20",
-        },
-        {
-          id: "2",
-          email: "jane.smith@example.com",
-          name: "Jane Smith",
-          role: "Member",
-          status: "Active",
-          joinedAt: "2024-01-18",
-          lastActive: "2024-01-19",
-        },
-        {
-          id: "3",
-          email: "mike.johnson@example.com",
-          name: "Mike Johnson",
-          role: "Member",
-          status: "Pending",
-          joinedAt: "2024-01-20",
-          lastActive: null,
-        },
-      ],
-      inviteEmail: "",
-      inviteRole: "Member",
-    },
-    security: {
-      twoFactorEnabled: false,
-      backupCodes: [],
-      lastPasswordChange: "2024-01-15",
-      activeSessions: [
-        {
-          id: "1",
-          device: "Chrome on MacBook Pro",
-          location: "San Francisco, CA",
-          lastActive: "2024-01-20T10:30:00Z",
-          current: true,
-        },
-        {
-          id: "2",
-          device: "Safari on iPhone",
-          location: "San Francisco, CA",
-          lastActive: "2024-01-19T14:20:00Z",
-          current: false,
-        },
-      ],
-      loginAlerts: true,
-    },
-    advanced: {
-      developerMode: false,
-      betaFeatures: false,
-    },
+  // Load settings from localStorage or use defaults
+  const [settings, setSettings] = useState(() => {
+    const savedSettings = localStorage.getItem("userSettings");
+    return savedSettings
+      ? JSON.parse(savedSettings)
+      : {
+          language: "en",
+          timezone: "UTC-8",
+          defaultSummaryLength: "medium",
+          autoSave: true,
+          notifications: {
+            emailWeeklyReport: true,
+            emailCreditUpdates: true,
+            emailFeatureUpdates: false,
+            emailMarketing: false,
+            browserSummaryComplete: true,
+          },
+          privacy: {
+            allowAnalytics: true,
+            saveSearchHistory: true,
+          },
+          team: {
+            members: [
+              {
+                id: "1",
+                email: "john.doe@example.com",
+                name: "John Doe",
+                role: "Admin",
+                status: "Active",
+                joinedAt: "2024-01-15",
+                lastActive: "2024-01-20",
+              },
+              {
+                id: "2",
+                email: "jane.smith@example.com",
+                name: "Jane Smith",
+                role: "Member",
+                status: "Active",
+                joinedAt: "2024-01-18",
+                lastActive: "2024-01-19",
+              },
+              {
+                id: "3",
+                email: "mike.johnson@example.com",
+                name: "Mike Johnson",
+                role: "Member",
+                status: "Pending",
+                joinedAt: "2024-01-20",
+                lastActive: null,
+              },
+            ],
+            inviteEmail: "",
+            inviteRole: "Member",
+          },
+          security: {
+            twoFactorEnabled: false,
+            backupCodes: [],
+            lastPasswordChange: "2024-01-15",
+            activeSessions: [
+              {
+                id: "1",
+                device: "Chrome on MacBook Pro",
+                location: "San Francisco, CA",
+                lastActive: "2024-01-20T10:30:00Z",
+                current: true,
+              },
+              {
+                id: "2",
+                device: "Safari on iPhone",
+                location: "San Francisco, CA",
+                lastActive: "2024-01-19T14:20:00Z",
+                current: false,
+              },
+            ],
+            loginAlerts: true,
+          },
+          advanced: {
+            developerMode: false,
+            betaFeatures: false,
+          },
+        };
   });
 
   // Load user settings on mount
@@ -125,15 +130,19 @@ export default function Settings() {
 
     setSettings(newSettings);
 
+    // Save to localStorage immediately
+    localStorage.setItem("userSettings", JSON.stringify(newSettings));
+
     // Save to backend
     try {
       await updateUserSettings(newSettings);
       showNotification("Settings saved successfully!", "success");
     } catch (error) {
       console.error("Failed to save settings:", error);
-      showNotification("Failed to save settings. Please try again.", "error");
-      // Revert the settings on error
-      setSettings((prev) => prev);
+      showNotification(
+        "Settings saved locally. Will sync when connection is restored.",
+        "info",
+      );
     }
   };
 

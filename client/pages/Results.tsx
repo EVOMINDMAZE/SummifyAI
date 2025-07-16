@@ -843,16 +843,35 @@ export default function Results() {
                           {new Date(result.searchDate).toLocaleDateString()}
                         </p>
                       </div>
-                      <button className="bg-red-100 hover:bg-red-200 text-red-700 px-3 py-1 rounded-lg text-sm font-medium">
+                      <button
+                        onClick={() =>
+                          handleSave({
+                            ...result,
+                            saved: savedResults.includes(result.id),
+                          })
+                        }
+                        className="bg-red-100 hover:bg-red-200 text-red-700 px-3 py-1 rounded-lg text-sm font-medium"
+                      >
                         Remove
                       </button>
                     </div>
                     <p className="text-gray-700 mb-4">{result.summary}</p>
                     <div className="flex gap-2">
-                      <button className="bg-blue-100 hover:bg-blue-200 text-blue-700 px-3 py-1 rounded-lg text-sm font-medium">
+                      <Link
+                        to={`/results/${result.id}`}
+                        className="bg-blue-100 hover:bg-blue-200 text-blue-700 px-3 py-1 rounded-lg text-sm font-medium"
+                      >
                         View Full Summary
-                      </button>
-                      <button className="bg-green-100 hover:bg-green-200 text-green-700 px-3 py-1 rounded-lg text-sm font-medium">
+                      </Link>
+                      <button
+                        onClick={() =>
+                          handleExportPDF({
+                            ...result,
+                            saved: savedResults.includes(result.id),
+                          })
+                        }
+                        className="bg-green-100 hover:bg-green-200 text-green-700 px-3 py-1 rounded-lg text-sm font-medium"
+                      >
                         Export PDF
                       </button>
                     </div>

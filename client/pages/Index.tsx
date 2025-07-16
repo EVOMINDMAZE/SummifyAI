@@ -295,8 +295,8 @@ export default function Index() {
                       Get Started Now
                     </Link>
                     <p className="text-xs text-[#0A0B1E]/60 dark:text-gray-500 mt-2">
-                      No credit card required • 5 free summaries • Instant
-                      access
+                      No credit card required • 5 free chapter discoveries •
+                      Instant access
                     </p>
                   </div>
                 </>

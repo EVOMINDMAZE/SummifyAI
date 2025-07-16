@@ -647,10 +647,10 @@ export default function Index() {
                       {user ? "View Library" : "Start Earning"}
                     </Link>
                     <Link
-                      to={user ? "/results" : "/library-showcase"}
+                      to="/library-showcase"
                       className="bg-pink-200 dark:bg-pink-700 hover:bg-pink-300 dark:hover:bg-pink-600 text-[#0A0B1E] dark:text-white px-6 py-3 rounded-xl font-medium transition-colors border-2 border-[#0A0B1E] dark:border-white inline-block"
                     >
-                      {user ? "View Results" : "See Examples"}
+                      See Library Demo
                     </Link>
                   </div>
                 </div>

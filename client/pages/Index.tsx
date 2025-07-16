@@ -570,8 +570,8 @@ export default function Index() {
                 </div>
                 <div className="flex justify-center">
                   <AIChatDemo
-                    title="Summary Pro"
-                    subtitle="See how beautiful summaries are generated instantly"
+                    title="Chapter Insights"
+                    subtitle="See how precise chapter analysis and insights are generated instantly"
                     demoType="generate"
                     initialMessages={[
                       {

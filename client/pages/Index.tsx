@@ -589,7 +589,7 @@ export default function Index() {
                       "Mindfulness",
                       "Investment basics",
                     ]}
-                    ctaText={user ? "Generate Summary" : "Start Free Trial"}
+                    ctaText={user ? "Find Chapters" : "Start Free Trial"}
                     ctaLink={user ? "/generate" : "/signup"}
                   />
                 </div>

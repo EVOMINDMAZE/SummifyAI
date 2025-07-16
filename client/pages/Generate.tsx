@@ -4,6 +4,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import ThemeToggle from "@/components/ThemeToggle";
 import { pdf } from "@react-pdf/renderer";
 import PDFTemplate from "@/components/PDFTemplate";
+import CollaborationPanel from "@/components/CollaborationPanel";
+import { useCollaboration } from "@/contexts/CollaborationContext";
 
 interface Book {
   id: string;

@@ -253,7 +253,10 @@ export default function Results() {
 
   // If viewing individual result, find it by ID
   const currentResult = id
-    ? mockSearchResults.find((result) => result.id === id)
+    ? {
+        ...mockSearchResults.find((result) => result.id === id)!,
+        saved: savedResults.includes(id),
+      }
     : null;
 
   // Redirect to login if not authenticated

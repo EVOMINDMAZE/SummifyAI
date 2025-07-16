@@ -247,6 +247,182 @@ export default function Results() {
     );
   }
 
+  // If viewing individual result, render single result view
+  if (id && currentResult) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+        {/* Navigation */}
+        <nav className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="flex justify-between items-center h-16">
+              <Link to="/" className="flex items-center gap-2">
+                <div className="w-8 h-8 bg-[#FFFD63] rounded-lg flex items-center justify-center">
+                  <span className="text-[#0A0B1E] font-bold text-lg">S</span>
+                </div>
+                <span className="text-xl font-bold text-[#0A0B1E] dark:text-white">
+                  SummifyAI
+                </span>
+              </Link>
+              <div className="flex items-center gap-4">
+                <ThemeToggle />
+                <Link
+                  to="/results"
+                  className="text-gray-600 dark:text-gray-300 hover:text-[#0A0B1E] dark:hover:text-white font-medium"
+                >
+                  ← Back to Results
+                </Link>
+                <Link
+                  to="/dashboard"
+                  className="text-gray-600 dark:text-gray-300 hover:text-[#0A0B1E] dark:hover:text-white font-medium"
+                >
+                  Dashboard
+                </Link>
+              </div>
+            </div>
+          </div>
+        </nav>
+
+        {/* Individual Result Content */}
+        <div className="max-w-6xl mx-auto px-6 py-12">
+          <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-8">
+            {/* Result Header */}
+            <div className="mb-8">
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+                {currentResult.topic}
+              </h1>
+              <p className="text-gray-600 dark:text-gray-400">
+                Generated on{" "}
+                {new Date(currentResult.searchDate).toLocaleDateString()}
+              </p>
+              <div className="flex items-center gap-4 mt-4">
+                {currentResult.saved && (
+                  <span className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 px-3 py-1 rounded-full text-sm">
+                    ⭐ Saved
+                  </span>
+                )}
+                {currentResult.shared && (
+                  <span className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 px-3 py-1 rounded-full text-sm">
+                    🔗 Shared
+                  </span>
+                )}
+              </div>
+            </div>
+
+            {/* Books Section */}
+            <div className="mb-8">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+                📚 Books Analyzed ({currentResult.books.length})
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {currentResult.books.map((book, index) => (
+                  <div
+                    key={index}
+                    className="bg-gray-50 dark:bg-gray-700 rounded-xl p-6"
+                  >
+                    <img
+                      src={book.image}
+                      alt={book.title}
+                      className="w-full h-48 object-cover rounded-lg mb-4"
+                    />
+                    <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
+                      {book.title}
+                    </h3>
+                    <p className="text-gray-600 dark:text-gray-400 text-sm mb-3">
+                      by {book.author}
+                    </p>
+                    <div className="flex items-center gap-2 mb-4">
+                      <div className="flex text-yellow-400">
+                        {"★".repeat(Math.floor(book.rating))}
+                        {"☆".repeat(5 - Math.floor(book.rating))}
+                      </div>
+                      <span className="text-sm text-gray-600 dark:text-gray-400">
+                        {book.rating}
+                      </span>
+                    </div>
+                    <a
+                      href={book.affiliateLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full bg-[#FFFD63] hover:bg-yellow-300 text-[#0A0B1E] px-4 py-2 rounded-lg font-medium transition-colors text-center block"
+                    >
+                      Buy on Amazon
+                    </a>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Summary Section */}
+            <div className="mb-8">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+                🧠 Comparative Analysis
+              </h2>
+              <div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-6">
+                <p className="text-gray-800 dark:text-gray-200 leading-relaxed">
+                  {currentResult.summary}
+                </p>
+              </div>
+            </div>
+
+            {/* Key Insights Section */}
+            <div className="mb-8">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+                💡 Key Insights
+              </h2>
+              <div className="space-y-4">
+                {currentResult.keyInsights.map((insight, index) => (
+                  <div
+                    key={index}
+                    className="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 p-4 rounded-r-lg"
+                  >
+                    <p className="text-gray-800 dark:text-gray-200">
+                      {insight}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Actions */}
+            <div className="flex flex-wrap gap-4">
+              <button className="bg-[#4361EE] hover:bg-[#4361EE]/90 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+                Export PDF
+              </button>
+              <button className="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+                Share Result
+              </button>
+              <button className="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+                Save to Library
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // If ID provided but result not found
+  if (id && !currentResult) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+            Result Not Found
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400 mb-4">
+            The result you're looking for doesn't exist or has been removed.
+          </p>
+          <Link
+            to="/results"
+            className="bg-[#FFFD63] hover:bg-yellow-300 text-[#0A0B1E] px-6 py-3 rounded-lg font-medium transition-colors"
+          >
+            Back to Results
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Navigation */}

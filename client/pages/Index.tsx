@@ -160,19 +160,20 @@ export default function Index() {
                 className="-mt-0.5 inline-block"
                 style={{ marginTop: "-2.5px" }}
               >
-                Get instant book summaries.
+                Find exact chapters instantly.
               </span>
               <br />
               <span className="text-[#0A0B1E] dark:text-white">
-                Discover better insights.
+                Discover targeted insights.
               </span>
             </h1>
 
             {/* Subheading */}
             <p className="text-lg md:text-xl text-[#0A0B1E]/80 dark:text-gray-300 max-w-3xl mx-auto mb-8 leading-relaxed">
-              Enter any topic and get comparative insights from the top 5 books,
-              complete with key quotes, Amazon affiliate links, and actionable
-              takeaways—all powered by AI.
+              Search any topic and discover the exact chapters and pages from
+              top books that address your question, complete with AI chapter
+              analysis, insights on why each chapter is relevant, and affiliate
+              purchase links—all powered by intelligent book indexing.
             </p>
 
             {/* Premium Features Highlight */}

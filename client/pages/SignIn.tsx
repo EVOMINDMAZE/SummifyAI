@@ -64,20 +64,16 @@ export default function SignIn() {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email || !password) {
-      setError("Please fill in all fields");
-      return;
-    }
-
+  const onSubmit = async (data: SignInFormData) => {
     try {
       setIsLoading(true);
       setError("");
-      await signIn(email, password);
+      await signIn(data.email, data.password);
       navigate("/dashboard");
     } catch (err) {
-      setError("Invalid email or password");
+      setError(
+        "Invalid email or password. Please check your credentials and try again.",
+      );
     } finally {
       setIsLoading(false);
     }

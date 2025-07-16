@@ -693,8 +693,7 @@ export default function Index() {
                     Your SummifyAI account gives you one place to save chapter
                     discoveries, share targeted insights, and track your
                     learning journey. Build your personal library of chapter
-                    locations and help friends discover exactly what they need
-                    while earning affiliate commissions.
+                    locations and help friends discover exactly what they need.
                   </p>
                   <div className="space-y-4">
                     <Link

@@ -633,13 +633,14 @@ export default function Index() {
                 </div>
                 <div className="order-1 lg:order-2">
                   <h4 className="text-3xl font-bold text-[#0A0B1E] dark:text-white mb-6">
-                    Your personal library of insights
+                    Your personal chapter discovery library
                   </h4>
                   <p className="text-lg text-[#0A0B1E]/70 dark:text-gray-300 mb-8 leading-relaxed">
-                    Your SummifyAI account gives you one place to save
-                    summaries, share insights, and track your reading journey.
-                    Build your personal library and help friends discover great
-                    books while earning affiliate commissions.
+                    Your SummifyAI account gives you one place to save chapter
+                    discoveries, share targeted insights, and track your
+                    learning journey. Build your personal library of chapter
+                    locations and help friends discover exactly what they need
+                    while earning affiliate commissions.
                   </p>
                   <div className="space-y-4">
                     <Link

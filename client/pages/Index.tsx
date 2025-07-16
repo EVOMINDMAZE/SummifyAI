@@ -433,10 +433,10 @@ export default function Index() {
                       {user ? "Try Search Now" : "Start Free Trial"}
                     </Link>
                     <Link
-                      to="/how-it-works"
+                      to="/search-demo"
                       className="bg-blue-200 dark:bg-blue-700 hover:bg-blue-300 dark:hover:bg-blue-600 text-[#0A0B1E] dark:text-white px-6 py-3 rounded-xl font-medium transition-colors border-2 border-[#0A0B1E] dark:border-white inline-block"
                     >
-                      Learn more
+                      Try Live Demo
                     </Link>
                   </div>
                 </div>

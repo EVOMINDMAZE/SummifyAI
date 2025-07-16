@@ -37,10 +37,32 @@ interface Summary {
   quotes: string[];
 }
 
+const ResponsiveGridLayout = WidthProvider(Responsive);
+
+interface DashboardWidget {
+  id: string;
+  title: string;
+  component: React.ReactNode;
+  defaultProps: {
+    w: number;
+    h: number;
+    x: number;
+    y: number;
+    minW?: number;
+    minH?: number;
+  };
+}
+
 export default function Dashboard() {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isCustomizing, setIsCustomizing] = useState(false);
+  const [layouts, setLayouts] = useState({});
+  const [currentBreakpoint, setCurrentBreakpoint] = useState("lg");
+  const [compactType, setCompactType] = useState<
+    "vertical" | "horizontal" | null
+  >("vertical");
 
   // Mock data - replace with real data
   const recentSummaries: Summary[] = [

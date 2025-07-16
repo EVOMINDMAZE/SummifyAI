@@ -66,13 +66,17 @@ export default function SearchDemo() {
           "https://images-na.ssl-images-amazon.com/images/P/0743269519.01.L.jpg",
         rating: 4.7,
         relevanceScore: 96,
+        chapterTitle: "Habit 1: Be Proactive",
+        pageRange: "Pages 65-94",
+        whyRelevant:
+          "Explains how effective leaders take initiative and responsibility for their choices",
         keyTopics: [
           "Principle-Centered Leadership",
           "Character Ethics",
           "Personal Mastery",
         ],
         description:
-          "A holistic, principle-centered approach for solving personal and professional problems with timeless wisdom.",
+          "This chapter introduces the foundation of effective leadership through proactive thinking and taking responsibility for outcomes.",
         amazonLink: "https://amazon.com/dp/0743269519?tag=summifyai-20",
         price: "$15.49",
       },
@@ -84,9 +88,13 @@ export default function SearchDemo() {
           "https://images-na.ssl-images-amazon.com/images/P/1591845327.01.L.jpg",
         rating: 4.6,
         relevanceScore: 94,
+        chapterTitle: "The Circle of Safety",
+        pageRange: "Pages 61-78",
+        whyRelevant:
+          "Demonstrates how great leaders create environments where teams can thrive",
         keyTopics: ["Circle of Safety", "Servant Leadership", "Team Chemistry"],
         description:
-          "Why some teams pull together and others don't - the biology and anthropology of outstanding leadership.",
+          "This chapter explains the biological basis of leadership and why some teams pull together while others don't.",
         amazonLink: "https://amazon.com/dp/1591845327?tag=summifyai-20",
         price: "$17.99",
       },

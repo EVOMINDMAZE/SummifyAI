@@ -1181,6 +1181,12 @@ Sinek's "Leaders Eat Last" introduces the biological and anthropological foundat
           </div>
         )}
       </div>
+
+      {/* Collaboration Panel */}
+      <CollaborationPanel
+        isOpen={isCollaborationOpen}
+        onClose={() => setIsCollaborationOpen(false)}
+      />
     </div>
   );
 }

@@ -5,6 +5,7 @@ import ThemeToggle from "../components/ThemeToggle";
 
 export default function Results() {
   const { user, shareContent } = useAuth();
+  const { id } = useParams();
   const isAuthenticated = !!user;
   const [activeTab, setActiveTab] = useState<"recent" | "saved" | "history">(
     "recent",

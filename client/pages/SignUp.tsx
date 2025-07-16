@@ -219,8 +219,7 @@ export default function SignUp() {
                     type="text"
                     autoComplete="name"
                     required
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    {...register("name")}
                     className="appearance-none block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#FFFD63] focus:border-transparent"
                     placeholder="Enter your full name"
                   />
@@ -241,8 +240,7 @@ export default function SignUp() {
                     type="email"
                     autoComplete="email"
                     required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    {...register("email")}
                     className="appearance-none block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#FFFD63] focus:border-transparent"
                     placeholder="Enter your email"
                   />
@@ -263,8 +261,7 @@ export default function SignUp() {
                     type={showPassword ? "text" : "password"}
                     autoComplete="new-password"
                     required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    {...register("password")}
                     className="appearance-none block w-full px-3 py-2 pr-10 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#FFFD63] focus:border-transparent"
                     placeholder="Create a password"
                   />
@@ -329,8 +326,7 @@ export default function SignUp() {
                     type={showConfirmPassword ? "text" : "password"}
                     autoComplete="new-password"
                     required
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    {...register("confirmPassword")}
                     className="appearance-none block w-full px-3 py-2 pr-10 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#FFFD63] focus:border-transparent"
                     placeholder="Confirm your password"
                   />

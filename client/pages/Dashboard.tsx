@@ -463,7 +463,12 @@ export default function Dashboard() {
           </h3>
           <ResponsiveContainer width="100%" height="85%">
             <BarChart data={topBooksData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
+              <CartesianGrid
+                strokeDasharray="3 3"
+                stroke="#e0e0e0"
+                horizontal={true}
+                vertical={true}
+              />
               <XAxis
                 dataKey="title"
                 tick={{ fontSize: 10 }}
@@ -489,7 +494,13 @@ export default function Dashboard() {
                   boxShadow: "0 8px 32px rgba(0,0,0,0.1)",
                 }}
               />
-              <Bar dataKey="sales" fill="#7B2CBF" radius={[4, 4, 0, 0]} />
+              <Bar
+                dataKey="sales"
+                fill="#7B2CBF"
+                radius={[4, 4, 0, 0]}
+                isAnimationActive={true}
+                animationDuration={1000}
+              />
             </BarChart>
           </ResponsiveContainer>
         </div>

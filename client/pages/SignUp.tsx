@@ -95,32 +95,44 @@ export default function SignUp() {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!name || !email || !password || !confirmPassword) {
-      setError("Please fill in all fields");
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      setError("Passwords do not match");
-      return;
-    }
-
-    if (password.length < 6) {
-      setError("Password must be at least 6 characters");
-      return;
-    }
-
+  const onSubmit = async (data: SignUpFormData) => {
     try {
       setIsLoading(true);
       setError("");
-      await signUp(email, password, name);
+      await signUp(data.email, data.password, data.name);
       navigate("/dashboard");
     } catch (err) {
       setError("Failed to create account. Please try again.");
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const getPasswordStrength = (password: string) => {
+    let strength = 0;
+    if (password.length >= 8) strength++;
+    if (password.match(/[a-z]/)) strength++;
+    if (password.match(/[A-Z]/)) strength++;
+    if (password.match(/[0-9]/)) strength++;
+    if (password.match(/[^a-zA-Z0-9]/)) strength++;
+    return strength;
+  };
+
+  const getPasswordStrengthLabel = (strength: number) => {
+    switch (strength) {
+      case 0:
+      case 1:
+        return { label: "Very weak", color: "bg-red-500" };
+      case 2:
+        return { label: "Weak", color: "bg-orange-500" };
+      case 3:
+        return { label: "Medium", color: "bg-yellow-500" };
+      case 4:
+        return { label: "Strong", color: "bg-green-500" };
+      case 5:
+        return { label: "Very strong", color: "bg-green-600" };
+      default:
+        return { label: "", color: "" };
     }
   };
 

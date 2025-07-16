@@ -382,7 +382,7 @@ export default function Index() {
                     10,000+
                   </div>
                   <div className="text-gray-600 dark:text-gray-400 text-sm">
-                    Book summaries generated
+                    Chapter discoveries made
                   </div>
                 </div>
                 <div>

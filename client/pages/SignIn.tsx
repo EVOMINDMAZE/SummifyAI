@@ -158,15 +158,23 @@ export default function SignIn() {
                 <div className="mt-1">
                   <input
                     id="email"
-                    name="email"
                     type="email"
                     autoComplete="email"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="appearance-none block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#FFFD63] focus:border-transparent"
+                    {...register("email")}
+                    className={`appearance-none block w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:border-transparent transition-colors ${
+                      errors.email
+                        ? "border-red-500 focus:ring-red-500"
+                        : dirtyFields.email && !errors.email
+                          ? "border-green-500 focus:ring-green-500"
+                          : "border-gray-300 dark:border-gray-600 focus:ring-[#FFFD63]"
+                    }`}
                     placeholder="Enter your email"
                   />
+                  {errors.email && (
+                    <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+                      {errors.email.message}
+                    </p>
+                  )}
                 </div>
               </div>
 
@@ -180,15 +188,23 @@ export default function SignIn() {
                 <div className="mt-1 relative">
                   <input
                     id="password"
-                    name="password"
                     type={showPassword ? "text" : "password"}
                     autoComplete="current-password"
-                    required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="appearance-none block w-full px-3 py-2 pr-10 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#FFFD63] focus:border-transparent"
+                    {...register("password")}
+                    className={`appearance-none block w-full px-3 py-2 pr-10 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:border-transparent transition-colors ${
+                      errors.password
+                        ? "border-red-500 focus:ring-red-500"
+                        : dirtyFields.password && !errors.password
+                          ? "border-green-500 focus:ring-green-500"
+                          : "border-gray-300 dark:border-gray-600 focus:ring-[#FFFD63]"
+                    }`}
                     placeholder="Enter your password"
                   />
+                  {errors.password && (
+                    <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+                      {errors.password.message}
+                    </p>
+                  )}
                   <button
                     type="button"
                     className="absolute inset-y-0 right-0 pr-3 flex items-center"
@@ -236,13 +252,13 @@ export default function SignIn() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
                   <input
-                    id="remember-me"
-                    name="remember-me"
+                    id="rememberMe"
                     type="checkbox"
+                    {...register("rememberMe")}
                     className="h-4 w-4 text-[#FFFD63] focus:ring-[#FFFD63] border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700"
                   />
                   <label
-                    htmlFor="remember-me"
+                    htmlFor="rememberMe"
                     className="ml-2 block text-sm text-gray-900 dark:text-white"
                   >
                     Remember me

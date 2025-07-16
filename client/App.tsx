@@ -36,9 +36,10 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <ThemeProvider>
+            <ThemeProvider>
         <AuthProvider>
-          <BrowserRouter>
+          <CollaborationProvider>
+            <BrowserRouter>
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/signin" element={<SignIn />} />

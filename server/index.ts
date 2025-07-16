@@ -1,5 +1,7 @@
 import express from "express";
 import cors from "cors";
+import dotenv from "dotenv";
+import rateLimit from "express-rate-limit";
 import { handleDemo } from "./routes/demo";
 import {
   handleNeonExecute,
@@ -10,6 +12,14 @@ import {
   handleRecordShare,
   handleUpdateUserSettings,
 } from "./routes/neon";
+import {
+  handleGenerateStart,
+  handleGenerateProgress,
+  handleGetRecentSummaries,
+} from "./routes/generate";
+
+// Load environment variables
+dotenv.config();
 
 export function createServer() {
   const app = express();

@@ -25,10 +25,10 @@ export default function SearchDemo() {
 
   const searchStages = [
     "🔍 Scanning 2.5 million books...",
-    "📊 Analyzing relevance scores...",
-    "🎯 Ranking by quality & insights...",
-    "⭐ Filtering bestsellers & reviews...",
-    "✨ Preparing your perfect matches...",
+    "📖 Analyzing chapter contents...",
+    "🎯 Identifying relevant pages...",
+    "⭐ Scoring chapter relevance...",
+    "✨ Preparing your chapter matches...",
   ];
 
   const mockSearchResults: Record<string, SearchResult[]> = {

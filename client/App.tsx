@@ -27,6 +27,7 @@ import AnalysisDemo from "./pages/AnalysisDemo";
 import Settings from "./pages/Settings";
 import Support from "./pages/Support";
 import Contact from "./pages/Contact";
+import Help from "./pages/Help";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();

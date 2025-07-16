@@ -3,12 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import ThemeToggle from "@/components/ThemeToggle";
 import { loadStripe } from "@stripe/stripe-js";
-import {
-  Elements,
-  CardElement,
-  useStripe,
-  useElements,
-} from "@stripe/react-stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
+import StripeCheckout from "@/components/StripeCheckout";
 
 // Initialize Stripe
 const stripePromise = loadStripe(
@@ -22,6 +18,7 @@ export default function Pricing() {
   const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">(
     "yearly",
   );
+  const [showCheckout, setShowCheckout] = useState(false);
 
   const handleSubscribe = async (plan: "premium") => {
     if (!user) {
@@ -29,70 +26,26 @@ export default function Pricing() {
       return;
     }
 
-    setIsProcessing(true);
+    // Show Stripe checkout modal
+    setShowCheckout(true);
+  };
 
-    try {
-      // Create Stripe Checkout Session
-      const response = await fetch("/api/create-checkout-session", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          priceId:
-            billingCycle === "monthly"
-              ? "price_1ABC123monthly"
-              : "price_1ABC123yearly",
-          userId: user.id,
-          successUrl: `${window.location.origin}/dashboard?success=true`,
-          cancelUrl: `${window.location.origin}/pricing`,
-          customerEmail: user.email,
-          mode: "subscription",
-        }),
-      });
+  const handleCheckoutSuccess = () => {
+    setShowCheckout(false);
+    alert(
+      "🎉 Welcome to Premium!\n\n" +
+        "Your subscription is now active and you have:\n" +
+        "• Unlimited chapter discoveries\n" +
+        "• Priority generation access\n" +
+        "• PDF export capabilities\n" +
+        "• Advanced analytics\n\n" +
+        "Start exploring with no limits!",
+    );
+    navigate("/dashboard");
+  };
 
-      if (!response.ok) {
-        throw new Error("Failed to create checkout session");
-      }
-
-      const { sessionId } = await response.json();
-
-      // Redirect to Stripe Checkout
-      const stripe = await stripePromise;
-      if (stripe) {
-        const { error } = await stripe.redirectToCheckout({ sessionId });
-        if (error) {
-          throw error;
-        }
-      }
-    } catch (error) {
-      console.error("Stripe error:", error);
-
-      // Demo mode fallback
-      const proceedWithDemo = confirm(
-        "Demo Mode: Stripe integration not configured.\n\nWould you like to simulate the subscription for testing purposes?",
-      );
-
-      if (proceedWithDemo) {
-        updateUser({
-          tier: "premium",
-          queriesLimit: 999999,
-          subscriptionId: "sub_demo_" + Date.now(),
-        });
-
-        alert(
-          "✅ Successfully upgraded to Premium! (Demo mode)\n\n" +
-            "In production, this would:\n" +
-            "• Process real payment via Stripe\n" +
-            "• Send confirmation email\n" +
-            "• Activate premium features\n" +
-            "• Set up recurring billing",
-        );
-        navigate("/dashboard");
-      }
-    } finally {
-      setIsProcessing(false);
-    }
+  const handleCheckoutCancel = () => {
+    setShowCheckout(false);
   };
 
   const handleCancelSubscription = async () => {
@@ -726,6 +679,40 @@ export default function Pricing() {
           </div>
         </div>
       </div>
+
+      {/* Stripe Checkout Modal */}
+      {showCheckout && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="relative">
+            <button
+              onClick={handleCheckoutCancel}
+              className="absolute -top-4 -right-4 w-8 h-8 bg-white rounded-full flex items-center justify-center text-gray-600 hover:text-gray-800 z-10"
+            >
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+            <Elements stripe={stripePromise}>
+              <StripeCheckout
+                plan="premium"
+                billingCycle={billingCycle}
+                onSuccess={handleCheckoutSuccess}
+                onCancel={handleCheckoutCancel}
+              />
+            </Elements>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -559,10 +559,10 @@ export default function Index() {
                       {user ? "Generate Summary" : "Start Free Trial"}
                     </Link>
                     <Link
-                      to={user ? "/results" : "/signin"}
+                      to="/summary-showcase"
                       className="bg-orange-200 dark:bg-orange-700 hover:bg-orange-300 dark:hover:bg-orange-600 text-[#0A0B1E] dark:text-white px-6 py-3 rounded-xl font-medium transition-colors border-2 border-[#0A0B1E] dark:border-white inline-block"
                     >
-                      {user ? "View Results" : "See Examples"}
+                      See Examples
                     </Link>
                   </div>
                 </div>

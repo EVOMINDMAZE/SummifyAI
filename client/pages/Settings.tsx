@@ -7,7 +7,7 @@ import ThemeToggle from "@/components/ThemeToggle";
 export default function Settings() {
   const { user, updateUserSettings } = useAuth();
   const [activeTab, setActiveTab] = useState<
-    "general" | "notifications" | "privacy" | "advanced"
+    "general" | "notifications" | "privacy" | "team" | "advanced"
   >("general");
 
   // Local settings state

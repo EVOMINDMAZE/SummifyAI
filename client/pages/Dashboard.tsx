@@ -1244,6 +1244,7 @@ export default function Dashboard() {
                   fontSize={12}
                   axisLine={true}
                   tickLine={true}
+                  type="category"
                 />
                 <YAxis
                   stroke="#6b7280"

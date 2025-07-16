@@ -75,8 +75,8 @@ export default function Pricing() {
     }
   };
 
-  const monthlyPrice = 29;
-  const yearlyPrice = 299;
+  const monthlyPrice = 19;
+  const yearlyPrice = 199;
   const yearlyDiscount = Math.round(
     (1 - yearlyPrice / (monthlyPrice * 12)) * 100,
   );
@@ -127,39 +127,27 @@ export default function Pricing() {
         </div>
       </nav>
 
-      {/* Hero Section with Urgency */}
+      {/* Hero Section */}
       <div className="bg-gradient-to-br from-[#FFFD63] via-yellow-300 to-orange-300 py-20 relative overflow-hidden">
         {/* Background Elements */}
         <div className="absolute inset-0 opacity-20">
           <div className="absolute top-10 left-10 w-32 h-32 bg-[#0A0B1E] rounded-full"></div>
           <div className="absolute bottom-10 right-10 w-40 h-40 bg-orange-500 rounded-full"></div>
-          <div className="absolute top-1/2 left-1/3 w-24 h-24 bg-red-500 rounded-full"></div>
+          <div className="absolute top-1/2 left-1/3 w-24 h-24 bg-blue-500 rounded-full"></div>
         </div>
 
         <div className="max-w-5xl mx-auto px-6 text-center relative z-10">
-          {/* Urgency Badge */}
-          <div className="inline-flex items-center gap-2 bg-red-500 text-white px-4 py-2 rounded-full text-sm font-bold mb-6 animate-pulse">
-            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-              <path
-                fillRule="evenodd"
-                d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                clipRule="evenodd"
-              />
-            </svg>
-            LIMITED TIME: 48 Hours Left - Save $200+ This Week Only!
-          </div>
-
-          <h1 className="text-5xl md:text-7xl font-black text-[#0A0B1E] dark:text-white mb-6 leading-tight">
-            Stop Wasting Hours Reading
+          <h1 className="text-5xl md:text-6xl font-black text-[#0A0B1E] dark:text-white mb-6 leading-tight">
+            Stop Reading Entire Books.
             <br />
-            <span className="text-red-600">Entire Books</span>
+            <span className="text-blue-600">Find Exact Chapters.</span>
           </h1>
 
           <p className="text-xl md:text-2xl text-[#0A0B1E]/80 dark:text-gray-300 max-w-4xl mx-auto mb-8 leading-relaxed">
             Join 10,000+ smart professionals who find{" "}
             <strong>exact chapters and pages</strong> in seconds, not hours. Get
-            AI chapter analysis + affiliate earnings that pay for your
-            subscription.
+            AI chapter analysis that helps you learn faster and more
+            efficiently.
           </p>
 
           {/* Social Proof Badges */}
@@ -207,7 +195,7 @@ export default function Pricing() {
                 />
               </svg>
               <span className="text-sm font-medium text-[#0A0B1E]">
-                $127K+ earned by users
+                Trusted by professionals
               </span>
             </div>
           </div>
@@ -216,7 +204,9 @@ export default function Pricing() {
           <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-8 max-w-4xl mx-auto border border-gray-200 shadow-xl mb-8">
             <div className="grid md:grid-cols-3 gap-6">
               <div className="text-center">
-                <div className="text-4xl font-black text-red-600 mb-2">10X</div>
+                <div className="text-4xl font-black text-blue-600 mb-2">
+                  10X
+                </div>
                 <div className="font-semibold text-[#0A0B1E] mb-1">
                   Faster Discovery
                 </div>
@@ -224,17 +214,17 @@ export default function Pricing() {
               </div>
               <div className="text-center">
                 <div className="text-4xl font-black text-green-600 mb-2">
-                  $500+
+                  50+
                 </div>
                 <div className="font-semibold text-[#0A0B1E] mb-1">
-                  Avg Monthly Earnings
+                  Hours Saved Monthly
                 </div>
                 <div className="text-sm text-gray-600">
-                  Affiliate commissions
+                  Research time reduced
                 </div>
               </div>
               <div className="text-center">
-                <div className="text-4xl font-black text-blue-600 mb-2">
+                <div className="text-4xl font-black text-purple-600 mb-2">
                   99.9%
                 </div>
                 <div className="font-semibold text-[#0A0B1E] mb-1">
@@ -266,7 +256,7 @@ export default function Pricing() {
               }`}
             >
               Yearly
-              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-3 py-1 rounded-full animate-bounce">
+              <span className="absolute -top-2 -right-2 bg-green-500 text-white text-xs px-3 py-1 rounded-full">
                 SAVE {yearlyDiscount}%
               </span>
             </button>
@@ -274,18 +264,18 @@ export default function Pricing() {
         </div>
       </div>
 
-      {/* Pricing Cards - Focused on Value */}
+      {/* Pricing Cards - Clean and Focused */}
       <div className="py-20 bg-gray-50 dark:bg-gray-800">
         <div className="max-w-6xl mx-auto px-6">
           <div className="grid lg:grid-cols-2 gap-12 max-w-5xl mx-auto">
-            {/* Free Plan - De-emphasized */}
-            <div className="bg-white dark:bg-gray-700 rounded-3xl p-8 border border-gray-200 dark:border-gray-600 shadow-lg opacity-75">
+            {/* Free Plan - Improved Design */}
+            <div className="bg-white dark:bg-gray-700 rounded-3xl p-8 border-2 border-gray-200 dark:border-gray-600 shadow-lg relative">
               <div className="text-center mb-8">
                 <h3 className="text-2xl font-bold text-[#0A0B1E] dark:text-white mb-2">
                   Free
                 </h3>
                 <p className="text-gray-600 dark:text-gray-300 mb-6">
-                  Limited trial to get started
+                  Perfect for getting started
                 </p>
                 <div className="mb-4">
                   <span className="text-5xl font-black text-[#0A0B1E] dark:text-white">
@@ -295,43 +285,22 @@ export default function Pricing() {
                     /month
                   </span>
                 </div>
-                <p className="text-sm text-red-600 font-semibold">
-                  ⚠️ Very Limited Features
+                <p className="text-sm text-green-600 dark:text-green-400 font-semibold">
+                  ✅ No credit card required
                 </p>
               </div>
 
               <ul className="space-y-4 mb-8">
                 {[
-                  { text: "Only 3 chapter discoveries", limited: true },
-                  { text: "Basic chapter locations", limited: true },
-                  { text: "No page numbers", limited: true },
-                  { text: "No affiliate earnings", limited: true },
-                  { text: "No export features", limited: true },
-                  { text: "Email support only", limited: true },
+                  { text: "3 chapter discoveries per month", icon: "🔍" },
+                  { text: "Basic chapter locations", icon: "📍" },
+                  { text: "AI chapter summaries", icon: "🤖" },
+                  { text: "Email support", icon: "📧" },
+                  { text: "Mobile & desktop access", icon: "📱" },
                 ].map((feature, index) => (
                   <li key={index} className="flex items-center gap-3">
-                    <svg
-                      className={`w-5 h-5 flex-shrink-0 ${feature.limited ? "text-red-400" : "text-green-500"}`}
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      {feature.limited ? (
-                        <path
-                          fillRule="evenodd"
-                          d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                          clipRule="evenodd"
-                        />
-                      ) : (
-                        <path
-                          fillRule="evenodd"
-                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                          clipRule="evenodd"
-                        />
-                      )}
-                    </svg>
-                    <span
-                      className={`${feature.limited ? "text-gray-500 line-through" : "text-gray-700 dark:text-gray-300"}`}
-                    >
+                    <span className="text-lg">{feature.icon}</span>
+                    <span className="text-gray-700 dark:text-gray-300">
                       {feature.text}
                     </span>
                   </li>
@@ -340,9 +309,9 @@ export default function Pricing() {
 
               <Link
                 to="/signup"
-                className="w-full py-4 border-2 border-gray-300 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors font-medium text-center block"
+                className="w-full py-4 border-2 border-[#FFFD63] text-[#0A0B1E] dark:text-white rounded-xl hover:bg-[#FFFD63] hover:text-[#0A0B1E] transition-colors font-bold text-center block"
               >
-                Try Limited Free Version
+                Get Started Free
               </Link>
             </div>
 
@@ -367,14 +336,14 @@ export default function Pricing() {
               <div className="text-center mb-8 mt-8">
                 <h3 className="text-3xl font-bold mb-2">Premium</h3>
                 <p className="text-gray-300 mb-6">
-                  Unlimited discoveries + earnings
+                  Unlimited discoveries + advanced features
                 </p>
 
                 {/* Price with Strikethrough */}
                 <div className="mb-6">
                   {billingCycle === "yearly" && (
                     <div className="text-lg text-red-400 line-through mb-2">
-                      Was $348/year
+                      Was ${monthlyPrice * 12}/year
                     </div>
                   )}
                   <div className="flex items-center justify-center gap-2">
@@ -431,8 +400,8 @@ export default function Pricing() {
                     highlight: true,
                   },
                   { text: "🤖 Advanced AI chapter analysis", highlight: true },
-                  { text: "💰 Affiliate earnings dashboard", highlight: true },
-                  { text: "📊 Real-time earnings tracking", highlight: true },
+                  { text: "📚 Personal library management", highlight: true },
+                  { text: "📊 Usage analytics & insights", highlight: true },
                   { text: "📄 PDF exports & sharing", highlight: false },
                   { text: "🎯 Priority search (2x faster)", highlight: false },
                   { text: "📞 24/7 priority support", highlight: false },
@@ -504,28 +473,28 @@ export default function Pricing() {
                         Processing...
                       </>
                     ) : (
-                      <>🚀 START EARNING NOW - INSTANT ACCESS</>
+                      <>🚀 START PREMIUM - INSTANT ACCESS</>
                     )}
                   </button>
 
                   <div className="text-center">
                     <p className="text-xs text-gray-400">
-                      ✅ No credit card required for 7-day trial
-                      <br />✅ Cancel anytime • ✅ Instant activation
+                      ✅ 7-day free trial • ✅ Cancel anytime • ✅ Instant
+                      activation
                     </p>
                   </div>
                 </div>
               )}
 
-              {/* Earnings Guarantee */}
-              <div className="mt-6 bg-yellow-900/30 border border-yellow-500 rounded-xl p-4">
+              {/* Value Guarantee */}
+              <div className="mt-6 bg-blue-900/30 border border-blue-500 rounded-xl p-4">
                 <div className="text-center">
-                  <div className="text-yellow-400 font-bold mb-1">
-                    💰 EARNINGS GUARANTEE
+                  <div className="text-blue-400 font-bold mb-1">
+                    ⏰ TIME-SAVING GUARANTEE
                   </div>
                   <p className="text-sm text-gray-300">
-                    Our avg user earns $500+/month. If you don't earn your
-                    subscription back in 90 days, we'll refund you!
+                    Save 50+ hours per month or get your money back! Most users
+                    find this pays for itself in time saved.
                   </p>
                 </div>
               </div>
@@ -539,10 +508,10 @@ export default function Pricing() {
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-[#0A0B1E] dark:text-white mb-4">
-              Join 10,000+ Users Earning While Learning
+              Join 10,000+ Users Saving Time Daily
             </h2>
             <p className="text-xl text-gray-600 dark:text-gray-300">
-              Real results from real users making real money
+              Real results from real users finding exactly what they need
             </p>
           </div>
 
@@ -552,24 +521,24 @@ export default function Pricing() {
                 name: "Sarah M.",
                 role: "Marketing Manager",
                 avatar: "👩‍💼",
-                earnings: "$847/month",
-                text: "SummifyAI paid for itself in week 1. I've earned over $5K sharing chapter insights with my network. The exact page numbers save me hours!",
+                timeSaved: "15 hours/week",
+                text: "SummifyAI transformed my research process. Instead of reading entire business books, I find the exact chapters I need in seconds. Game-changer for my productivity!",
                 verified: true,
               },
               {
                 name: "David K.",
                 role: "Business Coach",
                 avatar: "👨‍💼",
-                earnings: "$1,234/month",
-                text: "My clients love getting precise chapter recommendations instead of full book summaries. I've built a passive income stream just by sharing what I find!",
+                timeSaved: "20 hours/week",
+                text: "My clients love getting precise chapter recommendations instead of vague book suggestions. I can give them exactly what they need to read for their specific challenges.",
                 verified: true,
               },
               {
                 name: "Lisa R.",
                 role: "Content Creator",
                 avatar: "👩‍🎨",
-                earnings: "$692/month",
-                text: "The AI chapter analysis is incredible. I create better content faster and earn affiliate commissions from every post. Total game-changer!",
+                timeSaved: "12 hours/week",
+                text: "The AI chapter analysis is incredible. I create better content faster by finding exactly the right source material. No more endless book browsing!",
                 verified: true,
               },
             ].map((testimonial, index) => (
@@ -603,7 +572,7 @@ export default function Pricing() {
                       {testimonial.role}
                     </div>
                     <div className="text-green-600 font-bold text-sm">
-                      Earns {testimonial.earnings}
+                      Saves {testimonial.timeSaved}
                     </div>
                   </div>
                 </div>
@@ -630,74 +599,7 @@ export default function Pricing() {
         </div>
       </div>
 
-      {/* Urgency CTA Section */}
-      <div className="bg-gradient-to-r from-red-600 via-red-700 to-red-800 text-white py-20 relative overflow-hidden">
-        <div className="absolute inset-0 bg-black/20"></div>
-
-        <div className="max-w-5xl mx-auto px-6 text-center relative z-10">
-          <div className="mb-6">
-            <div className="inline-flex items-center gap-2 bg-yellow-400 text-red-800 px-6 py-3 rounded-full font-black text-lg animate-pulse">
-              ⚠️ URGENT: Limited Time Offer Expires in 48 Hours!
-            </div>
-          </div>
-
-          <h2 className="text-4xl md:text-6xl font-black mb-6">
-            Don't Miss Out on $500+/Month
-          </h2>
-
-          <p className="text-xl mb-8 max-w-3xl mx-auto leading-relaxed">
-            While you're reading entire books, our users are finding exact
-            chapters in seconds and earning affiliate commissions. Every day you
-            wait is money left on the table.
-          </p>
-
-          <div className="grid md:grid-cols-3 gap-6 mb-12 max-w-4xl mx-auto">
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6">
-              <div className="text-3xl font-black text-yellow-400 mb-2">
-                $15,000+
-              </div>
-              <div className="font-bold mb-1">Total User Earnings</div>
-              <div className="text-sm opacity-80">This month alone</div>
-            </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6">
-              <div className="text-3xl font-black text-yellow-400 mb-2">
-                2.3 sec
-              </div>
-              <div className="font-bold mb-1">Average Discovery Time</div>
-              <div className="text-sm opacity-80">vs 2+ hours reading</div>
-            </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6">
-              <div className="text-3xl font-black text-yellow-400 mb-2">
-                94%
-              </div>
-              <div className="font-bold mb-1">Success Rate</div>
-              <div className="text-sm opacity-80">
-                Users find what they need
-              </div>
-            </div>
-          </div>
-
-          <div className="space-y-6">
-            <Link
-              to="/signup"
-              className="inline-block bg-gradient-to-r from-[#FFFD63] to-yellow-400 text-[#0A0B1E] px-12 py-6 rounded-2xl font-black text-2xl hover:from-yellow-400 hover:to-[#FFFD63] transition-all shadow-2xl transform hover:scale-105"
-            >
-              🚀 CLAIM YOUR SPOT NOW - START EARNING TODAY
-            </Link>
-
-            <div>
-              <p className="text-yellow-200 font-bold">
-                ⏰ Only 127 spots left at this price
-              </p>
-              <p className="text-sm opacity-80">
-                Price increases to $39/month after this promotion ends
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* FAQ Section - Objection Handling */}
+      {/* FAQ Section */}
       <div className="py-20 bg-gray-50 dark:bg-gray-800">
         <div className="max-w-4xl mx-auto px-6">
           <div className="text-center mb-16">
@@ -705,42 +607,41 @@ export default function Pricing() {
               Frequently Asked Questions
             </h2>
             <p className="text-gray-600 dark:text-gray-300 text-lg">
-              Everything you need to know to get started earning
+              Everything you need to know about finding exact chapters
             </p>
           </div>
 
           <div className="space-y-6">
             {[
               {
-                question: "How quickly can I start earning money?",
+                question: "How does SummifyAI find exact chapters?",
                 answer:
-                  "Most users start earning within their first week. Our fastest user made $127 in their first 3 days by sharing chapter discoveries on LinkedIn. The average user earns $500+ monthly after 30 days.",
+                  "Our AI analyzes millions of books and their content structure to identify which specific chapters and pages address your exact question. You get precise locations instead of generic book recommendations.",
               },
               {
-                question:
-                  "Do you really guarantee I'll earn my subscription back?",
+                question: "How much time will I actually save?",
                 answer:
-                  "Yes! If you don't earn at least your subscription cost back in affiliate commissions within 90 days, we'll refund your entire payment. We're that confident in our platform's earning potential.",
-              },
-              {
-                question: "How is this different from reading entire books?",
-                answer:
-                  "Instead of spending 8+ hours reading an entire book, you get the exact chapter and page number that answers your specific question in under 30 seconds. Our AI analyzes the content so you know exactly why each chapter is relevant.",
-              },
-              {
-                question: "What if I'm not tech-savvy?",
-                answer:
-                  "SummifyAI is designed for everyone. If you can use Google, you can use our platform. Plus, we provide 24/7 support and step-by-step tutorials to ensure your success.",
+                  "The average user saves 50+ hours per month. Instead of reading entire books (8+ hours each), you get directed to the exact 20-30 pages that answer your question in under 30 seconds.",
               },
               {
                 question: "Is the 30-day money-back guarantee real?",
                 answer:
-                  "Absolutely. We process refunds within 24 hours, no questions asked. We've only had a 2.1% refund rate because users love the results they get.",
+                  "Absolutely. We process refunds within 24 hours, no questions asked. We've only had a 2.1% refund rate because users love the time they save.",
               },
               {
-                question: "How much can I realistically earn?",
+                question: "What if I'm not tech-savvy?",
                 answer:
-                  "Our users average $500/month, with top performers earning $2,000+. Earnings depend on how actively you share insights. The more you use the platform, the more you typically earn.",
+                  "SummifyAI is designed for everyone. If you can use Google, you can use our platform. Plus, we provide 24/7 support and step-by-step tutorials.",
+              },
+              {
+                question: "Can I use this for academic research?",
+                answer:
+                  "Yes! Many students and researchers use SummifyAI to quickly find relevant chapters for citations and deep-dive reading, making literature reviews much faster.",
+              },
+              {
+                question: "Do you have team plans?",
+                answer:
+                  "Premium plans include up to 5 team members. For larger organizations, please contact us for custom enterprise pricing with unlimited seats and additional features.",
               },
             ].map((faq, index) => (
               <div
@@ -763,11 +664,11 @@ export default function Pricing() {
       <div className="bg-[#0A0B1E] text-white py-20">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <h2 className="text-4xl font-bold mb-6">
-            Ready to Stop Wasting Time and Start Earning?
+            Ready to Stop Wasting Time Reading Entire Books?
           </h2>
           <p className="text-xl text-gray-300 mb-8 leading-relaxed">
             Join 10,000+ smart professionals who've discovered the secret to
-            efficient learning and passive income.
+            efficient learning and targeted research.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link

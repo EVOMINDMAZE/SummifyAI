@@ -173,6 +173,63 @@ export default function Dashboard() {
     navigate("/");
   };
 
+  // Filter and sort summaries
+  const filteredAndSortedSummaries = () => {
+    let filtered = recentSummaries;
+
+    // Apply search filter
+    if (searchQuery) {
+      filtered = filtered.filter(
+        (summary) =>
+          summary.topic.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          summary.books.some(
+            (book) =>
+              book.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+              book.author.toLowerCase().includes(searchQuery.toLowerCase()),
+          ),
+      );
+    }
+
+    // Apply book filter
+    if (filterByBooks) {
+      filtered = filtered.filter((summary) =>
+        summary.books.some((book) =>
+          book.title.toLowerCase().includes(filterByBooks.toLowerCase()),
+        ),
+      );
+    }
+
+    // Apply sorting
+    filtered.sort((a, b) => {
+      let comparison = 0;
+
+      switch (sortBy) {
+        case "date":
+          comparison =
+            new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+          break;
+        case "topic":
+          comparison = a.topic.localeCompare(b.topic);
+          break;
+        case "books":
+          comparison = a.books.length - b.books.length;
+          break;
+        default:
+          comparison = 0;
+      }
+
+      return sortOrder === "asc" ? comparison : -comparison;
+    });
+
+    return filtered;
+  };
+
+  const getUniqueBooks = () => {
+    const allBooks = recentSummaries.flatMap((summary) => summary.books);
+    const uniqueBooks = Array.from(new Set(allBooks.map((book) => book.title)));
+    return uniqueBooks.sort();
+  };
+
   // Widget definitions
   const generateWidgets = (): DashboardWidget[] => [
     {

@@ -232,7 +232,7 @@ export default function Index() {
                     clipRule="evenodd"
                   />
                 </svg>
-                <span>Affiliate Purchase Links</span>
+                <span>Book Purchase Links</span>
               </div>
             </div>
 

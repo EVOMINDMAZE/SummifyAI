@@ -31,6 +31,9 @@ export default function Generate() {
     useState<GeneratedSummary | null>(null);
   const [showUpgrade, setShowUpgrade] = useState(false);
   const [generationStage, setGenerationStage] = useState(0);
+  const [progressPercent, setProgressPercent] = useState(0);
+  const [currentOperation, setCurrentOperation] = useState("");
+  const [estimatedTimeLeft, setEstimatedTimeLeft] = useState(60);
 
   useEffect(() => {
     const topicParam = searchParams.get("topic");
@@ -95,12 +98,59 @@ export default function Generate() {
   ];
 
   const generationStages = [
-    "🔍 Searching through millions of books...",
-    "📚 Analyzing top 5 most relevant books...",
-    "🧠 Extracting key insights and themes...",
-    "⚡ Comparing different perspectives...",
-    "✨ Generating your premium summary...",
+    {
+      text: "🔍 Searching through millions of books...",
+      duration: 800,
+      percent: 15,
+    },
+    {
+      text: "📚 Analyzing top 5 most relevant books...",
+      duration: 1000,
+      percent: 35,
+    },
+    {
+      text: "🧠 Extracting key insights and themes...",
+      duration: 900,
+      percent: 60,
+    },
+    {
+      text: "⚡ Comparing different perspectives...",
+      duration: 700,
+      percent: 80,
+    },
+    {
+      text: "✨ Generating your premium summary...",
+      duration: 600,
+      percent: 100,
+    },
   ];
+
+  // Simulate WebSocket connection for real-time updates
+  const simulateWebSocketUpdates = (callback: (data: any) => void) => {
+    const operations = [
+      "Indexing book database...",
+      "Applying NLP algorithms...",
+      "Cross-referencing topics...",
+      "Ranking relevance scores...",
+      "Synthesizing insights...",
+      "Formatting results...",
+    ];
+
+    let opIndex = 0;
+    const interval = setInterval(() => {
+      if (opIndex < operations.length) {
+        callback({
+          operation: operations[opIndex],
+          progress: (opIndex + 1) * 16.6,
+        });
+        opIndex++;
+      } else {
+        clearInterval(interval);
+      }
+    }, 400);
+
+    return () => clearInterval(interval);
+  };
 
   const handleGenerate = async () => {
     if (!topic.trim()) return;
@@ -114,20 +164,32 @@ export default function Generate() {
     setIsGenerating(true);
     setGenerationStage(0);
 
-    // Simulate progressive generation stages
-    const stageInterval = setInterval(() => {
-      setGenerationStage((prev) => {
-        if (prev >= generationStages.length - 1) {
-          clearInterval(stageInterval);
-          return prev;
-        }
-        return prev + 1;
-      });
-    }, 600);
+    // Enhanced progressive generation with WebSocket simulation
+    let currentStageIndex = 0;
+    const processNextStage = () => {
+      if (currentStageIndex < generationStages.length) {
+        const stage = generationStages[currentStageIndex];
+        setGenerationStage(currentStageIndex);
+        setProgressPercent(stage.percent);
+        setEstimatedTimeLeft(Math.max(5, 60 - (stage.percent / 100) * 55));
 
-    // Simulate API call
+        // Simulate WebSocket updates for current stage
+        const cleanup = simulateWebSocketUpdates((data) => {
+          setCurrentOperation(data.operation);
+        });
+
+        setTimeout(() => {
+          cleanup();
+          currentStageIndex++;
+          processNextStage();
+        }, stage.duration);
+      }
+    };
+
+    processNextStage();
+
+    // Complete generation after all stages
     setTimeout(() => {
-      clearInterval(stageInterval);
       const summary: GeneratedSummary = {
         topic: topic,
         books: mockBooks,
@@ -159,7 +221,10 @@ Kouzes and Posner's extensive research in "The Leadership Challenge" provides th
 
       setIsGenerating(false);
       setGenerationStage(0);
-    }, 4000);
+      setProgressPercent(0);
+      setCurrentOperation("");
+      setEstimatedTimeLeft(60);
+    }, 4500);
   };
 
   const handleExportPDF = () => {
@@ -464,17 +529,38 @@ Kouzes and Posner's extensive research in "The Leadership Challenge" provides th
                 AI is analyzing "{topic}"
               </h3>
 
+              {/* Real-time Progress Bar */}
+              <div className="mb-6">
+                <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400 mb-2">
+                  <span>Progress: {progressPercent}%</span>
+                  <span>~{Math.ceil(estimatedTimeLeft)}s remaining</span>
+                </div>
+                <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
+                  <div
+                    className="bg-gradient-to-r from-[#4361EE] to-[#7B2CBF] h-3 rounded-full transition-all duration-500 ease-out"
+                    style={{ width: `${progressPercent}%` }}
+                  ></div>
+                </div>
+                {currentOperation && (
+                  <p className="text-sm text-[#4361EE] dark:text-[#7B2CBF] mt-2 font-medium animate-pulse">
+                    → {currentOperation}
+                  </p>
+                )}
+              </div>
+
               <div className="space-y-4 mb-8">
                 {generationStages.map((stage, index) => (
                   <div
                     key={index}
-                    className={`flex items-center justify-center p-4 rounded-2xl transition-all duration-500 ${
-                      index <= generationStage
+                    className={`flex items-center justify-center p-4 rounded-2xl transition-all duration-500 relative ${
+                      index < generationStage
                         ? "bg-gradient-to-r from-green-100 to-blue-100 dark:from-green-900/30 dark:to-blue-900/30 text-green-800 dark:text-green-200"
-                        : "bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400"
+                        : index === generationStage
+                          ? "bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30 text-blue-800 dark:text-blue-200 animate-pulse"
+                          : "bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400"
                     }`}
                   >
-                    {index <= generationStage && (
+                    {index < generationStage ? (
                       <svg
                         className="w-5 h-5 mr-3 text-green-600"
                         fill="currentColor"
@@ -486,8 +572,19 @@ Kouzes and Posner's extensive research in "The Leadership Challenge" provides th
                           clipRule="evenodd"
                         />
                       </svg>
+                    ) : index === generationStage ? (
+                      <div className="w-5 h-5 mr-3">
+                        <div className="w-full h-full border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                      </div>
+                    ) : (
+                      <div className="w-5 h-5 mr-3 rounded-full border-2 border-gray-400"></div>
                     )}
-                    <span className="font-medium">{stage}</span>
+                    <span className="font-medium">{stage.text}</span>
+                    {index < generationStage && (
+                      <div className="absolute right-4 text-green-600 font-bold">
+                        {stage.percent}%
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>

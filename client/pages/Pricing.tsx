@@ -128,7 +128,7 @@ export default function Pricing() {
       </nav>
 
       {/* Hero Section */}
-      <div className="bg-gradient-to-br from-[#FFFD63] via-yellow-300 to-orange-300 py-20 relative overflow-hidden">
+      <div className="bg-gradient-to-br from-[#FFFD63] via-yellow-300 to-orange-300 dark:from-gray-800 dark:via-gray-900 dark:to-gray-800 py-20 relative overflow-hidden">
         {/* Background Elements */}
         <div className="absolute inset-0 opacity-20">
           <div className="absolute top-10 left-10 w-32 h-32 bg-[#0A0B1E] rounded-full"></div>

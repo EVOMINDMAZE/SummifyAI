@@ -172,8 +172,8 @@ export default function Index() {
             <p className="text-lg md:text-xl text-[#0A0B1E]/80 dark:text-gray-300 max-w-3xl mx-auto mb-8 leading-relaxed">
               Search any topic and discover the exact chapters and pages from
               top books that address your question, complete with AI chapter
-              analysis, insights on why each chapter is relevant, and affiliate
-              purchase links—all powered by intelligent book indexing.
+              analysis and insights on why each chapter is relevant—all powered
+              by intelligent book indexing.
             </p>
 
             {/* Premium Features Highlight */}

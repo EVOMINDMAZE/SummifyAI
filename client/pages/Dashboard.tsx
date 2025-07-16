@@ -1215,6 +1215,7 @@ export default function Dashboard() {
                   iconType="circle"
                   wrapperStyle={{ fontSize: "12px" }}
                   align="center"
+                  layout="horizontal"
                 />
               </PieChart>
             </ResponsiveContainer>

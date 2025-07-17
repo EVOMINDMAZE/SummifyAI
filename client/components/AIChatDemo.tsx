@@ -28,6 +28,7 @@ const AIChatDemo: React.FC<AIChatDemoProps> = ({
   suggestedPrompts = [],
   ctaText = "Start Free Trial",
   ctaLink = "/signup",
+  disableAutoScroll = false,
 }) => {
   const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
   const [inputValue, setInputValue] = useState("");

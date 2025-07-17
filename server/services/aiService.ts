@@ -23,7 +23,11 @@ export class AIService {
     const apiKey = process.env.OPENAI_API_KEY;
     this.model = process.env.OPENAI_MODEL || "gpt-4";
 
-    if (!apiKey || apiKey === "sk-demo-key-replace-with-real-key") {
+    if (
+      !apiKey ||
+      apiKey === "sk-demo-key-replace-with-real-key" ||
+      apiKey === ""
+    ) {
       console.warn(
         "OpenAI API key not configured. AI generation will use fallback content.",
       );

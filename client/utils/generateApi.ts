@@ -150,7 +150,7 @@ export class GenerateAPI {
   }> {
     return [
       {
-        text: "�� Searching through millions of books...",
+        text: "🔍 Searching through millions of books...",
         duration: 1000,
         percent: 15,
       },

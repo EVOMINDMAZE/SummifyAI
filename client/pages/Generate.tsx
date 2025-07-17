@@ -428,16 +428,14 @@ Sinek's "Leaders Eat Last" introduces the biological and anthropological foundat
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header Section */}
         <div className="text-center mb-12">
-          <div className="bg-gradient-to-r from-[#4361EE] to-[#7B2CBF] rounded-3xl p-8 text-white relative overflow-hidden mb-8">
+                      <div className="bg-gradient-to-r from-[#4361EE] to-[#7B2CBF] rounded-3xl p-8 text-white relative overflow-hidden mb-8">
             <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-32 translate-x-32"></div>
             <div className="relative z-10">
               <h1 className="text-4xl md:text-5xl font-bold mb-4">
-                🚀 AI-Powered Chapter Discovery
+                🎯 Smart Chapter Discovery
               </h1>
               <p className="text-xl text-white/90 max-w-3xl mx-auto">
-                Enter any topic and watch our AI find the exact chapters and
-                pages that address your question, analyze why each chapter is
-                relevant, and provide targeted insights in seconds.
+                Find the exact chapters that address your question across multiple books - even in books that aren't primarily about your topic. Our AI analyzes chapter content and explains precisely why each chapter is relevant to your query.
               </p>
             </div>
           </div>

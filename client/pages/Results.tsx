@@ -656,7 +656,7 @@ export default function Results() {
                 filteredAndSortedResults().map((result) => (
                   <div
                     key={result.id}
-                    className="bg-white rounded-xl border border-gray-200 p-8"
+                    className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-8"
                   >
                     <div className="flex justify-between items-start mb-6">
                       <div>
@@ -831,7 +831,7 @@ export default function Results() {
                 filteredAndSortedResults().map((result) => (
                   <div
                     key={result.id}
-                    className="bg-white rounded-xl border border-gray-200 p-8"
+                    className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-8"
                   >
                     <div className="flex justify-between items-start mb-4">
                       <div>

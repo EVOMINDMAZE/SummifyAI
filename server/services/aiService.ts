@@ -23,6 +23,11 @@ export class AIService {
     const apiKey = process.env.OPENAI_API_KEY;
     this.model = process.env.OPENAI_MODEL || "gpt-4";
 
+    console.log(
+      "OpenAI API Key status:",
+      apiKey ? `Found (${apiKey.substring(0, 10)}...)` : "Missing",
+    );
+
     if (
       !apiKey ||
       apiKey === "sk-demo-key-replace-with-real-key" ||

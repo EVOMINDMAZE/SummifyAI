@@ -15,6 +15,7 @@ import {
   ExternalLink,
   Share2,
   Lightbulb,
+  Target,
 } from "lucide-react";
 
 interface ChapterMatch {
@@ -54,6 +55,19 @@ interface GeneratedSummary {
   userId: number;
 }
 
+interface TopicAnalysis {
+  isBroad: boolean;
+  broadnessScore: number;
+  suggestedRefinements: string[];
+  explanation: string;
+}
+
+interface TopicRefinement {
+  label: string;
+  value: string;
+  description: string;
+}
+
 export default function Generate() {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -66,6 +80,16 @@ export default function Generate() {
   const [progress, setProgress] = useState(0);
   const [currentOperation, setCurrentOperation] = useState("");
   const [sessionId, setSessionId] = useState<string | null>(null);
+
+  // Topic refinement states
+  const [showRefinements, setShowRefinements] = useState(false);
+  const [topicAnalysis, setTopicAnalysis] = useState<TopicAnalysis | null>(
+    null,
+  );
+  const [topicRefinements, setTopicRefinements] = useState<TopicRefinement[]>(
+    [],
+  );
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
 
   // Redirect if not authenticated
   if (!user) {
@@ -89,21 +113,63 @@ export default function Generate() {
     );
   }
 
+  const analyzeTopic = async (topicToAnalyze: string) => {
+    if (!topicToAnalyze.trim()) return;
+
+    setIsAnalyzing(true);
+    try {
+      const response = await fetch("/api/topic/analyze", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ topic: topicToAnalyze.trim() }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to analyze topic");
+      }
+
+      const data = await response.json();
+      setTopicAnalysis(data.analysis);
+      setTopicRefinements(data.refinements);
+
+      if (data.analysis.isBroad) {
+        setShowRefinements(true);
+      } else {
+        // Topic is specific enough, proceed with generation
+        startGeneration(topicToAnalyze);
+      }
+    } catch (error) {
+      console.error("Topic analysis error:", error);
+      // If analysis fails, proceed with generation anyway
+      startGeneration(topicToAnalyze);
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
+
   const handleGenerate = async () => {
     if (!topic.trim()) return;
 
+    // First analyze the topic
+    await analyzeTopic(topic.trim());
+  };
+
+  const startGeneration = async (finalTopic: string) => {
     setIsGenerating(true);
     setProgress(0);
     setCurrentOperation("Initializing...");
+    setShowRefinements(false);
 
     try {
-      const response = await fetch("/api/generate", {
+      const response = await fetch("/api/generate/start", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          topic: topic.trim(),
+          topic: finalTopic,
           userId: user.id,
           maxBooks: 10,
         }),
@@ -144,6 +210,15 @@ export default function Generate() {
       console.error("Progress polling error:", error);
       setIsGenerating(false);
     }
+  };
+
+  const handleRefinementSelect = (refinedTopic: string) => {
+    setTopic(refinedTopic);
+    startGeneration(refinedTopic);
+  };
+
+  const proceedWithOriginalTopic = () => {
+    startGeneration(topic);
   };
 
   const handleShare = (chapter: ChapterMatch, book: Book) => {
@@ -198,16 +273,21 @@ export default function Generate() {
                     placeholder="e.g., Team building, Leadership, Productivity, Negotiation..."
                     className="text-lg py-4 px-6 rounded-xl border-2 border-gray-200 dark:border-gray-600 focus:border-[#4361EE] dark:focus:border-[#4361EE] transition-colors"
                     onKeyPress={(e) => e.key === "Enter" && handleGenerate()}
-                    disabled={isGenerating}
+                    disabled={isGenerating || isAnalyzing}
                   />
                 </div>
 
                 <Button
                   onClick={handleGenerate}
-                  disabled={!topic.trim() || isGenerating}
+                  disabled={!topic.trim() || isGenerating || isAnalyzing}
                   className="w-full py-4 text-lg font-semibold bg-gradient-to-r from-[#4361EE] to-[#7B2CBF] hover:from-[#3B4DE8] hover:to-[#6B1DAF] text-white rounded-xl transition-all shadow-lg hover:shadow-xl transform hover:scale-105 disabled:transform-none disabled:opacity-50"
                 >
-                  {isGenerating ? (
+                  {isAnalyzing ? (
+                    <div className="flex items-center">
+                      <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white mr-3"></div>
+                      Analyzing Topic...
+                    </div>
+                  ) : isGenerating ? (
                     <div className="flex items-center">
                       <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white mr-3"></div>
                       Discovering Chapters...
@@ -242,6 +322,75 @@ export default function Generate() {
             </CardContent>
           </Card>
         </div>
+
+        {/* Topic Refinement Modal */}
+        {showRefinements && topicAnalysis && (
+          <div className="max-w-4xl mx-auto mb-12">
+            <Card className="shadow-2xl border-0 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20">
+              <CardContent className="p-8">
+                <div className="text-center mb-6">
+                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3 flex items-center justify-center">
+                    <Target className="w-8 h-8 mr-3 text-blue-600" />
+                    Let's Make Your Search More Specific
+                  </h3>
+                  <p className="text-lg text-gray-700 dark:text-gray-300 mb-2">
+                    {topicAnalysis.explanation}
+                  </p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    Choose a more specific focus below, or continue with your
+                    original topic.
+                  </p>
+                </div>
+
+                <div className="grid gap-4 mb-6">
+                  {topicRefinements.map((refinement, index) => (
+                    <button
+                      key={index}
+                      onClick={() => handleRefinementSelect(refinement.value)}
+                      className="text-left p-4 bg-white/70 dark:bg-gray-800/70 rounded-xl border border-blue-200 dark:border-blue-800 hover:border-blue-400 dark:hover:border-blue-600 transition-all hover:shadow-lg group"
+                    >
+                      <div className="flex items-start">
+                        <div className="flex-shrink-0 w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mr-4 group-hover:bg-blue-200 dark:group-hover:bg-blue-800 transition-colors">
+                          <span className="text-blue-600 dark:text-blue-400 font-bold text-sm">
+                            {index + 1}
+                          </span>
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="font-semibold text-gray-900 dark:text-white mb-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                            {refinement.label}
+                          </h4>
+                          <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                            {refinement.description}
+                          </p>
+                          <p className="text-xs text-blue-600 dark:text-blue-400 font-medium">
+                            Search: "{refinement.value}"
+                          </p>
+                        </div>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                  <Button
+                    onClick={proceedWithOriginalTopic}
+                    variant="outline"
+                    className="px-6 py-2 border-2 border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 rounded-xl"
+                  >
+                    Continue with "{topic}"
+                  </Button>
+                  <Button
+                    onClick={() => setShowRefinements(false)}
+                    variant="ghost"
+                    className="px-6 py-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200"
+                  >
+                    Let me rephrase
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
 
         {/* Results */}
         {generatedSummary && (

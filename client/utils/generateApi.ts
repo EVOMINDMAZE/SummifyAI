@@ -107,7 +107,7 @@ export class GenerateAPI {
     onComplete: (result: GeneratedResult) => void,
     onError: (error: string) => void,
   ): Promise<void> {
-    const maxAttempts = 120; // 2 minutes max (120 * 1 second)
+    const maxAttempts = 300; // 5 minutes max (300 * 1 second)
     let attempts = 0;
 
     const poll = async () => {

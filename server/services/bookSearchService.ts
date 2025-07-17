@@ -155,6 +155,33 @@ export class BookSearchService {
     }
   }
 
+  private async searchGoogleBooks(
+    topic: string,
+    maxResults: number,
+  ): Promise<Book[]> {
+    const query = this.buildSearchQuery(topic);
+    const url = `${this.baseUrl}?q=${encodeURIComponent(query)}&maxResults=${maxResults * 2}&key=${this.apiKey}&orderBy=relevance&printType=books&langRestrict=en`;
+
+    console.log(`Searching Google Books for: ${topic}`);
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error(
+        `Google Books API error: ${response.status} ${response.statusText}`,
+      );
+    }
+
+    const data = (await response.json()) as { items?: GoogleBook[] };
+
+    if (!data.items || data.items.length === 0) {
+      console.log(`No Google Books found for topic: ${topic}`);
+      return [];
+    }
+
+    const books = await this.processBooks(data.items, maxResults);
+    return books;
+  }
+
   private buildSearchQuery(topic: string): string {
     // Build a more targeted search query
     const searchTerms = [

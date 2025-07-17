@@ -208,6 +208,125 @@ async function generateAsync(
           activeSessions.delete(sessionId);
         },
         5 * 60 * 1000,
+            );
+    }
+
+    return; // Skip database save for now
+
+  } catch (error) {
+    console.error("Generation error for session", sessionId, ":", error);
+    console.error("Error details:", {
+      message: error instanceof Error ? error.message : "Unknown error",
+      stack: error instanceof Error ? error.stack : undefined,
+      userId,
+      topic
+    });
+
+    const session = activeSessions.get(sessionId);
+    if (session) {
+      session.status = "error";
+      session.error = error instanceof Error ? error.message : "Unknown error";
+      console.log("Session marked as error:", sessionId);
+    }
+  } finally {
+    client.release();
+  }
+}
+
+export async function handleGetRecentSummaries(req: Request, res: Response) {
+  try {
+    const { userId } = req.params;
+    const limit = parseInt(req.query.limit as string) || 10;
+
+    const client = await pool.connect();
+    try {
+      const result = await client.query(
+        `SELECT id, topic, content, key_insights, quotes, books_data, created_at
+         FROM summaries
+         WHERE user_id = $1
+         ORDER BY created_at DESC
+         LIMIT $2`,
+        [userId, limit],
+      );
+
+      const summaries = result.rows.map((row) => ({
+        id: row.id,
+        topic: row.topic,
+        summary: row.content,
+        keyInsights: JSON.parse(row.key_insights || "[]"),
+        quotes: JSON.parse(row.quotes || "[]"),
+        books: JSON.parse(row.books_data || "[]"),
+        generatedAt: row.created_at,
+        userId: parseInt(userId),
+      }));
+
+      res.json({ summaries });
+    } finally {
+      client.release();
+    }
+  } catch (error) {
+    console.error("Get summaries error:", error);
+    res.status(500).json({
+      error: "Failed to get summaries",
+      details: error instanceof Error ? error.message : "Unknown error",
+    });
+  }
+    const summaryData = {
+      topic,
+      books,
+      summary: aiResult.summary,
+      keyInsights: aiResult.keyInsights,
+      quotes: aiResult.quotes,
+      generatedAt: new Date().toISOString(),
+      userId,
+    };
+
+    console.log("About to insert data:", {
+      userId,
+      topic,
+      keyInsights: aiResult.keyInsights,
+      quotes: aiResult.quotes,
+      quotesType: typeof aiResult.quotes,
+    });
+
+    const insertResult = await client.query(
+      `INSERT INTO summaries (user_id, topic, content, key_insights, quotes, books_data, created_at) 
+       VALUES ($1, $2, $3, $4, $5, $6, CURRENT_TIMESTAMP) 
+       RETURNING id`,
+      [
+        userId,
+        topic,
+        aiResult.summary,
+        aiResult.keyInsights,
+        aiResult.quotes,
+        books,
+      ],
+    );
+
+    const summaryId = insertResult.rows[0].id;
+
+    // Update user query count
+    await client.query(
+      "UPDATE users SET queries_used = queries_used + 1 WHERE id = $1",
+      [userId],
+    );
+
+    updateProgress(100, "Generation complete!", 0);
+
+    // Store final result
+    const session = activeSessions.get(sessionId);
+    if (session) {
+      session.result = {
+        id: summaryId,
+        ...summaryData,
+      };
+
+      // Clean up session after 5 minutes
+      setTimeout(
+        () => {
+          activeSessions.delete(sessionId);
+        },
+        5 * 60 * 1000,
       );
     }
   } catch (error) {

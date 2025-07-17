@@ -18,6 +18,7 @@ import {
   Target,
 } from "lucide-react";
 import ChapterRating from "@/components/ChapterRating";
+import ResultsShareButton from "@/components/ResultsShareButton";
 
 interface ChapterMatch {
   chapter: string;
@@ -401,7 +402,7 @@ export default function Generate() {
               <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-3">
                 📖 Chapter Discovery Results for "{generatedSummary.topic}"
               </h2>
-              <p className="text-lg text-gray-600 dark:text-gray-400">
+              <p className="text-lg text-gray-600 dark:text-gray-400 mb-6">
                 Found{" "}
                 {
                   generatedSummary.books.flatMap(
@@ -410,6 +411,19 @@ export default function Generate() {
                 }{" "}
                 relevant chapters across {generatedSummary.books.length} books
               </p>
+
+              {/* Share Results Button */}
+              <div className="flex justify-center">
+                <ResultsShareButton
+                  topic={generatedSummary.topic}
+                  books={generatedSummary.books}
+                  totalChapters={
+                    generatedSummary.books.flatMap(
+                      (book) => book.relevantChapters || [],
+                    ).length
+                  }
+                />
+              </div>
             </div>
 
             {/* Chapter Results */}

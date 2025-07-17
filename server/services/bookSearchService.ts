@@ -267,9 +267,10 @@ export class BookSearchService {
     );
   }
 
-  private getFallbackBooks(topic: string): Book[] {
-    // High-quality curated books as fallback
-    const fallbackBooks = [
+  private getExpandedBookDatabase(): Book[] {
+    // Comprehensive database of books with detailed chapter information
+    // This includes books that may not be primarily about a topic but contain relevant chapters
+    const expandedDatabase = [
       {
         id: "fallback-1",
         title: "Good to Great",

@@ -203,9 +203,9 @@ async function generateAsync(
         userId,
         topic,
         aiResult.summary,
-        JSON.stringify(aiResult.keyInsights),
-        JSON.stringify(aiResult.quotes),
-        JSON.stringify(books),
+        aiResult.keyInsights,
+        aiResult.quotes,
+        books,
       ],
     );
 

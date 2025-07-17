@@ -5,11 +5,19 @@ import { aiService } from "../services/aiService";
 
 // Database connection (reuse from neon.ts)
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
+  connectionString:
+    process.env.DATABASE_URL || process.env.NETLIFY_DATABASE_URL,
   ssl: {
     rejectUnauthorized: false,
   },
 });
+
+console.log(
+  "Database URL status:",
+  process.env.DATABASE_URL || process.env.NETLIFY_DATABASE_URL
+    ? "Found"
+    : "Missing",
+);
 
 interface GenerateRequest {
   topic: string;

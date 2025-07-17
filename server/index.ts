@@ -80,6 +80,13 @@ export function createServer() {
           WHERE table_schema = 'public'
         `);
 
+        const summariesColumns = await client.query(`
+          SELECT column_name, data_type
+          FROM information_schema.columns
+          WHERE table_schema = 'public' AND table_name = 'summaries'
+          ORDER BY ordinal_position
+        `);
+
         const usersExist = await client.query(`
           SELECT COUNT(*) as count FROM information_schema.tables
           WHERE table_schema = 'public' AND table_name = 'users'

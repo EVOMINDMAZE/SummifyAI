@@ -32,7 +32,7 @@ export default function Navigation({ variant = "app" }: NavigationProps) {
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-black text-white font-bold">
               S
             </div>
-            <span className="text-xl font-bold text-black">SummifyAI</span>
+            <span className="text-xl font-bold text-black">SummifyIO</span>
           </Link>
 
           {/* Desktop Marketing Links */}

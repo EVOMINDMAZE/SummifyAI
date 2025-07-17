@@ -26,6 +26,16 @@ interface GoogleBook {
   };
 }
 
+interface ChapterMatch {
+  chapter: string;
+  title: string;
+  pages: string;
+  relevance: string;
+  relevanceScore: number;
+  keyTopics: string[];
+  why: string;
+}
+
 interface Book {
   id: string;
   title: string;
@@ -38,12 +48,8 @@ interface Book {
   pageCount?: number;
   categories?: string[];
   isbn?: string;
-  relevantChapters?: Array<{
-    chapter: string;
-    title: string;
-    pages: string;
-    relevance: string;
-  }>;
+  relevantChapters?: ChapterMatch[];
+  chapterRelevanceScore?: number; // Total relevance score for this book's chapters
 }
 
 export class BookSearchService {

@@ -125,7 +125,7 @@ export class BookSearchService {
       return books;
     } catch (error) {
       console.error("Error searching books:", error);
-      return this.getFallbackBooks(topic);
+      return this.getExpandedBookDatabase().slice(0, maxResults);
     }
   }
 

@@ -429,9 +429,20 @@ export default function Generate() {
                               alt={book.title}
                               className="w-full h-80 object-cover rounded-2xl shadow-lg group-hover:shadow-2xl transition-all duration-300 transform group-hover:scale-105"
                               onError={(e) => {
-                                e.currentTarget.src =
-                                  "https://via.placeholder.com/300x400.png?text=No+Cover";
+                                const target = e.currentTarget;
+                                // Try alternative Amazon image URL first
+                                if (!target.dataset.retried) {
+                                  target.dataset.retried = "true";
+                                  target.src = book.cover.replace(
+                                    "m.media-amazon.com",
+                                    "images-na.ssl-images-amazon.com",
+                                  );
+                                } else {
+                                  // Fallback to placeholder
+                                  target.src = `https://via.placeholder.com/300x400/4361EE/FFFFFF?text=${encodeURIComponent(book.title.split(" ").slice(0, 3).join(" "))}`;
+                                }
                               }}
+                              loading="lazy"
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 

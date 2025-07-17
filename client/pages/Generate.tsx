@@ -1022,7 +1022,14 @@ Sinek's "Leaders Eat Last" introduces the biological and anthropological foundat
                   your personalized analysis!
                 </p>
                 <div className="flex flex-col sm:flex-row justify-center gap-4">
-                  <button className="bg-white hover:bg-gray-100 text-[#0A0B1E] px-8 py-3 rounded-2xl font-bold transition-all shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center gap-2">
+                  <button
+                    onClick={() => {
+                      const text = `I found amazing chapters on ${generatedSummary.topic} using SummifyAI! ${window.location.href}`;
+                      const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
+                      window.open(twitterUrl, "_blank");
+                    }}
+                    className="bg-white hover:bg-gray-100 text-[#0A0B1E] px-8 py-3 rounded-2xl font-bold transition-all shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center gap-2"
+                  >
                     <svg
                       className="w-5 h-5"
                       fill="currentColor"
@@ -1032,7 +1039,14 @@ Sinek's "Leaders Eat Last" introduces the biological and anthropological foundat
                     </svg>
                     Share on Twitter
                   </button>
-                  <button className="bg-white hover:bg-gray-100 text-[#0A0B1E] px-8 py-3 rounded-2xl font-bold transition-all shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center gap-2">
+                  <button
+                    onClick={() => {
+                      const shareText = `I found amazing chapters on ${generatedSummary.topic} using SummifyAI! ${window.location.href}`;
+                      navigator.clipboard.writeText(shareText);
+                      alert("Link copied to clipboard!");
+                    }}
+                    className="bg-white hover:bg-gray-100 text-[#0A0B1E] px-8 py-3 rounded-2xl font-bold transition-all shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center gap-2"
+                  >
                     <svg
                       className="w-5 h-5"
                       fill="none"

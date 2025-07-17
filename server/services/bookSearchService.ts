@@ -1,5 +1,6 @@
 import fetch from "node-fetch";
 import dotenv from "dotenv";
+import { ChapterDiscoveryService } from "./chapterDatabase";
 
 // Ensure environment variables are loaded
 dotenv.config();

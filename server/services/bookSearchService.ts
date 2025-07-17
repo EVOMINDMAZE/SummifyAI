@@ -227,12 +227,17 @@ export class BookSearchService {
     smallThumbnail?: string;
   }): string {
     if (imageLinks?.thumbnail) {
-      return imageLinks.thumbnail.replace("http:", "https:");
+      // Use higher resolution by replacing zoom=1 with zoom=0 if present
+      return imageLinks.thumbnail
+        .replace("http:", "https:")
+        .replace("zoom=1", "zoom=0");
     }
     if (imageLinks?.smallThumbnail) {
-      return imageLinks.smallThumbnail.replace("http:", "https:");
+      return imageLinks.smallThumbnail
+        .replace("http:", "https:")
+        .replace("zoom=1", "zoom=0");
     }
-    return "https://via.placeholder.com/128x192.png?text=No+Cover";
+    return "https://via.placeholder.com/200x300.png?text=No+Cover";
   }
 
   private cleanDescription(description: string): string {

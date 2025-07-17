@@ -660,10 +660,10 @@ export default function Results() {
                   >
                     <div className="flex justify-between items-start mb-6">
                       <div>
-                        <h2 className="text-2xl font-bold text-[#0A0B1E] mb-2">
+                        <h2 className="text-2xl font-bold text-[#0A0B1E] dark:text-white mb-2">
                           {result.topic}
                         </h2>
-                        <p className="text-gray-600">
+                        <p className="text-gray-600 dark:text-gray-300">
                           Generated on{" "}
                           {new Date(result.searchDate).toLocaleDateString()}
                         </p>

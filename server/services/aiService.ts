@@ -245,7 +245,7 @@ The synthesis of these perspectives suggests that ${topic.toLowerCase()} is not 
       ],
 
       quotes: [
-        `"Excellence is not a skill, it's an attitude toward ${topic.toLowerCase()} and continuous improvement." - Inspired by ${books[0]?.author || "Great Thinkers"}`,
+        `"Excellence is not a skill, it is an attitude toward ${topic.toLowerCase()} and continuous improvement." - Inspired by ${books[0]?.author || "Great Thinkers"}`,
         `"The journey of ${topic.toLowerCase()} begins with a single step, but requires consistent daily actions to reach the destination." - Inspired by ${books[1]?.author || "Wise Leaders"}`,
         `"True mastery in ${topic.toLowerCase()} comes not from perfection, but from the willingness to learn and adapt continuously." - Inspired by ${books[2]?.author || "Expert Practitioners"}`,
       ],

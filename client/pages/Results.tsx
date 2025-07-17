@@ -490,10 +490,10 @@ export default function Results() {
         <div className="max-w-6xl mx-auto px-6">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-3xl font-bold text-[#0A0B1E] mb-2">
+              <h1 className="text-3xl font-bold text-[#0A0B1E] dark:text-white mb-2">
                 Your Search Results
               </h1>
-              <p className="text-gray-600">
+              <p className="text-gray-600 dark:text-gray-300">
                 View and manage your generated book summaries and insights
               </p>
             </div>

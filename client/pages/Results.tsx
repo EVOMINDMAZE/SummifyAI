@@ -501,7 +501,7 @@ export default function Results() {
               <div className="text-sm text-gray-500 mb-1">
                 Searches this month
               </div>
-              <div className="text-2xl font-bold text-[#0A0B1E]">
+              <div className="text-2xl font-bold text-[#0A0B1E] dark:text-white">
                 {user?.queriesUsed} /{" "}
                 {user?.tier === "premium" ? "∞" : user?.queriesLimit}
               </div>

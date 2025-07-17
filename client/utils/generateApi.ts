@@ -59,12 +59,13 @@ export class GenerateAPI {
       }),
     });
 
+    const data = await response.json();
+
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.message || "Failed to start generation");
+      throw new Error(data.message || "Failed to start generation");
     }
 
-    return response.json();
+    return data;
   }
 
   static async getProgress(

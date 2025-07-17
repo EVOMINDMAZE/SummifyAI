@@ -39,7 +39,10 @@ const AIChatDemo: React.FC<AIChatDemoProps> = ({
   };
 
   useEffect(() => {
-    scrollToBottom();
+    // Only scroll if there are messages and component is visible
+    if (messages.length > 0) {
+      scrollToBottom();
+    }
   }, [messages]);
 
   const addMessage = (

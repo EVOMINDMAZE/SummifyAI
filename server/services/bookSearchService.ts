@@ -340,7 +340,7 @@ export class BookSearchService {
         title: "Atomic Habits",
         author: "James Clear",
         cover:
-          "https://images-na.ssl-images-amazon.com/images/P/0735211299.01.L.jpg",
+          "https://m.media-amazon.com/images/I/51B7kuFwWeL._SX329_BO1,204,203,200_.jpg",
         description:
           "An easy and proven way to build good habits and break bad ones through small changes.",
         amazonLink: `https://amazon.com/dp/0735211299?tag=${this.amazonTag}`,
@@ -348,6 +348,26 @@ export class BookSearchService {
         publishedDate: "2018",
         pageCount: 320,
         categories: ["Self-Help", "Psychology"],
+        relevantChapters: [
+          {
+            chapter: "Chapter 2",
+            title: "How Your Habits Shape Your Identity",
+            pages: "29-43",
+            relevance: "Identity-based habit formation and mindset shifts",
+          },
+          {
+            chapter: "Chapter 12",
+            title: "The Law of Least Effort",
+            pages: "149-162",
+            relevance: "Environment design and reducing friction",
+          },
+          {
+            chapter: "Chapter 16",
+            title: "How to Stick with Good Habits",
+            pages: "193-208",
+            relevance: "Consistency strategies and habit stacking",
+          },
+        ],
       },
       {
         id: "fallback-4",

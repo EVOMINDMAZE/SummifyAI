@@ -115,7 +115,9 @@ export class GenerateAPI {
         attempts++;
 
         if (attempts > maxAttempts) {
-          onError("Generation timeout - please try again");
+          onError(
+            "Generation timeout. This might be due to high server load. Please try again in a few moments.",
+          );
           return;
         }
 

@@ -138,7 +138,18 @@ export class GenerateAPI {
         setTimeout(poll, 1000);
       } catch (error) {
         console.error("Polling error:", error);
-        setTimeout(poll, 2000); // Retry with longer delay
+
+        // If too many attempts, give up
+        if (attempts > maxAttempts) {
+          onError(
+            "Connection error. Please check your internet connection and try again.",
+          );
+          return;
+        }
+
+        // Retry with exponential backoff
+        const delay = Math.min(2000 + attempts * 100, 5000);
+        setTimeout(poll, delay);
       }
     };
 

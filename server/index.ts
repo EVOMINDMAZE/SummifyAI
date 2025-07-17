@@ -42,6 +42,26 @@ export function createServer() {
     res.json({ message: "Hello from Express server v2!" });
   });
 
+  // Debug endpoint to check API key status
+  app.get("/api/debug/keys", (_req, res) => {
+    res.json({
+      openai: process.env.OPENAI_API_KEY
+        ? process.env.OPENAI_API_KEY.includes("demo")
+          ? "demo"
+          : "real"
+        : "missing",
+      googleBooks: process.env.GOOGLE_BOOKS_API_KEY
+        ? process.env.GOOGLE_BOOKS_API_KEY.includes("demo")
+          ? "demo"
+          : "real"
+        : "missing",
+      database:
+        process.env.DATABASE_URL || process.env.NETLIFY_DATABASE_URL
+          ? "configured"
+          : "missing",
+    });
+  });
+
   app.get("/api/demo", handleDemo);
 
   // Neon database routes

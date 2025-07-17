@@ -764,7 +764,7 @@ Sinek's "Leaders Eat Last" introduces the biological and anthropological foundat
                         alt={book.title}
                         className="w-full h-48 object-cover rounded-2xl shadow-lg group-hover:shadow-2xl transition-all transform group-hover:scale-105"
                       />
-                      {book.commission >= 8.5 && (
+                      {book.rating >= 4.5 && (
                         <div className="absolute -top-2 -right-2 bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs px-3 py-1 rounded-full font-bold animate-pulse">
                           🔥 Bestseller
                         </div>

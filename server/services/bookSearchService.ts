@@ -27,7 +27,7 @@ interface GoogleBook {
   };
 }
 
-interface ChapterMatch {
+export interface ChapterMatch {
   chapter: string;
   title: string;
   pages: string;
@@ -37,7 +37,7 @@ interface ChapterMatch {
   why: string;
 }
 
-interface Book {
+export interface Book {
   id: string;
   title: string;
   author: string;
@@ -231,7 +231,7 @@ export class BookSearchService {
 
     // If we don't have enough quality books, fill with fallback
     if (processedBooks.length < maxResults) {
-      const fallbackBooks = this.getFallbackBooks("").slice(
+      const fallbackBooks = this.getExpandedBookDatabase().slice(
         0,
         maxResults - processedBooks.length,
       );

@@ -776,9 +776,15 @@ Sinek's "Leaders Eat Last" introduces the biological and anthropological foundat
                     <h3 className="font-bold text-sm text-gray-900 dark:text-white mb-2 line-clamp-2">
                       {book.title}
                     </h3>
-                    <p className="text-xs text-gray-600 dark:text-gray-400 mb-4">
+                    <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">
                       by {book.author}
                     </p>
+                    {book.relevantChapters && (
+                      <div className="text-xs text-purple-600 dark:text-purple-400 mb-2 font-medium">
+                        📖 {book.relevantChapters.length} relevant chapters
+                        found
+                      </div>
+                    )}
                     <div className="space-y-2">
                       <a
                         href={book.amazonLink}

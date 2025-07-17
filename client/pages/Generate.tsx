@@ -768,7 +768,7 @@ Sinek's "Leaders Eat Last" introduces the biological and anthropological foundat
                 </p>
               </div>
 
-                              {generatedSummary.books.map((book, bookIndex) =>
+                                              {generatedSummary.books.flatMap((book, bookIndex) =>
                   book.relevantChapters?.map((chapter, chapterIndex) => (
                     <div key={`${book.id}-${chapterIndex}`} className="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-600 rounded-2xl p-6 border-l-4 border-purple-500">
                       {/* Chapter Header */}

@@ -20,6 +20,7 @@ import {
   handleGenerateProgress,
   handleGetRecentSummaries,
 } from "./routes/generate";
+import { handleTopicAnalysis } from "./routes/topicAnalysis";
 
 export function createServer() {
   const app = express();
@@ -169,6 +170,9 @@ export function createServer() {
   app.post("/api/generate/start", handleGenerateStart);
   app.get("/api/generate/progress/:sessionId", handleGenerateProgress);
   app.get("/api/users/:userId/recent-summaries", handleGetRecentSummaries);
+
+  // Topic analysis route
+  app.post("/api/topic/analyze", handleTopicAnalysis);
 
   return app;
 }

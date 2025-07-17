@@ -1,4 +1,8 @@
 import fetch from "node-fetch";
+import dotenv from "dotenv";
+
+// Ensure environment variables are loaded
+dotenv.config();
 
 interface GoogleBook {
   id: string;

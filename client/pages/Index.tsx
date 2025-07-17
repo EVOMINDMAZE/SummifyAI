@@ -1030,6 +1030,7 @@ export default function Index() {
                     title="Chapter Insights"
                     subtitle="See how precise chapter analysis and insights are generated instantly"
                     demoType="generate"
+                    disableAutoScroll={true}
                     initialMessages={[
                       {
                         id: "1",

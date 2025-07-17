@@ -217,7 +217,7 @@ export default function Navigation({ variant = "app" }: NavigationProps) {
               S
             </div>
             <span className="text-xl font-bold text-gray-900 dark:text-white">
-              SummifyAI
+              SummifyIO
             </span>
           </Link>
 

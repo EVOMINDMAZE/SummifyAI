@@ -4,6 +4,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { createRoot } from "react-dom/client";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
@@ -33,44 +34,55 @@ import NotFound from "./pages/NotFound";
 const queryClient = new QueryClient();
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider delayDuration={0}>
-      <Toaster />
-      <Sonner />
-      <ThemeProvider>
-        <AuthProvider>
-          <CollaborationProvider>
-            <BrowserRouter>
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/signin" element={<SignIn />} />
-                <Route path="/signup" element={<SignUp />} />
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/generate" element={<Generate />} />
-                <Route path="/pricing" element={<Pricing />} />
-                <Route path="/admin" element={<Admin />} />
-                <Route path="/how-it-works" element={<HowItWorks />} />
-                <Route path="/insights-demo" element={<InsightsDemo />} />
-                <Route path="/results" element={<Results />} />
-                <Route path="/results/:id" element={<Results />} />
-                <Route path="/account-settings" element={<AccountSettings />} />
-                <Route path="/summary-showcase" element={<SummaryShowcase />} />
-                <Route path="/library-showcase" element={<LibraryShowcase />} />
-                <Route path="/search-demo" element={<SearchDemo />} />
-                <Route path="/analysis-demo" element={<AnalysisDemo />} />
-                <Route path="/settings" element={<Settings />} />
-                <Route path="/support" element={<Support />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/help" element={<Help />} />
-                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </BrowserRouter>
-          </CollaborationProvider>
-        </AuthProvider>
-      </ThemeProvider>
-    </TooltipProvider>
-  </QueryClientProvider>
+  <ErrorBoundary>
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider delayDuration={0}>
+        <Toaster />
+        <Sonner />
+        <ThemeProvider>
+          <AuthProvider>
+            <CollaborationProvider>
+              <BrowserRouter>
+                <Routes>
+                  <Route path="/" element={<Index />} />
+                  <Route path="/signin" element={<SignIn />} />
+                  <Route path="/signup" element={<SignUp />} />
+                  <Route path="/dashboard" element={<Dashboard />} />
+                  <Route path="/generate" element={<Generate />} />
+                  <Route path="/pricing" element={<Pricing />} />
+                  <Route path="/admin" element={<Admin />} />
+                  <Route path="/how-it-works" element={<HowItWorks />} />
+                  <Route path="/insights-demo" element={<InsightsDemo />} />
+                  <Route path="/results" element={<Results />} />
+                  <Route path="/results/:id" element={<Results />} />
+                  <Route
+                    path="/account-settings"
+                    element={<AccountSettings />}
+                  />
+                  <Route
+                    path="/summary-showcase"
+                    element={<SummaryShowcase />}
+                  />
+                  <Route
+                    path="/library-showcase"
+                    element={<LibraryShowcase />}
+                  />
+                  <Route path="/search-demo" element={<SearchDemo />} />
+                  <Route path="/analysis-demo" element={<AnalysisDemo />} />
+                  <Route path="/settings" element={<Settings />} />
+                  <Route path="/support" element={<Support />} />
+                  <Route path="/contact" element={<Contact />} />
+                  <Route path="/help" element={<Help />} />
+                  {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </BrowserRouter>
+            </CollaborationProvider>
+          </AuthProvider>
+        </ThemeProvider>
+      </TooltipProvider>
+    </QueryClientProvider>
+  </ErrorBoundary>
 );
 
 createRoot(document.getElementById("root")!).render(<App />);

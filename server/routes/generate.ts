@@ -195,6 +195,14 @@ async function generateAsync(
       userId,
     };
 
+    console.log("About to insert data:", {
+      userId,
+      topic,
+      keyInsights: aiResult.keyInsights,
+      quotes: aiResult.quotes,
+      quotesType: typeof aiResult.quotes,
+    });
+
     const insertResult = await client.query(
       `INSERT INTO summaries (user_id, topic, content, key_insights, quotes, books_data, created_at) 
        VALUES ($1, $2, $3, $4, $5, $6, CURRENT_TIMESTAMP) 

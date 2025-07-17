@@ -38,6 +38,12 @@ interface Book {
   pageCount?: number;
   categories?: string[];
   isbn?: string;
+  relevantChapters?: Array<{
+    chapter: string;
+    title: string;
+    pages: string;
+    relevance: string;
+  }>;
 }
 
 export class BookSearchService {

@@ -236,12 +236,19 @@ async function generateAsync(
       );
     }
   } catch (error) {
-    console.error("Generation error:", error);
+    console.error("Generation error for session", sessionId, ":", error);
+    console.error("Error details:", {
+      message: error instanceof Error ? error.message : "Unknown error",
+      stack: error instanceof Error ? error.stack : undefined,
+      userId,
+      topic,
+    });
 
     const session = activeSessions.get(sessionId);
     if (session) {
       session.status = "error";
       session.error = error instanceof Error ? error.message : "Unknown error";
+      console.log("Session marked as error:", sessionId);
     }
   } finally {
     client.release();

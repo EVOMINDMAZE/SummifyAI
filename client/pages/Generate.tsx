@@ -132,7 +132,7 @@ export default function Generate() {
       return;
     }
 
-    const content = `SummifyAI Chapter Discovery Report
+    const content = `SummifyIO Chapter Discovery Report
 Topic: ${generatedSummary.topic}
 Generated: ${new Date().toLocaleDateString()}
 User: ${user?.email || "Guest"}

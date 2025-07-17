@@ -209,11 +209,68 @@ async function generateAsync(
         },
         5 * 60 * 1000,
       );
-    }
+        }
 
     return; // Skip database save for now
 
-    // Step 3: Save to database (temporarily disabled)
+  } catch (error) {
+    console.error("Generation error for session", sessionId, ":", error);
+    console.error("Error details:", {
+      message: error instanceof Error ? error.message : "Unknown error",
+      stack: error instanceof Error ? error.stack : undefined,
+      userId,
+      topic
+    });
+
+    const session = activeSessions.get(sessionId);
+    if (session) {
+      session.status = "error";
+      session.error = error instanceof Error ? error.message : "Unknown error";
+      console.log("Session marked as error:", sessionId);
+    }
+  } finally {
+    client.release();
+  }
+}
+
+export async function handleGetRecentSummaries(req: Request, res: Response) {
+  try {
+    const { userId } = req.params;
+    const limit = parseInt(req.query.limit as string) || 10;
+
+    const client = await pool.connect();
+    try {
+      const result = await client.query(
+        `SELECT id, topic, content, key_insights, quotes, books_data, created_at
+         FROM summaries
+         WHERE user_id = $1
+         ORDER BY created_at DESC
+         LIMIT $2`,
+        [userId, limit],
+      );
+
+      const summaries = result.rows.map((row) => ({
+        id: row.id,
+        topic: row.topic,
+        summary: row.content,
+        keyInsights: JSON.parse(row.key_insights || "[]"),
+        quotes: JSON.parse(row.quotes || "[]"),
+        books: JSON.parse(row.books_data || "[]"),
+        generatedAt: row.created_at,
+        userId: parseInt(userId),
+      }));
+
+      res.json({ summaries });
+    } finally {
+      client.release();
+    }
+  } catch (error) {
+    console.error("Get summaries error:", error);
+    res.status(500).json({
+      error: "Failed to get summaries",
+      details: error instanceof Error ? error.message : "Unknown error",
+    });
+  }
     const summaryData = {
       topic,
       books,

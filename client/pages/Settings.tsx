@@ -432,7 +432,6 @@ export default function Settings() {
               { id: "privacy", name: "Privacy", icon: "🔒" },
               { id: "security", name: "Security", icon: "🛡️" },
               { id: "team", name: "Team", icon: "👥" },
-              { id: "advanced", name: "Advanced", icon: "🔧" },
             ].map((tab) => (
               <button
                 key={tab.id}

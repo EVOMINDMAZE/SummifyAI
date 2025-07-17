@@ -614,12 +614,59 @@ export default function Generate() {
                     <BookOpen className="w-6 h-6 mr-3 text-indigo-600" />
                     AI-Generated Summary
                   </h3>
-                  <div
-                    className="prose prose-gray dark:prose-invert max-w-none text-gray-700 dark:text-gray-300"
-                    dangerouslySetInnerHTML={{
-                      __html: generatedSummary.summary.replace(/\n/g, "<br/>"),
-                    }}
-                  />
+                  <div className="ai-summary-content text-gray-700 dark:text-gray-300">
+                    {generatedSummary.summary.split("\n").map((line, index) => {
+                      // Handle markdown headings
+                      if (line.startsWith("## ")) {
+                        return (
+                          <h4
+                            key={index}
+                            className="text-lg font-bold text-gray-900 dark:text-white mb-3 mt-6 first:mt-0"
+                          >
+                            {line.replace("## ", "")}
+                          </h4>
+                        );
+                      }
+                      // Handle bullet points
+                      if (line.startsWith("• ")) {
+                        const content = line.replace("• ", "");
+                        const [boldPart, ...rest] = content.split(": ");
+                        return (
+                          <div
+                            key={index}
+                            className="flex items-start mb-2 ml-4"
+                          >
+                            <span className="text-indigo-600 dark:text-indigo-400 mr-2 mt-1">
+                              •
+                            </span>
+                            <span>
+                              {rest.length > 0 ? (
+                                <>
+                                  <strong className="text-gray-900 dark:text-white">
+                                    {boldPart}:
+                                  </strong>
+                                  <span className="ml-1">
+                                    {rest.join(": ")}
+                                  </span>
+                                </>
+                              ) : (
+                                content
+                              )}
+                            </span>
+                          </div>
+                        );
+                      }
+                      // Handle regular paragraphs
+                      if (line.trim()) {
+                        return (
+                          <p key={index} className="mb-4 leading-relaxed">
+                            {line}
+                          </p>
+                        );
+                      }
+                      return null;
+                    })}
+                  </div>
                 </CardContent>
               </Card>
             )}

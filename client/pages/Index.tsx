@@ -941,6 +941,7 @@ export default function Index() {
                     title="Chapter Analysis"
                     subtitle="See how our AI explains why each chapter is relevant to your query"
                     demoType="analyze"
+                    disableAutoScroll={true}
                     initialMessages={[
                       {
                         id: "1",

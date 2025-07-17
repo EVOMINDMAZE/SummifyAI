@@ -768,72 +768,77 @@ Sinek's "Leaders Eat Last" introduces the biological and anthropological foundat
                 </p>
               </div>
 
-              <div className="space-y-6">
-                {generatedSummary.books.map((book, index) => (
-                  <div key={book.id} className="text-center group relative">
-                    <div className="relative mb-4">
-                      <img
-                        src={book.cover}
-                        alt={book.title}
-                        className="w-full h-48 object-cover rounded-2xl shadow-lg group-hover:shadow-2xl transition-all transform group-hover:scale-105"
-                      />
-                      {book.rating >= 4.5 && (
-                        <div className="absolute -top-2 -right-2 bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs px-3 py-1 rounded-full font-bold animate-pulse">
-                          🔥 Bestseller
+                              {generatedSummary.books.map((book, bookIndex) =>
+                  book.relevantChapters?.map((chapter, chapterIndex) => (
+                    <div key={`${book.id}-${chapterIndex}`} className="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-600 rounded-2xl p-6 border-l-4 border-purple-500">
+                      {/* Chapter Header */}
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-3 mb-2">
+                            <div className="bg-purple-500 text-white px-3 py-1 rounded-full text-sm font-bold">
+                              {chapter.chapter}
+                            </div>
+                            <div className="bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 px-2 py-1 rounded text-xs font-medium">
+                              Pages {chapter.pages}
+                            </div>
+                            <div className="bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 px-2 py-1 rounded text-xs font-medium">
+                              {chapter.relevanceScore || 95}% match
+                            </div>
+                          </div>
+                          <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+                            {chapter.title}
+                          </h3>
+                          <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed mb-3">
+                            <span className="font-semibold text-purple-600 dark:text-purple-400">Why this chapter matters for "{generatedSummary.topic}":</span><br />
+                            {chapter.why || chapter.relevance}
+                          </p>
+                          {chapter.keyTopics && (
+                            <div className="flex flex-wrap gap-2 mb-3">
+                              {chapter.keyTopics.slice(0, 4).map((topic, topicIndex) => (
+                                <span key={topicIndex} className="bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 px-2 py-1 rounded-full text-xs">
+                                  {topic}
+                                </span>
+                              ))}
+                            </div>
+                          )}
                         </div>
-                      )}
-                      <div className="absolute -bottom-2 -left-2 w-8 h-8 bg-gradient-to-r from-[#4361EE] to-[#7B2CBF] rounded-full flex items-center justify-center text-white font-bold text-sm">
-                        {index + 1}
-                      </div>
-                    </div>
-                    <h3 className="font-bold text-sm text-gray-900 dark:text-white mb-2 line-clamp-2">
-                      {book.title}
-                    </h3>
-                    <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">
-                      by {book.author}
-                    </p>
-                    {book.relevantChapters && (
-                      <div className="text-xs text-purple-600 dark:text-purple-400 mb-2 font-medium">
-                        📖 {book.relevantChapters.length} relevant chapters
-                        found
-                      </div>
-                    )}
-                    <div className="space-y-2">
-                      <a
-                        href={book.amazonLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-block bg-gradient-to-r from-[#FFFD63] to-[#FFE066] hover:from-[#FFE066] hover:to-[#FFFD63] text-[#0A0B1E] text-xs px-4 py-2 rounded-xl font-bold transition-all shadow-lg hover:shadow-xl transform hover:scale-105 w-full text-center"
-                      >
-                        Buy on Amazon
-                      </a>
-                      {currentSession && (
-                        <button
-                          onClick={() => shareBook(book)}
-                          className="w-full bg-blue-500 hover:bg-blue-600 text-white text-xs px-4 py-2 rounded-xl font-medium transition-all shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center gap-1"
-                        >
-                          <svg
-                            className="w-3 h-3"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
+
+                        {/* Book Info */}
+                        <div className="ml-6 text-center">
+                          <img
+                            src={book.cover}
+                            alt={book.title}
+                            className="w-20 h-30 object-cover rounded-lg shadow-lg mb-2"
+                          />
+                          <p className="text-xs font-semibold text-gray-900 dark:text-white line-clamp-2 mb-1">
+                            {book.title}
+                          </p>
+                          <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">
+                            by {book.author}
+                          </p>
+                          <a
+                            href={book.amazonLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-block bg-[#FFFD63] hover:bg-[#FFE066] text-[#0A0B1E] text-xs px-3 py-1 rounded-lg font-bold transition-all shadow-sm hover:shadow-md transform hover:scale-105"
                           >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"
-                            />
-                          </svg>
-                          Share
+                            Get Book
+                          </a>
+                        </div>
+                      </div>
+
+                      {/* Quick Action */}
+                      <div className="flex items-center justify-between bg-white dark:bg-gray-800 rounded-xl p-3 mt-4">
+                        <div className="text-sm text-gray-600 dark:text-gray-400">
+                          💡 <span className="font-medium">Quick tip:</span> Read this chapter to understand {chapter.keyTopics?.[0] || 'the core concepts'}
+                        </div>
+                        <button className="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                          Save Chapter
                         </button>
-                      )}
+                      </div>
                     </div>
-                    <p className="text-xs text-blue-600 dark:text-blue-400 mt-2 font-medium">
-                      ⭐ {book.rating}/5.0 rating
-                    </p>
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
             </div>
 

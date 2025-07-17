@@ -62,6 +62,37 @@ export function createServer() {
     });
   });
 
+  // Fix database schema endpoint
+  app.post("/api/debug/fix-schema", async (_req, res) => {
+    try {
+      const { Pool } = await import("pg");
+      const pool = new Pool({
+        connectionString:
+          process.env.DATABASE_URL || process.env.NETLIFY_DATABASE_URL,
+        ssl: { rejectUnauthorized: false },
+      });
+
+      const client = await pool.connect();
+      try {
+        // Add missing columns if they don't exist
+        await client.query(`
+          ALTER TABLE summaries
+          ADD COLUMN IF NOT EXISTS key_insights JSONB DEFAULT '[]',
+          ADD COLUMN IF NOT EXISTS quotes JSONB DEFAULT '[]',
+          ADD COLUMN IF NOT EXISTS books_data JSONB DEFAULT '[]'
+        `);
+
+        res.json({ message: "Schema updated successfully" });
+      } finally {
+        client.release();
+      }
+    } catch (error) {
+      res.status(500).json({
+        error: error instanceof Error ? error.message : "Schema fix failed",
+      });
+    }
+  });
+
   // Debug endpoint to check database tables
   app.get("/api/debug/tables", async (_req, res) => {
     try {

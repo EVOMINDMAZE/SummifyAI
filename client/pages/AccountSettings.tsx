@@ -57,7 +57,7 @@ export default function AccountSettings() {
                 <span className="text-[#0A0B1E] font-bold text-lg">S</span>
               </div>
               <span className="text-xl font-bold text-[#0A0B1E]">
-                SummifyAI
+                SummifyIO
               </span>
             </Link>
             <div className="flex items-center gap-4">
@@ -276,7 +276,7 @@ export default function AccountSettings() {
                     </h3>
                     <p className="text-[#0A0B1E] opacity-80">
                       {user?.tier === "premium"
-                        ? "$9.99/month • Unlimited summaries"
+                        ? "$9.99/month ��� Unlimited summaries"
                         : "3 summaries per month"}
                     </p>
                   </div>

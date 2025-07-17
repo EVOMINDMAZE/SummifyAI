@@ -360,6 +360,9 @@ export class BookSearchService {
             pages: "41-64",
             relevance:
               "Core principles of building effective teams and leadership structures",
+            relevanceScore: 85,
+            keyTopics: ["leadership", "team building", "management"],
+            why: "Essential framework for building effective teams and leadership structures",
           },
           {
             chapter: "Chapter 5",
@@ -367,6 +370,9 @@ export class BookSearchService {
             pages: "90-119",
             relevance:
               "Framework for strategic focus and competitive advantage",
+            relevanceScore: 88,
+            keyTopics: ["strategy", "focus", "competitive advantage"],
+            why: "Framework for strategic clarity and focused execution",
           },
           {
             chapter: "Chapter 7",
@@ -374,6 +380,9 @@ export class BookSearchService {
             pages: "152-178",
             relevance:
               "How technology supports but doesn't drive transformation",
+            relevanceScore: 75,
+            keyTopics: ["technology", "transformation", "innovation"],
+            why: "Understanding how technology supports but doesn't drive transformation",
           },
         ],
       },

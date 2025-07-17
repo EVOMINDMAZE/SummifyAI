@@ -19,6 +19,9 @@ import {
 } from "lucide-react";
 import ChapterRating from "@/components/ChapterRating";
 import ResultsShareButton from "@/components/ResultsShareButton";
+import SearchFilters, {
+  SearchFilters as ISearchFilters,
+} from "@/components/SearchFilters";
 
 interface ChapterMatch {
   chapter: string;
@@ -92,6 +95,16 @@ export default function Generate() {
     [],
   );
   const [isAnalyzing, setIsAnalyzing] = useState(false);
+
+  // Search filters
+  const [showFilters, setShowFilters] = useState(false);
+  const [searchFilters, setSearchFilters] = useState<ISearchFilters>({
+    publicationYearRange: [1990, new Date().getFullYear()],
+    difficultyLevel: "any",
+    industryFocus: [],
+    bookCategories: [],
+    minRating: 0,
+  });
 
   // Redirect if not authenticated
   if (!user) {
@@ -279,28 +292,39 @@ export default function Generate() {
                   />
                 </div>
 
-                <Button
-                  onClick={handleGenerate}
-                  disabled={!topic.trim() || isGenerating || isAnalyzing}
-                  className="w-full py-4 text-lg font-semibold bg-gradient-to-r from-[#4361EE] to-[#7B2CBF] hover:from-[#3B4DE8] hover:to-[#6B1DAF] text-white rounded-xl transition-all shadow-lg hover:shadow-xl transform hover:scale-105 disabled:transform-none disabled:opacity-50"
-                >
-                  {isAnalyzing ? (
-                    <div className="flex items-center">
-                      <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white mr-3"></div>
-                      Analyzing Topic...
-                    </div>
-                  ) : isGenerating ? (
-                    <div className="flex items-center">
-                      <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white mr-3"></div>
-                      Discovering Chapters...
-                    </div>
-                  ) : (
-                    <>
-                      <BookOpen className="w-6 h-6 mr-2" />
-                      Discover Relevant Chapters
-                    </>
-                  )}
-                </Button>
+                <div className="flex space-x-3">
+                  <div className="flex-1">
+                    <Button
+                      onClick={handleGenerate}
+                      disabled={!topic.trim() || isGenerating || isAnalyzing}
+                      className="w-full py-4 text-lg font-semibold bg-gradient-to-r from-[#4361EE] to-[#7B2CBF] hover:from-[#3B4DE8] hover:to-[#6B1DAF] text-white rounded-xl transition-all shadow-lg hover:shadow-xl transform hover:scale-105 disabled:transform-none disabled:opacity-50"
+                    >
+                      {isAnalyzing ? (
+                        <div className="flex items-center">
+                          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white mr-3"></div>
+                          Analyzing Topic...
+                        </div>
+                      ) : isGenerating ? (
+                        <div className="flex items-center">
+                          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white mr-3"></div>
+                          Discovering Chapters...
+                        </div>
+                      ) : (
+                        <>
+                          <BookOpen className="w-6 h-6 mr-2" />
+                          Discover Relevant Chapters
+                        </>
+                      )}
+                    </Button>
+                  </div>
+
+                  <SearchFilters
+                    filters={searchFilters}
+                    onFiltersChange={setSearchFilters}
+                    isVisible={showFilters}
+                    onToggleVisibility={() => setShowFilters(!showFilters)}
+                  />
+                </div>
 
                 {isGenerating && (
                   <div className="mt-6">

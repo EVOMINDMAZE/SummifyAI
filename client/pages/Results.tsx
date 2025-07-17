@@ -779,7 +779,9 @@ export default function Results() {
                                 {index + 1}
                               </span>
                             </div>
-                            <span className="text-gray-700">{insight}</span>
+                            <span className="text-gray-700 dark:text-gray-200">
+                              {insight}
+                            </span>
                           </li>
                         ))}
                       </ul>

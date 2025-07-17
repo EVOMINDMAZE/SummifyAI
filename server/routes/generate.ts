@@ -208,8 +208,8 @@ async function generateAsync(
           activeSessions.delete(sessionId);
         },
         5 * 60 * 1000,
-      );
-        }
+            );
+    }
 
     return; // Skip database save for now
 

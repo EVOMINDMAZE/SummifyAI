@@ -713,14 +713,14 @@ export default function Results() {
 
                     {/* Books Found */}
                     <div className="mb-6">
-                      <h3 className="text-lg font-semibold text-[#0A0B1E] mb-4">
+                      <h3 className="text-lg font-semibold text-[#0A0B1E] dark:text-white mb-4">
                         Books Found ({result.books.length})
                       </h3>
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         {result.books.map((book, index) => (
                           <div
                             key={index}
-                            className="flex gap-3 p-4 bg-gray-50 rounded-lg"
+                            className="flex gap-3 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg"
                           >
                             <img
                               src={book.image}

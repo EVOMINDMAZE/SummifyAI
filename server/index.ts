@@ -74,20 +74,19 @@ export function createServer() {
 
       const client = await pool.connect();
       try {
-        // Add missing columns if they don't exist and fix types
+        // Drop existing columns with wrong types and recreate with correct types
         await client.query(`
           ALTER TABLE summaries
-          ADD COLUMN IF NOT EXISTS key_insights JSONB DEFAULT '[]',
-          ADD COLUMN IF NOT EXISTS quotes JSONB DEFAULT '[]',
-          ADD COLUMN IF NOT EXISTS books_data JSONB DEFAULT '[]'
+          DROP COLUMN IF EXISTS key_insights,
+          DROP COLUMN IF EXISTS quotes,
+          DROP COLUMN IF EXISTS books_data
         `);
 
-        // Fix column types if they exist but are wrong type
         await client.query(`
           ALTER TABLE summaries
-          ALTER COLUMN key_insights TYPE JSONB USING key_insights::JSONB,
-          ALTER COLUMN quotes TYPE JSONB USING quotes::JSONB,
-          ALTER COLUMN books_data TYPE JSONB USING books_data::JSONB
+          ADD COLUMN key_insights JSONB DEFAULT '[]',
+          ADD COLUMN quotes JSONB DEFAULT '[]',
+          ADD COLUMN books_data JSONB DEFAULT '[]'
         `);
 
         res.json({ message: "Schema updated successfully" });

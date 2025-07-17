@@ -25,7 +25,7 @@ export class AIService {
 
   constructor() {
     const apiKey = process.env.OPENAI_API_KEY;
-    this.model = process.env.OPENAI_MODEL || "gpt-4";
+    this.model = process.env.OPENAI_MODEL || "gpt-4o-mini";
 
     console.log(
       "OpenAI API Key status:",

@@ -78,7 +78,7 @@ export class BookSearchService {
     }
   }
 
-  async searchBooks(topic: string, maxResults: number = 5): Promise<Book[]> {
+  async searchBooks(topic: string, maxResults: number = 10): Promise<Book[]> {
     try {
       console.log(`Starting chapter-centric search for: "${topic}"`);
 

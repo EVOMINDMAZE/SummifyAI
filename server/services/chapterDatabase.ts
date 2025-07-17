@@ -598,7 +598,7 @@ export const CHAPTER_DATABASE: Book[] = [
 
 // Chapter discovery algorithm
 export class ChapterDiscoveryService {
-  static findRelevantChapters(query: string, maxResults: number = 5): Book[] {
+  static findRelevantChapters(query: string, maxResults: number = 10): Book[] {
     const queryTerms = this.extractKeyTerms(query.toLowerCase());
     const scoredBooks: Array<Book & { totalScore: number }> = [];
 
@@ -636,10 +636,36 @@ export class ChapterDiscoveryService {
     }
 
     // Sort by total relevance score and return top results
-    return scoredBooks
-      .sort((a, b) => b.totalScore - a.totalScore)
-      .slice(0, maxResults)
-      .map(({ totalScore, ...book }) => book);
+    // Collect all chapters from all books and sort by individual chapter relevance
+    const allChapters: Array<{ book: Book; chapter: ChapterMatch }> = [];
+
+    for (const book of scoredBooks) {
+      if (book.relevantChapters) {
+        for (const chapter of book.relevantChapters) {
+          allChapters.push({ book, chapter });
+        }
+      }
+    }
+
+    // Sort all chapters by relevance score and take top 10
+    const topChapters = allChapters
+      .sort((a, b) => b.chapter.relevanceScore - a.chapter.relevanceScore)
+      .slice(0, maxResults);
+
+    // Group chapters back by book
+    const bookMap = new Map<
+      string,
+      Book & { relevantChapters: ChapterMatch[] }
+    >();
+
+    for (const { book, chapter } of topChapters) {
+      if (!bookMap.has(book.id)) {
+        bookMap.set(book.id, { ...book, relevantChapters: [] });
+      }
+      bookMap.get(book.id)!.relevantChapters.push(chapter);
+    }
+
+    return Array.from(bookMap.values());
   }
 
   private static extractKeyTerms(query: string): string[] {

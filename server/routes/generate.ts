@@ -46,7 +46,7 @@ const activeSessions = new Map<string, any>();
 
 export async function handleGenerateStart(req: Request, res: Response) {
   try {
-    const { topic, userId, maxBooks = 5 }: GenerateRequest = req.body;
+    const { topic, userId, maxBooks = 10 }: GenerateRequest = req.body;
 
     console.log("Generate request:", { topic, userId, maxBooks });
 

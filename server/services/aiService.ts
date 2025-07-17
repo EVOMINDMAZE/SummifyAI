@@ -53,8 +53,19 @@ export class AIService {
     onProgress?: (progress: number, operation: string) => void,
   ): Promise<GeneratedSummary> {
     try {
-      // If no OpenAI API key, return fallback content
+      // If no OpenAI API key, simulate the process with fallback content
       if (!this.openai) {
+        if (onProgress) onProgress(10, "Analyzing books and topic...");
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+
+        if (onProgress) onProgress(60, "Extracting key insights...");
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+
+        if (onProgress) onProgress(80, "Finding relevant quotes...");
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+
+        if (onProgress) onProgress(100, "Finalizing summary...");
+
         return this.getFallbackSummary(topic, books);
       }
 

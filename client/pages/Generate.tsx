@@ -1010,16 +1010,16 @@ Sinek's "Leaders Eat Last" introduces the biological and anthropological foundat
               </div>
             </div>
 
-            {/* Viral Loop */}
+            {/* Share Section */}
             <div className="bg-gradient-to-r from-[#FFFD63] via-yellow-400 to-orange-400 rounded-3xl p-8 text-center relative overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-white/20 rounded-full -translate-y-16 translate-x-16"></div>
               <div className="relative z-10">
                 <h3 className="text-2xl font-bold text-[#0A0B1E] mb-4">
-                  🚀 Love this summary? Share it and earn!
+                  🚀 Love this chapter analysis? Share it!
                 </h3>
                 <p className="text-[#0A0B1E]/80 mb-6 text-lg">
-                  When friends sign up through your link, you both get +1 free
-                  summary and you earn commissions on their book purchases!
+                  Help others discover exactly which chapters to read by sharing
+                  your personalized analysis!
                 </p>
                 <div className="flex flex-col sm:flex-row justify-center gap-4">
                   <button className="bg-white hover:bg-gray-100 text-[#0A0B1E] px-8 py-3 rounded-2xl font-bold transition-all shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center justify-center gap-2">

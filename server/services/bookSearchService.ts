@@ -336,10 +336,9 @@ export class BookSearchService {
     );
   }
 
-  private getExpandedBookDatabase(): Book[] {
-    // Comprehensive database of books with detailed chapter information
-    // This includes books that may not be primarily about a topic but contain relevant chapters
-    const expandedDatabase = [
+    private getExpandedBookDatabase(): Book[] {
+    // Import and return books from the main chapter database
+    return ChapterDiscoveryService.getAllBooks();
       {
         id: "fallback-1",
         title: "Good to Great",
@@ -354,7 +353,7 @@ export class BookSearchService {
         pageCount: 320,
         categories: ["Business", "Leadership"],
         relevantChapters: [
-          {
+                    {
             chapter: "Chapter 3",
             title: "First Who... Then What",
             pages: "41-64",
@@ -364,7 +363,7 @@ export class BookSearchService {
             keyTopics: ["leadership", "team building", "management"],
             why: "Essential framework for building effective teams and leadership structures",
           },
-          {
+                    {
             chapter: "Chapter 5",
             title: "The Hedgehog Concept",
             pages: "90-119",
@@ -374,7 +373,7 @@ export class BookSearchService {
             keyTopics: ["strategy", "focus", "competitive advantage"],
             why: "Framework for strategic clarity and focused execution",
           },
-          {
+                    {
             chapter: "Chapter 7",
             title: "Technology Accelerators",
             pages: "152-178",

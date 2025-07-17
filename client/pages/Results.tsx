@@ -835,7 +835,7 @@ export default function Results() {
                   >
                     <div className="flex justify-between items-start mb-4">
                       <div>
-                        <h2 className="text-xl font-bold text-[#0A0B1E] mb-2">
+                        <h2 className="text-xl font-bold text-[#0A0B1E] dark:text-white mb-2">
                           {result.topic}
                         </h2>
                         <p className="text-gray-600">

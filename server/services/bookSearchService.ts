@@ -338,9 +338,9 @@ export class BookSearchService {
 
     private getExpandedBookDatabase(): Book[] {
     // Import and return books from the main chapter database
-    return ChapterDiscoveryService.getAllBooks();
-      {
-        id: "fallback-1",
+        return ChapterDiscoveryService.getAllBooks();
+  }
+}
         title: "Good to Great",
         author: "Jim Collins",
         cover:

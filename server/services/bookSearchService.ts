@@ -45,6 +45,11 @@ export class BookSearchService {
     this.apiKey = process.env.GOOGLE_BOOKS_API_KEY || "";
     this.amazonTag = process.env.AMAZON_ASSOCIATE_TAG || "summifyai-20";
 
+    console.log(
+      "Google Books API Key status:",
+      this.apiKey ? `Found (${this.apiKey.substring(0, 10)}...)` : "Missing",
+    );
+
     if (
       !this.apiKey ||
       this.apiKey === "demo-key-replace-with-real-key" ||

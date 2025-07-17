@@ -247,9 +247,11 @@ The synthesis of current best practices suggests that ${topic.toLowerCase()} is 
       ],
 
       quotes: [
-        `"Excellence is not a skill, it is an attitude toward ${topic.toLowerCase()} and continuous improvement." - Inspired by ${books[0]?.author || "Great Thinkers"}`,
-        `"The journey of ${topic.toLowerCase()} begins with a single step, but requires consistent daily actions to reach the destination." - Inspired by ${books[1]?.author || "Wise Leaders"}`,
-        `"True mastery in ${topic.toLowerCase()} comes not from perfection, but from the willingness to learn and adapt continuously." - Inspired by ${books[2]?.author || "Expert Practitioners"}`,
+        `"Excellence in ${topic.toLowerCase()} is not about perfection, but about consistent improvement and dedication to growth."`,
+        `"The foundation of successful ${topic.toLowerCase()} lies in building systems that work independently of motivation."`,
+        `"True progress in ${topic.toLowerCase()} comes from understanding principles rather than just following techniques."`,
+        `"Sustainable ${topic.toLowerCase()} requires both strategic thinking and practical daily actions."`,
+        `"The most effective approach to ${topic.toLowerCase()} integrates multiple perspectives and adapts to individual circumstances."`,
       ],
 
       comparativeAnalysis: `The analysis reveals complementary approaches to ${topic} that, when combined, provide a comprehensive framework for success.`,

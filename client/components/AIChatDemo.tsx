@@ -41,11 +41,11 @@ const AIChatDemo: React.FC<AIChatDemoProps> = ({
   };
 
   useEffect(() => {
-    // Only scroll if there are messages and component is visible
-    if (messages.length > 0) {
+    // Only scroll if auto-scroll is enabled and there are messages
+    if (!disableAutoScroll && messages.length > 0) {
       scrollToBottom();
     }
-  }, [messages]);
+  }, [messages, disableAutoScroll]);
 
   const addMessage = (
     content: string,

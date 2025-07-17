@@ -80,9 +80,24 @@ export class BookSearchService {
 
   async searchBooks(topic: string, maxResults: number = 5): Promise<Book[]> {
     try {
+      console.log(`Starting chapter-centric search for: "${topic}"`);
+
+      // Use chapter discovery system for more precise results
+      const chapterBasedResults = ChapterDiscoveryService.findRelevantChapters(
+        topic,
+        maxResults,
+      );
+
+      if (chapterBasedResults.length > 0) {
+        console.log(
+          `Found ${chapterBasedResults.length} books with relevant chapters for "${topic}"`,
+        );
+        return chapterBasedResults;
+      }
+
       // If no API key, return curated fallback books
       if (!this.apiKey || this.apiKey === "demo-key-replace-with-real-key") {
-        return this.getFallbackBooks(topic);
+        return this.getExpandedBookDatabase();
       }
 
       const query = this.buildSearchQuery(topic);

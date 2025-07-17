@@ -1,5 +1,10 @@
 import { Request, Response } from "express";
 import { Pool } from "pg";
+import dotenv from "dotenv";
+
+// Ensure environment variables are loaded
+dotenv.config();
+
 import { bookSearchService } from "../services/bookSearchService";
 import { aiService } from "../services/aiService";
 

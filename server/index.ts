@@ -21,9 +21,6 @@ import {
   handleGetRecentSummaries,
 } from "./routes/generate";
 
-// Load environment variables
-dotenv.config();
-
 export function createServer() {
   const app = express();
 

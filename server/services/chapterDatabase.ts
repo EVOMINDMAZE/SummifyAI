@@ -5,6 +5,96 @@ import { ChapterMatch, Book } from "./bookSearchService";
 export const CHAPTER_DATABASE: Book[] = [
   // BUSINESS & LEADERSHIP BOOKS
   {
+    id: "five-dysfunctions-team",
+    title: "The Five Dysfunctions of a Team",
+    author: "Patrick Lencioni",
+    cover:
+      "https://m.media-amazon.com/images/I/51rJPGr3cqL._SX327_BO1,204,203,200_.jpg",
+    description:
+      "A leadership fable about the fundamental causes of organizational politics and team failure.",
+    amazonLink: "https://amazon.com/dp/0787960756",
+    rating: 4.6,
+    categories: ["Leadership", "Team Building"],
+    relevantChapters: [
+      {
+        chapter: "Chapter 1",
+        title: "Absence of Trust",
+        pages: "15-32",
+        relevance: "Foundation of team building, creating psychological safety",
+        relevanceScore: 98,
+        keyTopics: [
+          "team building",
+          "trust",
+          "psychological safety",
+          "team dynamics",
+          "vulnerability",
+        ],
+        why: "Essential foundation for building effective teams through trust and vulnerability",
+      },
+      {
+        chapter: "Chapter 2",
+        title: "Fear of Conflict",
+        pages: "33-52",
+        relevance:
+          "Healthy conflict management, productive disagreement in teams",
+        relevanceScore: 96,
+        keyTopics: [
+          "team building",
+          "conflict resolution",
+          "healthy debate",
+          "team communication",
+          "productive conflict",
+        ],
+        why: "Framework for enabling productive conflict and debate within teams",
+      },
+      {
+        chapter: "Chapter 3",
+        title: "Lack of Commitment",
+        pages: "53-72",
+        relevance: "Team alignment, collective decision making, buy-in",
+        relevanceScore: 94,
+        keyTopics: [
+          "team building",
+          "commitment",
+          "team alignment",
+          "decision making",
+          "buy-in",
+        ],
+        why: "Creating genuine commitment and alignment within team decisions",
+      },
+      {
+        chapter: "Chapter 4",
+        title: "Avoidance of Accountability",
+        pages: "73-92",
+        relevance: "Peer-to-peer accountability, team performance standards",
+        relevanceScore: 92,
+        keyTopics: [
+          "team building",
+          "accountability",
+          "peer feedback",
+          "performance standards",
+          "team responsibility",
+        ],
+        why: "Building systems for mutual accountability and high performance standards",
+      },
+      {
+        chapter: "Chapter 5",
+        title: "Inattention to Results",
+        pages: "93-110",
+        relevance: "Team focus on collective outcomes, shared goals",
+        relevanceScore: 90,
+        keyTopics: [
+          "team building",
+          "results orientation",
+          "collective goals",
+          "team performance",
+          "shared outcomes",
+        ],
+        why: "Focusing teams on collective results rather than individual agendas",
+      },
+    ],
+  },
+  {
     id: "good-to-great",
     title: "Good to Great",
     author: "Jim Collins",
@@ -211,6 +301,99 @@ export const CHAPTER_DATABASE: Book[] = [
           "market dynamics",
         ],
         why: "How customer preferences and market forces drive innovation cycles",
+      },
+    ],
+  },
+
+  // TEAM BUILDING & COLLABORATION BOOKS
+  {
+    id: "crucial-conversations",
+    title: "Crucial Conversations",
+    author: "Kerry Patterson, Joseph Grenny, Ron McMillan, Al Switzler",
+    cover:
+      "https://m.media-amazon.com/images/I/51OHJOhmQgL._SX327_BO1,204,203,200_.jpg",
+    description: "Tools for talking when stakes are high and opinions vary.",
+    amazonLink: "https://amazon.com/dp/1260474186",
+    rating: 4.5,
+    categories: ["Communication", "Team Building"],
+    relevantChapters: [
+      {
+        chapter: "Chapter 3",
+        title: "Start with Heart",
+        pages: "27-40",
+        relevance:
+          "Team communication, creating safety for difficult conversations",
+        relevanceScore: 95,
+        keyTopics: [
+          "team building",
+          "communication",
+          "difficult conversations",
+          "psychological safety",
+          "team dialogue",
+        ],
+        why: "Essential skills for fostering open and honest team communication",
+      },
+      {
+        chapter: "Chapter 5",
+        title: "Learn to Look",
+        pages: "55-70",
+        relevance:
+          "Reading team dynamics, recognizing silence and violence in teams",
+        relevanceScore: 88,
+        keyTopics: [
+          "team building",
+          "team dynamics",
+          "nonverbal communication",
+          "team awareness",
+          "group dynamics",
+        ],
+        why: "Developing awareness of team dynamics and communication patterns",
+      },
+    ],
+  },
+  {
+    id: "team-of-teams",
+    title: "Team of Teams",
+    author: "General Stanley McChrystal",
+    cover:
+      "https://m.media-amazon.com/images/I/41B%2BjGr2w1L._SX327_BO1,204,203,200_.jpg",
+    description:
+      "New rules of engagement for a complex world - building adaptive teams.",
+    amazonLink: "https://amazon.com/dp/1591847486",
+    rating: 4.3,
+    categories: ["Leadership", "Team Building", "Management"],
+    relevantChapters: [
+      {
+        chapter: "Chapter 6",
+        title: "Sharing Consciousness",
+        pages: "95-118",
+        relevance:
+          "Information sharing, team transparency, collective intelligence",
+        relevanceScore: 93,
+        keyTopics: [
+          "team building",
+          "information sharing",
+          "transparency",
+          "collective intelligence",
+          "team coordination",
+        ],
+        why: "Creating transparent information flow and shared understanding across teams",
+      },
+      {
+        chapter: "Chapter 8",
+        title: "Empowered Execution",
+        pages: "139-162",
+        relevance:
+          "Team empowerment, distributed decision making, autonomous teams",
+        relevanceScore: 89,
+        keyTopics: [
+          "team building",
+          "empowerment",
+          "decision making",
+          "autonomy",
+          "distributed leadership",
+        ],
+        why: "Building empowered teams capable of rapid, autonomous decision making",
       },
     ],
   },
@@ -429,7 +612,7 @@ export class ChapterDiscoveryService {
             queryTerms,
             chapter,
           );
-          if (chapterScore > 50) {
+          if (chapterScore > 30) {
             // Threshold for relevance
             relevantChapters.push({
               ...chapter,
@@ -494,28 +677,65 @@ export class ChapterDiscoveryService {
     const allText =
       `${chapter.title} ${chapter.relevance} ${chapter.why} ${chapter.keyTopics.join(" ")}`.toLowerCase();
 
-    // Direct keyword matches
-    for (const term of queryTerms) {
-      if (allText.includes(term)) {
-        score += 20;
-      }
-      // Partial matches
-      if (allText.includes(term.substring(0, Math.max(4, term.length - 2)))) {
-        score += 10;
-      }
+    // Exact phrase matching (highest priority)
+    const queryPhrase = queryTerms.join(" ");
+    if (allText.includes(queryPhrase)) {
+      score += 50;
     }
 
-    // Boost for key topics matches
+    // Direct keyword matches in key topics (high priority)
+    let keyTopicMatches = 0;
     for (const topic of chapter.keyTopics) {
       for (const term of queryTerms) {
-        if (topic.includes(term) || term.includes(topic)) {
-          score += 15;
+        if (topic.toLowerCase() === term.toLowerCase()) {
+          score += 30;
+          keyTopicMatches++;
+        } else if (
+          topic.toLowerCase().includes(term.toLowerCase()) ||
+          term.toLowerCase().includes(topic.toLowerCase())
+        ) {
+          score += 20;
+          keyTopicMatches++;
         }
       }
     }
 
-    // Base relevance score bonus
-    score += chapter.relevanceScore * 0.3;
+    // Require at least one key topic match for relevance
+    if (keyTopicMatches === 0) {
+      // Check for semantic matches in title and relevance text
+      let hasSemanticMatch = false;
+      for (const term of queryTerms) {
+        if (
+          chapter.title.toLowerCase().includes(term) ||
+          chapter.relevance.toLowerCase().includes(term)
+        ) {
+          hasSemanticMatch = true;
+          score += 15;
+        }
+      }
+
+      // If no semantic match either, heavily penalize
+      if (!hasSemanticMatch) {
+        score = Math.max(score - 40, 0);
+      }
+    }
+
+    // Direct keyword matches in other text
+    for (const term of queryTerms) {
+      if (allText.includes(term)) {
+        score += 10;
+      }
+      // Partial matches (reduced weight)
+      if (
+        term.length > 4 &&
+        allText.includes(term.substring(0, Math.max(4, term.length - 2)))
+      ) {
+        score += 5;
+      }
+    }
+
+    // Base relevance score bonus (reduced influence)
+    score += chapter.relevanceScore * 0.1;
 
     return Math.min(score, 100); // Cap at 100
   }

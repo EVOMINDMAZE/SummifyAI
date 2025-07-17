@@ -276,7 +276,7 @@ export default function AccountSettings() {
                     </h3>
                     <p className="text-[#0A0B1E] opacity-80">
                       {user?.tier === "premium"
-                        ? "$9.99/month ��� Unlimited summaries"
+                        ? "$9.99/month • Unlimited summaries"
                         : "3 summaries per month"}
                     </p>
                   </div>
@@ -335,7 +335,7 @@ export default function AccountSettings() {
               {/* Credit System */}
               <div className="bg-white rounded-xl border border-gray-200 p-8">
                 <h2 className="text-xl font-bold text-[#0A0B1E] mb-6">
-                  SummifyAI Credits
+                  SummifyIO Credits
                 </h2>
                 <div className="flex items-center justify-between p-6 bg-green-50 border border-green-200 rounded-xl mb-4">
                   <div>

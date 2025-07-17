@@ -758,17 +758,17 @@ export default function Results() {
 
                     {/* Summary */}
                     <div className="mb-6">
-                      <h3 className="text-lg font-semibold text-[#0A0B1E] mb-3">
+                      <h3 className="text-lg font-semibold text-[#0A0B1E] dark:text-white mb-3">
                         AI-Generated Summary
                       </h3>
-                      <p className="text-gray-700 leading-relaxed bg-gray-50 p-4 rounded-lg">
+                      <p className="text-gray-700 dark:text-gray-200 leading-relaxed bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
                         {result.summary}
                       </p>
                     </div>
 
                     {/* Key Insights */}
                     <div>
-                      <h3 className="text-lg font-semibold text-[#0A0B1E] mb-3">
+                      <h3 className="text-lg font-semibold text-[#0A0B1E] dark:text-white mb-3">
                         Key Insights
                       </h3>
                       <ul className="space-y-2">

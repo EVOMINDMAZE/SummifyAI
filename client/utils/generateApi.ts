@@ -75,12 +75,13 @@ export class GenerateAPI {
       `${this.baseUrl}/generate/progress/${sessionId}`,
     );
 
+    const data = await response.json();
+
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.message || "Failed to get progress");
+      throw new Error(data.message || "Failed to get progress");
     }
 
-    return response.json();
+    return data;
   }
 
   static async getRecentSummaries(

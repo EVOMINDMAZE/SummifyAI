@@ -62,6 +62,52 @@ export function createServer() {
     });
   });
 
+  // Debug endpoint to check database tables
+  app.get("/api/debug/tables", async (_req, res) => {
+    try {
+      const { Pool } = await import("pg");
+      const pool = new Pool({
+        connectionString:
+          process.env.DATABASE_URL || process.env.NETLIFY_DATABASE_URL,
+        ssl: { rejectUnauthorized: false },
+      });
+
+      const client = await pool.connect();
+      try {
+        const tablesResult = await client.query(`
+          SELECT table_name
+          FROM information_schema.tables
+          WHERE table_schema = 'public'
+        `);
+
+        const usersExist = await client.query(`
+          SELECT COUNT(*) as count FROM information_schema.tables
+          WHERE table_schema = 'public' AND table_name = 'users'
+        `);
+
+        let userCount = 0;
+        if (parseInt(usersExist.rows[0].count) > 0) {
+          const userCountResult = await client.query(
+            "SELECT COUNT(*) as count FROM users",
+          );
+          userCount = parseInt(userCountResult.rows[0].count);
+        }
+
+        res.json({
+          tables: tablesResult.rows.map((r) => r.table_name),
+          usersTableExists: parseInt(usersExist.rows[0].count) > 0,
+          userCount,
+        });
+      } finally {
+        client.release();
+      }
+    } catch (error) {
+      res.status(500).json({
+        error: error instanceof Error ? error.message : "Database check failed",
+      });
+    }
+  });
+
   app.get("/api/demo", handleDemo);
 
   // Neon database routes

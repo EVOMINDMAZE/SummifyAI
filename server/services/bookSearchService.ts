@@ -269,7 +269,7 @@ export class BookSearchService {
         title: "Good to Great",
         author: "Jim Collins",
         cover:
-          "https://images-na.ssl-images-amazon.com/images/P/0066620996.01.L.jpg",
+          "https://m.media-amazon.com/images/I/51-vOqJOVXL._SX334_BO1,204,203,200_.jpg",
         description:
           "Uncovers the factors that transform good companies into great ones through rigorous research and analysis.",
         amazonLink: `https://amazon.com/dp/0066620996?tag=${this.amazonTag}`,
@@ -277,6 +277,29 @@ export class BookSearchService {
         publishedDate: "2001",
         pageCount: 320,
         categories: ["Business", "Leadership"],
+        relevantChapters: [
+          {
+            chapter: "Chapter 3",
+            title: "First Who... Then What",
+            pages: "41-64",
+            relevance:
+              "Core principles of building effective teams and leadership structures",
+          },
+          {
+            chapter: "Chapter 5",
+            title: "The Hedgehog Concept",
+            pages: "90-119",
+            relevance:
+              "Framework for strategic focus and competitive advantage",
+          },
+          {
+            chapter: "Chapter 7",
+            title: "Technology Accelerators",
+            pages: "152-178",
+            relevance:
+              "How technology supports but doesn't drive transformation",
+          },
+        ],
       },
       {
         id: "fallback-2",

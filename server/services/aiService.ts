@@ -102,28 +102,32 @@ export class AIService {
     topic: string,
     books: Book[],
   ): Promise<string> {
-    const prompt = `You are an expert book analyst and summarizer. Create a comprehensive comparative analysis for the topic "${topic}" based on these ${books.length} books:
+    const prompt = `You are an expert book analyst. Create a BRIEF, beautifully formatted summary for the topic "${topic}" based on these books:
 
 ${books
-  .map(
-    (book, index) =>
-      `${index + 1}. "${book.title}" by ${book.author}\n   Description: ${book.description}`,
-  )
-  .join("\n\n")}
+  .map((book, index) => `${index + 1}. "${book.title}" by ${book.author}`)
+  .join("\n")}
 
-Please provide a detailed comparative analysis that:
-1. Synthesizes the key concepts from all books related to "${topic}"
-2. Identifies common themes and contrasting viewpoints
-3. Shows how different authors approach the topic
-4. Provides actionable insights that readers can apply
-5. Maintains an academic yet accessible tone
+Format your response using markdown with the following structure:
 
-Format the response as a well-structured analysis with clear paragraphs. Aim for 300-500 words.`;
+## 📖 Topic Overview
+[Brief 2-3 sentence overview of the topic]
+
+## 🔍 Key Approaches
+[2-3 bullet points comparing different approaches from the books]
+
+## 💡 Core Insights
+[2-3 most important takeaways]
+
+## 🎯 Practical Application
+[1-2 sentences on how to apply these insights]
+
+Keep the entire response under 200 words. Use emojis for visual appeal and make it scannable.`;
 
     const completion = await this.openai!.chat.completions.create({
       model: this.model,
       messages: [{ role: "user", content: prompt }],
-      max_tokens: 800,
+      max_tokens: 400,
       temperature: 0.7,
     });
 
@@ -228,15 +232,21 @@ Provide 3-5 quotes total.`;
 
   private getFallbackSummary(topic: string, books: Book[]): GeneratedSummary {
     return {
-      summary: `**Comparative Analysis: ${topic}**
+      summary: `## 📖 Topic Overview
+${topic} represents a multifaceted discipline that combines strategic thinking with practical execution. The leading experts in this field emphasize both systematic approaches and adaptive methodologies.
 
-The field of ${topic} encompasses multiple complementary approaches that, when understood together, provide a comprehensive framework for success. Research shows that effective ${topic.toLowerCase()} requires both systematic thinking and practical implementation strategies.
+## 🔍 Key Approaches
+• **Strategic Foundation**: Building robust frameworks and systematic processes
+• **Practical Application**: Implementing actionable techniques and measurable outcomes
+• **Psychological Insights**: Understanding human behavior and motivational drivers
 
-Key patterns emerge from analyzing leading methodologies in this area. First, successful ${topic.toLowerCase()} requires a combination of strategic planning and tactical execution. Second, understanding psychological barriers and motivational drivers proves crucial for sustainable results. Third, measurement systems and feedback loops enable continuous improvement and course correction.
+## 💡 Core Insights
+• Success in ${topic.toLowerCase()} requires balancing theory with hands-on practice
+• Sustainable results come from building systems rather than relying on willpower
+• The most effective approaches integrate multiple perspectives and disciplines
 
-Modern approaches to ${topic.toLowerCase()} emphasize the importance of building robust systems and processes rather than relying solely on motivation or willpower. This systematic approach creates more predictable outcomes and reduces dependency on external factors.
-
-The synthesis of current best practices suggests that ${topic.toLowerCase()} is most effective when it integrates multiple disciplines including psychology, strategic thinking, and operational excellence. This holistic approach enables practitioners to develop personalized methodologies that align with their specific goals and circumstances.`,
+## 🎯 Practical Application
+Apply these insights by starting with proven frameworks, adapting them to your specific context, and building consistent measurement systems for continuous improvement.`,
 
       keyInsights: [
         `${topic} requires both strategic planning and tactical execution to achieve sustainable results.`,

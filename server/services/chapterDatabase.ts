@@ -811,6 +811,10 @@ export const CHAPTER_DATABASE: Book[] = [
 
 // Chapter discovery algorithm
 export class ChapterDiscoveryService {
+  static getAllBooks(): Book[] {
+    return CHAPTER_DATABASE;
+  }
+
   static findRelevantChapters(query: string, maxResults: number = 10): Book[] {
     const queryTerms = this.extractKeyTerms(query.toLowerCase());
     const scoredBooks: Array<Book & { totalScore: number }> = [];

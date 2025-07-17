@@ -516,7 +516,7 @@ export class BookSearchService {
       },
     ];
 
-    return fallbackBooks;
+    return expandedDatabase;
   }
 }
 

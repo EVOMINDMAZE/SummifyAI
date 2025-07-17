@@ -230,11 +230,13 @@ Provide 3-5 quotes total.`;
     return {
       summary: `**Comparative Analysis: ${topic}**
 
-The concept of ${topic} emerges as a central theme across multiple thought-leadership works, each offering unique perspectives while building upon common foundational principles. ${books[0]?.author || "Leading authors"} emphasizes the importance of systematic approaches and evidence-based strategies, while ${books[1]?.author || "other experts"} focus on the psychological and behavioral aspects that drive sustainable change.
+The field of ${topic} encompasses multiple complementary approaches that, when understood together, provide a comprehensive framework for success. Research shows that effective ${topic.toLowerCase()} requires both systematic thinking and practical implementation strategies.
 
-Through comparative analysis of these influential works, several key patterns emerge. First, successful ${topic.toLowerCase()} requires a combination of strategic thinking and practical implementation. Second, the human element - understanding motivation, resistance, and change psychology - proves crucial across all approaches. Third, measurement and continuous improvement form the backbone of any effective ${topic.toLowerCase()} initiative.
+Key patterns emerge from analyzing leading methodologies in this area. First, successful ${topic.toLowerCase()} requires a combination of strategic planning and tactical execution. Second, understanding psychological barriers and motivational drivers proves crucial for sustainable results. Third, measurement systems and feedback loops enable continuous improvement and course correction.
 
-The synthesis of these perspectives suggests that ${topic.toLowerCase()} is not merely a set of techniques, but a comprehensive approach that integrates multiple disciplines. By understanding how different experts approach similar challenges, readers can develop a more nuanced and effective personal methodology for achieving their goals in this area.`,
+Modern approaches to ${topic.toLowerCase()} emphasize the importance of building robust systems and processes rather than relying solely on motivation or willpower. This systematic approach creates more predictable outcomes and reduces dependency on external factors.
+
+The synthesis of current best practices suggests that ${topic.toLowerCase()} is most effective when it integrates multiple disciplines including psychology, strategic thinking, and operational excellence. This holistic approach enables practitioners to develop personalized methodologies that align with their specific goals and circumstances.`,
 
       keyInsights: [
         `${topic} requires both strategic planning and tactical execution to achieve sustainable results.`,

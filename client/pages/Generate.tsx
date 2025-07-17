@@ -914,10 +914,64 @@ Sinek's "Leaders Eat Last" introduces the biological and anthropological foundat
               </div>
             </div>
 
+            {/* Chapter Details Section */}
+            <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-8 border border-gray-200 dark:border-gray-700">
+              <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
+                📖 Relevant Chapters Found
+              </h2>
+              <div className="space-y-6">
+                {generatedSummary.books.map((book, bookIndex) =>
+                  book.relevantChapters ? (
+                    <div
+                      key={book.id}
+                      className="border border-gray-200 dark:border-gray-700 rounded-2xl p-6"
+                    >
+                      <div className="flex items-center mb-4">
+                        <img
+                          src={book.cover}
+                          alt={book.title}
+                          className="w-16 h-24 object-cover rounded-lg mr-4"
+                        />
+                        <div>
+                          <h3 className="font-bold text-lg text-gray-900 dark:text-white">
+                            {book.title}
+                          </h3>
+                          <p className="text-gray-600 dark:text-gray-400">
+                            by {book.author}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="space-y-4">
+                        {book.relevantChapters.map((chapter, chapterIndex) => (
+                          <div
+                            key={chapterIndex}
+                            className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4"
+                          >
+                            <div className="flex justify-between items-start mb-2">
+                              <h4 className="font-semibold text-purple-600 dark:text-purple-400">
+                                {chapter.chapter}: {chapter.title}
+                              </h4>
+                              <span className="text-sm text-gray-500 dark:text-gray-400 bg-gray-200 dark:bg-gray-600 px-2 py-1 rounded">
+                                Pages {chapter.pages}
+                              </span>
+                            </div>
+                            <p className="text-sm text-gray-700 dark:text-gray-300">
+                              <strong>Why it's relevant:</strong>{" "}
+                              {chapter.relevance}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ) : null,
+                )}
+              </div>
+            </div>
+
             {/* Key Quotes Section */}
             <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-8 border border-gray-200 dark:border-gray-700">
               <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">
-                💬 Key Insights & Quotes
+                💬 Key Insights & Principles
               </h2>
               <div className="space-y-6">
                 {generatedSummary.quotes.map((quote, index) => (

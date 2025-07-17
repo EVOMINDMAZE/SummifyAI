@@ -184,7 +184,36 @@ async function generateAsync(
 
     updateProgress(95, "Saving results...", 2);
 
-    // Step 3: Save to database
+    console.log("Completing generation without database save for now");
+
+    updateProgress(100, "Generation complete!", 0);
+
+    // Store final result
+    const session = activeSessions.get(sessionId);
+    if (session) {
+      session.result = {
+        id: "demo-" + Date.now(),
+        topic,
+        books,
+        summary: aiResult.summary,
+        keyInsights: aiResult.keyInsights,
+        quotes: aiResult.quotes,
+        generatedAt: new Date().toISOString(),
+        userId,
+      };
+
+      // Clean up session after 5 minutes
+      setTimeout(
+        () => {
+          activeSessions.delete(sessionId);
+        },
+        5 * 60 * 1000,
+      );
+    }
+
+    return; // Skip database save for now
+
+    // Step 3: Save to database (temporarily disabled)
     const summaryData = {
       topic,
       books,

@@ -408,7 +408,7 @@ export class BookSearchService {
         title: "The Lean Startup",
         author: "Eric Ries",
         cover:
-          "https://images-na.ssl-images-amazon.com/images/P/0307887898.01.L.jpg",
+          "https://m.media-amazon.com/images/I/51T-sMqSMiL._SX329_BO1,204,203,200_.jpg",
         description:
           "How todays entrepreneurs use continuous innovation to create radically successful businesses.",
         amazonLink: `https://amazon.com/dp/0307887898?tag=${this.amazonTag}`,
@@ -416,6 +416,27 @@ export class BookSearchService {
         publishedDate: "2011",
         pageCount: 336,
         categories: ["Business", "Entrepreneurship"],
+        relevantChapters: [
+          {
+            chapter: "Chapter 4",
+            title: "Experiment",
+            pages: "78-104",
+            relevance: "Building and testing minimum viable products",
+          },
+          {
+            chapter: "Chapter 7",
+            title: "Measure",
+            pages: "117-143",
+            relevance:
+              "Innovation accounting and metric-driven decision making",
+          },
+          {
+            chapter: "Chapter 8",
+            title: "Pivot (or Persevere)",
+            pages: "149-172",
+            relevance: "Strategic direction changes and adaptation strategies",
+          },
+        ],
       },
     ];
 

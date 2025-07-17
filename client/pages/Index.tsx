@@ -902,6 +902,7 @@ export default function Index() {
                     title="Chapter Discovery"
                     subtitle="Try asking about any topic to see how our AI finds exact chapters and pages"
                     demoType="search"
+                    disableAutoScroll={true}
                     initialMessages={[
                       {
                         id: "1",

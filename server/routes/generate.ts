@@ -35,6 +35,8 @@ export async function handleGenerateStart(req: Request, res: Response) {
   try {
     const { topic, userId, maxBooks = 5 }: GenerateRequest = req.body;
 
+    console.log("Generate request:", { topic, userId, maxBooks });
+
     if (!topic || !userId) {
       return res.status(400).json({
         error: "Topic and userId are required",

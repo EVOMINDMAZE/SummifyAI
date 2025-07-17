@@ -45,7 +45,11 @@ export class BookSearchService {
     this.apiKey = process.env.GOOGLE_BOOKS_API_KEY || "";
     this.amazonTag = process.env.AMAZON_ASSOCIATE_TAG || "summifyai-20";
 
-    if (!this.apiKey || this.apiKey === "demo-key-replace-with-real-key") {
+    if (
+      !this.apiKey ||
+      this.apiKey === "demo-key-replace-with-real-key" ||
+      this.apiKey === ""
+    ) {
       console.warn(
         "Google Books API key not configured. Book search will use fallback data.",
       );

@@ -222,7 +222,7 @@ export const CHAPTER_DATABASE: Book[] = [
     title: "The Five Dysfunctions of a Team",
     author: "Patrick Lencioni",
     cover:
-      "https://m.media-amazon.com/images/I/51rJPGr3cqL._SX327_BO1,204,203,200_.jpg",
+      "https://images-na.ssl-images-amazon.com/images/I/51rJPGr3cqL._SX327_BO1,204,203,200_.jpg",
     description:
       "A leadership fable about the fundamental causes of organizational politics and team failure.",
     amazonLink: "https://amazon.com/dp/0787960756",
@@ -312,7 +312,7 @@ export const CHAPTER_DATABASE: Book[] = [
     title: "Good to Great",
     author: "Jim Collins",
     cover:
-      "https://m.media-amazon.com/images/I/51-vOqJOVXL._SX334_BO1,204,203,200_.jpg",
+      "https://images-na.ssl-images-amazon.com/images/I/51-vOqJOVXL._SX334_BO1,204,203,200_.jpg",
     description:
       "Research-based analysis of companies that made the leap from good to great performance.",
     amazonLink: "https://amazon.com/dp/0066620996",
@@ -372,7 +372,7 @@ export const CHAPTER_DATABASE: Book[] = [
     title: "Atomic Habits",
     author: "James Clear",
     cover:
-      "https://m.media-amazon.com/images/I/51B7kuFwWeL._SX329_BO1,204,203,200_.jpg",
+      "https://images-na.ssl-images-amazon.com/images/I/51B7kuFwWeL._SX329_BO1,204,203,200_.jpg",
     description:
       "An easy and proven way to build good habits and break bad ones.",
     amazonLink: "https://amazon.com/dp/0735211299",

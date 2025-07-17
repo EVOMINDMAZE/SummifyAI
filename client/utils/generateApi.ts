@@ -92,12 +92,13 @@ export class GenerateAPI {
       `${this.baseUrl}/users/${userId}/recent-summaries?limit=${limit}`,
     );
 
+    const data = await response.json();
+
     if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.message || "Failed to get recent summaries");
+      throw new Error(data.message || "Failed to get recent summaries");
     }
 
-    return response.json();
+    return data;
   }
 
   static async pollProgress(
@@ -149,7 +150,7 @@ export class GenerateAPI {
   }> {
     return [
       {
-        text: "🔍 Searching through millions of books...",
+        text: "�� Searching through millions of books...",
         duration: 1000,
         percent: 15,
       },

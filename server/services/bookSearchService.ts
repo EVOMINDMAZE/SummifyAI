@@ -80,49 +80,75 @@ export class BookSearchService {
 
   async searchBooks(topic: string, maxResults: number = 10): Promise<Book[]> {
     try {
-      console.log(`Starting chapter-centric search for: "${topic}"`);
+      console.log(`Starting comprehensive search for: "${topic}"`);
 
-      // Use chapter discovery system for more precise results
+      // First, search our curated chapter database
       const chapterBasedResults = ChapterDiscoveryService.findRelevantChapters(
         topic,
         maxResults,
       );
 
-      if (chapterBasedResults.length > 0) {
-        console.log(
-          `Found ${chapterBasedResults.length} books with relevant chapters for "${topic}"`,
-        );
+      console.log(
+        `Found ${chapterBasedResults.length} books with relevant chapters for "${topic}" in local database`,
+      );
+
+      // If we have good results from our database, use them
+      if (chapterBasedResults.length >= 3) {
         return chapterBasedResults;
       }
 
-      // If no API key, return curated fallback books
-      if (!this.apiKey || this.apiKey === "demo-key-replace-with-real-key") {
-        return this.getExpandedBookDatabase();
+      // If we need more results, search Google Books API
+      let googleBooksResults: Book[] = [];
+      if (this.apiKey && this.apiKey !== "demo-key-replace-with-real-key") {
+        try {
+          googleBooksResults = await this.searchGoogleBooks(
+            topic,
+            maxResults - chapterBasedResults.length,
+          );
+          console.log(
+            `Found ${googleBooksResults.length} additional books from Google Books API`,
+          );
+        } catch (error) {
+          console.error("Google Books API error:", error);
+        }
       }
 
-      const query = this.buildSearchQuery(topic);
-      const url = `${this.baseUrl}?q=${encodeURIComponent(query)}&maxResults=${maxResults * 2}&key=${this.apiKey}&orderBy=relevance&printType=books&langRestrict=en`;
+      // Combine results, prioritizing our curated content
+      const combinedResults = [...chapterBasedResults];
 
-      console.log(`Searching books for topic: ${topic}`);
-      const response = await fetch(url);
+      // Add Google Books results that don't duplicate our curated content
+      for (const googleBook of googleBooksResults) {
+        const isDuplicate = combinedResults.some(
+          (existing) =>
+            existing.title
+              .toLowerCase()
+              .includes(googleBook.title.toLowerCase()) ||
+            googleBook.title
+              .toLowerCase()
+              .includes(existing.title.toLowerCase()),
+        );
+        if (!isDuplicate && combinedResults.length < maxResults) {
+          combinedResults.push(googleBook);
+        }
+      }
 
-      if (!response.ok) {
-        throw new Error(
-          `Google Books API error: ${response.status} ${response.statusText}`,
+      // If still not enough results, return fallback
+      if (combinedResults.length < maxResults) {
+        const fallbackBooks = this.getExpandedBookDatabase().slice(
+          0,
+          maxResults - combinedResults.length,
+        );
+        combinedResults.push(
+          ...fallbackBooks.filter(
+            (fallback) =>
+              !combinedResults.some((existing) => existing.id === fallback.id),
+          ),
         );
       }
 
-      const data = (await response.json()) as { items?: GoogleBook[] };
+      return combinedResults.slice(0, maxResults);
 
-      if (!data.items || data.items.length === 0) {
-        console.log(`No books found for topic: ${topic}, using fallback`);
-        return this.getFallbackBooks(topic);
-      }
-
-      const books = await this.processBooks(data.items, maxResults);
-      console.log(`Found ${books.length} books for topic: ${topic}`);
-
-      return books;
+      return this.getExpandedBookDatabase().slice(0, maxResults);
     } catch (error) {
       console.error("Error searching books:", error);
       return this.getExpandedBookDatabase().slice(0, maxResults);

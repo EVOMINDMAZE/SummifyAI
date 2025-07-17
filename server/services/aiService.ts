@@ -1,4 +1,8 @@
 import OpenAI from "openai";
+import dotenv from "dotenv";
+
+// Ensure environment variables are loaded
+dotenv.config();
 
 interface Book {
   id: string;

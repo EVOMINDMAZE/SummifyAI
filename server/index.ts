@@ -21,6 +21,12 @@ import {
   handleGetRecentSummaries,
 } from "./routes/generate";
 import { handleTopicAnalysis } from "./routes/topicAnalysis";
+import {
+  handleSubmitRating,
+  handleGetRatingStats,
+  handleGetUserRating,
+  handleGetTopRatedChapters,
+} from "./routes/ratings";
 
 export function createServer() {
   const app = express();
@@ -173,6 +179,12 @@ export function createServer() {
 
   // Topic analysis route
   app.post("/api/topic/analyze", handleTopicAnalysis);
+
+  // Rating routes
+  app.post("/api/ratings", handleSubmitRating);
+  app.get("/api/ratings/:bookId/:chapterId", handleGetRatingStats);
+  app.get("/api/ratings/user/:userId/:bookId/:chapterId", handleGetUserRating);
+  app.get("/api/ratings/top/:searchTopic", handleGetTopRatedChapters);
 
   return app;
 }

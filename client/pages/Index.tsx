@@ -1069,6 +1069,7 @@ export default function Index() {
                     title="Share & Earn"
                     subtitle="Discover how to share insights and earn affiliate commissions"
                     demoType="share"
+                    disableAutoScroll={true}
                     initialMessages={[
                       {
                         id: "1",
@@ -1324,7 +1325,7 @@ export default function Index() {
                 </p>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
-                <div className="text-[#FFFD63] text-2xl mb-2">📚</div>
+                <div className="text-[#FFFD63] text-2xl mb-2">���</div>
                 <h3 className="font-bold mb-2">Precise Chapter Locations</h3>
                 <p className="text-gray-300 text-sm">
                   Get exact page numbers and why each chapter matters

@@ -123,18 +123,7 @@ export default function SearchFilters({
             variant="secondary"
             className="ml-2 bg-blue-600 text-white px-2 py-0.5 text-xs"
           >
-            {[
-              localFilters.difficultyLevel !== "any" ? 1 : 0,
-              localFilters.industryFocus.length,
-              localFilters.bookCategories.length,
-              localFilters.minRating > 0 ? 1 : 0,
-              localFilters.publicationYearRange[0] > 1990 ||
-              localFilters.publicationYearRange[1] < new Date().getFullYear()
-                ? 1
-                : 0,
-            ]
-              .filter((count) => count > 0)
-              .reduce((sum, count) => sum + count, 0)}
+            Active
           </Badge>
         )}
       </Button>
@@ -170,25 +159,6 @@ export default function SearchFilters({
             </div>
 
             <div className="space-y-6">
-              {/* Publication Year Range */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3 flex items-center">
-                  <Calendar className="w-4 h-4 mr-2" />
-                  Publication Year: {localFilters.publicationYearRange[0]} -{" "}
-                  {localFilters.publicationYearRange[1]}
-                </label>
-                <Slider
-                  value={localFilters.publicationYearRange}
-                  onValueChange={(value) =>
-                    updateFilter("publicationYearRange", value as [number, number])
-                  }
-                  min={1980}
-                  max={new Date().getFullYear()}
-                  step={1}
-                  className="w-full"
-                />
-              </div>
-
               {/* Difficulty Level */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center">
@@ -216,83 +186,37 @@ export default function SearchFilters({
                 </Select>
               </div>
 
-              {/* Industry Focus */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center">
-                  <Building className="w-4 h-4 mr-2" />
-                  Industry Focus
-                </label>
-                <div className="grid grid-cols-2 gap-2 max-h-32 overflow-y-auto">
-                  {INDUSTRIES.map((industry) => (
-                    <button
-                      key={industry}
-                      onClick={() =>
-                        updateFilter(
-                          "industryFocus",
-                          toggleArrayFilter(localFilters.industryFocus, industry),
-                        )
-                      }
-                      className={`text-left px-2 py-1 rounded text-xs border transition-colors ${\n                        localFilters.industryFocus.includes(industry)\n                          ? "bg-blue-100 dark:bg-blue-900 border-blue-300 dark:border-blue-700 text-blue-700 dark:text-blue-300"\n                          : "bg-gray-50 dark:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600"\n                      }`}
-                    >
-                      {industry}
-                    </button>
-                  ))}
-                </div>
-                {localFilters.industryFocus.length > 0 && (
-                  <div className="mt-2 flex flex-wrap gap-1">
-                    {localFilters.industryFocus.map((industry) => (
-                      <Badge
-                        key={industry}
-                        variant="secondary"
-                        className="bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 text-xs"
-                      >
-                        {industry}
-                        <button
-                          onClick={() =>
-                            updateFilter(
-                              "industryFocus",
-                              localFilters.industryFocus.filter(
-                                (i) => i !== industry,
-                              ),
-                            )
-                          }
-                          className="ml-1 hover:text-blue-900 dark:hover:text-blue-100"
-                        >
-                          <X className="w-3 h-3" />
-                        </button>
-                      </Badge>
-                    ))}
-                  </div>
-                )}
-              </div>
-
               {/* Book Categories */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Book Categories
                 </label>
                 <div className="grid grid-cols-2 gap-2 max-h-32 overflow-y-auto">
-                  {BOOK_CATEGORIES.map((category) => (
-                    <button
-                      key={category}
-                      onClick={() =>
-                        updateFilter(
-                          "bookCategories",
-                          toggleArrayFilter(
-                            localFilters.bookCategories,
-                            category,
-                          ),
-                        )
-                      }
-                      className={`text-left px-2 py-1 rounded text-xs border transition-colors ${
-                        localFilters.bookCategories.includes(category)
-                          ? "bg-purple-100 dark:bg-purple-900 border-purple-300 dark:border-purple-700 text-purple-700 dark:text-purple-300"
-                          : "bg-gray-50 dark:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600"
-                      }`}
-                    >
-                      {category}
-                    </button>
-                  ))}
+                  {BOOK_CATEGORIES.map((category) => {
+                    const isSelected =
+                      localFilters.bookCategories.includes(category);
+                    return (
+                      <button
+                        key={category}
+                        onClick={() =>
+                          updateFilter(
+                            "bookCategories",
+                            toggleArrayFilter(
+                              localFilters.bookCategories,
+                              category,
+                            ),
+                          )
+                        }
+                        className={`text-left px-2 py-1 rounded text-xs border transition-colors ${
+                          isSelected
+                            ? "bg-purple-100 dark:bg-purple-900 border-purple-300 dark:border-purple-700 text-purple-700 dark:text-purple-300"
+                            : "bg-gray-50 dark:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600"
+                        }`}
+                      >
+                        {category}
+                      </button>
+                    );
+                  })}
                 </div>
                 {localFilters.bookCategories.length > 0 && (
                   <div className="mt-2 flex flex-wrap gap-1">
@@ -325,18 +249,24 @@ export default function SearchFilters({
               {/* Minimum Rating */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Minimum Rating: {localFilters.minRating > 0 ? `${localFilters.minRating}+ stars` : "Any"}
+                  Minimum Rating:{" "}
+                  {localFilters.minRating > 0
+                    ? `${localFilters.minRating}+ stars`
+                    : "Any"}
                 </label>
-                <Slider
-                  value={[localFilters.minRating]}
-                  onValueChange={(value) =>
-                    updateFilter("minRating", value[0])
-                  }
-                  min={0}
-                  max={5}
-                  step={0.5}
-                  className="w-full"
-                />
+                <div className="px-2">
+                  <input
+                    type="range"
+                    min="0"
+                    max="5"
+                    step="0.5"
+                    value={localFilters.minRating}
+                    onChange={(e) =>
+                      updateFilter("minRating", parseFloat(e.target.value))
+                    }
+                    className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-lg appearance-none cursor-pointer"
+                  />
+                </div>
               </div>
             </div>
           </CardContent>

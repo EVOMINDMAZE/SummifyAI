@@ -3,6 +3,219 @@ import { ChapterMatch, Book } from "./bookSearchService";
 // Comprehensive database of books with detailed chapter mappings
 // This includes books that may not be primarily about a topic but contain relevant chapters
 export const CHAPTER_DATABASE: Book[] = [
+  // NEGOTIATION & INFLUENCE BOOKS
+  {
+    id: "getting-to-yes",
+    title: "Getting to Yes: Negotiating Agreement Without Giving In",
+    author: "Roger Fisher, William Ury, Bruce Patton",
+    cover:
+      "https://images-na.ssl-images-amazon.com/images/I/61NPm-8VyGL._SX324_BO1,204,203,200_.jpg",
+    description:
+      "The definitive guide to principled negotiation that gets to yes while preserving relationships.",
+    amazonLink: "https://amazon.com/dp/0143118757",
+    rating: 4.4,
+    categories: ["Negotiation", "Communication"],
+    relevantChapters: [
+      {
+        chapter: "Chapter 1",
+        title: "Don't Bargain Over Positions",
+        pages: "3-14",
+        relevance: "Core principles of effective negotiation strategy",
+        relevanceScore: 98,
+        keyTopics: [
+          "negotiation",
+          "positional bargaining",
+          "principled negotiation",
+          "negotiation strategy",
+          "win-win solutions",
+        ],
+        why: "Fundamental framework for moving beyond positional bargaining to principled negotiation",
+      },
+      {
+        chapter: "Chapter 2",
+        title: "Separate the People from the Problem",
+        pages: "17-39",
+        relevance:
+          "Relationship management in negotiation, dealing with emotions",
+        relevanceScore: 95,
+        keyTopics: [
+          "negotiation",
+          "relationship management",
+          "emotional intelligence",
+          "people skills",
+          "conflict resolution",
+        ],
+        why: "Essential technique for maintaining relationships while addressing substantive issues",
+      },
+      {
+        chapter: "Chapter 3",
+        title: "Focus on Interests, Not Positions",
+        pages: "40-55",
+        relevance:
+          "Understanding underlying needs and motivations in negotiation",
+        relevanceScore: 97,
+        keyTopics: [
+          "negotiation",
+          "interests vs positions",
+          "underlying needs",
+          "motivation",
+          "problem solving",
+        ],
+        why: "Key strategy for uncovering win-win solutions by understanding what parties really want",
+      },
+      {
+        chapter: "Chapter 4",
+        title: "Invent Options for Mutual Gain",
+        pages: "56-80",
+        relevance:
+          "Creative problem solving and generating alternatives in negotiation",
+        relevanceScore: 94,
+        keyTopics: [
+          "negotiation",
+          "creative solutions",
+          "brainstorming",
+          "mutual gain",
+          "option generation",
+        ],
+        why: "Framework for expanding the pie and creating value in negotiations",
+      },
+      {
+        chapter: "Chapter 5",
+        title: "Use Objective Criteria",
+        pages: "81-94",
+        relevance:
+          "Using standards and criteria to guide negotiation decisions",
+        relevanceScore: 91,
+        keyTopics: [
+          "negotiation",
+          "objective criteria",
+          "standards",
+          "fairness",
+          "benchmarking",
+        ],
+        why: "Method for ensuring fair outcomes based on objective standards rather than arbitrary positions",
+      },
+    ],
+  },
+  {
+    id: "never-split-difference",
+    title: "Never Split the Difference",
+    author: "Chris Voss",
+    cover:
+      "https://images-na.ssl-images-amazon.com/images/I/71u0G1u4WDL._SX323_BO1,204,203,200_.jpg",
+    description:
+      "Negotiating as if your life depended on it - lessons from an FBI hostage negotiator.",
+    amazonLink: "https://amazon.com/dp/0062407805",
+    rating: 4.6,
+    categories: ["Negotiation", "Psychology"],
+    relevantChapters: [
+      {
+        chapter: "Chapter 2",
+        title: "Be a Mirror",
+        pages: "31-54",
+        relevance: "Mirroring and tactical empathy in negotiation",
+        relevanceScore: 96,
+        keyTopics: [
+          "negotiation",
+          "mirroring",
+          "tactical empathy",
+          "active listening",
+          "rapport building",
+        ],
+        why: "Powerful technique for building trust and understanding in high-stakes negotiations",
+      },
+      {
+        chapter: "Chapter 3",
+        title: "Don't Feel Their Pain, Label It",
+        pages: "55-78",
+        relevance: "Emotional labeling and validation techniques",
+        relevanceScore: 94,
+        keyTopics: [
+          "negotiation",
+          "emotional labeling",
+          "validation",
+          "emotional intelligence",
+          "de-escalation",
+        ],
+        why: "Technique for acknowledging and defusing emotions without being overwhelmed by them",
+      },
+      {
+        chapter: "Chapter 5",
+        title:
+          "Trigger the Two Words That Immediately Transform Any Negotiation",
+        pages: "103-126",
+        relevance: "The power of 'That's right' and validation in negotiation",
+        relevanceScore: 92,
+        keyTopics: [
+          "negotiation",
+          "validation",
+          "agreement",
+          "psychological triggers",
+          "influence",
+        ],
+        why: "Understanding how validation and the phrase 'that's right' can transform negotiations",
+      },
+      {
+        chapter: "Chapter 7",
+        title: "Create the Illusion of Control",
+        pages: "149-172",
+        relevance: "Calibrated questions and giving the other party control",
+        relevanceScore: 90,
+        keyTopics: [
+          "negotiation",
+          "calibrated questions",
+          "control",
+          "questioning techniques",
+          "influence",
+        ],
+        why: "Advanced technique for maintaining control while making the other party feel empowered",
+      },
+    ],
+  },
+  {
+    id: "crucial-conversations",
+    title: "Crucial Conversations",
+    author: "Kerry Patterson, Joseph Grenny, Ron McMillan, Al Switzler",
+    cover:
+      "https://images-na.ssl-images-amazon.com/images/I/51OHJOhmQgL._SX327_BO1,204,203,200_.jpg",
+    description: "Tools for talking when stakes are high and opinions vary.",
+    amazonLink: "https://amazon.com/dp/1260474186",
+    rating: 4.5,
+    categories: ["Communication", "Negotiation"],
+    relevantChapters: [
+      {
+        chapter: "Chapter 7",
+        title: "STATE Your Path",
+        pages: "123-142",
+        relevance:
+          "Framework for sharing controversial or sensitive information",
+        relevanceScore: 93,
+        keyTopics: [
+          "negotiation",
+          "difficult conversations",
+          "communication framework",
+          "sharing opinions",
+          "persuasion",
+        ],
+        why: "Structured approach for presenting your viewpoint in high-stakes negotiations",
+      },
+      {
+        chapter: "Chapter 8",
+        title: "Explore Others' Paths",
+        pages: "143-162",
+        relevance: "Techniques for understanding the other party's perspective",
+        relevanceScore: 91,
+        keyTopics: [
+          "negotiation",
+          "active listening",
+          "empathy",
+          "perspective taking",
+          "understanding",
+        ],
+        why: "Essential skills for uncovering the other party's real interests and concerns",
+      },
+    ],
+  },
   // BUSINESS & LEADERSHIP BOOKS
   {
     id: "five-dysfunctions-team",

@@ -104,6 +104,7 @@ export function createServer() {
           tables: tablesResult.rows.map((r) => r.table_name),
           usersTableExists: parseInt(usersExist.rows[0].count) > 0,
           userCount,
+          summariesColumns: summariesColumns.rows,
         });
       } finally {
         client.release();

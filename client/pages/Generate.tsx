@@ -17,6 +17,7 @@ import {
   Lightbulb,
   Target,
 } from "lucide-react";
+import ChapterRating from "@/components/ChapterRating";
 
 interface ChapterMatch {
   chapter: string;
@@ -598,6 +599,17 @@ export default function Generate() {
                               </div>
                             </div>
                           )}
+
+                          {/* Chapter Rating */}
+                          <div className="mt-6">
+                            <ChapterRating
+                              bookId={book.id}
+                              chapterId={chapter.chapter}
+                              searchTopic={generatedSummary.topic}
+                              bookTitle={book.title}
+                              chapterTitle={chapter.title}
+                            />
+                          </div>
                         </div>
                       </div>
                     </CardContent>

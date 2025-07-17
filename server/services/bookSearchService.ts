@@ -374,7 +374,7 @@ export class BookSearchService {
         title: "Think and Grow Rich",
         author: "Napoleon Hill",
         cover:
-          "https://images-na.ssl-images-amazon.com/images/P/1585424331.01.L.jpg",
+          "https://m.media-amazon.com/images/I/41x4tVNrXCL._SX331_BO1,204,203,200_.jpg",
         description:
           "The classic guide to achieving success through positive thinking and personal development.",
         amazonLink: `https://amazon.com/dp/1585424331?tag=${this.amazonTag}`,
@@ -382,6 +382,26 @@ export class BookSearchService {
         publishedDate: "1937",
         pageCount: 320,
         categories: ["Business", "Self-Help"],
+        relevantChapters: [
+          {
+            chapter: "Chapter 1",
+            title: "Thoughts Are Things",
+            pages: "25-38",
+            relevance: "Foundation of thought power and mental transformation",
+          },
+          {
+            chapter: "Chapter 6",
+            title: "Organized Planning",
+            pages: "109-140",
+            relevance: "Strategic planning and leadership principles",
+          },
+          {
+            chapter: "Chapter 11",
+            title: "The Mystery of Sex Transmutation",
+            pages: "187-202",
+            relevance: "Energy channeling and creative force dynamics",
+          },
+        ],
       },
       {
         id: "fallback-5",

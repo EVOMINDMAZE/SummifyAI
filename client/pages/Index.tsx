@@ -30,7 +30,7 @@ export default function Index() {
       useModalOverlay: true,
       defaultStepOptions: {
         classes: "custom-shepherd-theme",
-        scrollTo: true,
+        scrollTo: false,
         modalOverlayOpeningPadding: 10,
         cancelIcon: {
           enabled: true,

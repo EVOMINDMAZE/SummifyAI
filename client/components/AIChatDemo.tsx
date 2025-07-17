@@ -17,6 +17,7 @@ interface AIChatDemoProps {
   suggestedPrompts?: string[];
   ctaText?: string;
   ctaLink?: string;
+  disableAutoScroll?: boolean;
 }
 
 const AIChatDemo: React.FC<AIChatDemoProps> = ({

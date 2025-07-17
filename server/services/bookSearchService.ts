@@ -306,7 +306,7 @@ export class BookSearchService {
         title: "The 7 Habits of Highly Effective People",
         author: "Stephen R. Covey",
         cover:
-          "https://images-na.ssl-images-amazon.com/images/P/0743269519.01.L.jpg",
+          "https://m.media-amazon.com/images/I/51S35F9CROL._SX327_BO1,204,203,200_.jpg",
         description:
           "A holistic approach to personal and professional effectiveness based on timeless principles.",
         amazonLink: `https://amazon.com/dp/0743269519?tag=${this.amazonTag}`,
@@ -314,6 +314,26 @@ export class BookSearchService {
         publishedDate: "1989",
         pageCount: 432,
         categories: ["Self-Help", "Productivity"],
+        relevantChapters: [
+          {
+            chapter: "Habit 2",
+            title: "Begin with the End in Mind",
+            pages: "95-144",
+            relevance: "Strategic planning and vision-setting principles",
+          },
+          {
+            chapter: "Habit 4",
+            title: "Think Win-Win",
+            pages: "204-234",
+            relevance: "Collaborative mindset and relationship building",
+          },
+          {
+            chapter: "Habit 5",
+            title: "Seek First to Understand",
+            pages: "235-260",
+            relevance: "Communication skills and empathetic listening",
+          },
+        ],
       },
       {
         id: "fallback-3",

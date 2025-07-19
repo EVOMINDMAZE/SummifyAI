@@ -106,27 +106,8 @@ export default function Generate() {
     minRating: 0,
   });
 
-  // Redirect if not authenticated
-  if (!user) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-            Access Restricted
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400 mb-8">
-            Please sign in to access the chapter discovery feature.
-          </p>
-          <Link
-            to="/signin"
-            className="bg-gradient-to-r from-[#FFFD63] to-[#FFE066] hover:from-[#FFE066] hover:to-[#FFFD63] text-[#0A0B1E] px-8 py-3 rounded-2xl font-bold transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
-          >
-            Sign In to Continue
-          </Link>
-        </div>
-      </div>
-    );
-  }
+  // Note: Authentication no longer required for database search
+  // Users can search the database without being logged in
 
   const analyzeTopic = async (topicToAnalyze: string) => {
     if (!topicToAnalyze.trim()) return;
@@ -207,7 +188,7 @@ export default function Generate() {
         keyInsights: generateKeyInsights(data.books),
         quotes: [], // Database search doesn't provide quotes yet
         generatedAt: new Date().toISOString(),
-        userId: user.id,
+        userId: user?.id || 0,
       };
 
       setGeneratedSummary(formattedSummary);
@@ -215,6 +196,15 @@ export default function Generate() {
     } catch (error) {
       console.error("Database search error:", error);
       setIsGenerating(false);
+
+      // Show user-friendly error message
+      setCurrentOperation("Search failed. Please try again.");
+
+      // Clear error after 3 seconds
+      setTimeout(() => {
+        setCurrentOperation("");
+        setProgress(0);
+      }, 3000);
     }
   };
 

@@ -218,27 +218,7 @@ export default function Generate() {
     }
   };
 
-  const pollProgress = async (sessionId: string) => {
-    try {
-      const response = await fetch(`/api/generate/progress/${sessionId}`);
-      const data = await response.json();
-
-      setProgress(data.progress);
-      setCurrentOperation(data.currentOperation || "Processing...");
-
-      if (data.progress >= 100 && data.result) {
-        setGeneratedSummary(data.result);
-        setIsGenerating(false);
-      } else if (data.status === "error") {
-        throw new Error(data.error || "Generation failed");
-      } else {
-        setTimeout(() => pollProgress(sessionId), 1000);
-      }
-    } catch (error) {
-      console.error("Progress polling error:", error);
-      setIsGenerating(false);
-    }
-  };
+  // Note: pollProgress function removed - no longer needed for direct database search
 
   const handleRefinementSelect = (refinedTopic: string) => {
     setTopic(refinedTopic);

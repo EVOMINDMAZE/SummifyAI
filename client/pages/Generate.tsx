@@ -622,58 +622,61 @@ export default function Generate() {
                             )}
                           </div>
 
-                          {/* Book Actions */}
-                          <div className="mt-4 space-y-3">
+                          {/* Enhanced Book Actions */}
+                          <div className="mt-6 space-y-4">
                             <a
                               href={book.amazonLink}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="w-full bg-gradient-to-r from-[#FFFD63] to-[#FFE066] hover:from-[#FFE066] hover:to-[#FFFD63] text-[#0A0B1E] px-4 py-2 rounded-xl font-bold transition-all shadow-lg hover:shadow-xl text-center block"
+                              className="w-full bg-gradient-to-r from-[#FFD700] via-[#FFA500] to-[#FF6347] hover:from-[#FFA500] hover:via-[#FF6347] hover:to-[#FFD700] text-white px-6 py-4 rounded-2xl font-bold transition-all duration-300 shadow-xl hover:shadow-2xl text-center block transform hover:scale-105 relative overflow-hidden group"
                             >
-                              <ExternalLink className="w-4 h-4 inline mr-2" />
-                              Get Book
+                              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 group-hover:animate-pulse"></div>
+                              <div className="relative z-10 flex items-center justify-center">
+                                <ExternalLink className="w-5 h-5 mr-2" />
+                                Get This Book
+                              </div>
                             </a>
                             <Button
                               onClick={() => handleShare(chapter, book)}
                               variant="outline"
                               size="sm"
-                              className="w-full rounded-xl border-2"
+                              className="w-full rounded-2xl border-2 border-[#667eea] text-[#667eea] hover:bg-[#667eea] hover:text-white transition-all duration-300 py-3 font-semibold"
                             >
                               <Share2 className="w-4 h-4 mr-2" />
-                              Share Chapter
+                              Share Discovery
                             </Button>
                           </div>
                         </div>
 
                         {/* Chapter Details */}
                         <div className="flex-1 p-8">
-                          {/* Chapter Header */}
-                          <div className="flex items-center justify-between mb-6">
-                            <div className="flex items-center space-x-4">
+                          {/* Enhanced Chapter Header */}
+                          <div className="mb-8">
+                            <div className="flex flex-wrap items-center gap-3 mb-4">
                               <Badge
                                 variant="secondary"
-                                className="bg-[#4361EE] text-white px-3 py-1 rounded-full text-sm font-semibold"
+                                className="bg-gradient-to-r from-[#667eea] to-[#764ba2] text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg"
                               >
                                 {chapter.chapter}
                               </Badge>
                               <Badge
                                 variant="outline"
-                                className="border-green-500 text-green-700 dark:text-green-400 px-3 py-1 rounded-full text-sm font-semibold"
+                                className="border-2 border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 px-4 py-2 rounded-full text-sm font-bold"
                               >
-                                {Math.round(chapter.relevanceScore || 95)}%
-                                match
+                                ✓ {Math.round(chapter.relevanceScore || 95)}%
+                                Match
                               </Badge>
                               <Badge
                                 variant="outline"
-                                className="border-blue-500 text-blue-700 dark:text-blue-400 px-2 py-1 rounded-full text-xs"
+                                className="border-2 border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 px-3 py-1 rounded-full text-xs font-medium"
                               >
-                                Pages {chapter.pages}
+                                📖 Pages {chapter.pages}
                               </Badge>
                             </div>
                           </div>
 
-                          {/* Chapter Title */}
-                          <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+                          {/* Enhanced Chapter Title */}
+                          <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
                             {chapter.title}
                           </h3>
 

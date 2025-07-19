@@ -249,6 +249,61 @@ export default function Generate() {
     performDatabaseSearch(topic);
   };
 
+  // Helper function to generate summary from search results
+  const generateSearchSummary = (books: Book[], query: string): string => {
+    const totalChapters = books.reduce(
+      (sum, book) => sum + (book.relevantChapters?.length || 0),
+      0,
+    );
+
+    return `## Database Search Results for \"${query}\"\n\nI found ${totalChapters} highly relevant chapters across ${books.length} books in our comprehensive database. These chapters have been selected based on semantic similarity to your search query using advanced AI vector embeddings.\n\n## Key Findings\n\n• **Comprehensive Coverage**: Our database contains thousands of pre-processed book chapters with AI-generated embeddings for precise semantic search\n• **Relevance Scoring**: Each chapter is ranked by semantic similarity to your query, ensuring you get the most relevant content first\n• **Diverse Sources**: Results span multiple books and authors, giving you varied perspectives on ${query.toLowerCase()}\n\n## How to Use These Results\n\n• **Start with High-Scoring Chapters**: Focus on chapters with 80%+ relevance scores for the most targeted content\n• **Cross-Reference**: Compare insights across different books to build a comprehensive understanding\n• **Deep Dive**: Use the \"Get Book\" links to access full content for chapters that interest you most`;
+  };
+
+  // Helper function to generate key insights
+  const generateKeyInsights = (books: Book[]): string[] => {
+    const insights: string[] = [];
+
+    const avgRelevance =
+      books.reduce((sum, book) => {
+        const chapterScores =
+          book.relevantChapters?.map((ch) => ch.relevanceScore) || [];
+        const bookAvg =
+          chapterScores.reduce((s, score) => s + score, 0) /
+          Math.max(chapterScores.length, 1);
+        return sum + bookAvg;
+      }, 0) / Math.max(books.length, 1);
+
+    insights.push(
+      `Average relevance score of ${Math.round(avgRelevance)}% indicates high-quality matches from our AI-powered semantic search`,
+    );
+
+    if (books.length > 5) {
+      insights.push(
+        `Found content across ${books.length} different books, providing diverse perspectives and comprehensive coverage`,
+      );
+    }
+
+    const uniqueAuthors = new Set(books.map((book) => book.author)).size;
+    if (uniqueAuthors > 3) {
+      insights.push(
+        `Results include insights from ${uniqueAuthors} different authors, ensuring varied viewpoints and approaches`,
+      );
+    }
+
+    const recentBooks = books.filter((book) => {
+      const year = book.publishedDate ? parseInt(book.publishedDate) : 0;
+      return year > 2010;
+    }).length;
+
+    if (recentBooks > 0) {
+      insights.push(
+        `${recentBooks} books from the last decade ensure you get contemporary insights and current best practices`,
+      );
+    }
+
+    return insights;
+  };
+
   const handleShare = (chapter: ChapterMatch, book: Book) => {
     const shareText = `Check out "${chapter.title}" from "${book.title}" by ${book.author} - ${chapter.relevanceScore}% match for "${topic}"`;
 

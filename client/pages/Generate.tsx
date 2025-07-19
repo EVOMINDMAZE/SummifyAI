@@ -528,20 +528,38 @@ export default function Generate() {
         {/* Results */}
         {generatedSummary && (
           <div className="space-y-8">
-            {/* Results Header */}
-            <div className="text-center">
-              <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-3">
-                📖 Chapter Discovery Results for "{generatedSummary.topic}"
-              </h2>
-              <p className="text-lg text-gray-600 dark:text-gray-400 mb-6">
-                Found{" "}
-                {
-                  generatedSummary.books.flatMap(
-                    (book) => book.relevantChapters || [],
-                  ).length
-                }{" "}
-                relevant chapters across {generatedSummary.books.length} books
-              </p>
+            {/* Enhanced Results Header */}
+            <div className="text-center mb-12">
+              <div className="bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 rounded-3xl p-8 border border-emerald-200 dark:border-emerald-800">
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full mb-4">
+                  <BookOpen className="w-8 h-8 text-white" />
+                </div>
+                <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+                  Discovery Results
+                </h2>
+                <div className="text-xl text-emerald-700 dark:text-emerald-300 font-semibold mb-2">
+                  "{generatedSummary.topic}"
+                </div>
+                <div className="flex flex-wrap justify-center gap-6 text-sm font-medium">
+                  <div className="bg-white/70 dark:bg-gray-800/70 rounded-full px-4 py-2 flex items-center">
+                    <span className="w-2 h-2 bg-emerald-500 rounded-full mr-2"></span>
+                    {
+                      generatedSummary.books.flatMap(
+                        (book) => book.relevantChapters || [],
+                      ).length
+                    }{" "}
+                    Chapters Found
+                  </div>
+                  <div className="bg-white/70 dark:bg-gray-800/70 rounded-full px-4 py-2 flex items-center">
+                    <span className="w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
+                    {generatedSummary.books.length} Books Searched
+                  </div>
+                  <div className="bg-white/70 dark:bg-gray-800/70 rounded-full px-4 py-2 flex items-center">
+                    <span className="w-2 h-2 bg-purple-500 rounded-full mr-2"></span>
+                    AI-Powered Results
+                  </div>
+                </div>
+              </div>
 
               {/* Share Results Button */}
               <div className="flex justify-center">
@@ -563,20 +581,19 @@ export default function Generate() {
                 (book.relevantChapters || []).map((chapter, chapterIndex) => (
                   <Card
                     key={`${book.id}-${chapterIndex}`}
-                    className="overflow-hidden shadow-xl border-0 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm hover:shadow-2xl transition-all duration-300"
+                    className="overflow-hidden shadow-2xl border-0 bg-gradient-to-br from-white to-gray-50/50 dark:from-gray-800 dark:to-gray-900/50 backdrop-blur-md hover:shadow-3xl transition-all duration-500 transform hover:scale-[1.02] rounded-3xl"
                   >
                     <CardContent className="p-0">
                       <div className="flex flex-col lg:flex-row">
-                        {/* Book Cover - Large and Prominent */}
-                        <div className="lg:w-80 flex-shrink-0 p-6 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800">
-                          <div className="relative group">
+                        {/* Enhanced Book Cover */}
+                        <div className="lg:w-80 flex-shrink-0 p-8 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-indigo-900/30 dark:via-purple-900/30 dark:to-pink-900/30">
+                          <div className="relative group transform transition-transform duration-300 hover:scale-105">
                             <img
                               src={book.cover}
                               alt={book.title}
-                              className="w-full h-80 object-cover rounded-2xl shadow-lg group-hover:shadow-2xl transition-all duration-300 transform group-hover:scale-105"
+                              className="w-full h-80 object-cover rounded-3xl shadow-2xl group-hover:shadow-3xl transition-all duration-500 border-4 border-white/50 dark:border-gray-700/50"
                               onError={(e) => {
                                 const target = e.currentTarget;
-                                // Try alternative Amazon image URL first
                                 if (!target.dataset.retried) {
                                   target.dataset.retried = "true";
                                   target.src = book.cover.replace(
@@ -584,13 +601,15 @@ export default function Generate() {
                                     "images-na.ssl-images-amazon.com",
                                   );
                                 } else {
-                                  // Fallback to placeholder
-                                  target.src = `https://via.placeholder.com/300x400/4361EE/FFFFFF?text=${encodeURIComponent(book.title.split(" ").slice(0, 3).join(" "))}`;
+                                  target.src = `https://via.placeholder.com/300x400/667eea/FFFFFF?text=${encodeURIComponent(book.title.split(" ").slice(0, 3).join(" "))}`;
                                 }
                               }}
                               loading="lazy"
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+                            {/* Floating glow effect */}
+                            <div className="absolute -inset-1 bg-gradient-to-r from-[#667eea] via-[#764ba2] to-[#f093fb] rounded-3xl blur opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
 
                             {/* Book Rating Badge */}
                             {book.rating && (

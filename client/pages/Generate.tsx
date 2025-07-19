@@ -293,66 +293,126 @@ export default function Generate() {
       <Navigation />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <div className="bg-gradient-to-r from-[#4361EE] to-[#7B2CBF] rounded-3xl p-8 text-white relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-32 translate-x-32"></div>
+        {/* Enhanced Header */}
+        <div className="text-center mb-16">
+          <div className="bg-gradient-to-br from-[#667eea] via-[#764ba2] to-[#f093fb] rounded-3xl p-12 text-white relative overflow-hidden shadow-2xl">
+            {/* Animated background elements */}
+            <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full -translate-y-48 translate-x-48 animate-pulse"></div>
+            <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/10 rounded-full translate-y-32 -translate-x-32"></div>
+            <div className="absolute top-1/2 left-1/2 w-32 h-32 bg-white/5 rounded-full -translate-x-16 -translate-y-16 animate-bounce"></div>
+
             <div className="relative z-10">
-              <h1 className="text-4xl md:text-5xl font-bold mb-4">
-                📚 Chapter Discovery
+              <div className="inline-flex items-center justify-center w-20 h-20 bg-white/20 rounded-full mb-6">
+                <BookOpen className="w-10 h-10 text-white" />
+              </div>
+              <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-white/80">
+                AI Chapter Discovery
               </h1>
-              <p className="text-xl text-white/90 mb-8 max-w-3xl mx-auto">
-                Search our comprehensive database of thousands of book chapters
-                with AI-powered semantic search. Get instant, relevant results
-                from our pre-processed content library.
+              <p className="text-xl text-white/90 mb-8 max-w-4xl mx-auto leading-relaxed">
+                Unlock knowledge from thousands of books instantly. Our
+                AI-powered semantic search finds the exact chapters you need
+                across our comprehensive database.
               </p>
+              <div className="flex flex-wrap justify-center gap-4 text-sm">
+                <div className="bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
+                  ⚡ Instant Results
+                </div>
+                <div className="bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
+                  🧠 AI-Powered
+                </div>
+                <div className="bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
+                  📚 1000+ Books
+                </div>
+                <div className="bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
+                  🎯 Semantic Search
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Search Form */}
-        <div className="max-w-2xl mx-auto mb-12">
-          <Card className="p-8 shadow-xl border-0 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm">
-            <CardContent className="p-0">
-              <div className="space-y-6">
-                <div>
-                  <label className="block text-lg font-semibold text-gray-900 dark:text-white mb-3">
-                    What topic would you like to explore?
-                  </label>
+        {/* Enhanced Search Form */}
+        <div className="max-w-4xl mx-auto mb-16">
+          <Card className="p-10 shadow-2xl border-0 bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-3xl relative overflow-hidden">
+            {/* Subtle background pattern */}
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-purple-50/50 dark:from-blue-900/10 dark:to-purple-900/10"></div>
+
+            <CardContent className="p-0 relative z-10">
+              <div className="space-y-8">
+                <div className="text-center">
+                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+                    What knowledge are you seeking?
+                  </h2>
+                  <p className="text-gray-600 dark:text-gray-400">
+                    Enter any topic and discover relevant chapters across our
+                    entire book database
+                  </p>
+                </div>
+
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none">
+                    <div className="w-6 h-6 text-gray-400">🔍</div>
+                  </div>
                   <Input
                     type="text"
                     value={topic}
                     onChange={(e) => setTopic(e.target.value)}
-                    placeholder="e.g., Team building, Leadership, Productivity, Negotiation..."
-                    className="text-lg py-4 px-6 rounded-xl border-2 border-gray-200 dark:border-gray-600 focus:border-[#4361EE] dark:focus:border-[#4361EE] transition-colors"
+                    placeholder="leadership, productivity, negotiation, team building, innovation..."
+                    className="text-lg py-6 pl-16 pr-6 rounded-2xl border-2 border-gray-200 dark:border-gray-600 focus:border-[#667eea] dark:focus:border-[#667eea] transition-all duration-300 bg-white/70 dark:bg-gray-700/70 backdrop-blur-sm shadow-inner"
                     onKeyPress={(e) => e.key === "Enter" && handleGenerate()}
                     disabled={isGenerating || isAnalyzing}
                   />
+
+                  {/* Search suggestions */}
+                  <div className="mt-4 flex flex-wrap gap-2 justify-center">
+                    {[
+                      "Leadership",
+                      "Productivity",
+                      "Negotiation",
+                      "Innovation",
+                      "Strategy",
+                      "Communication",
+                    ].map((suggestion) => (
+                      <button
+                        key={suggestion}
+                        onClick={() => setTopic(suggestion)}
+                        className="px-3 py-1 text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-[#667eea] hover:text-white transition-all duration-200 transform hover:scale-105"
+                        disabled={isGenerating || isAnalyzing}
+                      >
+                        {suggestion}
+                      </button>
+                    ))}
+                  </div>
                 </div>
 
-                <div className="flex space-x-3">
+                <div className="flex flex-col sm:flex-row gap-4">
                   <div className="flex-1">
                     <Button
                       onClick={handleGenerate}
                       disabled={!topic.trim() || isGenerating || isAnalyzing}
-                      className="w-full py-4 text-lg font-semibold bg-gradient-to-r from-[#4361EE] to-[#7B2CBF] hover:from-[#3B4DE8] hover:to-[#6B1DAF] text-white rounded-xl transition-all shadow-lg hover:shadow-xl transform hover:scale-105 disabled:transform-none disabled:opacity-50"
+                      className="w-full py-6 text-lg font-bold bg-gradient-to-r from-[#667eea] via-[#764ba2] to-[#f093fb] hover:from-[#5a67d8] hover:via-[#6b46c1] hover:to-[#ec4899] text-white rounded-2xl transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105 disabled:transform-none disabled:opacity-50 relative overflow-hidden group"
                     >
-                      {isAnalyzing ? (
-                        <div className="flex items-center">
-                          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white mr-3"></div>
-                          Analyzing Topic...
-                        </div>
-                      ) : isGenerating ? (
-                        <div className="flex items-center">
-                          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white mr-3"></div>
-                          Discovering Chapters...
-                        </div>
-                      ) : (
-                        <>
-                          <BookOpen className="w-6 h-6 mr-2" />
-                          Discover Relevant Chapters
-                        </>
-                      )}
+                      {/* Button shine effect */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 group-hover:animate-pulse"></div>
+
+                      <div className="relative z-10">
+                        {isAnalyzing ? (
+                          <div className="flex items-center justify-center">
+                            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white mr-3"></div>
+                            <span>Analyzing Topic...</span>
+                          </div>
+                        ) : isGenerating ? (
+                          <div className="flex items-center justify-center">
+                            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white mr-3"></div>
+                            <span>Searching Database...</span>
+                          </div>
+                        ) : (
+                          <div className="flex items-center justify-center">
+                            <BookOpen className="w-6 h-6 mr-3" />
+                            <span>Search Knowledge Base</span>
+                          </div>
+                        )}
+                      </div>
                     </Button>
                   </div>
 
@@ -364,22 +424,31 @@ export default function Generate() {
                   />
                 </div>
 
-                {isGenerating && (
-                  <div className="mt-6">
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                        {currentOperation}
+                {(isGenerating || currentOperation) && (
+                  <div className="mt-8 p-6 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-2xl border border-blue-200 dark:border-blue-800">
+                    <div className="flex justify-between items-center mb-4">
+                      <span className="text-sm font-semibold text-gray-800 dark:text-gray-200 flex items-center">
+                        {isGenerating && (
+                          <div className="animate-pulse w-2 h-2 bg-[#667eea] rounded-full mr-2"></div>
+                        )}
+                        {currentOperation || "Ready to search..."}
                       </span>
-                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                        {Math.round(progress)}%
-                      </span>
+                      {isGenerating && (
+                        <span className="text-sm font-bold text-[#667eea] dark:text-[#a78bfa]">
+                          {Math.round(progress)}%
+                        </span>
+                      )}
                     </div>
-                    <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
-                      <div
-                        className="bg-gradient-to-r from-[#4361EE] to-[#7B2CBF] h-3 rounded-full transition-all duration-300"
-                        style={{ width: `${progress}%` }}
-                      ></div>
-                    </div>
+                    {isGenerating && (
+                      <div className="w-full bg-white/50 dark:bg-gray-700/50 rounded-full h-2 overflow-hidden">
+                        <div
+                          className="bg-gradient-to-r from-[#667eea] via-[#764ba2] to-[#f093fb] h-2 rounded-full transition-all duration-500 ease-out relative"
+                          style={{ width: `${progress}%` }}
+                        >
+                          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-pulse"></div>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>

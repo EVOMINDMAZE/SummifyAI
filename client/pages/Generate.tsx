@@ -167,40 +167,53 @@ export default function Generate() {
   const handleGenerate = async () => {
     if (!topic.trim()) return;
 
-    // First analyze the topic
-    await analyzeTopic(topic.trim());
+    // For now, skip topic analysis and go directly to search
+    // TODO: Integrate topic analysis with database search if needed
+    await performDatabaseSearch(topic.trim());
   };
 
-  const startGeneration = async (finalTopic: string) => {
+  const performDatabaseSearch = async (searchQuery: string) => {
     setIsGenerating(true);
     setProgress(0);
-    setCurrentOperation("Initializing...");
+    setCurrentOperation("Searching database...");
     setShowRefinements(false);
 
     try {
-      const response = await fetch("/api/generate/start", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          topic: finalTopic,
-          userId: user.id,
-          maxBooks: 10,
-        }),
-      });
+      setProgress(30);
+      setCurrentOperation("Analyzing your query...");
+
+      const response = await fetch(
+        `/api/search?q=${encodeURIComponent(searchQuery)}`,
+      );
 
       if (!response.ok) {
-        throw new Error("Failed to start generation");
+        throw new Error("Failed to search database");
       }
 
-      const data = await response.json();
-      setSessionId(data.sessionId);
+      setProgress(70);
+      setCurrentOperation("Processing results...");
 
-      // Start polling for progress
-      pollProgress(data.sessionId);
+      const data = await response.json();
+
+      setProgress(100);
+      setCurrentOperation("Complete!");
+
+      // Format the results to match the expected structure
+      const formattedSummary: GeneratedSummary = {
+        id: Date.now().toString(),
+        topic: searchQuery,
+        books: data.books,
+        summary: generateSearchSummary(data.books, searchQuery),
+        keyInsights: generateKeyInsights(data.books),
+        quotes: [], // Database search doesn't provide quotes yet
+        generatedAt: new Date().toISOString(),
+        userId: user.id,
+      };
+
+      setGeneratedSummary(formattedSummary);
+      setIsGenerating(false);
     } catch (error) {
-      console.error("Generation error:", error);
+      console.error("Database search error:", error);
       setIsGenerating(false);
     }
   };
@@ -229,11 +242,11 @@ export default function Generate() {
 
   const handleRefinementSelect = (refinedTopic: string) => {
     setTopic(refinedTopic);
-    startGeneration(refinedTopic);
+    performDatabaseSearch(refinedTopic);
   };
 
   const proceedWithOriginalTopic = () => {
-    startGeneration(topic);
+    performDatabaseSearch(topic);
   };
 
   const handleShare = (chapter: ChapterMatch, book: Book) => {

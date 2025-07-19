@@ -785,14 +785,21 @@ export default function Generate() {
               )}
             </div>
 
-            {/* AI Summary Section */}
+            {/* Enhanced AI Summary Section */}
             {generatedSummary.summary && (
-              <Card className="shadow-xl border-0 bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20">
-                <CardContent className="p-8">
-                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
-                    <BookOpen className="w-6 h-6 mr-3 text-indigo-600" />
-                    AI-Generated Summary
-                  </h3>
+              <Card className="shadow-2xl border-0 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-indigo-900/20 dark:via-purple-900/20 dark:to-pink-900/20 rounded-3xl overflow-hidden">
+                <CardContent className="p-10">
+                  <div className="text-center mb-8">
+                    <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full mb-4">
+                      <BookOpen className="w-8 h-8 text-white" />
+                    </div>
+                    <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+                      Search Summary
+                    </h3>
+                    <p className="text-gray-600 dark:text-gray-400">
+                      AI-generated insights from your database search
+                    </p>
+                  </div>
                   <div className="ai-summary-content text-gray-700 dark:text-gray-300">
                     {generatedSummary.summary.split("\n").map((line, index) => {
                       // Handle markdown headings
@@ -850,27 +857,34 @@ export default function Generate() {
               </Card>
             )}
 
-            {/* Key Insights */}
+            {/* Enhanced Key Insights */}
             {generatedSummary.keyInsights &&
               generatedSummary.keyInsights.length > 0 && (
-                <Card className="shadow-xl border-0 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20">
-                  <CardContent className="p-8">
-                    <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center">
-                      <Lightbulb className="w-6 h-6 mr-3 text-green-600" />
-                      Key Insights
-                    </h3>
+                <Card className="shadow-2xl border-0 bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 dark:from-emerald-900/20 dark:via-teal-900/20 dark:to-cyan-900/20 rounded-3xl overflow-hidden">
+                  <CardContent className="p-10">
+                    <div className="text-center mb-8">
+                      <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-full mb-4">
+                        <Lightbulb className="w-8 h-8 text-white" />
+                      </div>
+                      <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+                        Key Insights
+                      </h3>
+                      <p className="text-gray-600 dark:text-gray-400">
+                        Valuable discoveries from your search results
+                      </p>
+                    </div>
                     <div className="grid gap-4">
                       {generatedSummary.keyInsights.map((insight, index) => (
                         <div
                           key={index}
-                          className="flex items-start p-4 bg-white/70 dark:bg-gray-800/70 rounded-xl border border-green-200 dark:border-green-800"
+                          className="flex items-start p-6 bg-white/80 dark:bg-gray-800/80 rounded-2xl border-2 border-emerald-200 dark:border-emerald-800 hover:border-emerald-300 dark:hover:border-emerald-700 transition-all duration-300 transform hover:scale-[1.02]"
                         >
-                          <div className="flex-shrink-0 w-8 h-8 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mr-4">
-                            <span className="text-green-600 dark:text-green-400 font-bold text-sm">
+                          <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full flex items-center justify-center mr-4 shadow-lg">
+                            <span className="text-white font-bold text-sm">
                               {index + 1}
                             </span>
                           </div>
-                          <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                          <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-lg">
                             {insight}
                           </p>
                         </div>

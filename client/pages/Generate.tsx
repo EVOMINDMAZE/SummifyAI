@@ -312,9 +312,9 @@ export default function Generate() {
                 📚 Chapter Discovery
               </h1>
               <p className="text-xl text-white/90 mb-8 max-w-3xl mx-auto">
-                Find the exact chapters and pages you need across multiple
-                books. Discover relevant content even in books not primarily
-                about your topic.
+                Search our comprehensive database of thousands of book chapters
+                with AI-powered semantic search. Get instant, relevant results
+                from our pre-processed content library.
               </p>
             </div>
           </div>

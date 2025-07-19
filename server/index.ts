@@ -187,5 +187,8 @@ export function createServer() {
   app.get("/api/ratings/user/:userId/:bookId/:chapterId", handleGetUserRating);
   app.get("/api/ratings/top/:searchTopic", handleGetTopRatedChapters);
 
+  // Search routes
+  app.use("/api/search", searchRoutes);
+
   return app;
 }

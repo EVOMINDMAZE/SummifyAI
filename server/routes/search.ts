@@ -40,16 +40,6 @@ interface FormattedBook {
   chapterRelevanceScore?: number;
 }
 
-// Placeholder function to simulate sentence-transformers
-function generateQueryEmbedding(query: string): number[] {
-  const vector = [];
-  for (let i = 0; i < 384; i++) {
-    vector.push((Math.random() - 0.5) * 2);
-  }
-  const magnitude = Math.sqrt(vector.reduce((sum, val) => sum + val * val, 0));
-  return vector.map((val) => val / magnitude);
-}
-
 // Database search endpoint
 router.get("/", async (req, res) => {
   try {
@@ -58,9 +48,6 @@ router.get("/", async (req, res) => {
     if (!query || typeof query !== "string" || query.trim() === "") {
       return res.status(400).json({ error: 'Query parameter "q" is required' });
     }
-
-    // Generate query embedding
-    const queryEmbedding = generateQueryEmbedding(query.trim());
 
     // Connect to database
     const client = new Client({
@@ -71,8 +58,7 @@ router.get("/", async (req, res) => {
     await client.connect();
 
     try {
-      const embeddingString = `[${queryEmbedding.join(",")}]`;
-
+      // Use text-based search with PostgreSQL pattern matching
       const result = await client.query(
         `
         SELECT 
@@ -88,16 +74,31 @@ router.get("/", async (req, res) => {
           b.summary as book_description,
           b.publication_year,
           b.genres,
-          c.vector_embedding <=> $1::vector AS distance
+          CASE 
+            WHEN c.chapter_title ILIKE $1 THEN 0.1
+            WHEN c.chapter_text ILIKE $1 THEN 0.3
+            WHEN b.title ILIKE $1 THEN 0.5
+            ELSE 0.8
+          END AS distance
         FROM chapters c
         JOIN books b ON c.book_id = b.id
         WHERE c.chapter_text IS NOT NULL 
-          AND c.vector_embedding IS NOT NULL
           AND b.title IS NOT NULL
-        ORDER BY distance ASC
-        LIMIT 15;
+          AND (
+            c.chapter_title ILIKE $1 
+            OR c.chapter_text ILIKE $1 
+            OR b.title ILIKE $1
+            OR b.author_name ILIKE $1
+          )
+        ORDER BY distance ASC, 
+          CASE 
+            WHEN c.chapter_title ILIKE $1 THEN 1
+            WHEN b.title ILIKE $1 THEN 2
+            ELSE 3
+          END
+        LIMIT 20;
       `,
-        [embeddingString],
+        [`%${query.trim()}%`],
       );
 
       // Group results by book
@@ -196,6 +197,7 @@ router.get("/", async (req, res) => {
         books: formattedBooks.slice(0, 10),
         totalResults: formattedBooks.length,
         query: query.trim(),
+        searchType: "text-based", // Indicate this is text search, not vector search
       });
     } finally {
       await client.end();

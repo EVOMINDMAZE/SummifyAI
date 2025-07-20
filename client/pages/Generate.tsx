@@ -28,6 +28,8 @@ interface TopChapter {
   title: string;
   snippet: string;
   relevanceScore: number;
+  whyRelevant: string;
+  keyTopics: string[];
 }
 
 interface BookGroup {

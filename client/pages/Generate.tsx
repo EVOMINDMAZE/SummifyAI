@@ -276,6 +276,25 @@ export default function Generate() {
     performDatabaseSearch(topic);
   };
 
+  // Debug function to test API connection
+  const testAPIConnection = async () => {
+    try {
+      console.log("🔧 Testing API connection...");
+      const response = await fetch("/api/health");
+      const data = await response.json();
+      console.log("✅ API Health Check:", data);
+      alert(
+        `API Status: ${data.status}\nDatabase: ${data.hasDatabase ? "Connected" : "Not configured"}\nOpenAI: ${data.hasOpenAI ? "Connected" : "Not configured"}`,
+      );
+    } catch (error) {
+      console.error("❌ API Health Check failed:", error);
+      alert(
+        "API connection failed: " +
+          (error instanceof Error ? error.message : "Unknown error"),
+      );
+    }
+  };
+
   const handleBookCardClick = (bookGroup: BookGroup) => {
     console.log(`📖 Viewing details for: ${bookGroup.title}`);
 

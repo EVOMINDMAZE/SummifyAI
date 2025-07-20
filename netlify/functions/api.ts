@@ -406,14 +406,16 @@ export const handler: Handler = async (event, context) => {
 
     // Default 404 response
     console.log(`❌ Route not found: ${method} ${path}`);
+    console.log(`Available routes: /health, /database, /topic, /topic/analyze`);
     return {
       statusCode: 404,
       headers,
       body: JSON.stringify({
         error: "API route not found",
-        path: path,
+        originalPath: event.path,
+        processedPath: path,
         method: method,
-        availableRoutes: ["/health", "/database", "/topic"],
+        availableRoutes: ["/health", "/database", "/topic", "/topic/analyze"],
       }),
     };
   } catch (error) {

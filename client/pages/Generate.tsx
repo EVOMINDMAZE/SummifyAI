@@ -313,11 +313,17 @@ export default function Generate() {
 
   const handleBookCardClick = (bookGroup: BookGroup) => {
     console.log(`📖 Viewing details for: ${bookGroup.title}`);
-    // TODO: Navigate to chapter detail page
-    // For now, show an alert with book info
-    alert(
-      `Coming soon: Detailed view for "${bookGroup.title}" with ${bookGroup.topChapters.length} relevant chapters.`,
-    );
+
+    // Navigate to the first chapter detail page
+    if (bookGroup.topChapters.length > 0) {
+      const firstChapter = bookGroup.topChapters[0];
+      navigate(`/chapter/${bookGroup.id}/${firstChapter.id}`, {
+        state: {
+          query: searchResults?.query || topic,
+          bookGroup,
+        },
+      });
+    }
   };
 
   return (

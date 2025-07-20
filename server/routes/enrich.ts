@@ -25,10 +25,20 @@ interface EnrichmentResponse {
   success: boolean;
 }
 
-// Initialize OpenAI client for GPT-4.1-nano
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+// Initialize OpenAI client only when API key is available
+let openai: OpenAI | null = null;
+
+function getOpenAIClient(): OpenAI {
+  if (!openai && process.env.OPENAI_API_KEY) {
+    openai = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    });
+  }
+  if (!openai) {
+    throw new Error("OpenAI API key not configured");
+  }
+  return openai;
+}
 
 // AI Enrichment endpoint for comprehensive chapter analysis
 router.post("/", async (req, res) => {
@@ -144,7 +154,8 @@ Chapter Content: "${chapterText}"
 
 As an expert content analyst, explain in one compelling sentence why this chapter is highly relevant to the user's query. Focus on specific concepts, frameworks, or actionable insights that directly address what the user seeks. Be precise and value-focused.`;
 
-    const response = await openai.chat.completions.create({
+    const openaiClient = getOpenAIClient();
+    const response = await openaiClient.chat.completions.create({
       model: "gpt-4-turbo", // Using GPT-4 Turbo as GPT-4.1-nano isn't available
       messages: [
         {
@@ -188,7 +199,8 @@ Text: "${chapterText}"
 
 Return only a comma-separated list of topics, no explanations.`;
 
-    const response = await openai.chat.completions.create({
+    const openaiClient = getOpenAIClient();
+    const response = await openaiClient.chat.completions.create({
       model: "gpt-4-turbo",
       messages: [
         {
@@ -233,7 +245,8 @@ Content: "${chapterText}"
 
 Return a simple list, one principle per line, no bullet points or numbers.`;
 
-    const response = await openai.chat.completions.create({
+    const openaiClient = getOpenAIClient();
+    const response = await openaiClient.chat.completions.create({
       model: "gpt-4-turbo",
       messages: [
         {
@@ -278,7 +291,8 @@ Content: "${chapterText}"
 
 Return a simple list, one application per line, focused on practical steps.`;
 
-    const response = await openai.chat.completions.create({
+    const openaiClient = getOpenAIClient();
+    const response = await openaiClient.chat.completions.create({
       model: "gpt-4-turbo",
       messages: [
         {
@@ -325,7 +339,8 @@ Content: "${chapterText}"
 
 Provide a clear, value-focused summary.`;
 
-    const response = await openai.chat.completions.create({
+    const openaiClient = getOpenAIClient();
+    const response = await openaiClient.chat.completions.create({
       model: "gpt-4-turbo",
       messages: [
         {
@@ -365,7 +380,8 @@ Content: "${chapterText}"
 
 Provide actionable recommendations, one per line.`;
 
-    const response = await openai.chat.completions.create({
+    const openaiClient = getOpenAIClient();
+    const response = await openaiClient.chat.completions.create({
       model: "gpt-4-turbo",
       messages: [
         {

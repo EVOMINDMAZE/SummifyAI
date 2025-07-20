@@ -242,7 +242,12 @@ router.get("/", async (req, res) => {
             book: {
               id: bookId.toString(),
               title: row.book_title,
-              author: row.author_name || "Unknown Author",
+              author:
+                row.author_name &&
+                row.author_name.trim() &&
+                row.author_name !== "Unknown"
+                  ? row.author_name
+                  : "Unknown Author",
               cover:
                 row.cover_url ||
                 `https://via.placeholder.com/300x400/667eea/FFFFFF?text=${encodeURIComponent(row.book_title?.split(" ").slice(0, 3).join(" ") || "Book")}`,

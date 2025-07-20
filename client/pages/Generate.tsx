@@ -184,12 +184,14 @@ export default function Generate() {
   const performDatabaseSearch = async (searchQuery: string) => {
     setIsGenerating(true);
     setProgress(0);
-    setCurrentOperation("Searching database...");
+    setCurrentOperation("Initializing AI vector search...");
     setShowRefinements(false);
+    setSearchResults(null);
+    setGeneratedSummary(null);
 
     try {
       setProgress(30);
-      setCurrentOperation("Analyzing your query...");
+      setCurrentOperation("Generating semantic embeddings...");
 
       const response = await fetch(
         `/api/search?q=${encodeURIComponent(searchQuery)}`,
@@ -200,9 +202,9 @@ export default function Generate() {
       }
 
       setProgress(70);
-      setCurrentOperation("Processing results...");
+      setCurrentOperation("Processing AI results...");
 
-      const data = await response.json();
+      const data: SearchResults = await response.json();
 
       setProgress(100);
       setCurrentOperation("Complete!");

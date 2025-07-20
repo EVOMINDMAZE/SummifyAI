@@ -16,10 +16,20 @@ interface TopicRefinement {
   description: string;
 }
 
-// Initialize OpenAI client
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+// Initialize OpenAI client only when API key is available
+let openai: OpenAI | null = null;
+
+function getOpenAIClient(): OpenAI {
+  if (!openai && process.env.OPENAI_API_KEY) {
+    openai = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    });
+  }
+  if (!openai) {
+    throw new Error("OpenAI API key not configured");
+  }
+  return openai;
+}
 
 // Analyze topic to determine if it's too broad
 router.post("/analyze", async (req, res) => {
@@ -48,7 +58,8 @@ Respond with a JSON object with this exact structure:
   "explanation": "Brief explanation of why this topic is/isn't too broad"
 }`;
 
-    const analysisResponse = await openai.chat.completions.create({
+    const openaiClient = getOpenAIClient();
+    const analysisResponse = await openaiClient.chat.completions.create({
       model: "gpt-4-turbo",
       messages: [
         {
@@ -122,7 +133,8 @@ Respond with JSON array:
 ]`;
 
       try {
-        const refinementResponse = await openai.chat.completions.create({
+        const openaiClient = getOpenAIClient();
+        const refinementResponse = await openaiClient.chat.completions.create({
           model: "gpt-4-turbo",
           messages: [
             {

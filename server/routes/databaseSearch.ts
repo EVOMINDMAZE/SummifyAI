@@ -662,16 +662,126 @@ function createFallbackEnrichment(
   };
 }
 
-function extractBasicTopics(text: string, query: string): string[] {
+function generateContextualRelevance(
+  chapterTitle: string,
+  chapterText: string,
+  userQuery: string,
+): string {
+  const titleWords = chapterTitle.toLowerCase().split(/\s+/);
+  const queryWords = userQuery.toLowerCase().split(/\s+/);
+  const textSample = chapterText.substring(0, 500).toLowerCase();
+
+  // Find specific connections between query and chapter
+  const connections = [];
+
+  // Check for direct query terms in title
+  const titleMatches = queryWords.filter((word) =>
+    titleWords.some(
+      (titleWord) => titleWord.includes(word) || word.includes(titleWord),
+    ),
+  );
+
+  if (titleMatches.length > 0) {
+    connections.push(`directly addresses ${titleMatches.join(" and ")}`);
+  }
+
+  // Look for key concepts in the text
+  const conceptMappings = {
+    leadership: [
+      "leading",
+      "manager",
+      "team",
+      "direct",
+      "authority",
+      "influence",
+    ],
+    communication: [
+      "speaking",
+      "listening",
+      "conversation",
+      "message",
+      "talk",
+      "discuss",
+    ],
+    negotiation: [
+      "bargain",
+      "deal",
+      "agreement",
+      "compromise",
+      "persuade",
+      "convince",
+    ],
+    strategy: ["plan", "approach", "method", "framework", "system", "process"],
+    team: [
+      "group",
+      "collaborate",
+      "work together",
+      "cooperation",
+      "collective",
+    ],
+    decision: [
+      "choose",
+      "decide",
+      "select",
+      "evaluate",
+      "judgment",
+      "analysis",
+    ],
+    problem: [
+      "solve",
+      "issue",
+      "challenge",
+      "difficulty",
+      "obstacle",
+      "solution",
+    ],
+    innovation: ["create", "new", "change", "improve", "transform", "develop"],
+  };
+
+  for (const [concept, keywords] of Object.entries(conceptMappings)) {
+    if (userQuery.toLowerCase().includes(concept)) {
+      const foundKeywords = keywords.filter((keyword) =>
+        textSample.includes(keyword),
+      );
+      if (foundKeywords.length > 0) {
+        connections.push(
+          `provides practical insights on ${concept} through ${foundKeywords[0]}-focused content`,
+        );
+        break;
+      }
+    }
+  }
+
+  if (connections.length === 0) {
+    // Generic but still contextual fallback
+    return `This chapter "${chapterTitle}" offers relevant perspectives that can enhance your understanding of ${userQuery}.`;
+  }
+
+  return `This chapter ${connections[0]} and provides actionable frameworks you can apply to ${userQuery}.`;
+}
+
+function extractSmartTopics(
+  text: string,
+  title: string,
+  query: string,
+): string[] {
   const words = text.toLowerCase().match(/\b[a-z]{4,}\b/g) || [];
+  const titleWords = title.toLowerCase().match(/\b[a-z]{3,}\b/g) || [];
   const queryWords = query.split(/\s+/).map((w) => w.toLowerCase());
   const topics = new Set<string>();
 
+  // Prioritize query words that appear in text
   queryWords.forEach((word) => {
-    if (word.length > 3) topics.add(word);
+    if (
+      word.length > 3 &&
+      (words.includes(word) || titleWords.includes(word))
+    ) {
+      topics.add(word.charAt(0).toUpperCase() + word.slice(1));
+    }
   });
 
-  const commonTopics = [
+  // Extract key business terms from the text
+  const businessTerms = [
     "leadership",
     "management",
     "strategy",
@@ -682,17 +792,32 @@ function extractBasicTopics(text: string, query: string): string[] {
     "planning",
     "execution",
     "growth",
+    "negotiation",
+    "influence",
+    "decision",
+    "problem",
+    "solution",
+    "team",
+    "collaboration",
+    "productivity",
+    "efficiency",
+    "accountability",
   ];
 
-  commonTopics.forEach((topic) => {
-    if (words.includes(topic)) {
-      topics.add(topic);
+  businessTerms.forEach((term) => {
+    if (words.includes(term) || titleWords.includes(term)) {
+      topics.add(term.charAt(0).toUpperCase() + term.slice(1));
     }
   });
 
-  return Array.from(topics)
-    .map((t) => t.charAt(0).toUpperCase() + t.slice(1))
-    .slice(0, 4);
+  // Add title-specific topics
+  titleWords.forEach((word) => {
+    if (word.length > 4 && businessTerms.includes(word)) {
+      topics.add(word.charAt(0).toUpperCase() + word.slice(1));
+    }
+  });
+
+  return Array.from(topics).slice(0, 5);
 }
 
 function generateBasicPrinciples(query: string): string[] {

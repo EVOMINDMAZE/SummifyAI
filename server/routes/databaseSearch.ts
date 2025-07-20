@@ -37,17 +37,28 @@ interface EnrichedChapter {
   practicalApplications: string[];
 }
 
-// Initialize OpenAI client
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+// Initialize OpenAI client only when API key is available
+let openai: OpenAI | null = null;
+
+function getOpenAIClient(): OpenAI {
+  if (!openai && process.env.OPENAI_API_KEY) {
+    openai = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    });
+  }
+  if (!openai) {
+    throw new Error("OpenAI API key not configured");
+  }
+  return openai;
+}
 
 // Generate query embedding using OpenAI's text-embedding-3-small
 async function generateQueryEmbedding(query: string): Promise<number[]> {
   try {
     console.log(`🧠 Generating embedding for: "${query}"`);
 
-    const response = await openai.embeddings.create({
+    const openaiClient = getOpenAIClient();
+    const response = await openaiClient.embeddings.create({
       model: "text-embedding-3-small",
       input: query.trim(),
       encoding_format: "float",
@@ -341,7 +352,8 @@ Provide a JSON response with:
 }`;
 
   try {
-    const response = await openai.chat.completions.create({
+    const openaiClient = getOpenAIClient();
+    const response = await openaiClient.chat.completions.create({
       model: "gpt-4-turbo",
       messages: [
         {

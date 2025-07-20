@@ -28,6 +28,7 @@ import {
   handleGetTopRatedChapters,
 } from "./routes/ratings";
 import searchRoutes from "./routes/search";
+import enrichRoutes from "./routes/enrich";
 
 export function createServer() {
   const app = express();

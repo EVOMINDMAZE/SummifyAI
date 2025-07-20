@@ -3,15 +3,16 @@ import cors from "cors";
 import rateLimit from "express-rate-limit";
 import dotenv from "dotenv";
 
-// Import routes
+// Import properly structured routes (that export Express routers)
 import searchRoutes from "./routes/search.js";
 import enrichRoutes from "./routes/enrich.js";
-import generateRoutes from "./routes/generate.js";
-import ratingsRoutes from "./routes/ratings.js";
-import neonRoutes from "./routes/neon.js";
-import demoRoutes from "./routes/demo.js";
 import queryAnalysisRoutes from "./routes/queryAnalysis.js";
 import databaseSearchRoutes from "./routes/databaseSearch.js";
+
+// Import individual handlers
+import { handleDemo } from "./routes/demo.js";
+import { handleNeonExecute } from "./routes/neon.js";
+import { handleSubmitRating } from "./routes/ratings.js";
 
 // Load environment variables
 dotenv.config();
@@ -46,15 +47,16 @@ export function createServer() {
     });
   });
 
-  // Route registration
+  // Router-based routes
   app.use("/api/search", searchRoutes);
   app.use("/api/enrich", enrichRoutes);
-  app.use("/api/generate", generateRoutes);
-  app.use("/api/ratings", ratingsRoutes);
-  app.use("/api/neon", neonRoutes);
-  app.use("/api/demo", demoRoutes);
   app.use("/api/topic", queryAnalysisRoutes);
   app.use("/api/database", databaseSearchRoutes);
+
+  // Individual handler routes
+  app.get("/api/demo", handleDemo);
+  app.post("/api/neon/execute", handleNeonExecute);
+  app.post("/api/ratings/submit", handleSubmitRating);
 
   // Error handling middleware
   app.use(

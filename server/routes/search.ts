@@ -146,7 +146,7 @@ router.get("/", async (req, res) => {
           JOIN books b ON c.book_id = b.id
           WHERE c.vector_embedding IS NOT NULL 
             AND c.chapter_text IS NOT NULL
-            AND LENGTH(c.chapter_text) > 100
+                        AND LENGTH(c.chapter_text) > 50
             AND b.title IS NOT NULL
           ORDER BY distance ASC
           LIMIT 20;
@@ -187,7 +187,7 @@ router.get("/", async (req, res) => {
           FROM chapters c
           JOIN books b ON c.book_id = b.id
           WHERE c.chapter_text IS NOT NULL 
-            AND LENGTH(c.chapter_text) > 100
+                        AND LENGTH(c.chapter_text) > 50
             AND b.title IS NOT NULL
             AND (
               c.chapter_title ILIKE $1 

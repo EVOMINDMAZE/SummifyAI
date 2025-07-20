@@ -636,7 +636,7 @@ function createFallbackEnrichment(
   const relevanceExplanation = generateContextualRelevance(
     chapter.chapter_title,
     chapter.chapter_text,
-    userQuery
+    userQuery,
   );
 
   return {
@@ -645,16 +645,27 @@ function createFallbackEnrichment(
     snippet: chapter.chapter_text.substring(0, 300),
     relevanceScore: score,
     whyRelevant: relevanceExplanation,
-    keyTopics: extractSmartTopics(chapter.chapter_text, chapter.chapter_title, userQuery),
-    coreLeadershipPrinciples: generateContextualPrinciples(chapter.chapter_text, userQuery),
-    practicalApplications: generateContextualApplications(chapter.chapter_text, chapter.chapter_title, userQuery),
+    keyTopics: extractSmartTopics(
+      chapter.chapter_text,
+      chapter.chapter_title,
+      userQuery,
+    ),
+    coreLeadershipPrinciples: generateContextualPrinciples(
+      chapter.chapter_text,
+      userQuery,
+    ),
+    practicalApplications: generateContextualApplications(
+      chapter.chapter_text,
+      chapter.chapter_title,
+      userQuery,
+    ),
   };
 }
 
 function generateContextualRelevance(
   chapterTitle: string,
   chapterText: string,
-  userQuery: string
+  userQuery: string,
 ): string {
   const titleWords = chapterTitle.toLowerCase().split(/\s+/);
   const queryWords = userQuery.toLowerCase().split(/\s+/);
@@ -664,31 +675,78 @@ function generateContextualRelevance(
   const connections = [];
 
   // Check for direct query terms in title
-  const titleMatches = queryWords.filter(word =>
-    titleWords.some(titleWord => titleWord.includes(word) || word.includes(titleWord))
+  const titleMatches = queryWords.filter((word) =>
+    titleWords.some(
+      (titleWord) => titleWord.includes(word) || word.includes(titleWord),
+    ),
   );
 
   if (titleMatches.length > 0) {
-    connections.push(`directly addresses ${titleMatches.join(' and ')}`);
+    connections.push(`directly addresses ${titleMatches.join(" and ")}`);
   }
 
   // Look for key concepts in the text
   const conceptMappings = {
-    'leadership': ['leading', 'manager', 'team', 'direct', 'authority', 'influence'],
-    'communication': ['speaking', 'listening', 'conversation', 'message', 'talk', 'discuss'],
-    'negotiation': ['bargain', 'deal', 'agreement', 'compromise', 'persuade', 'convince'],
-    'strategy': ['plan', 'approach', 'method', 'framework', 'system', 'process'],
-    'team': ['group', 'collaborate', 'work together', 'cooperation', 'collective'],
-    'decision': ['choose', 'decide', 'select', 'evaluate', 'judgment', 'analysis'],
-    'problem': ['solve', 'issue', 'challenge', 'difficulty', 'obstacle', 'solution'],
-    'innovation': ['create', 'new', 'change', 'improve', 'transform', 'develop']
+    leadership: [
+      "leading",
+      "manager",
+      "team",
+      "direct",
+      "authority",
+      "influence",
+    ],
+    communication: [
+      "speaking",
+      "listening",
+      "conversation",
+      "message",
+      "talk",
+      "discuss",
+    ],
+    negotiation: [
+      "bargain",
+      "deal",
+      "agreement",
+      "compromise",
+      "persuade",
+      "convince",
+    ],
+    strategy: ["plan", "approach", "method", "framework", "system", "process"],
+    team: [
+      "group",
+      "collaborate",
+      "work together",
+      "cooperation",
+      "collective",
+    ],
+    decision: [
+      "choose",
+      "decide",
+      "select",
+      "evaluate",
+      "judgment",
+      "analysis",
+    ],
+    problem: [
+      "solve",
+      "issue",
+      "challenge",
+      "difficulty",
+      "obstacle",
+      "solution",
+    ],
+    innovation: ["create", "new", "change", "improve", "transform", "develop"],
   };
 
   for (const [concept, keywords] of Object.entries(conceptMappings)) {
     if (userQuery.toLowerCase().includes(concept)) {
-      const foundKeywords = keywords.filter(keyword => textSample.includes(keyword));
+      const foundKeywords = keywords.filter((keyword) =>
+        textSample.includes(keyword),
+      );
       if (foundKeywords.length > 0) {
-        connections.push(`provides practical insights on ${concept} through ${foundKeywords[0]}-focused content`);
+        connections.push(
+          `provides practical insights on ${concept} through ${foundKeywords[0]}-focused content`,
+        );
         break;
       }
     }
@@ -702,7 +760,11 @@ function generateContextualRelevance(
   return `This chapter ${connections[0]} and provides actionable frameworks you can apply to ${userQuery}.`;
 }
 
-function extractSmartTopics(text: string, title: string, query: string): string[] {
+function extractSmartTopics(
+  text: string,
+  title: string,
+  query: string,
+): string[] {
   const words = text.toLowerCase().match(/\b[a-z]{4,}\b/g) || [];
   const titleWords = title.toLowerCase().match(/\b[a-z]{3,}\b/g) || [];
   const queryWords = query.split(/\s+/).map((w) => w.toLowerCase());
@@ -710,17 +772,36 @@ function extractSmartTopics(text: string, title: string, query: string): string[
 
   // Prioritize query words that appear in text
   queryWords.forEach((word) => {
-    if (word.length > 3 && (words.includes(word) || titleWords.includes(word))) {
+    if (
+      word.length > 3 &&
+      (words.includes(word) || titleWords.includes(word))
+    ) {
       topics.add(word.charAt(0).toUpperCase() + word.slice(1));
     }
   });
 
   // Extract key business terms from the text
   const businessTerms = [
-    'leadership', 'management', 'strategy', 'communication', 'innovation',
-    'performance', 'development', 'planning', 'execution', 'growth',
-    'negotiation', 'influence', 'decision', 'problem', 'solution',
-    'team', 'collaboration', 'productivity', 'efficiency', 'accountability'
+    "leadership",
+    "management",
+    "strategy",
+    "communication",
+    "innovation",
+    "performance",
+    "development",
+    "planning",
+    "execution",
+    "growth",
+    "negotiation",
+    "influence",
+    "decision",
+    "problem",
+    "solution",
+    "team",
+    "collaboration",
+    "productivity",
+    "efficiency",
+    "accountability",
   ];
 
   businessTerms.forEach((term) => {
@@ -730,7 +811,7 @@ function extractSmartTopics(text: string, title: string, query: string): string[
   });
 
   // Add title-specific topics
-  titleWords.forEach(word => {
+  titleWords.forEach((word) => {
     if (word.length > 4 && businessTerms.includes(word)) {
       topics.add(word.charAt(0).toUpperCase() + word.slice(1));
     }
@@ -739,27 +820,30 @@ function extractSmartTopics(text: string, title: string, query: string): string[
   return Array.from(topics).slice(0, 5);
 }
 
-function generateContextualPrinciples(chapterText: string, query: string): string[] {
+function generateContextualPrinciples(
+  chapterText: string,
+  query: string,
+): string[] {
   const textSample = chapterText.substring(0, 800).toLowerCase();
   const principles = [];
 
   // Context-aware principle generation based on actual chapter content
   const principlePatterns = {
-    'framework': 'Apply systematic frameworks',
-    'process': 'Follow structured processes',
-    'method': 'Use proven methodologies',
-    'strategy': 'Think strategically',
-    'plan': 'Plan before executing',
-    'communicate': 'Communicate clearly and often',
-    'listen': 'Listen actively to understand',
-    'trust': 'Build trust through consistency',
-    'goal': 'Set clear, measurable goals',
-    'feedback': 'Seek and provide regular feedback',
-    'learn': 'Embrace continuous learning',
-    'adapt': 'Remain flexible and adaptable',
-    'collaborate': 'Foster genuine collaboration',
-    'lead': 'Lead by example',
-    'empower': 'Empower others to succeed'
+    framework: "Apply systematic frameworks",
+    process: "Follow structured processes",
+    method: "Use proven methodologies",
+    strategy: "Think strategically",
+    plan: "Plan before executing",
+    communicate: "Communicate clearly and often",
+    listen: "Listen actively to understand",
+    trust: "Build trust through consistency",
+    goal: "Set clear, measurable goals",
+    feedback: "Seek and provide regular feedback",
+    learn: "Embrace continuous learning",
+    adapt: "Remain flexible and adaptable",
+    collaborate: "Foster genuine collaboration",
+    lead: "Lead by example",
+    empower: "Empower others to succeed",
   };
 
   // Find principles that match the chapter content
@@ -773,36 +857,43 @@ function generateContextualPrinciples(chapterText: string, query: string): strin
   // If no specific matches, use query-based principles
   if (principles.length === 0) {
     const queryKey = query.toLowerCase();
-    if (queryKey.includes('leadership')) {
-      principles.push('Lead with authenticity', 'Develop others');
-    } else if (queryKey.includes('communication')) {
-      principles.push('Listen before speaking', 'Seek understanding');
-    } else if (queryKey.includes('team')) {
-      principles.push('Foster psychological safety', 'Build trust');
+    if (queryKey.includes("leadership")) {
+      principles.push("Lead with authenticity", "Develop others");
+    } else if (queryKey.includes("communication")) {
+      principles.push("Listen before speaking", "Seek understanding");
+    } else if (queryKey.includes("team")) {
+      principles.push("Foster psychological safety", "Build trust");
     } else {
-      principles.push('Focus on value creation', 'Embrace continuous improvement');
+      principles.push(
+        "Focus on value creation",
+        "Embrace continuous improvement",
+      );
     }
   }
 
   return principles.slice(0, 3);
 }
 
-function generateContextualApplications(chapterText: string, chapterTitle: string, query: string): string[] {
+function generateContextualApplications(
+  chapterText: string,
+  chapterTitle: string,
+  query: string,
+): string[] {
   const textSample = chapterText.substring(0, 600).toLowerCase();
   const applications = [];
 
   // Extract actionable content from the chapter
   const actionPatterns = {
-    'implement': `Implement the ${chapterTitle} approach in your work`,
-    'practice': `Practice the techniques described in this chapter`,
-    'apply': `Apply these methods to your specific ${query} challenges`,
-    'use': `Use this framework to guide your ${query} decisions`,
-    'develop': `Develop skills based on the chapter's recommendations`,
-    'create': `Create systems inspired by these insights`,
-    'build': `Build upon these foundational concepts`,
-    'establish': `Establish processes using these principles`,
-    'follow': `Follow the structured approach outlined here`,
-    'adopt': `Adopt these proven strategies`
+    implement: `Implement the ${chapterTitle} approach in your work`,
+    practice: `Practice the techniques described in this chapter`,
+    apply: `Apply these methods to your specific ${query} challenges`,
+    use: `Use this framework to guide your ${query} decisions`,
+    develop: `Develop skills based on the chapter's recommendations`,
+    create: `Create systems inspired by these insights`,
+    build: `Build upon these foundational concepts`,
+    establish: `Establish processes using these principles`,
+    follow: `Follow the structured approach outlined here`,
+    adopt: `Adopt these proven strategies`,
   };
 
   // Find applications based on chapter content
@@ -815,12 +906,16 @@ function generateContextualApplications(chapterText: string, chapterTitle: strin
 
   // Add query-specific applications
   const queryLower = query.toLowerCase();
-  if (queryLower.includes('team')) {
-    applications.push('Practice these concepts in team meetings and one-on-ones');
-  } else if (queryLower.includes('leadership')) {
-    applications.push('Integrate these principles into your leadership development');
-  } else if (queryLower.includes('communication')) {
-    applications.push('Apply these techniques in difficult conversations');
+  if (queryLower.includes("team")) {
+    applications.push(
+      "Practice these concepts in team meetings and one-on-ones",
+    );
+  } else if (queryLower.includes("leadership")) {
+    applications.push(
+      "Integrate these principles into your leadership development",
+    );
+  } else if (queryLower.includes("communication")) {
+    applications.push("Apply these techniques in difficult conversations");
   } else {
     applications.push(`Adapt these insights to your ${query} context`);
   }
@@ -829,15 +924,11 @@ function generateContextualApplications(chapterText: string, chapterTitle: strin
   if (applications.length === 0) {
     applications.push(
       `Study and implement the core concepts from "${chapterTitle}"`,
-      `Create action plans based on this chapter's insights`
+      `Create action plans based on this chapter's insights`,
     );
   }
 
   return applications.slice(0, 3);
-}
-    `Develop a systematic approach to ${query.toLowerCase()}`,
-    `Measure and track progress in ${query.toLowerCase()}`,
-  ];
 }
 
 // Create sample database if tables don't exist

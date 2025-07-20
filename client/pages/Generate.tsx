@@ -621,7 +621,7 @@ export default function Generate() {
                             {bookGroup.title}
                           </h3>
                           <p className="text-gray-600 dark:text-gray-400 text-sm">
-                            by {bookGroup.author}
+                            by {bookGroup.author || "Unknown Author"}
                           </p>
                         </div>
 

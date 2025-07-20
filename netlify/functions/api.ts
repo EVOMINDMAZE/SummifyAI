@@ -35,7 +35,9 @@ export const handler: Handler = async (event, context) => {
     }
     const method = event.httpMethod;
 
-    console.log(`🚀 Netlify Function called: ${method} ${path}`);
+    console.log(
+      `🚀 Netlify Function called: ${method} ${event.path} -> processed as: ${path}`,
+    );
     console.log("Environment check:", {
       DATABASE_URL: process.env.DATABASE_URL ? "Set" : "Missing",
       OPENAI_API_KEY: process.env.OPENAI_API_KEY ? "Set" : "Missing",

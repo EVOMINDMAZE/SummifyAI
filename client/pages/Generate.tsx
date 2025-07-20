@@ -180,8 +180,8 @@ export default function Generate() {
       if (data.analysis.isBroad) {
         setShowRefinements(true);
       } else {
-        // Topic is specific enough, proceed with generation
-        startGeneration(topicToAnalyze);
+        // Topic is specific enough, proceed with database search
+        performDatabaseSearch(topicToAnalyze);
       }
     } catch (error) {
       console.error("Topic analysis error:", error);

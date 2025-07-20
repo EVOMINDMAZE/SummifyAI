@@ -31,7 +31,7 @@ interface ThemeProviderProps {
 
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   const [theme, setThemeState] = useState<Theme>(() => {
-    const savedTheme = localStorage.getItem("summifyai-theme") as Theme;
+    const savedTheme = localStorage.getItem("summifyio-theme") as Theme;
     return savedTheme || "light";
   });
 

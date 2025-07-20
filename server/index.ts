@@ -191,5 +191,8 @@ export function createServer() {
   // Search routes
   app.use("/api/search", searchRoutes);
 
+  // AI Enrichment routes
+  app.use("/api/enrich", enrichRoutes);
+
   return app;
 }

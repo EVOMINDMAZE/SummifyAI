@@ -135,7 +135,7 @@ export default function ChapterDetail() {
         body: JSON.stringify({
           chapterId: chapterData.id,
           userQuery,
-          chapterText: chapterData.content,
+          chapterText: chapterData.snippet || chapterData.content,
           chapterTitle: chapterData.title,
           bookTitle: chapterData.book.title,
           bookAuthor: chapterData.book.author,

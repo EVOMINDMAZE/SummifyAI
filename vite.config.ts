@@ -26,10 +26,14 @@ function expressPlugin(): Plugin {
     name: "express-plugin",
     apply: "serve", // Only apply during development (serve mode)
     configureServer(server) {
+      // Set environment variable to indicate we're in Vite dev mode
+      process.env.VITE_DEV_SERVER = "true";
+
       const app = createServer();
 
       // Add Express app as middleware to Vite dev server
-      server.middlewares.use(app);
+      // Only handle /api routes, let Vite handle everything else
+      server.middlewares.use("/api", app);
     },
   };
 }

@@ -258,6 +258,12 @@ router.get("/", async (req, res) => {
           snippet: row.chapter_text_snippet || "",
           relevanceScore,
           rawDistance: row.distance,
+          whyRelevant: generateQuickRelevanceExplanation(
+            query,
+            row.chapter_text_snippet,
+            row.chapter_title,
+          ),
+          keyTopics: generateQuickTopics(row.chapter_text_snippet, query),
         };
 
         bookMap.get(bookId)!.chapters.push(enrichedChapter);

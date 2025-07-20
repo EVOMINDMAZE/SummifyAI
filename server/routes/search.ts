@@ -279,7 +279,7 @@ router.get("/", async (req, res) => {
           };
         })
         .filter(
-          (book) => book.topChapters.length > 0 && book.averageRelevance >= 20,
+          (book) => book.topChapters.length > 0 && book.averageRelevance >= 10,
         )
         .sort((a, b) => b.averageRelevance - a.averageRelevance)
         .slice(0, 12); // Limit to 12 high-quality books

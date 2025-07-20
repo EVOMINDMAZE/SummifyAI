@@ -632,15 +632,33 @@ function createFallbackEnrichment(
     Math.round((chapter.similarity_score || 0.5) * 100),
   );
 
+  // Generate contextual relevance based on chapter content and title
+  const relevanceExplanation = generateContextualRelevance(
+    chapter.chapter_title,
+    chapter.chapter_text,
+    userQuery,
+  );
+
   return {
     id: chapter.id,
     title: chapter.chapter_title,
     snippet: chapter.chapter_text.substring(0, 300),
     relevanceScore: score,
-    whyRelevant: `This chapter contains valuable insights related to ${userQuery} with practical frameworks and strategies.`,
-    keyTopics: extractBasicTopics(chapter.chapter_text, userQuery),
-    coreLeadershipPrinciples: generateBasicPrinciples(userQuery),
-    practicalApplications: generateBasicApplications(userQuery),
+    whyRelevant: relevanceExplanation,
+    keyTopics: extractSmartTopics(
+      chapter.chapter_text,
+      chapter.chapter_title,
+      userQuery,
+    ),
+    coreLeadershipPrinciples: generateContextualPrinciples(
+      chapter.chapter_text,
+      userQuery,
+    ),
+    practicalApplications: generateContextualApplications(
+      chapter.chapter_text,
+      chapter.chapter_title,
+      userQuery,
+    ),
   };
 }
 

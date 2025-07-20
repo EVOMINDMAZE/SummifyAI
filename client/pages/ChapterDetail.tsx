@@ -24,6 +24,10 @@ interface ChapterDetail {
   relevanceScore: number;
   whyRelevant: string;
   keyTopics: string[];
+  coreLeadershipPrinciples?: string[];
+  practicalApplications?: string[];
+  aiSummary?: string;
+  recommendations?: string[];
   book: {
     id: string;
     title: string;
@@ -41,6 +45,7 @@ export default function ChapterDetail() {
 
   const [chapter, setChapter] = useState<ChapterDetail | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isEnriching, setIsEnriching] = useState(false);
   const [query, setQuery] = useState("");
 
   // Extract query from state or URL
@@ -60,7 +65,7 @@ export default function ChapterDetail() {
       // Simulate API call delay
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      // Mock data - in production this would come from your API
+      // Get chapter data and enrich with AI
       const mockChapter: ChapterDetail = {
         id: parseInt(chapterId || "1"),
         title: "The Foundations of Effective Leadership",
@@ -94,6 +99,10 @@ The concepts presented here have been tested in various organizational contexts 
           "Decision Making",
           "Trust Building",
         ],
+        coreLeadershipPrinciples: [],
+        practicalApplications: [],
+        aiSummary: "",
+        recommendations: [],
         book: {
           id: bookId || "1",
           title:
@@ -108,6 +117,11 @@ The concepts presented here have been tested in various organizational contexts 
 
       setChapter(mockChapter);
       setIsLoading(false);
+
+      // Enrich with AI if we have a query
+      if (query) {
+        enrichChapterWithAI(mockChapter, query);
+      }
     };
 
     fetchChapterDetail();

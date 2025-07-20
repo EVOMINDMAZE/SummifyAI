@@ -548,8 +548,128 @@ export default function Generate() {
           </div>
         )}
 
-        {/* Results */}
-        {generatedSummary && (
+        {/* New Compact Grid Results */}
+        {searchResults && (
+          <div className="max-w-7xl mx-auto">
+            {/* Results Header */}
+            <div className="text-center mb-12">
+              <div className="bg-gradient-to-r from-emerald-50 to-cyan-50 dark:from-emerald-900/20 dark:to-cyan-900/20 rounded-3xl p-8 border border-emerald-200 dark:border-emerald-800">
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-emerald-500 to-cyan-500 rounded-full mb-4">
+                  <BookOpen className="w-8 h-8 text-white" />
+                </div>
+                <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+                  AI Discovery Results
+                </h2>
+                <div className="text-xl text-emerald-700 dark:text-emerald-300 font-semibold mb-4">
+                  "{searchResults.query}"
+                </div>
+                <div className="flex flex-wrap justify-center gap-6 text-sm font-medium">
+                  <div className="bg-white/70 dark:bg-gray-800/70 rounded-full px-4 py-2 flex items-center">
+                    <span className="w-2 h-2 bg-emerald-500 rounded-full mr-2"></span>
+                    {searchResults.totalChapters} Relevant Chapters
+                  </div>
+                  <div className="bg-white/70 dark:bg-gray-800/70 rounded-full px-4 py-2 flex items-center">
+                    <span className="w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
+                    {searchResults.totalBooks} Books Found
+                  </div>
+                  <div className="bg-white/70 dark:bg-gray-800/70 rounded-full px-4 py-2 flex items-center">
+                    <span className="w-2 h-2 bg-purple-500 rounded-full mr-2"></span>
+                    {searchResults.searchType === "ai_vector_search"
+                      ? "Vector"
+                      : "Text"}{" "}
+                    Search
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Compact Book Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+              {searchResults.books.map((bookGroup) => (
+                <Card
+                  key={bookGroup.id}
+                  className="overflow-hidden shadow-xl border-0 bg-gradient-to-br from-white to-gray-50/50 dark:from-gray-800 dark:to-gray-900/50 backdrop-blur-md hover:shadow-2xl transition-all duration-300 transform hover:scale-[1.02] rounded-2xl cursor-pointer"
+                  onClick={() => handleBookCardClick(bookGroup)}
+                >
+                  <CardContent className="p-0">
+                    <div className="flex">
+                      {/* Compact Book Cover */}
+                      <div className="w-32 flex-shrink-0 p-4 bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/30 dark:to-purple-900/30">
+                        <img
+                          src={bookGroup.cover}
+                          alt={bookGroup.title}
+                          className="w-full h-40 object-cover rounded-xl shadow-lg"
+                          onError={(e) => {
+                            const target = e.currentTarget;
+                            target.src = `https://via.placeholder.com/300x400/667eea/FFFFFF?text=${encodeURIComponent(bookGroup.title.split(" ").slice(0, 3).join(" "))}`;
+                          }}
+                          loading="lazy"
+                        />
+                      </div>
+
+                      {/* Book Info & Chapters */}
+                      <div className="flex-1 p-6">
+                        {/* Book Title & Author */}
+                        <div className="mb-4">
+                          <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-1 line-clamp-2">
+                            {bookGroup.title}
+                          </h3>
+                          <p className="text-gray-600 dark:text-gray-400 text-sm">
+                            by {bookGroup.author}
+                          </p>
+                        </div>
+
+                        {/* Top Chapters */}
+                        <div className="space-y-3">
+                          <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center">
+                            <span className="w-2 h-2 bg-emerald-500 rounded-full mr-2"></span>
+                            Most Relevant Chapters
+                          </h4>
+                          {bookGroup.topChapters
+                            .slice(0, 3)
+                            .map((chapter, index) => (
+                              <div
+                                key={chapter.id}
+                                className="flex items-start space-x-3"
+                              >
+                                <Badge
+                                  variant="outline"
+                                  className="bg-emerald-50 border-emerald-300 text-emerald-700 dark:bg-emerald-900/20 dark:border-emerald-700 dark:text-emerald-400 text-xs font-bold px-2 py-1 rounded-full flex-shrink-0"
+                                >
+                                  {chapter.relevanceScore}%
+                                </Badge>
+                                <div className="flex-1 min-w-0">
+                                  <p className="text-sm font-medium text-gray-900 dark:text-white line-clamp-1">
+                                    {chapter.title}
+                                  </p>
+                                  <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2 mt-1">
+                                    {chapter.snippet}
+                                  </p>
+                                </div>
+                              </div>
+                            ))}
+                        </div>
+
+                        {/* View Details Button */}
+                        <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs text-gray-500 dark:text-gray-400">
+                              Click to view all chapters
+                            </span>
+                            <ExternalLink className="w-4 h-4 text-gray-400" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Legacy Results (Hidden when using new grid) */}
+        {generatedSummary && !searchResults && (
           <div className="space-y-8">
             {/* Enhanced Results Header */}
             <div className="text-center mb-12">

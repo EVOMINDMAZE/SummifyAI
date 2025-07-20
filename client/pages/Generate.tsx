@@ -468,31 +468,17 @@ export default function Generate() {
                   />
                 </div>
 
-                {(isGenerating || currentOperation) && (
+                {isGenerating && (
                   <div className="mt-8 p-6 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-2xl border border-blue-200 dark:border-blue-800">
-                    <div className="flex justify-between items-center mb-4">
-                      <span className="text-sm font-semibold text-gray-800 dark:text-gray-200 flex items-center">
-                        {isGenerating && (
-                          <div className="animate-pulse w-2 h-2 bg-[#667eea] rounded-full mr-2"></div>
-                        )}
-                        {currentOperation || "Ready to search..."}
-                      </span>
-                      {isGenerating && (
-                        <span className="text-sm font-bold text-[#667eea] dark:text-[#a78bfa]">
-                          {Math.round(progress)}%
-                        </span>
-                      )}
-                    </div>
-                    {isGenerating && (
-                      <div className="w-full bg-white/50 dark:bg-gray-700/50 rounded-full h-2 overflow-hidden">
-                        <div
-                          className="bg-gradient-to-r from-[#667eea] via-[#764ba2] to-[#f093fb] h-2 rounded-full transition-all duration-500 ease-out relative"
-                          style={{ width: `${progress}%` }}
-                        >
-                          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-pulse"></div>
-                        </div>
+                    <div className="flex items-center justify-center space-x-4">
+                      <div className="relative">
+                        <div className="animate-spin rounded-full h-8 w-8 border-3 border-[#667eea] border-t-transparent"></div>
+                        <div className="absolute inset-0 animate-ping rounded-full h-8 w-8 border border-[#667eea] opacity-20"></div>
                       </div>
-                    )}
+                      <span className="text-lg font-semibold text-gray-800 dark:text-gray-200">
+                        Searching with AI...
+                      </span>
+                    </div>
                   </div>
                 )}
               </div>

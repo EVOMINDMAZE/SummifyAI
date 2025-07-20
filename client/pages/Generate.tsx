@@ -460,15 +460,6 @@ export default function Generate() {
                         )}
                       </div>
                     </Button>
-
-                    {/* Debug button - temporary for testing API */}
-                    <Button
-                      onClick={testAPIConnection}
-                      variant="outline"
-                      className="w-full mt-2 text-sm py-2 text-gray-600 border-gray-300 hover:bg-gray-50"
-                    >
-                      🔧 Test API Connection (Debug)
-                    </Button>
                   </div>
 
                   <SearchFilters

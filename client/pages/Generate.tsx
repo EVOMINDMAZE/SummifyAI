@@ -591,19 +591,25 @@ export default function Generate() {
                   <CardContent className="p-0">
                     <div className="flex">
                       {/* Enhanced Book Cover */}
-                      <div className="w-36 flex-shrink-0 p-6 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-indigo-900/30 dark:via-purple-900/30 dark:to-pink-900/30">
+                      <div className="w-40 flex-shrink-0 p-4 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-indigo-900/30 dark:via-purple-900/30 dark:to-pink-900/30">
                         <div className="relative">
-                          <img
-                            src={bookGroup.cover}
-                            alt={bookGroup.title}
-                            className="w-full h-44 object-cover rounded-2xl shadow-xl group-hover:shadow-2xl transition-all duration-500 border-2 border-white/50 dark:border-gray-700/50"
-                            onError={(e) => {
-                              const target = e.currentTarget;
-                              target.src = `https://via.placeholder.com/300x400/667eea/FFFFFF?text=${encodeURIComponent(bookGroup.title.split(" ").slice(0, 3).join(" "))}`;
-                            }}
-                            loading="lazy"
-                          />
-                          <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-2xl blur opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
+                          {/* Book cover container with proper aspect ratio */}
+                          <div className="aspect-[2/3] w-full relative overflow-hidden rounded-2xl shadow-xl group-hover:shadow-2xl transition-all duration-500 border-2 border-white/50 dark:border-gray-700/50">
+                            <img
+                              src={bookGroup.cover}
+                              alt={bookGroup.title}
+                              className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                              onError={(e) => {
+                                const target = e.currentTarget;
+                                target.src = `https://via.placeholder.com/300x450/667eea/FFFFFF?text=${encodeURIComponent(bookGroup.title.split(" ").slice(0, 3).join(" "))}`;
+                              }}
+                              loading="lazy"
+                            />
+                            {/* Gradient overlay for visual enhancement */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                          </div>
+                          {/* Glow effect */}
+                          <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-2xl blur opacity-20 group-hover:opacity-40 transition-opacity duration-500 -z-10"></div>
                         </div>
                       </div>
 

@@ -39,10 +39,10 @@ export function createServer() {
     legacyHeaders: false,
   });
 
-  app.use("/api", limiter);
+  app.use(limiter);
 
   // Health check endpoint
-  app.get("/api/health", (req, res) => {
+  app.get("/health", (req, res) => {
     res.json({
       status: "ok",
       timestamp: new Date().toISOString(),
@@ -52,22 +52,22 @@ export function createServer() {
     });
   });
 
-  // API Routes
-  app.use("/api/search", searchRoutes);
-  app.use("/api/enrich", enrichRoutes);
-  app.use("/api/topic", queryAnalysisRoutes);
-  app.use("/api/database", databaseSearchRoutes);
+  // API Routes (note: /api prefix is handled by vite config in dev mode)
+  app.use("/search", searchRoutes);
+  app.use("/enrich", enrichRoutes);
+  app.use("/topic", queryAnalysisRoutes);
+  app.use("/database", databaseSearchRoutes);
 
   // Individual handler routes
-  app.get("/api/demo", handleDemo);
-  app.post("/api/neon/execute", handleNeonExecute);
-  app.post("/api/ratings/submit", handleSubmitRating);
+  app.get("/demo", handleDemo);
+  app.post("/neon/execute", handleNeonExecute);
+  app.post("/ratings/submit", handleSubmitRating);
 
-  // Only serve static files in production or standalone mode
+  // Only serve static files in production mode
   const isProduction = process.env.NODE_ENV === "production";
-  const isStandalone = !process.env.VITE_DEV_SERVER; // Vite sets this during dev
+  const isViteDev = process.env.VITE_DEV_SERVER === "true";
 
-  if (isProduction || isStandalone) {
+  if (isProduction && !isViteDev) {
     // Serve static files from the React app build directory
     const staticPath = path.join(__dirname, "../spa");
     console.log(`📁 Serving static files from: ${staticPath}`);
@@ -78,12 +78,11 @@ export function createServer() {
       res.sendFile(path.join(staticPath, "index.html"));
     });
   } else {
-    // In development mode, let Vite handle static files and routing
     console.log("🔧 Development mode: Vite handles static files and routing");
   }
 
-  // API 404 handler (only for /api/* routes)
-  app.use("/api/*", (req, res) => {
+  // API 404 handler
+  app.use("*", (req, res) => {
     res.status(404).json({
       error: "API route not found",
       path: req.originalUrl,

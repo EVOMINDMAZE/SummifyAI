@@ -350,8 +350,8 @@ export const handler: Handler = async (event, context) => {
       }
     }
 
-    // Query analysis endpoint
-    if (path === "/topic" && method === "POST") {
+    // Query analysis endpoint - handle both /topic and /topic/analyze
+    if ((path === "/topic" || path === "/topic/analyze") && method === "POST") {
       try {
         const body = JSON.parse(event.body || "{}");
         const { topic } = body;

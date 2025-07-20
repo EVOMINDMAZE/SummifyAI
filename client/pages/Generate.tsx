@@ -631,7 +631,10 @@ export default function Generate() {
                             .map((chapter, index) => (
                               <div
                                 key={chapter.id}
-                                className="flex items-start space-x-3 p-3 rounded-xl bg-white/60 dark:bg-gray-800/60 hover:bg-white/80 dark:hover:bg-gray-800/80 transition-all"
+                                onClick={(e) =>
+                                  handleChapterClick(e, bookGroup, chapter)
+                                }
+                                className="flex items-start space-x-3 p-3 rounded-xl bg-white/60 dark:bg-gray-800/60 hover:bg-white/80 dark:hover:bg-gray-800/80 transition-all cursor-pointer border-2 border-transparent hover:border-indigo-200 dark:hover:border-indigo-800 hover:shadow-md transform hover:scale-[1.02]"
                               >
                                 <div className="flex-shrink-0">
                                   <Badge

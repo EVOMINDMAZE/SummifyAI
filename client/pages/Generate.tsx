@@ -107,6 +107,9 @@ export default function Generate() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedSummary, setGeneratedSummary] =
     useState<GeneratedSummary | null>(null);
+  const [searchResults, setSearchResults] = useState<SearchResults | null>(
+    null,
+  );
   const [progress, setProgress] = useState(0);
   const [currentOperation, setCurrentOperation] = useState("");
   const [sessionId, setSessionId] = useState<string | null>(null);

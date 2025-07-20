@@ -39,7 +39,7 @@ export default function Index() {
     });
 
     tour.addStep({
-      title: "Welcome to SummifyAI!",
+      title: "Welcome to SummifyIO!",
       text: "Let me show you how to find exact chapters from any book in seconds. This quick tour takes just 2 minutes.",
       buttons: [
         {
@@ -217,7 +217,7 @@ export default function Index() {
                 </span>
               </div>
               <span className="text-xl font-bold text-[#0A0B1E] dark:text-white">
-                SummifyAI
+                SummifyIO
               </span>
             </Link>
             <div className="flex items-center gap-4">
@@ -722,7 +722,7 @@ export default function Index() {
               Powerful Features for Smart Learning
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-              Discover why thousands of learners choose SummifyAI for targeted
+              Discover why thousands of learners choose SummifyIO for targeted
               chapter discovery
             </p>
           </div>
@@ -1095,7 +1095,7 @@ export default function Index() {
                     Your personal chapter discovery library
                   </h4>
                   <p className="text-lg text-[#0A0B1E]/70 dark:text-gray-300 mb-8 leading-relaxed">
-                    Your SummifyAI account gives you one place to save chapter
+                    Your SummifyIO account gives you one place to save chapter
                     discoveries, share targeted insights, and track your
                     learning journey. Build your personal library of chapter
                     locations and help friends discover exactly what they need.
@@ -1156,7 +1156,7 @@ export default function Index() {
                 company: "Google",
                 image: "SC",
                 rating: 5,
-                text: "SummifyAI transformed how I research leadership strategies. Instead of reading 10 full books, I found exactly what I needed in specific chapters. Saved me 30+ hours last month alone.",
+                text: "SummifyIO transformed how I research leadership strategies. Instead of reading 10 full books, I found exactly what I needed in specific chapters. Saved me 30+ hours last month alone.",
                 verified: true,
               },
               {
@@ -1174,7 +1174,7 @@ export default function Index() {
                 company: "Microsoft",
                 image: "EW",
                 rating: 5,
-                text: "Our L&D team uses SummifyAI to create targeted reading lists. The AI analysis helps us understand which chapters address specific skill gaps. ROI has been phenomenal.",
+                text: "Our L&D team uses SummifyIO to create targeted reading lists. The AI analysis helps us understand which chapters address specific skill gaps. ROI has been phenomenal.",
                 verified: true,
               },
               {
@@ -1183,7 +1183,7 @@ export default function Index() {
                 company: "Goldman Sachs",
                 image: "JK",
                 rating: 5,
-                text: "Research is everything in my field. SummifyAI helps me find relevant chapters on market analysis and investment strategies across hundreds of finance books instantly.",
+                text: "Research is everything in my field. SummifyIO helps me find relevant chapters on market analysis and investment strategies across hundreds of finance books instantly.",
                 verified: true,
               },
               {
@@ -1201,7 +1201,7 @@ export default function Index() {
                 company: "Harvard Business School",
                 image: "AT",
                 rating: 5,
-                text: "Writing my thesis on organizational behavior. SummifyAI helped me locate specific chapters and pages from academic and business books. My advisor was impressed with the targeted research.",
+                text: "Writing my thesis on organizational behavior. SummifyIO helped me locate specific chapters and pages from academic and business books. My advisor was impressed with the targeted research.",
                 verified: true,
               },
             ].map((testimonial, index) => (
@@ -1303,7 +1303,7 @@ export default function Index() {
               Transform Your Learning Today
             </h2>
             <p className="text-xl text-gray-300 mb-8 leading-relaxed max-w-3xl mx-auto">
-              Join thousands of smart learners who use SummifyAI to discover
+              Join thousands of smart learners who use SummifyIO to discover
               exact chapters, understand precise insights, and earn through
               affiliate links. Start finding exactly what you need.
             </p>
@@ -1325,7 +1325,7 @@ export default function Index() {
                 </p>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
-                <div className="text-[#FFFD63] text-2xl mb-2">���</div>
+                <div className="text-[#FFFD63] text-2xl mb-2">📚</div>
                 <h3 className="font-bold mb-2">Precise Chapter Locations</h3>
                 <p className="text-gray-300 text-sm">
                   Get exact page numbers and why each chapter matters

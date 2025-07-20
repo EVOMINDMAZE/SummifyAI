@@ -86,13 +86,23 @@ function generateSemanticEmbedding(query: string): number[] {
 // Calculate accurate relevance score from vector distance
 function calculateRelevanceScore(distance: number): number {
   // Convert cosine distance to percentage (higher is better)
-  // Cosine distance ranges from 0 (identical) to 2 (opposite)
-  // We want 0 distance = 100% relevance, 1 distance = 0% relevance
-  const relevance = Math.max(
-    0,
-    Math.min(100, Math.round((1 - distance) * 100)),
-  );
-  return relevance;
+  // For text-based search, distances are typically 0.1-0.8
+  // Apply more generous scoring for better user experience
+  let relevance;
+
+  if (distance <= 0.1) {
+    relevance = 95; // Excellent match
+  } else if (distance <= 0.3) {
+    relevance = Math.round(85 - (distance - 0.1) * 50); // 85-75%
+  } else if (distance <= 0.5) {
+    relevance = Math.round(75 - (distance - 0.3) * 100); // 75-55%
+  } else if (distance <= 0.7) {
+    relevance = Math.round(55 - (distance - 0.5) * 75); // 55-40%
+  } else {
+    relevance = Math.max(25, Math.round(40 - (distance - 0.7) * 50)); // 40-25%
+  }
+
+  return Math.max(25, Math.min(100, relevance));
 }
 
 // AI Vector Search endpoint

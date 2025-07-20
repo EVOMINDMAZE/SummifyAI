@@ -185,8 +185,8 @@ export default function Generate() {
       }
     } catch (error) {
       console.error("Topic analysis error:", error);
-      // If analysis fails, proceed with generation anyway
-      startGeneration(topicToAnalyze);
+      // If analysis fails, proceed with database search anyway
+      performDatabaseSearch(topicToAnalyze);
     } finally {
       setIsAnalyzing(false);
     }

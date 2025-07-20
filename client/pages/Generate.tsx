@@ -276,6 +276,23 @@ export default function Generate() {
     }
   };
 
+  const handleChapterClick = (
+    event: React.MouseEvent,
+    bookGroup: BookGroup,
+    chapter: EnrichedChapter,
+  ) => {
+    event.stopPropagation(); // Prevent book card click
+    console.log(`📄 Viewing specific chapter: ${chapter.title}`);
+
+    navigate(`/chapter/${bookGroup.id}/${chapter.id}`, {
+      state: {
+        query: searchResults?.query || topic,
+        bookGroup,
+        selectedChapter: chapter,
+      },
+    });
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-gray-900 dark:via-slate-800 dark:to-gray-900">
       <Navigation />

@@ -340,4 +340,64 @@ router.get("/", async (req, res) => {
   }
 });
 
+// Quick AI generation functions for search results
+function generateQuickRelevanceExplanation(
+  query: string,
+  chapterText: string,
+  chapterTitle: string,
+): string {
+  const queryWords = query.toLowerCase().split(/\s+/);
+  const textWords = chapterText.toLowerCase();
+  const titleWords = chapterTitle.toLowerCase();
+
+  // Find key matches
+  const titleMatches = queryWords.filter((word) => titleWords.includes(word));
+  const textMatches = queryWords.filter((word) => textWords.includes(word));
+
+  if (titleMatches.length > 0) {
+    return `This chapter directly addresses ${titleMatches.join(" and ")} with practical frameworks and actionable strategies.`;
+  } else if (textMatches.length > 0) {
+    return `This content explores ${textMatches.join(" and ")} through detailed analysis and real-world applications.`;
+  } else {
+    return `This chapter provides valuable insights related to ${query} with strategic approaches and practical guidance.`;
+  }
+}
+
+function generateQuickTopics(chapterText: string, query: string): string[] {
+  const words = chapterText.toLowerCase().match(/\b[a-z]{4,}\b/g) || [];
+  const queryWords = query
+    .split(/\s+/)
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase());
+
+  // Extract meaningful topics from text
+  const topics = new Set<string>();
+
+  // Add query-related topics
+  queryWords.forEach((word) => {
+    if (word.length > 3) topics.add(word);
+  });
+
+  // Add common business/leadership topics found in text
+  const commonTopics = [
+    "leadership",
+    "management",
+    "strategy",
+    "communication",
+    "innovation",
+    "performance",
+    "development",
+    "planning",
+    "execution",
+    "growth",
+  ];
+
+  commonTopics.forEach((topic) => {
+    if (words.includes(topic) || words.some((word) => word.includes(topic))) {
+      topics.add(topic.charAt(0).toUpperCase() + topic.slice(1));
+    }
+  });
+
+  return Array.from(topics).slice(0, 4);
+}
+
 export default router;

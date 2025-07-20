@@ -820,27 +820,58 @@ function extractSmartTopics(
   return Array.from(topics).slice(0, 5);
 }
 
-function generateBasicPrinciples(query: string): string[] {
-  const principles = {
-    leadership: ["Lead by example", "Empower others", "Take accountability"],
-    negotiation: [
-      "Prepare thoroughly",
-      "Listen actively",
-      "Seek win-win solutions",
-    ],
-    management: ["Set clear expectations", "Provide regular feedback"],
-    productivity: ["Focus on priorities", "Eliminate distractions"],
-    communication: ["Listen actively", "Be clear and concise", "Show empathy"],
+function generateContextualPrinciples(
+  chapterText: string,
+  query: string,
+): string[] {
+  const textSample = chapterText.substring(0, 800).toLowerCase();
+  const principles = [];
+
+  // Context-aware principle generation based on actual chapter content
+  const principlePatterns = {
+    framework: "Apply systematic frameworks",
+    process: "Follow structured processes",
+    method: "Use proven methodologies",
+    strategy: "Think strategically",
+    plan: "Plan before executing",
+    communicate: "Communicate clearly and often",
+    listen: "Listen actively to understand",
+    trust: "Build trust through consistency",
+    goal: "Set clear, measurable goals",
+    feedback: "Seek and provide regular feedback",
+    learn: "Embrace continuous learning",
+    adapt: "Remain flexible and adaptable",
+    collaborate: "Foster genuine collaboration",
+    lead: "Lead by example",
+    empower: "Empower others to succeed",
   };
 
-  const key = query.toLowerCase();
-  for (const [termKey, termPrinciples] of Object.entries(principles)) {
-    if (key.includes(termKey)) {
-      return termPrinciples;
+  // Find principles that match the chapter content
+  for (const [keyword, principle] of Object.entries(principlePatterns)) {
+    if (textSample.includes(keyword)) {
+      principles.push(principle);
+      if (principles.length >= 3) break;
     }
   }
 
-  return ["Take systematic approach", "Continuous improvement"];
+  // If no specific matches, use query-based principles
+  if (principles.length === 0) {
+    const queryKey = query.toLowerCase();
+    if (queryKey.includes("leadership")) {
+      principles.push("Lead with authenticity", "Develop others");
+    } else if (queryKey.includes("communication")) {
+      principles.push("Listen before speaking", "Seek understanding");
+    } else if (queryKey.includes("team")) {
+      principles.push("Foster psychological safety", "Build trust");
+    } else {
+      principles.push(
+        "Focus on value creation",
+        "Embrace continuous improvement",
+      );
+    }
+  }
+
+  return principles.slice(0, 3);
 }
 
 function generateBasicApplications(query: string): string[] {

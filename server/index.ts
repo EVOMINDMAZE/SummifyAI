@@ -1,198 +1,102 @@
 import express from "express";
 import cors from "cors";
-import dotenv from "dotenv";
 import rateLimit from "express-rate-limit";
+import dotenv from "dotenv";
 
-// Load environment variables first
+// Import routes
+import searchRoutes from "./routes/search.js";
+import enrichRoutes from "./routes/enrich.js";
+import generateRoutes from "./routes/generate.js";
+import ratingsRoutes from "./routes/ratings.js";
+import neonRoutes from "./routes/neon.js";
+import demoRoutes from "./routes/demo.js";
+import queryAnalysisRoutes from "./routes/queryAnalysis.js";
+import databaseSearchRoutes from "./routes/databaseSearch.js";
+
+// Load environment variables
 dotenv.config();
-import { handleDemo } from "./routes/demo";
-import {
-  handleNeonExecute,
-  handleUserSignIn,
-  handleUserSignUp,
-  handleGetUserSummaries,
-  handleUpdateCredits,
-  handleRecordShare,
-  handleUpdateUserSettings,
-} from "./routes/neon";
-import {
-  handleGenerateStart,
-  handleGenerateProgress,
-  handleGetRecentSummaries,
-} from "./routes/generate";
-import { handleTopicAnalysis } from "./routes/topicAnalysis";
-import {
-  handleSubmitRating,
-  handleGetRatingStats,
-  handleGetUserRating,
-  handleGetTopRatedChapters,
-} from "./routes/ratings";
-import searchRoutes from "./routes/search";
-import enrichRoutes from "./routes/enrich";
 
 export function createServer() {
   const app = express();
 
-  // Rate limiting for API endpoints
+  // Middleware
+  app.use(cors());
+  app.use(express.json({ limit: "10mb" }));
+  app.use(express.urlencoded({ extended: true }));
+
+  // Rate limiting
   const limiter = rateLimit({
     windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS || "900000"), // 15 minutes
     max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS || "100"), // limit each IP to 100 requests per windowMs
     message: "Too many requests from this IP, please try again later.",
+    standardHeaders: true,
+    legacyHeaders: false,
   });
 
-  // Middleware
-  app.use(cors());
-  app.use(express.json());
-  app.use(express.urlencoded({ extended: true }));
-  app.use("/api/", limiter);
+  app.use("/api", limiter);
 
-  // Example API routes
-  app.get("/api/ping", (_req, res) => {
-    res.json({ message: "Hello from Express server v2!" });
-  });
-
-  // Debug endpoint to check API key status
-  app.get("/api/debug/keys", (_req, res) => {
+  // Health check endpoint
+  app.get("/api/health", (req, res) => {
     res.json({
-      openai: process.env.OPENAI_API_KEY
-        ? process.env.OPENAI_API_KEY.includes("demo")
-          ? "demo"
-          : "real"
-        : "missing",
-      googleBooks: process.env.GOOGLE_BOOKS_API_KEY
-        ? process.env.GOOGLE_BOOKS_API_KEY.includes("demo")
-          ? "demo"
-          : "real"
-        : "missing",
-      database:
-        process.env.DATABASE_URL || process.env.NETLIFY_DATABASE_URL
-          ? "configured"
-          : "missing",
+      status: "ok",
+      timestamp: new Date().toISOString(),
+      environment: process.env.NODE_ENV || "development",
+      database: process.env.DATABASE_URL ? "configured" : "missing",
+      openai: process.env.OPENAI_API_KEY ? "configured" : "missing",
     });
   });
 
-  // Fix database schema endpoint
-  app.post("/api/debug/fix-schema", async (_req, res) => {
-    try {
-      const { Pool } = await import("pg");
-      const pool = new Pool({
-        connectionString:
-          process.env.DATABASE_URL || process.env.NETLIFY_DATABASE_URL,
-        ssl: { rejectUnauthorized: false },
-      });
-
-      const client = await pool.connect();
-      try {
-        // Drop existing columns with wrong types and recreate with correct types
-        await client.query(`
-          ALTER TABLE summaries
-          DROP COLUMN IF EXISTS key_insights,
-          DROP COLUMN IF EXISTS quotes,
-          DROP COLUMN IF EXISTS books_data
-        `);
-
-        await client.query(`
-          ALTER TABLE summaries
-          ADD COLUMN key_insights JSONB DEFAULT '[]',
-          ADD COLUMN quotes JSONB DEFAULT '[]',
-          ADD COLUMN books_data JSONB DEFAULT '[]'
-        `);
-
-        res.json({ message: "Schema updated successfully" });
-      } finally {
-        client.release();
-      }
-    } catch (error) {
-      res.status(500).json({
-        error: error instanceof Error ? error.message : "Schema fix failed",
-      });
-    }
-  });
-
-  // Debug endpoint to check database tables
-  app.get("/api/debug/tables", async (_req, res) => {
-    try {
-      const { Pool } = await import("pg");
-      const pool = new Pool({
-        connectionString:
-          process.env.DATABASE_URL || process.env.NETLIFY_DATABASE_URL,
-        ssl: { rejectUnauthorized: false },
-      });
-
-      const client = await pool.connect();
-      try {
-        const tablesResult = await client.query(`
-          SELECT table_name
-          FROM information_schema.tables
-          WHERE table_schema = 'public'
-        `);
-
-        const summariesColumns = await client.query(`
-          SELECT column_name, data_type, is_nullable
-          FROM information_schema.columns
-          WHERE table_schema = 'public' AND table_name = 'summaries'
-          ORDER BY ordinal_position
-        `);
-
-        const usersExist = await client.query(`
-          SELECT COUNT(*) as count FROM information_schema.tables
-          WHERE table_schema = 'public' AND table_name = 'users'
-        `);
-
-        let userCount = 0;
-        if (parseInt(usersExist.rows[0].count) > 0) {
-          const userCountResult = await client.query(
-            "SELECT COUNT(*) as count FROM users",
-          );
-          userCount = parseInt(userCountResult.rows[0].count);
-        }
-
-        res.json({
-          tables: tablesResult.rows.map((r) => r.table_name),
-          usersTableExists: parseInt(usersExist.rows[0].count) > 0,
-          userCount,
-          summariesColumns: summariesColumns.rows,
-        });
-      } finally {
-        client.release();
-      }
-    } catch (error) {
-      res.status(500).json({
-        error: error instanceof Error ? error.message : "Database check failed",
-      });
-    }
-  });
-
-  app.get("/api/demo", handleDemo);
-
-  // Neon database routes
-  app.post("/api/neon/execute", handleNeonExecute);
-  app.post("/api/auth/signin", handleUserSignIn);
-  app.post("/api/auth/signup", handleUserSignUp);
-  app.get("/api/users/:userId/summaries", handleGetUserSummaries);
-  app.post("/api/users/:userId/credits", handleUpdateCredits);
-  app.put("/api/users/:userId/settings", handleUpdateUserSettings);
-  app.post("/api/shares", handleRecordShare);
-
-  // Generation API routes
-  app.post("/api/generate/start", handleGenerateStart);
-  app.get("/api/generate/progress/:sessionId", handleGenerateProgress);
-  app.get("/api/users/:userId/recent-summaries", handleGetRecentSummaries);
-
-  // Topic analysis route
-  app.post("/api/topic/analyze", handleTopicAnalysis);
-
-  // Rating routes
-  app.post("/api/ratings", handleSubmitRating);
-  app.get("/api/ratings/:bookId/:chapterId", handleGetRatingStats);
-  app.get("/api/ratings/user/:userId/:bookId/:chapterId", handleGetUserRating);
-  app.get("/api/ratings/top/:searchTopic", handleGetTopRatedChapters);
-
-  // Search routes
+  // Route registration
   app.use("/api/search", searchRoutes);
-
-  // AI Enrichment routes
   app.use("/api/enrich", enrichRoutes);
+  app.use("/api/generate", generateRoutes);
+  app.use("/api/ratings", ratingsRoutes);
+  app.use("/api/neon", neonRoutes);
+  app.use("/api/demo", demoRoutes);
+  app.use("/api/topic", queryAnalysisRoutes);
+  app.use("/api/database", databaseSearchRoutes);
+
+  // Error handling middleware
+  app.use(
+    (
+      err: any,
+      req: express.Request,
+      res: express.Response,
+      next: express.NextFunction,
+    ) => {
+      console.error("Server error:", err);
+      res.status(500).json({
+        error: "Internal server error",
+        details:
+          process.env.NODE_ENV === "development" ? err.message : undefined,
+      });
+    },
+  );
+
+  // 404 handler
+  app.use("*", (req, res) => {
+    res.status(404).json({
+      error: "Route not found",
+      path: req.originalUrl,
+    });
+  });
 
   return app;
+}
+
+// Start server if this file is run directly
+if (import.meta.url === `file://${process.argv[1]}`) {
+  const app = createServer();
+  const port = parseInt(process.env.PORT || "8080");
+
+  app.listen(port, () => {
+    console.log(`🚀 Server running on http://localhost:${port}`);
+    console.log(`📊 Environment: ${process.env.NODE_ENV || "development"}`);
+    console.log(
+      `🔑 OpenAI API: ${process.env.OPENAI_API_KEY ? "configured" : "MISSING"}`,
+    );
+    console.log(
+      `💾 Database: ${process.env.DATABASE_URL ? "configured" : "MISSING"}`,
+    );
+  });
 }

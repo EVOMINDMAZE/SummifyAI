@@ -83,7 +83,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
 
   const setTheme = (newTheme: Theme) => {
     setThemeState(newTheme);
-    localStorage.setItem("summifyai-theme", newTheme);
+    localStorage.setItem("summifyio-theme", newTheme);
   };
 
   const toggleTheme = () => {

@@ -269,16 +269,22 @@ export default function ChapterDetail() {
                 {/* Book Cover */}
                 <div className="text-center mb-6">
                   <div className="relative group">
-                    <img
-                      src={bookDetail.cover}
-                      alt={bookDetail.title}
-                      className="w-full h-80 object-cover rounded-2xl shadow-xl group-hover:shadow-2xl transition-all duration-500 border-4 border-white/50 dark:border-gray-700/50"
-                      onError={(e) => {
-                        const target = e.currentTarget;
-                        target.src = `https://via.placeholder.com/300x400/667eea/FFFFFF?text=${encodeURIComponent(bookDetail.title.split(" ").slice(0, 3).join(" "))}`;
-                      }}
-                    />
-                    <div className="absolute -inset-1 bg-gradient-to-r from-[#667eea] via-[#764ba2] to-[#f093fb] rounded-2xl blur opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
+                    {/* Book cover container with proper aspect ratio */}
+                    <div className="aspect-[2/3] w-full relative overflow-hidden rounded-2xl shadow-xl group-hover:shadow-2xl transition-all duration-500 border-4 border-white/50 dark:border-gray-700/50">
+                      <img
+                        src={bookDetail.cover}
+                        alt={bookDetail.title}
+                        className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                        onError={(e) => {
+                          const target = e.currentTarget;
+                          target.src = `https://via.placeholder.com/300x450/667eea/FFFFFF?text=${encodeURIComponent(bookDetail.title.split(" ").slice(0, 3).join(" "))}`;
+                        }}
+                      />
+                      {/* Subtle overlay for visual enhancement */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    </div>
+                    {/* Glow effect */}
+                    <div className="absolute -inset-1 bg-gradient-to-r from-[#667eea] via-[#764ba2] to-[#f093fb] rounded-2xl blur opacity-20 group-hover:opacity-40 transition-opacity duration-500 -z-10"></div>
                   </div>
                 </div>
 

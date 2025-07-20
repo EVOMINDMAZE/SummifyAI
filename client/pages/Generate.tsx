@@ -137,6 +137,25 @@ export default function Generate() {
   // Note: Authentication no longer required for database search
   // Users can search the database without being logged in
 
+  // Restore search state when component mounts
+  useEffect(() => {
+    const savedResults = sessionStorage.getItem("lastSearchResults");
+    const savedQuery = sessionStorage.getItem("lastSearchQuery");
+
+    if (savedResults && savedQuery) {
+      try {
+        const parsedResults = JSON.parse(savedResults);
+        setSearchResults(parsedResults);
+        setTopic(savedQuery);
+        console.log("🔄 Restored previous search state");
+      } catch (error) {
+        console.error("Failed to restore search state:", error);
+        sessionStorage.removeItem("lastSearchResults");
+        sessionStorage.removeItem("lastSearchQuery");
+      }
+    }
+  }, []);
+
   const analyzeTopic = async (topicToAnalyze: string) => {
     if (!topicToAnalyze.trim()) return;
 

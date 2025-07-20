@@ -197,7 +197,7 @@ Respond with a JSON object with this exact structure:
 }`;
 
         const analysisResponse = await openaiClient.chat.completions.create({
-          model: "gpt-4-turbo",
+          model: "gpt-4o-nano",
           messages: [
             {
               role: "system",
@@ -263,7 +263,7 @@ Respond with JSON array:
 
           const refinementResponse = await openaiClient.chat.completions.create(
             {
-              model: "gpt-4-turbo",
+              model: "gpt-4o-nano",
               messages: [
                 {
                   role: "system",

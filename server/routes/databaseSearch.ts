@@ -125,7 +125,7 @@ router.get("/", async (req, res) => {
       `);
 
       const availableTables = tableCheck.rows.map((row) => row.table_name);
-      console.log("��� Available tables:", availableTables);
+      console.log("📋 Available tables:", availableTables);
 
       if (
         !availableTables.includes("books") ||
@@ -576,7 +576,7 @@ Provide a JSON response with:
   try {
     console.log(`🧠 AI enriching chapter: "${chapter.chapter_title}"`);
     const response = await openaiClient.chat.completions.create({
-      model: "gpt-4-turbo",
+      model: "gpt-4o-nano",
       messages: [
         {
           role: "system",

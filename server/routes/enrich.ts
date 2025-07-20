@@ -140,7 +140,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-// Generate AI-powered relevance explanation using GPT-4.1-nano
+// Generate AI-powered relevance explanation using GPT-4.1 nano
 async function generateRelevanceExplanation(
   userQuery: string,
   chapterText: string,
@@ -156,7 +156,7 @@ As an expert content analyst, explain in one compelling sentence why this chapte
 
     const openaiClient = getOpenAIClient();
     const response = await openaiClient.chat.completions.create({
-      model: "gpt-4-turbo", // Using GPT-4 Turbo as GPT-4.1-nano isn't available
+      model: "gpt-4o-nano", // Using GPT-4.1 nano
       messages: [
         {
           role: "system",
@@ -201,7 +201,7 @@ Return only a comma-separated list of topics, no explanations.`;
 
     const openaiClient = getOpenAIClient();
     const response = await openaiClient.chat.completions.create({
-      model: "gpt-4-turbo",
+      model: "gpt-4o-nano",
       messages: [
         {
           role: "system",
@@ -247,7 +247,7 @@ Return a simple list, one principle per line, no bullet points or numbers.`;
 
     const openaiClient = getOpenAIClient();
     const response = await openaiClient.chat.completions.create({
-      model: "gpt-4-turbo",
+      model: "gpt-4o-nano",
       messages: [
         {
           role: "system",
@@ -293,7 +293,7 @@ Return a simple list, one application per line, focused on practical steps.`;
 
     const openaiClient = getOpenAIClient();
     const response = await openaiClient.chat.completions.create({
-      model: "gpt-4-turbo",
+      model: "gpt-4o-nano",
       messages: [
         {
           role: "system",
@@ -341,7 +341,7 @@ Provide a clear, value-focused summary.`;
 
     const openaiClient = getOpenAIClient();
     const response = await openaiClient.chat.completions.create({
-      model: "gpt-4-turbo",
+      model: "gpt-4o-nano",
       messages: [
         {
           role: "system",
@@ -382,7 +382,7 @@ Provide actionable recommendations, one per line.`;
 
     const openaiClient = getOpenAIClient();
     const response = await openaiClient.chat.completions.create({
-      model: "gpt-4-turbo",
+      model: "gpt-4o-nano",
       messages: [
         {
           role: "system",

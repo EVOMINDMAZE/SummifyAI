@@ -21,7 +21,18 @@ export const handler: Handler = async (event, context) => {
   }
 
   try {
-    const path = event.path.replace("/.netlify/functions/api", "");
+    // Handle both possible path formats from Netlify
+    let path = event.path;
+    if (path.startsWith("/.netlify/functions/api")) {
+      path = path.replace("/.netlify/functions/api", "");
+    } else if (path.startsWith("/api")) {
+      path = path.replace("/api", "");
+    }
+
+    // Ensure path starts with / for consistency
+    if (!path.startsWith("/")) {
+      path = "/" + path;
+    }
     const method = event.httpMethod;
 
     console.log(`🚀 Netlify Function called: ${method} ${path}`);

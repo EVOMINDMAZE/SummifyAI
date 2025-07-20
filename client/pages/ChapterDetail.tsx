@@ -127,6 +127,60 @@ The concepts presented here have been tested in various organizational contexts 
     fetchChapterDetail();
   }, [bookId, chapterId, query]);
 
+  // AI Enrichment function
+  const enrichChapterWithAI = async (
+    chapterData: ChapterDetail,
+    userQuery: string,
+  ) => {
+    setIsEnriching(true);
+
+    try {
+      const response = await fetch("/api/enrich", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          chapterId: chapterData.id,
+          userQuery,
+          chapterText: chapterData.content,
+          chapterTitle: chapterData.title,
+          bookTitle: chapterData.book.title,
+          bookAuthor: chapterData.book.author,
+        }),
+      });
+
+      if (response.ok) {
+        const enrichmentData = await response.json();
+
+        // Update chapter with AI-enriched data
+        setChapter((prev) =>
+          prev
+            ? {
+                ...prev,
+                whyRelevant: enrichmentData.whyRelevant || prev.whyRelevant,
+                keyTopics: enrichmentData.keyTopics || prev.keyTopics,
+                coreLeadershipPrinciples:
+                  enrichmentData.coreLeadershipPrinciples || [],
+                practicalApplications:
+                  enrichmentData.practicalApplications || [],
+                aiSummary: enrichmentData.aiSummary || "",
+                recommendations: enrichmentData.recommendations || [],
+                relevanceScore:
+                  enrichmentData.relevanceScore || prev.relevanceScore,
+              }
+            : null,
+        );
+
+        console.log("✅ Chapter enriched with AI insights");
+      }
+    } catch (error) {
+      console.error("AI enrichment failed:", error);
+    } finally {
+      setIsEnriching(false);
+    }
+  };
+
   const handleShare = () => {
     if (chapter) {
       const shareText = `Check out "${chapter.title}" from "${chapter.book.title}" - ${chapter.relevanceScore}% relevant to "${query}"`;

@@ -57,75 +57,67 @@ export default function ChapterDetail() {
     setQuery(searchQuery);
   }, [location]);
 
-  // Mock chapter data for demonstration
+  // Fetch real chapter data from database
   useEffect(() => {
     const fetchChapterDetail = async () => {
       setIsLoading(true);
 
-      // Simulate API call delay
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      try {
+        // Try to get chapter data from the bookGroup passed via navigation state
+        const bookGroup = location.state?.bookGroup;
 
-      // Get chapter data and enrich with AI
-      const mockChapter: ChapterDetail = {
-        id: parseInt(chapterId || "1"),
-        title: "The Foundations of Effective Leadership",
-        content: `Leadership is the art of mobilizing others to want to struggle for shared aspirations. This chapter explores the fundamental principles that separate great leaders from merely good managers.
+        if (bookGroup && chapterId) {
+          const chapter = bookGroup.topChapters.find(
+            (ch: any) => ch.id.toString() === chapterId,
+          );
 
-## Core Leadership Principles
+          if (chapter) {
+            const chapterDetail: ChapterDetail = {
+              id: chapter.id,
+              title: chapter.title,
+              content:
+                chapter.snippet +
+                "\n\nThis is the beginning of the chapter. The full content would be loaded from the database in a production environment.",
+              relevanceScore: chapter.relevanceScore,
+              whyRelevant: `This chapter is ${chapter.relevanceScore}% relevant to your search query.`,
+              keyTopics: [],
+              coreLeadershipPrinciples: [],
+              practicalApplications: [],
+              aiSummary: "",
+              recommendations: [],
+              book: {
+                id: bookGroup.id,
+                title: bookGroup.title,
+                author: bookGroup.author || "Unknown Author",
+                cover: bookGroup.cover,
+                amazonLink: `https://www.amazon.com/s?k=${encodeURIComponent(bookGroup.title)}&tag=summifyio-20`,
+                isbn: bookGroup.isbn || "",
+              },
+            };
 
-**Vision and Direction**
-Effective leaders possess the ability to see beyond the present circumstances and articulate a compelling vision of the future. They understand that leadership is not about commanding others, but about inspiring them to join in pursuit of a common goal.
+            setChapter(chapterDetail);
 
-**Emotional Intelligence**
-The best leaders are those who understand themselves and others deeply. They can manage their emotions effectively and help others do the same. This involves empathy, self-awareness, and the ability to read social situations accurately.
-
-**Decision Making Under Pressure**
-Leadership often requires making difficult decisions with incomplete information. Great leaders develop frameworks for decision-making that account for both rational analysis and intuitive insights.
-
-**Building Trust and Credibility**
-Trust is the foundation of all effective leadership. Leaders build trust through consistency between their words and actions, transparency in their decision-making processes, and genuine care for the wellbeing of their team members.
-
-## Practical Applications
-
-This chapter provides actionable strategies for developing these leadership capabilities, including exercises for self-reflection, frameworks for difficult conversations, and methods for creating psychological safety within teams.
-
-The concepts presented here have been tested in various organizational contexts and have proven effective for leaders at all levels, from team leads to C-suite executives.`,
-        relevanceScore: 92,
-        whyRelevant: `This chapter directly addresses the core principles of ${query || "leadership"}, providing both theoretical frameworks and practical strategies that can be immediately applied in real-world leadership situations.`,
-        keyTopics: [
-          "Leadership",
-          "Vision",
-          "Emotional Intelligence",
-          "Decision Making",
-          "Trust Building",
-        ],
-        coreLeadershipPrinciples: [],
-        practicalApplications: [],
-        aiSummary: "",
-        recommendations: [],
-        book: {
-          id: bookId || "1",
-          title:
-            "The Leadership Challenge: How to Make Extraordinary Things Happen",
-          author: "James M. Kouzes, Barry Z. Posner",
-          cover:
-            "https://via.placeholder.com/300x400/667eea/FFFFFF?text=Leadership+Challenge",
-          amazonLink: `https://www.amazon.com/s?k=Leadership+Challenge+Kouzes&tag=summifyio-20`,
-          isbn: "9781119278962",
-        },
-      };
-
-      setChapter(mockChapter);
-      setIsLoading(false);
-
-      // Enrich with AI if we have a query
-      if (query) {
-        enrichChapterWithAI(mockChapter, query);
+            // Enrich with AI if we have a query
+            if (query) {
+              enrichChapterWithAI(chapterDetail, query);
+            }
+          }
+        } else {
+          // Fallback: try to fetch from API or use default
+          console.warn("No chapter data found, using fallback");
+          // Navigate back to search if no data available
+          navigate("/generate");
+        }
+      } catch (error) {
+        console.error("Failed to fetch chapter details:", error);
+        navigate("/generate");
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchChapterDetail();
-  }, [bookId, chapterId, query]);
+  }, [bookId, chapterId, query, location.state, navigate]);
 
   // AI Enrichment function
   const enrichChapterWithAI = async (

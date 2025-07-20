@@ -249,7 +249,15 @@ The concepts presented here have been tested in various organizational contexts 
         {/* Header */}
         <div className="mb-8">
           <Button
-            onClick={() => navigate(-1)}
+            onClick={() => {
+              const hasSearchResults =
+                sessionStorage.getItem("lastSearchResults");
+              if (hasSearchResults) {
+                navigate("/generate");
+              } else {
+                navigate(-1);
+              }
+            }}
             variant="ghost"
             className="mb-4 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
           >

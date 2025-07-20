@@ -20,8 +20,8 @@ interface EnrichedChapter {
   title: string;
   snippet: string;
   relevanceScore: number;
-  whyRelevant?: string;
-  keyTopics?: string[];
+  whyRelevant: string;
+  keyTopics: string[];
   rawDistance: number;
 }
 

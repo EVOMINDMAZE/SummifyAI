@@ -208,8 +208,9 @@ export default function Generate() {
     setGeneratedSummary(null);
 
     try {
+      // Use the new database search API that uses real embeddings
       const response = await fetch(
-        `/api/search?q=${encodeURIComponent(searchQuery)}`,
+        `/api/database?q=${encodeURIComponent(searchQuery)}`,
       );
 
       if (!response.ok) {
@@ -219,7 +220,7 @@ export default function Generate() {
       const data: SearchResults = await response.json();
 
       console.log(
-        `🎯 Found ${data.totalBooks} books with ${data.totalChapters} relevant chapters`,
+        `🎯 Found ${data.totalBooks} books with ${data.totalChapters} relevant chapters using ${data.searchType}`,
       );
 
       // Set the new search results for grid display
@@ -230,11 +231,15 @@ export default function Generate() {
       sessionStorage.setItem("lastSearchResults", JSON.stringify(data));
       sessionStorage.setItem("lastSearchQuery", searchQuery);
     } catch (error) {
-      console.error("AI Vector search error:", error);
+      console.error("Database search error:", error);
       setIsGenerating(false);
 
       // Show user-friendly error with better UX
-      alert("Search failed. Please check your connection and try again.");
+      const errorMessage =
+        error instanceof Error ? error.message : "Search failed";
+      alert(
+        `Search failed: ${errorMessage}. Please check your connection and try again.`,
+      );
     }
   };
 
@@ -366,7 +371,7 @@ export default function Generate() {
                   🧠 AI-Powered
                 </div>
                 <div className="bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
-                  📚 1000+ Books
+                  📚 Real Database
                 </div>
                 <div className="bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
                   🎯 Semantic Search
@@ -389,8 +394,8 @@ export default function Generate() {
                     What knowledge are you seeking?
                   </h2>
                   <p className="text-gray-600 dark:text-gray-400">
-                    Enter any topic and discover relevant chapters across our
-                    entire book database
+                    Enter any topic and discover relevant chapters using
+                    AI-powered semantic search
                   </p>
                 </div>
 
@@ -963,7 +968,7 @@ export default function Generate() {
                       Search Summary
                     </h3>
                     <p className="text-gray-600 dark:text-gray-400">
-                      AI-generated insights from your database search
+                      Real-time insights from our comprehensive book database
                     </p>
                   </div>
                   <div className="ai-summary-content text-gray-700 dark:text-gray-300">

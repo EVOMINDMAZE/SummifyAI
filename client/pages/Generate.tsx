@@ -216,12 +216,27 @@ export default function Generate() {
 
     try {
       // Use the new database search API that uses real embeddings
+      console.log(`🔍 Searching for: "${searchQuery}"`);
       const response = await fetch(
         `/api/database?q=${encodeURIComponent(searchQuery)}`,
       );
 
+      console.log(`📡 API Response status: ${response.status}`);
+
       if (!response.ok) {
-        throw new Error("Failed to search database");
+        const errorText = await response.text();
+        console.error(`❌ API Error Response:`, errorText);
+
+        let errorMessage = "Failed to search database";
+        try {
+          const errorData = JSON.parse(errorText);
+          errorMessage = errorData.error || errorData.details || errorMessage;
+        } catch {
+          // If we can't parse JSON, use the raw text
+          errorMessage = errorText || errorMessage;
+        }
+
+        throw new Error(errorMessage);
       }
 
       const data: SearchResults = await response.json();

@@ -1,11 +1,7 @@
 import { Handler } from "@netlify/functions";
 import { Client } from "pg";
-import dotenv from "dotenv";
 
-// Load environment variables for serverless function
-dotenv.config();
-
-// Simple handler that provides the core API functionality without ES module complications
+// Simple handler that provides the core API functionality
 export const handler: Handler = async (event, context) => {
   // Set CORS headers
   const headers = {
@@ -28,6 +24,13 @@ export const handler: Handler = async (event, context) => {
     const path = event.path.replace("/.netlify/functions/api", "");
     const method = event.httpMethod;
 
+    console.log(`🚀 Netlify Function called: ${method} ${path}`);
+    console.log("Environment check:", {
+      DATABASE_URL: process.env.DATABASE_URL ? "Set" : "Missing",
+      OPENAI_API_KEY: process.env.OPENAI_API_KEY ? "Set" : "Missing",
+      NODE_ENV: process.env.NODE_ENV || "not-set",
+    });
+
     // Health check
     if (path === "/health" && method === "GET") {
       return {
@@ -37,6 +40,8 @@ export const handler: Handler = async (event, context) => {
           status: "ok",
           timestamp: new Date().toISOString(),
           environment: process.env.NODE_ENV || "production",
+          hasDatabase: !!process.env.DATABASE_URL,
+          hasOpenAI: !!process.env.OPENAI_API_KEY,
         }),
       };
     }
@@ -46,6 +51,7 @@ export const handler: Handler = async (event, context) => {
       const query = event.queryStringParameters?.q;
 
       if (!query || query.trim() === "") {
+        console.log("❌ Missing query parameter");
         return {
           statusCode: 400,
           headers,
@@ -53,24 +59,48 @@ export const handler: Handler = async (event, context) => {
         };
       }
 
-      // Connect to database
-      const client = new Client({
-        connectionString: process.env.DATABASE_URL,
-        ssl: {
-          rejectUnauthorized: false,
-        },
-      });
+      console.log(`🔍 Searching for: "${query}"`);
 
-      await client.connect();
+      // Check if DATABASE_URL is available
+      if (!process.env.DATABASE_URL) {
+        console.error("❌ DATABASE_URL not configured");
+        return {
+          statusCode: 500,
+          headers,
+          body: JSON.stringify({
+            error: "Database configuration missing",
+            details: "DATABASE_URL environment variable not set",
+          }),
+        };
+      }
+
+      let client: Client | null = null;
 
       try {
-        // For now, return the static data structure that the frontend expects
-        // In a real implementation, this would do the actual database search
-        const mockResults = {
+        // Connect to database with timeout
+        console.log("🔌 Connecting to database...");
+        client = new Client({
+          connectionString: process.env.DATABASE_URL,
+          ssl: {
+            rejectUnauthorized: false,
+          },
+          connectionTimeoutMillis: 10000, // 10 second timeout
+        });
+
+        await client.connect();
+        console.log("✅ Database connected successfully");
+
+        // Test the connection with a simple query
+        const testResult = await client.query("SELECT NOW() as server_time");
+        console.log("✅ Database test query successful:", testResult.rows[0]);
+
+        // For now, return intelligent mock data that matches the expected structure
+        // In production, this would do actual database queries
+        const results = {
           query: query,
           searchType: "enhanced_text_search",
           totalBooks: 3,
-          totalChapters: 8,
+          totalChapters: 7,
           books: [
             {
               id: "getting-to-yes",
@@ -85,30 +115,32 @@ export const handler: Handler = async (event, context) => {
                   id: 1,
                   title: "Don't Bargain Over Positions",
                   snippet:
-                    "This chapter explains why positional bargaining is ineffective and how to move beyond it to principled negotiation...",
+                    "This foundational chapter explains why positional bargaining fails and introduces the concept of principled negotiation. Learn how to separate the people from the problem and focus on interests rather than positions.",
                   relevanceScore: 98,
-                  whyRelevant: `This chapter directly addresses ${query} by providing fundamental frameworks for moving beyond positional bargaining to principled negotiation.`,
+                  whyRelevant: `This chapter directly addresses ${query} by providing fundamental frameworks for moving beyond win-lose thinking to collaborative problem-solving approaches.`,
                   keyTopics: [
-                    "Negotiation",
-                    "Positional Bargaining",
+                    "Negotiation Strategy",
                     "Principled Approach",
+                    "Win-Win Solutions",
                   ],
                   coreLeadershipPrinciples: [
-                    "Focus on interests not positions",
+                    "Focus on interests, not positions",
                     "Separate people from problems",
+                    "Generate options for mutual gain",
                   ],
                   practicalApplications: [
-                    "Apply principled negotiation in daily meetings",
-                    "Use interest-based problem solving",
+                    "Apply principled negotiation in team conflicts",
+                    "Use interest-based problem solving in meetings",
+                    "Practice separating emotions from issues",
                   ],
                 },
                 {
                   id: 2,
                   title: "Separate the People from the Problem",
                   snippet:
-                    "Learn how to maintain relationships while addressing substantive issues in negotiations...",
+                    "Discover how to maintain strong relationships while addressing tough issues. This chapter provides techniques for dealing with emotions, building rapport, and ensuring productive dialogue.",
                   relevanceScore: 95,
-                  whyRelevant: `This chapter provides essential techniques for ${query} by showing how to manage relationships while addressing core issues.`,
+                  whyRelevant: `Essential for ${query} situations where relationship preservation is critical while still addressing substantive issues effectively.`,
                   keyTopics: [
                     "Relationship Management",
                     "Emotional Intelligence",
@@ -116,11 +148,36 @@ export const handler: Handler = async (event, context) => {
                   ],
                   coreLeadershipPrinciples: [
                     "Maintain relationships during conflict",
-                    "Address issues not personalities",
+                    "Address issues without attacking people",
+                    "Build trust through empathy",
                   ],
                   practicalApplications: [
-                    "Practice empathy in difficult conversations",
-                    "Separate emotional reactions from facts",
+                    "Practice active listening in difficult conversations",
+                    "Separate emotional reactions from factual issues",
+                    "Use empathy to understand other perspectives",
+                  ],
+                },
+                {
+                  id: 3,
+                  title: "Focus on Interests, Not Positions",
+                  snippet:
+                    "Learn to uncover the underlying needs and motivations behind stated positions. This chapter teaches how to ask the right questions and find creative solutions that satisfy everyone's core interests.",
+                  relevanceScore: 97,
+                  whyRelevant: `Critical for ${query} because it reveals how to discover what people really want versus what they say they want, leading to breakthrough solutions.`,
+                  keyTopics: [
+                    "Interest-Based Negotiation",
+                    "Root Cause Analysis",
+                    "Creative Problem Solving",
+                  ],
+                  coreLeadershipPrinciples: [
+                    "Understand underlying motivations",
+                    "Ask probing questions to uncover needs",
+                    "Look for shared interests",
+                  ],
+                  practicalApplications: [
+                    "Ask 'why' to understand real motivations",
+                    "Map out all parties' interests before proposing solutions",
+                    "Look for overlapping interests as collaboration opportunities",
                   ],
                 },
               ],
@@ -135,24 +192,107 @@ export const handler: Handler = async (event, context) => {
               averageRelevance: 89,
               topChapters: [
                 {
-                  id: 3,
+                  id: 4,
                   title: "Be a Mirror",
                   snippet:
-                    "Discover the power of tactical empathy and mirroring in high-stakes negotiations...",
+                    "Master the art of tactical empathy and mirroring to build instant rapport. This chapter reveals FBI hostage negotiation techniques adapted for business and personal situations.",
                   relevanceScore: 96,
-                  whyRelevant: `This chapter enhances your ${query} skills through advanced mirroring and tactical empathy techniques.`,
+                  whyRelevant: `Enhances your ${query} effectiveness through advanced psychological techniques used by FBI negotiators to build trust and understanding.`,
                   keyTopics: [
-                    "Mirroring",
                     "Tactical Empathy",
-                    "Active Listening",
+                    "Mirroring Techniques",
+                    "Rapport Building",
                   ],
                   coreLeadershipPrinciples: [
                     "Use tactical empathy to understand others",
-                    "Mirror to build rapport",
+                    "Mirror to build instant connection",
+                    "Listen more than you speak",
                   ],
                   practicalApplications: [
-                    "Practice mirroring in conversations",
-                    "Apply tactical empathy in team situations",
+                    "Practice mirroring last 3 words in conversations",
+                    "Use tactical empathy to defuse tense situations",
+                    "Apply active listening techniques in all interactions",
+                  ],
+                },
+                {
+                  id: 5,
+                  title: "Don't Feel Their Pain, Label It",
+                  snippet:
+                    "Learn the powerful technique of labeling emotions to acknowledge and defuse them without being overwhelmed. Discover how validation can transform any negotiation.",
+                  relevanceScore: 94,
+                  whyRelevant: `Provides advanced ${query} skills by teaching how to acknowledge emotions without being controlled by them, leading to clearer thinking.`,
+                  keyTopics: [
+                    "Emotional Labeling",
+                    "Validation Techniques",
+                    "De-escalation",
+                  ],
+                  coreLeadershipPrinciples: [
+                    "Acknowledge emotions without absorbing them",
+                    "Use labeling to defuse tension",
+                    "Validate feelings to build trust",
+                  ],
+                  practicalApplications: [
+                    "Label emotions: 'It seems like you're frustrated...'",
+                    "Validate concerns before presenting solutions",
+                    "Use emotional labeling to calm heated discussions",
+                  ],
+                },
+              ],
+            },
+            {
+              id: "crucial-conversations",
+              title: "Crucial Conversations",
+              author:
+                "Kerry Patterson, Joseph Grenny, Ron McMillan, Al Switzler",
+              cover:
+                "https://images-na.ssl-images-amazon.com/images/I/51OHJOhmQgL._SX327_BO1,204,203,200_.jpg",
+              isbn: "1260474186",
+              averageRelevance: 87,
+              topChapters: [
+                {
+                  id: 6,
+                  title: "STATE Your Path",
+                  snippet:
+                    "Master the STATE method for sharing your controversial or sensitive viewpoints effectively. Learn how to speak persuasively without creating defensiveness.",
+                  relevanceScore: 93,
+                  whyRelevant: `Essential for ${query} when you need to communicate difficult messages while maintaining relationships and achieving understanding.`,
+                  keyTopics: [
+                    "Difficult Conversations",
+                    "STATE Method",
+                    "Persuasive Communication",
+                  ],
+                  coreLeadershipPrinciples: [
+                    "Share facts, tell your story, ask for others' paths",
+                    "Speak tentatively to invite dialogue",
+                    "Encourage testing to verify understanding",
+                  ],
+                  practicalApplications: [
+                    "Use STATE framework for sensitive topics",
+                    "Practice tentative language: 'I'm wondering if...'",
+                    "Always ask for others' perspectives after sharing yours",
+                  ],
+                },
+                {
+                  id: 7,
+                  title: "Explore Others' Paths",
+                  snippet:
+                    "Develop skills for understanding others' viewpoints and encouraging honest dialogue. Learn to create safety so people will share their real thoughts and feelings.",
+                  relevanceScore: 91,
+                  whyRelevant: `Crucial for ${query} situations where understanding multiple perspectives is essential for finding solutions that work for everyone.`,
+                  keyTopics: [
+                    "Active Listening",
+                    "Perspective Taking",
+                    "Creating Safety",
+                  ],
+                  coreLeadershipPrinciples: [
+                    "Create safety for honest dialogue",
+                    "Seek to understand before being understood",
+                    "Ask sincere questions to explore viewpoints",
+                  ],
+                  practicalApplications: [
+                    "Ask: 'Help me understand your perspective'",
+                    "Create psychological safety before difficult topics",
+                    "Use AMPP (Ask, Mirror, Paraphrase, Prime) to understand others",
                   ],
                 },
               ],
@@ -160,79 +300,119 @@ export const handler: Handler = async (event, context) => {
           ],
         };
 
+        console.log(
+          `✅ Returning ${results.totalBooks} books with ${results.totalChapters} chapters`,
+        );
+
         return {
           statusCode: 200,
           headers,
-          body: JSON.stringify(mockResults),
+          body: JSON.stringify(results),
+        };
+      } catch (dbError) {
+        console.error("❌ Database error:", dbError);
+
+        // Return a detailed error for debugging
+        return {
+          statusCode: 500,
+          headers,
+          body: JSON.stringify({
+            error: "Database connection failed",
+            details:
+              dbError instanceof Error
+                ? dbError.message
+                : "Unknown database error",
+            timestamp: new Date().toISOString(),
+          }),
         };
       } finally {
-        await client.end();
+        if (client) {
+          try {
+            await client.end();
+            console.log("🔌 Database connection closed");
+          } catch (closeError) {
+            console.error("❌ Error closing database connection:", closeError);
+          }
+        }
       }
     }
 
     // Query analysis endpoint
     if (path === "/topic" && method === "POST") {
-      const body = JSON.parse(event.body || "{}");
-      const { topic } = body;
+      try {
+        const body = JSON.parse(event.body || "{}");
+        const { topic } = body;
 
-      if (!topic) {
+        if (!topic) {
+          return {
+            statusCode: 400,
+            headers,
+            body: JSON.stringify({ error: "Topic is required" }),
+          };
+        }
+
+        console.log(`🎯 Analyzing topic: "${topic}"`);
+
+        // Return analysis result
+        const analysis = {
+          isBroad: topic.split(" ").length <= 2,
+          explanation: `"${topic}" could benefit from more specific focus to find the most relevant chapters.`,
+          refinements: [
+            {
+              label: `${topic} Strategies`,
+              value: `effective ${topic} strategies`,
+              description: `Focus on proven strategies and techniques for ${topic}`,
+            },
+            {
+              label: `${topic} in Leadership`,
+              value: `${topic} leadership skills`,
+              description: `Explore how ${topic} applies in leadership contexts`,
+            },
+            {
+              label: `Advanced ${topic}`,
+              value: `advanced ${topic} techniques`,
+              description: `Deep dive into sophisticated ${topic} methods`,
+            },
+          ],
+        };
+
+        return {
+          statusCode: 200,
+          headers,
+          body: JSON.stringify(analysis),
+        };
+      } catch (parseError) {
+        console.error("❌ Error parsing request body:", parseError);
         return {
           statusCode: 400,
           headers,
-          body: JSON.stringify({ error: "Topic is required" }),
+          body: JSON.stringify({ error: "Invalid JSON in request body" }),
         };
       }
-
-      // Return analysis result
-      const analysis = {
-        isBroad: topic.split(" ").length <= 2,
-        explanation: `"${topic}" is a broad topic that could benefit from more specific focus.`,
-        refinements: [
-          {
-            label: `${topic} Strategies`,
-            value: `effective ${topic} strategies`,
-            description: `Focus on proven strategies and techniques for ${topic}`,
-          },
-          {
-            label: `${topic} in Leadership`,
-            value: `${topic} leadership skills`,
-            description: `Explore how ${topic} applies in leadership contexts`,
-          },
-          {
-            label: `Advanced ${topic}`,
-            value: `advanced ${topic} techniques`,
-            description: `Deep dive into sophisticated ${topic} methods`,
-          },
-        ],
-      };
-
-      return {
-        statusCode: 200,
-        headers,
-        body: JSON.stringify(analysis),
-      };
     }
 
     // Default 404 response
+    console.log(`❌ Route not found: ${method} ${path}`);
     return {
       statusCode: 404,
       headers,
       body: JSON.stringify({
         error: "API route not found",
         path: path,
+        method: method,
         availableRoutes: ["/health", "/database", "/topic"],
       }),
     };
   } catch (error) {
-    console.error("API error:", error);
+    console.error("❌ Unexpected API error:", error);
 
     return {
       statusCode: 500,
       headers,
       body: JSON.stringify({
         error: "Internal server error",
-        details:
-          process.env.NODE_ENV === "development" ? error.message : undefined,
+        details: error instanceof Error ? error.message : "Unknown error",
+        timestamp: new Date().toISOString(),
       }),
     };
   }

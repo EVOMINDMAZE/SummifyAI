@@ -183,16 +183,11 @@ export default function Generate() {
 
   const performDatabaseSearch = async (searchQuery: string) => {
     setIsGenerating(true);
-    setProgress(0);
-    setCurrentOperation("Initializing AI vector search...");
     setShowRefinements(false);
     setSearchResults(null);
     setGeneratedSummary(null);
 
     try {
-      setProgress(30);
-      setCurrentOperation("Generating semantic embeddings...");
-
       const response = await fetch(
         `/api/search?q=${encodeURIComponent(searchQuery)}`,
       );
@@ -201,13 +196,7 @@ export default function Generate() {
         throw new Error("Failed to search database");
       }
 
-      setProgress(70);
-      setCurrentOperation("Processing AI results...");
-
       const data: SearchResults = await response.json();
-
-      setProgress(100);
-      setCurrentOperation("Complete!");
 
       console.log(
         `🎯 Found ${data.totalBooks} books with ${data.totalChapters} relevant chapters`,
@@ -216,18 +205,16 @@ export default function Generate() {
       // Set the new search results for grid display
       setSearchResults(data);
       setIsGenerating(false);
+
+      // Save search state for navigation preservation
+      sessionStorage.setItem("lastSearchResults", JSON.stringify(data));
+      sessionStorage.setItem("lastSearchQuery", searchQuery);
     } catch (error) {
-      console.error("Database search error:", error);
+      console.error("AI Vector search error:", error);
       setIsGenerating(false);
 
-      // Show user-friendly error message
-      setCurrentOperation("Search failed. Please try again.");
-
-      // Clear error after 3 seconds
-      setTimeout(() => {
-        setCurrentOperation("");
-        setProgress(0);
-      }, 3000);
+      // Show user-friendly error with better UX
+      alert("Search failed. Please check your connection and try again.");
     }
   };
 

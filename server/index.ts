@@ -63,9 +63,24 @@ export function createServer() {
   app.post("/api/neon/execute", handleNeonExecute);
   app.post("/api/ratings/submit", handleSubmitRating);
 
-  // Serve static files from the React app build directory
-  const staticPath = path.join(__dirname, "../spa");
-  app.use(express.static(staticPath));
+  // Only serve static files in production or standalone mode
+  const isProduction = process.env.NODE_ENV === "production";
+  const isStandalone = !process.env.VITE_DEV_SERVER; // Vite sets this during dev
+
+  if (isProduction || isStandalone) {
+    // Serve static files from the React app build directory
+    const staticPath = path.join(__dirname, "../spa");
+    console.log(`📁 Serving static files from: ${staticPath}`);
+    app.use(express.static(staticPath));
+
+    // Serve React app for all non-API routes (client-side routing)
+    app.get("*", (req, res) => {
+      res.sendFile(path.join(staticPath, "index.html"));
+    });
+  } else {
+    // In development mode, let Vite handle static files and routing
+    console.log("🔧 Development mode: Vite handles static files and routing");
+  }
 
   // API 404 handler (only for /api/* routes)
   app.use("/api/*", (req, res) => {
@@ -73,11 +88,6 @@ export function createServer() {
       error: "API route not found",
       path: req.originalUrl,
     });
-  });
-
-  // Serve React app for all non-API routes (client-side routing)
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(staticPath, "index.html"));
   });
 
   // Error handling middleware

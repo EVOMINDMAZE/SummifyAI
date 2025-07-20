@@ -209,19 +209,12 @@ export default function Generate() {
       setProgress(100);
       setCurrentOperation("Complete!");
 
-      // Format the results to match the expected structure
-      const formattedSummary: GeneratedSummary = {
-        id: Date.now().toString(),
-        topic: searchQuery,
-        books: data.books,
-        summary: generateSearchSummary(data.books, searchQuery),
-        keyInsights: generateKeyInsights(data.books),
-        quotes: [], // Database search doesn't provide quotes yet
-        generatedAt: new Date().toISOString(),
-        userId: user?.id || 0,
-      };
+      console.log(
+        `🎯 Found ${data.totalBooks} books with ${data.totalChapters} relevant chapters`,
+      );
 
-      setGeneratedSummary(formattedSummary);
+      // Set the new search results for grid display
+      setSearchResults(data);
       setIsGenerating(false);
     } catch (error) {
       console.error("Database search error:", error);

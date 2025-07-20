@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 import rateLimit from "express-rate-limit";
 import dotenv from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
 
 // Import properly structured routes (that export Express routers)
 import searchRoutes from "./routes/search.js";
@@ -16,6 +18,9 @@ import { handleSubmitRating } from "./routes/ratings.js";
 
 // Load environment variables
 dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export function createServer() {
   const app = express();
@@ -47,7 +52,7 @@ export function createServer() {
     });
   });
 
-  // Router-based routes
+  // API Routes
   app.use("/api/search", searchRoutes);
   app.use("/api/enrich", enrichRoutes);
   app.use("/api/topic", queryAnalysisRoutes);
@@ -57,6 +62,23 @@ export function createServer() {
   app.get("/api/demo", handleDemo);
   app.post("/api/neon/execute", handleNeonExecute);
   app.post("/api/ratings/submit", handleSubmitRating);
+
+  // Serve static files from the React app build directory
+  const staticPath = path.join(__dirname, "../spa");
+  app.use(express.static(staticPath));
+
+  // API 404 handler (only for /api/* routes)
+  app.use("/api/*", (req, res) => {
+    res.status(404).json({
+      error: "API route not found",
+      path: req.originalUrl,
+    });
+  });
+
+  // Serve React app for all non-API routes (client-side routing)
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(staticPath, "index.html"));
+  });
 
   // Error handling middleware
   app.use(
@@ -74,14 +96,6 @@ export function createServer() {
       });
     },
   );
-
-  // 404 handler
-  app.use("*", (req, res) => {
-    res.status(404).json({
-      error: "Route not found",
-      path: req.originalUrl,
-    });
-  });
 
   return app;
 }

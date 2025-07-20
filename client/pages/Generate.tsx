@@ -651,8 +651,23 @@ export default function Generate() {
                                     {chapter.title}
                                   </p>
                                   <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2 mt-1">
-                                    {chapter.snippet}
+                                    {chapter.whyRelevant || chapter.snippet}
                                   </p>
+                                  {chapter.keyTopics &&
+                                    chapter.keyTopics.length > 0 && (
+                                      <div className="flex flex-wrap gap-1 mt-2">
+                                        {chapter.keyTopics
+                                          .slice(0, 2)
+                                          .map((topic, topicIndex) => (
+                                            <span
+                                              key={topicIndex}
+                                              className="text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-full"
+                                            >
+                                              {topic}
+                                            </span>
+                                          ))}
+                                      </div>
+                                    )}
                                 </div>
                               </div>
                             ))}

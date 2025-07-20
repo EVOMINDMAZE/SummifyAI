@@ -195,9 +195,8 @@ export default function Generate() {
   const handleGenerate = async () => {
     if (!topic.trim()) return;
 
-    // For now, skip topic analysis and go directly to search
-    // TODO: Integrate topic analysis with database search if needed
-    await performDatabaseSearch(topic.trim());
+    // First analyze the topic to determine if it needs refinement
+    await analyzeTopic(topic.trim());
   };
 
   const performDatabaseSearch = async (searchQuery: string) => {

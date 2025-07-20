@@ -23,6 +23,23 @@ import SearchFilters, {
   SearchFilters as ISearchFilters,
 } from "@/components/SearchFilters";
 
+interface TopChapter {
+  id: number;
+  title: string;
+  snippet: string;
+  relevanceScore: number;
+}
+
+interface BookGroup {
+  id: string;
+  title: string;
+  author: string;
+  cover: string;
+  isbn: string;
+  topChapters: TopChapter[];
+}
+
+// Legacy interfaces for backward compatibility
 interface ChapterMatch {
   chapter: string;
   title: string;
@@ -47,6 +64,14 @@ interface Book {
   isbn?: string;
   relevantChapters?: ChapterMatch[];
   chapterRelevanceScore?: number;
+}
+
+interface SearchResults {
+  query: string;
+  totalBooks: number;
+  totalChapters: number;
+  books: BookGroup[];
+  searchType: string;
 }
 
 interface GeneratedSummary {

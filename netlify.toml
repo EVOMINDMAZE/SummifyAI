@@ -5,8 +5,9 @@
 
 
 [functions]
-  external_node_modules = ["express"]
+  external_node_modules = ["pg", "dotenv"]
   node_bundler = "esbuild"
+  directory = "netlify/functions"
   
 [[redirects]]
   force = true

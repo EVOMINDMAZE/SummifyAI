@@ -667,6 +667,9 @@ export default function Generate() {
                                       </div>
                                     )}
                                 </div>
+                                <div className="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                                  <ChevronRight className="w-4 h-4 text-indigo-500" />
+                                </div>
                               </div>
                             ))}
                         </div>

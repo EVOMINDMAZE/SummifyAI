@@ -28,6 +28,7 @@ import ResultsShareButton from "@/components/ResultsShareButton";
 import SearchFilters, {
   SearchFilters as ISearchFilters,
 } from "@/components/SearchFilters";
+import AIRelevanceScore from "@/components/AIRelevanceScore";
 
 interface TopChapter {
   id: number;

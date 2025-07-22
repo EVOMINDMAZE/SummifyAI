@@ -87,41 +87,25 @@ const AIRelevanceScore: React.FC<AIRelevanceScoreProps> = ({
   };
 
   return (
-    <div className="flex flex-col items-center space-y-1">
-      {/* AI Score Badge */}
-      <div className="relative group">
-        <Badge
-          variant="outline"
-          className={`${colorClasses[color].badge} ${sizeClasses[size]} font-bold rounded-full transition-all duration-300 hover:scale-110 ${colorClasses[color].glow} hover:shadow-xl cursor-help`}
-          title={`AI-analyzed relevance: ${description} (${normalizedScore}% match${query ? ` for "${query}"` : ""})`}
-        >
-          <span className="flex items-center space-x-1">
-            <span className="animate-pulse">🧠</span>
-            <span>{normalizedScore}%</span>
-          </span>
-        </Badge>
+    <div className="flex items-center space-x-2">
+      {/* Compact Score Badge */}
+      <Badge
+        variant="outline"
+        className={`${colorClasses[color].badge} ${sizeClasses[size]} font-bold rounded-full transition-all duration-300`}
+        title={`${normalizedScore}% AI relevance`}
+      >
+        <span>{normalizedScore}%</span>
+      </Badge>
 
-
-      </div>
-
-      {/* Level Bar */}
+      {/* Compact Level Bar */}
       {showBar && (
-        <div className="w-16 h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden shadow-inner">
+        <div className="w-10 h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden shadow-inner">
           <div
-            className={`h-full ${colorClasses[color].bar} rounded-full transition-all duration-1000 ease-out relative`}
+            className={`h-full ${colorClasses[color].bar} rounded-full transition-all duration-1000 ease-out`}
             style={{ width: `${normalizedScore}%` }}
-          >
-            {/* Animated shine effect */}
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-pulse"></div>
-          </div>
+          />
         </div>
       )}
-
-      {/* Score Label */}
-      <div className="text-[10px] font-medium text-gray-600 dark:text-gray-400 text-center leading-tight">
-        {size === "lg" && <div>{description}</div>}
-        <div className="text-gray-500">AI Match</div>
-      </div>
     </div>
   );
 };

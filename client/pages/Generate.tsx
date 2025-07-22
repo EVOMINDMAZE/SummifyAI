@@ -687,7 +687,7 @@ export default function Generate() {
                             <Sparkles className="w-4 h-4 mr-2 text-emerald-500" />
                             Top Relevant Chapters
                           </h4>
-                          <div className="grid gap-4">
+                          <div className="space-y-3">
                             {bookGroup.topChapters
                               .slice(0, 3)
                               .map((chapter, index) => (
@@ -696,65 +696,50 @@ export default function Generate() {
                                   onClick={(e) =>
                                     handleChapterClick(e, bookGroup, chapter)
                                   }
-                                  className="group relative p-6 rounded-2xl bg-gradient-to-r from-white/80 via-white/60 to-white/80 dark:from-gray-800/80 dark:via-gray-800/60 dark:to-gray-800/80 hover:from-white dark:hover:from-gray-800 backdrop-blur-sm transition-all duration-300 cursor-pointer border-2 border-transparent hover:border-indigo-200 dark:hover:border-indigo-700 hover:shadow-xl transform hover:scale-[1.02] hover:-translate-y-1"
+                                  className="group relative p-4 rounded-xl bg-white/60 dark:bg-gray-800/60 hover:bg-white/80 dark:hover:bg-gray-800/80 transition-all duration-300 cursor-pointer border border-gray-200/50 dark:border-gray-700/50 hover:border-indigo-300 dark:hover:border-indigo-600 hover:shadow-lg"
                                 >
-                                  {/* Chapter Rank Badge */}
-                                  <div className="absolute -top-3 -left-3 w-8 h-8 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full flex items-center justify-center text-white text-sm font-bold shadow-lg">
-                                    {index + 1}
-                                  </div>
-
                                   {/* Chapter Content */}
-                                  <div className="flex items-start space-x-4">
-                                    <div className="flex-shrink-0">
+                                  <div className="flex items-start space-x-3">
+                                    {/* Rank & Score */}
+                                    <div className="flex-shrink-0 flex flex-col items-center space-y-2">
+                                      <div className="w-6 h-6 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full flex items-center justify-center text-white text-xs font-bold">
+                                        {index + 1}
+                                      </div>
                                       <AIRelevanceScore
                                         score={chapter.relevanceScore}
-                                        size="md"
+                                        size="sm"
                                         showBar={true}
                                         query={searchResults?.query || topic}
                                       />
                                     </div>
 
                                     <div className="flex-1 min-w-0">
-                                      <h5 className="text-base font-bold text-gray-900 dark:text-white mb-2 line-clamp-1 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                                      <h5 className="text-sm font-bold text-gray-900 dark:text-white mb-1 line-clamp-1 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
                                         {chapter.title}
                                       </h5>
-                                      <p className="text-sm text-gray-700 dark:text-gray-300 line-clamp-3 mb-3 leading-relaxed">
+                                      <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2 mb-2 leading-relaxed">
                                         {chapter.whyRelevant || chapter.snippet}
                                       </p>
 
                                       {/* Key Topics */}
                                       {chapter.keyTopics && chapter.keyTopics.length > 0 && (
-                                        <div className="flex flex-wrap gap-2 mb-3">
+                                        <div className="flex flex-wrap gap-1">
                                           {chapter.keyTopics
                                             .slice(0, 3)
                                             .map((topic, topicIndex) => (
                                               <span
                                                 key={topicIndex}
-                                                className="inline-flex items-center text-xs bg-gradient-to-r from-indigo-100 to-purple-100 dark:from-indigo-900/30 dark:to-purple-900/30 text-indigo-700 dark:text-indigo-300 px-3 py-1 rounded-full font-medium shadow-sm"
+                                                className="text-xs bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 px-2 py-0.5 rounded-full"
                                               >
-                                                <span className="w-1.5 h-1.5 bg-indigo-500 rounded-full mr-2"></span>
                                                 {topic}
                                               </span>
                                             ))}
                                         </div>
                                       )}
-
-                                      {/* Practical Applications Preview */}
-                                      {chapter.practicalApplications && chapter.practicalApplications.length > 0 && (
-                                        <div className="bg-gradient-to-r from-emerald-50 to-cyan-50 dark:from-emerald-900/20 dark:to-cyan-900/20 rounded-lg p-3 mt-3">
-                                          <p className="text-xs text-emerald-700 dark:text-emerald-300 font-medium mb-1 flex items-center">
-                                            <Lightbulb className="w-3 h-3 mr-1" />
-                                            Key Application:
-                                          </p>
-                                          <p className="text-xs text-emerald-600 dark:text-emerald-400 line-clamp-2">
-                                            {chapter.practicalApplications[0]}
-                                          </p>
-                                        </div>
-                                      )}
                                     </div>
 
-                                    <div className="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0">
-                                      <ChevronRight className="w-5 h-5 text-indigo-500" />
+                                    <div className="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                                      <ChevronRight className="w-4 h-4 text-indigo-500" />
                                     </div>
                                   </div>
                                 </div>

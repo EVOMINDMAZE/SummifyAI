@@ -624,32 +624,59 @@ export default function Generate() {
                   onClick={() => handleBookCardClick(bookGroup)}
                 >
                   <CardContent className="p-0">
-                    <div className="flex">
-                      {/* Enhanced Book Cover */}
-                      <div className="w-40 flex-shrink-0 p-4 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-indigo-900/30 dark:via-purple-900/30 dark:to-pink-900/30">
-                        <div className="relative">
+                    {/* New Layout: Large Cover on Top */}
+                    <div className="relative">
+                      {/* Massive Book Cover Section */}
+                      <div className="w-full h-80 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-indigo-900/30 dark:via-purple-900/30 dark:to-pink-900/30 p-8 flex items-center justify-center relative overflow-hidden">
+                        {/* Background Pattern */}
+                        <div className="absolute inset-0 opacity-10">
+                          <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/20 via-purple-500/20 to-pink-500/20"></div>
+                          <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(120,119,198,0.1),transparent_50%)]"></div>
+                        </div>
+
+                        <div className="relative max-w-xs w-full">
                           {/* Book cover container with proper aspect ratio */}
-                          <div className="aspect-[2/3] w-full relative overflow-hidden rounded-2xl shadow-xl group-hover:shadow-2xl transition-all duration-500 border-2 border-white/50 dark:border-gray-700/50">
+                          <div className="aspect-[2/3] w-full relative overflow-hidden rounded-3xl shadow-2xl group-hover:shadow-3xl transition-all duration-700 border-4 border-white/70 dark:border-gray-700/70">
                             <img
                               src={bookGroup.cover}
                               alt={bookGroup.title}
-                              className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                              className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-110"
                               onError={(e) => {
                                 const target = e.currentTarget;
-                                target.src = `https://via.placeholder.com/300x450/667eea/FFFFFF?text=${encodeURIComponent(bookGroup.title.split(" ").slice(0, 3).join(" "))}`;
+                                target.src = `https://via.placeholder.com/400x600/667eea/FFFFFF?text=${encodeURIComponent(bookGroup.title.split(" ").slice(0, 3).join(" "))}`;
                               }}
                               loading="lazy"
                             />
-                            {/* Gradient overlay for visual enhancement */}
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                            {/* Enhanced gradient overlay */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+
+                            {/* Book Stats Overlay */}
+                            <div className="absolute top-4 right-4 bg-black/70 backdrop-blur-sm rounded-full p-3 opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-2 group-hover:translate-y-0">
+                              <div className="text-white text-xs font-bold text-center">
+                                <div className="text-lg">{bookGroup.topChapters.length}</div>
+                                <div className="text-[8px] text-gray-300 uppercase tracking-wide">Chapters</div>
+                              </div>
+                            </div>
+
+                            {/* Average Score Overlay */}
+                            <div className="absolute bottom-4 left-4 opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-2 group-hover:translate-y-0">
+                              <AIRelevanceScore
+                                score={bookGroup.averageRelevance || 85}
+                                size="md"
+                                showBar={true}
+                                query={searchResults?.query || topic}
+                              />
+                            </div>
                           </div>
-                          {/* Glow effect */}
-                          <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-2xl blur opacity-20 group-hover:opacity-40 transition-opacity duration-500 -z-10"></div>
+
+                          {/* Enhanced Glow effects */}
+                          <div className="absolute -inset-3 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-3xl blur-xl opacity-20 group-hover:opacity-50 transition-opacity duration-700 -z-10"></div>
+                          <div className="absolute -inset-1 bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 rounded-3xl blur opacity-30 group-hover:opacity-60 transition-opacity duration-700 -z-10"></div>
                         </div>
                       </div>
 
-                      {/* Book Info & Chapters */}
-                      <div className="flex-1 p-6">
+                      {/* Book Info & Chapters Section */}
+                      <div className="p-8">
                         {/* Book Header */}
                         <div className="mb-6">
                           <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 line-clamp-2 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">

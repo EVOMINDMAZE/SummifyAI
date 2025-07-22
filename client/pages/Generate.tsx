@@ -678,12 +678,12 @@ export default function Generate() {
                                 className="group flex items-start space-x-3 p-3 rounded-xl bg-white/60 dark:bg-gray-800/60 hover:bg-white/80 dark:hover:bg-gray-800/80 transition-all cursor-pointer border-2 border-transparent hover:border-indigo-200 dark:hover:border-indigo-800 hover:shadow-md transform hover:scale-[1.02]"
                               >
                                 <div className="flex-shrink-0">
-                                  <Badge
-                                    variant="outline"
-                                    className="bg-gradient-to-r from-emerald-500 to-cyan-500 border-0 text-white text-xs font-bold px-3 py-1 rounded-full shadow-md"
-                                  >
-                                    {chapter.relevanceScore}%
-                                  </Badge>
+                                  <AIRelevanceScore
+                                    score={chapter.relevanceScore}
+                                    size="sm"
+                                    showBar={true}
+                                    query={searchResults?.query || topic}
+                                  />
                                 </div>
                                 <div className="flex-1 min-w-0">
                                   <p className="text-sm font-semibold text-gray-900 dark:text-white line-clamp-1 mb-1">

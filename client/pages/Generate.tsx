@@ -792,14 +792,21 @@ export default function Generate() {
                           </div>
                         </div>
 
-                        {/* Call to Action */}
-                        <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
-                          <div className="flex items-center justify-between text-sm">
-                            <span className="text-gray-500 dark:text-gray-400 flex items-center">
-                              <Target className="w-4 h-4 mr-1" />
-                              Click to explore all chapters
-                            </span>
-                            <ChevronRight className="w-5 h-5 text-indigo-500 group-hover:text-indigo-600 transition-colors" />
+                        {/* Enhanced Call to Action */}
+                        <div className="mt-8 pt-6 border-t border-gradient-to-r from-indigo-200 via-purple-200 to-pink-200 dark:from-indigo-800 dark:via-purple-800 dark:to-pink-800">
+                          <div className="text-center">
+                            <div className="bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/30 dark:to-purple-900/30 rounded-2xl p-4 group-hover:from-indigo-100 dark:group-hover:from-indigo-900/50 transition-all duration-300">
+                              <div className="flex items-center justify-center space-x-3 text-sm">
+                                <Target className="w-4 h-4 text-indigo-500" />
+                                <span className="text-gray-700 dark:text-gray-300 font-medium">
+                                  Explore {bookGroup.topChapters.length > 3 ? bookGroup.topChapters.length - 3 + " more " : "all "}chapters with detailed AI analysis
+                                </span>
+                                <ChevronRight className="w-4 h-4 text-indigo-500 group-hover:translate-x-1 transition-transform duration-300" />
+                              </div>
+                              <div className="mt-2 text-xs text-gray-600 dark:text-gray-400">
+                                Click anywhere on this card to dive deeper
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>

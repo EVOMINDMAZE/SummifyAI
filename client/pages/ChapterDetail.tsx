@@ -345,12 +345,17 @@ export default function ChapterDetail() {
               <CardContent className="p-8">
                 <div className="mb-6">
                   <div className="flex flex-wrap items-center gap-3 mb-4">
-                    <Badge
-                      variant="outline"
-                      className="bg-emerald-50 border-emerald-300 text-emerald-700 dark:bg-emerald-900/20 dark:border-emerald-700 dark:text-emerald-400 px-4 py-2 rounded-full text-sm font-bold"
-                    >
-                      ✓ {chapterDetail.relevanceScore}% Match
-                    </Badge>
+                    <div className="flex items-center space-x-3">
+                      <AIRelevanceScore
+                        score={chapterDetail.relevanceScore}
+                        size="lg"
+                        showBar={true}
+                        query={query}
+                      />
+                      <div className="text-sm text-gray-600 dark:text-gray-400">
+                        AI-Analyzed Match
+                      </div>
+                    </div>
                     {query && (
                       <Badge
                         variant="secondary"

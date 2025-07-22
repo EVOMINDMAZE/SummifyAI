@@ -677,15 +677,33 @@ export default function Generate() {
 
                       {/* Book Info & Chapters Section */}
                       <div className="p-8">
-                        {/* Book Header */}
-                        <div className="mb-6">
-                          <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 line-clamp-2 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                        {/* Enhanced Book Header */}
+                        <div className="mb-8 text-center">
+                          <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3 line-clamp-2 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors leading-tight">
                             {bookGroup.title}
                           </h3>
-                          <p className="text-gray-600 dark:text-gray-400 text-sm flex items-center">
-                            <Users className="w-4 h-4 mr-2" />
-                            {bookGroup.author || "Unknown Author"}
-                          </p>
+                          <div className="flex items-center justify-center space-x-4 mb-4">
+                            <div className="flex items-center text-gray-600 dark:text-gray-400">
+                              <Users className="w-4 h-4 mr-2 text-indigo-500" />
+                              <span className="font-medium">{bookGroup.author || "Unknown Author"}</span>
+                            </div>
+                            <div className="w-1.5 h-1.5 bg-gray-400 rounded-full"></div>
+                            <div className="flex items-center text-gray-600 dark:text-gray-400">
+                              <BookOpen className="w-4 h-4 mr-2 text-emerald-500" />
+                              <span className="font-medium">{bookGroup.topChapters.length} Relevant Chapters</span>
+                            </div>
+                          </div>
+
+                          {/* Overall Relevance Score */}
+                          <div className="flex items-center justify-center space-x-3 mb-6">
+                            <span className="text-sm text-gray-600 dark:text-gray-400 font-medium">Overall Relevance:</span>
+                            <AIRelevanceScore
+                              score={bookGroup.averageRelevance || 85}
+                              size="md"
+                              showBar={true}
+                              query={searchResults?.query || topic}
+                            />
+                          </div>
                         </div>
 
                         {/* Top Chapters */}

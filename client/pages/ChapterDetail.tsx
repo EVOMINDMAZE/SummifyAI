@@ -4,6 +4,7 @@ import Navigation from "@/components/Navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import AIRelevanceScore from "@/components/AIRelevanceScore";
 import { Separator } from "@/components/ui/separator";
 import {
   ArrowLeft,

@@ -616,7 +616,7 @@ export default function Generate() {
             </div>
 
             {/* Beautiful Book Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-12 mb-16">
               {searchResults.books.map((bookGroup) => (
                 <Card
                   key={bookGroup.id}

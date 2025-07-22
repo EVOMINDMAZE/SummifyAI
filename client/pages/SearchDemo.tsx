@@ -541,8 +541,13 @@ export default function SearchDemo() {
                       <div className="absolute -top-2 -left-2 w-8 h-8 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
                         #{index + 1}
                       </div>
-                      <div className="absolute -top-2 -right-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full font-bold">
-                        {book.relevanceScore}%
+                      <div className="absolute -top-2 -right-2">
+                        <AIRelevanceScore
+                          score={book.relevanceScore}
+                          size="sm"
+                          showBar={false}
+                          query="leadership"
+                        />
                       </div>
                     </div>
 

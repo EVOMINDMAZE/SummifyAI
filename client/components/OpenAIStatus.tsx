@@ -101,25 +101,24 @@ export default function OpenAIStatus() {
               <AlertCircle className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
               <div className="space-y-2">
                 <p className="text-sm text-blue-800 dark:text-blue-200">
-                  <strong>AI Features in Fallback Mode:</strong> The app works without OpenAI, but you'll get enhanced AI analysis with an API key.
+                  <strong>Edge Functions Setup Required:</strong> Deploy Edge Functions to enable secure AI-powered analysis.
                 </p>
                 <div className="flex gap-2">
                   <Button
                     variant="outline"
                     size="sm"
                     className="text-blue-700 border-blue-300 hover:bg-blue-100"
-                    onClick={() => window.open('https://platform.openai.com/api-keys', '_blank')}
+                    onClick={() => window.open('/EDGE_FUNCTIONS_SETUP.md', '_blank')}
                   >
-                    <ExternalLink className="w-3 h-3 mr-1" />
-                    Get API Key
+                    📖 Setup Guide
                   </Button>
                   <Button
                     variant="outline"
                     size="sm"
                     className="text-blue-700 border-blue-300 hover:bg-blue-100"
-                    onClick={() => window.open('/OPENAI_SETUP_GUIDE.md', '_blank')}
+                    onClick={() => alert('Run: ./deploy-functions.sh\nOr see EDGE_FUNCTIONS_SETUP.md for detailed instructions')}
                   >
-                    📖 Setup Guide
+                    🚀 Deploy Guide
                   </Button>
                 </div>
               </div>

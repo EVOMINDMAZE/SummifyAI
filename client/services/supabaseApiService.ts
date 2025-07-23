@@ -1,5 +1,6 @@
 import { supabase } from "@/lib/supabase";
 import type { BookGroup, EnrichedChapter, SearchResults } from "@/lib/supabase";
+import { edgeFunctionService } from "./edgeFunctionService";
 
 // Initialize OpenAI (we'll import it when needed to avoid bundling issues)
 let OpenAI: any = null;

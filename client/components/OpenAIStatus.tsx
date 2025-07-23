@@ -96,18 +96,18 @@ export default function OpenAIStatus() {
         </div>
 
         {needsSetup && (
-          <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3">
+          <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-3">
             <div className="flex items-start space-x-2">
-              <AlertCircle className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
+              <AlertCircle className="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" />
               <div className="space-y-2">
-                <p className="text-sm text-blue-800 dark:text-blue-200">
-                  <strong>Edge Functions Setup Required:</strong> Deploy Edge Functions to enable secure AI-powered analysis.
+                <p className="text-sm text-amber-800 dark:text-amber-200">
+                  <strong>Running in Fallback Mode:</strong> App is fully functional! Deploy Edge Functions for enhanced AI features.
                 </p>
                 <div className="flex gap-2">
                   <Button
                     variant="outline"
                     size="sm"
-                    className="text-blue-700 border-blue-300 hover:bg-blue-100"
+                    className="text-amber-700 border-amber-300 hover:bg-amber-100"
                     onClick={() => window.open('/EDGE_FUNCTIONS_SETUP.md', '_blank')}
                   >
                     📖 Setup Guide
@@ -115,10 +115,10 @@ export default function OpenAIStatus() {
                   <Button
                     variant="outline"
                     size="sm"
-                    className="text-blue-700 border-blue-300 hover:bg-blue-100"
-                    onClick={() => alert('Run: ./deploy-functions.sh\nOr see EDGE_FUNCTIONS_SETUP.md for detailed instructions')}
+                    className="text-amber-700 border-amber-300 hover:bg-amber-100"
+                    onClick={() => alert('Quick Deploy:\n\n1. supabase login\n2. supabase link --project-ref voosuqmkazvjzheipbrl\n3. supabase functions deploy\n\nSee EDGE_FUNCTIONS_SETUP.md for details')}
                   >
-                    🚀 Deploy Guide
+                    🚀 Quick Deploy
                   </Button>
                 </div>
               </div>

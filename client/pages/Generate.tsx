@@ -722,20 +722,21 @@ export default function Generate() {
                                       </p>
 
                                       {/* Key Topics */}
-                                      {chapter.keyTopics && chapter.keyTopics.length > 0 && (
-                                        <div className="flex flex-wrap gap-1">
-                                          {chapter.keyTopics
-                                            .slice(0, 3)
-                                            .map((topic, topicIndex) => (
-                                              <span
-                                                key={topicIndex}
-                                                className="text-xs bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 px-2 py-0.5 rounded-full"
-                                              >
-                                                {topic}
-                                              </span>
-                                            ))}
-                                        </div>
-                                      )}
+                                      {chapter.keyTopics &&
+                                        chapter.keyTopics.length > 0 && (
+                                          <div className="flex flex-wrap gap-1">
+                                            {chapter.keyTopics
+                                              .slice(0, 3)
+                                              .map((topic, topicIndex) => (
+                                                <span
+                                                  key={topicIndex}
+                                                  className="text-xs bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 px-2 py-0.5 rounded-full"
+                                                >
+                                                  {topic}
+                                                </span>
+                                              ))}
+                                          </div>
+                                        )}
                                     </div>
 
                                     <div className="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">

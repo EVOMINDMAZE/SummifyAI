@@ -114,10 +114,11 @@ export default function Generate() {
     }>
   >([]);
   const [searchFilters, setSearchFilters] = useState<ISearchFilters>({
-    categories: [],
+    publicationYearRange: [1990, 2024],
+    difficultyLevel: "any",
+    industryFocus: [],
+    bookCategories: [],
     minRating: 0,
-    dateRange: "all",
-    sortBy: "relevance",
   });
   const [showFilters, setShowFilters] = useState(false);
 

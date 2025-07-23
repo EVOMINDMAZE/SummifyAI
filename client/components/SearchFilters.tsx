@@ -74,7 +74,7 @@ export default function SearchFilters({
   });
 
   // Sync localFilters with props when they change
-  React.useEffect(() => {
+  useEffect(() => {
     setLocalFilters({
       publicationYearRange: [1990, 2024],
       difficultyLevel: "any",

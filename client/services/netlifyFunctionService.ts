@@ -209,7 +209,9 @@ class NetlifyFunctionService {
       "execution",
     ];
 
-    const found = businessTerms.filter((term) => words.some(word => word === term));
+    const found = businessTerms.filter((term) =>
+      words.some((word) => word === term),
+    );
     return found
       .slice(0, 4)
       .map((term) => term.charAt(0).toUpperCase() + term.slice(1));

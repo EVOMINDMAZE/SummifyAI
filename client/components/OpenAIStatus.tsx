@@ -131,7 +131,7 @@ export default function OpenAIStatus() {
             <div className="flex items-center space-x-2">
               <CheckCircle className="w-4 h-4 text-green-600" />
               <span className="text-sm text-green-800 dark:text-green-200">
-                Edge Functions deployed! Secure AI analysis is active. 🚀
+                Netlify Functions active! Secure AI analysis is working. 🚀
               </span>
             </div>
           </div>

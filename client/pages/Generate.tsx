@@ -248,7 +248,7 @@ export default function Generate() {
       const output = {
         tables: result.tables || [],
         schemaDetails: result.schema || {},
-        method: result.method || 'unknown'
+        method: result.method || "unknown",
       };
 
       alert(`Database Schema:\n${JSON.stringify(output, null, 2)}`);
@@ -457,7 +457,6 @@ export default function Generate() {
                   </div>
 
                   {/* Info about AI features */}
-
                 </div>
 
                 {/* OpenAI Status */}

@@ -2,9 +2,10 @@
 
 ## ✅ Migration Complete!
 
-Your app has been successfully migrated from Supabase Edge Functions to **Netlify Functions**! 
+Your app has been successfully migrated from Supabase Edge Functions to **Netlify Functions**!
 
 ### 🎯 **Current Architecture:**
+
 - **Frontend**: React app hosted on Netlify
 - **Backend**: Supabase (database only)
 - **AI Functions**: Netlify Functions (serverless)
@@ -12,11 +13,13 @@ Your app has been successfully migrated from Supabase Edge Functions to **Netlif
 ### 🚀 **What's Been Created:**
 
 **Netlify Functions:**
+
 - `/api/analyze-topic` - AI-powered topic analysis and refinement suggestions
 - `/api/analyze-chapter` - Detailed chapter relevance analysis with AI insights
 - `/api/generate-embeddings` - Vector embeddings for semantic search
 
 **Configuration:**
+
 - `netlify.toml` - Netlify build and function configuration
 - Function redirects: `/api/*` → `/.netlify/functions/*`
 
@@ -25,6 +28,7 @@ Your app has been successfully migrated from Supabase Edge Functions to **Netlif
 To enable AI features, add your OpenAI API key to Netlify:
 
 #### Method 1: Netlify Dashboard (Recommended)
+
 1. Go to [Netlify Dashboard](https://app.netlify.com)
 2. Select your site
 3. Go to **Site Settings** → **Environment Variables**
@@ -36,6 +40,7 @@ To enable AI features, add your OpenAI API key to Netlify:
 7. **Redeploy** your site
 
 #### Method 2: Netlify CLI
+
 ```bash
 # Set environment variable
 netlify env:set OPENAI_API_KEY your_openai_api_key_here
@@ -47,6 +52,7 @@ netlify deploy --prod
 ### 🧪 **Testing Functions**
 
 Once deployed, your functions will be available at:
+
 - `https://yoursite.netlify.app/api/analyze-topic`
 - `https://yoursite.netlify.app/api/analyze-chapter`
 - `https://yoursite.netlify.app/api/generate-embeddings`
@@ -54,6 +60,7 @@ Once deployed, your functions will be available at:
 ### 🔍 **Verification**
 
 After setting the API key and redeploying:
+
 1. ✅ Status component shows "Netlify Functions: Connected"
 2. ✅ Logs show successful function calls
 3. ✅ AI analysis works with real OpenAI responses
@@ -68,6 +75,7 @@ After setting the API key and redeploying:
 ### 📊 **Performance**
 
 Expected benefits:
+
 - **Faster**: No client-side OpenAI calls
 - **Secure**: API keys hidden from browser
 - **Scalable**: Automatic function scaling
@@ -76,16 +84,19 @@ Expected benefits:
 ### 🔧 **Troubleshooting**
 
 #### Functions Not Working
+
 - Check Netlify function logs in dashboard
 - Verify `OPENAI_API_KEY` is set correctly
 - Ensure site has been redeployed after setting env vars
 
 #### API Key Issues
+
 - Key must start with `sk-`
 - Check OpenAI account credits
 - Verify key has correct permissions
 
 #### Local Development
+
 ```bash
 # Install Netlify CLI
 npm install -g netlify-cli

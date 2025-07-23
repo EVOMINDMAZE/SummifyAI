@@ -12,9 +12,9 @@ class NetlifyFunctionService {
       console.log(`🔄 Attempting to call Netlify function: ${functionPath}`);
 
       const response = await fetch(`${this.baseUrl}${functionPath}`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(payload),
       });
@@ -22,9 +22,13 @@ class NetlifyFunctionService {
       if (!response.ok) {
         // Check if it's a 404 (function not deployed)
         if (response.status === 404) {
-          console.warn(`⚠️ Netlify function ${functionPath} not deployed. Using fallback mode.`);
-          console.info(`💡 To deploy: Push to your main branch or deploy manually`);
-          throw new Error('FUNCTION_NOT_DEPLOYED');
+          console.warn(
+            `⚠️ Netlify function ${functionPath} not deployed. Using fallback mode.`,
+          );
+          console.info(
+            `💡 To deploy: Push to your main branch or deploy manually`,
+          );
+          throw new Error("FUNCTION_NOT_DEPLOYED");
         }
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
@@ -32,33 +36,41 @@ class NetlifyFunctionService {
       const result = await response.json();
       console.log(`✅ Netlify function ${functionPath} completed successfully`);
       return result;
-
     } catch (error) {
-      if (error.message === 'FUNCTION_NOT_DEPLOYED') {
+      if (error.message === "FUNCTION_NOT_DEPLOYED") {
         throw error;
       }
-      console.error(`❌ Failed to call Netlify function ${functionPath}:`, error);
-      throw new Error('FUNCTION_ERROR');
+      console.error(
+        `❌ Failed to call Netlify function ${functionPath}:`,
+        error,
+      );
+      throw new Error("FUNCTION_ERROR");
     }
   }
 
   // Analyze topic using Netlify function
   async analyzeTopicWithAI(topic: string) {
     try {
-      const result = await this.callFunction('/api/analyze-topic', { topic });
+      const result = await this.callFunction("/api/analyze-topic", { topic });
 
       if (result.success) {
         return result.data;
       } else {
-        console.warn('🔄 Using fallback from Netlify function');
+        console.warn("🔄 Using fallback from Netlify function");
         return result.fallback;
       }
     } catch (error) {
-      if (error.message === 'FUNCTION_NOT_DEPLOYED') {
-        console.info('📋 Netlify Functions not deployed yet. Using local analysis.');
-        console.info('🚀 Deploy by pushing to main branch or using Netlify CLI');
+      if (error.message === "FUNCTION_NOT_DEPLOYED") {
+        console.info(
+          "📋 Netlify Functions not deployed yet. Using local analysis.",
+        );
+        console.info(
+          "🚀 Deploy by pushing to main branch or using Netlify CLI",
+        );
       } else {
-        console.warn('⚠️ Netlify function temporarily unavailable, using fallback');
+        console.warn(
+          "⚠️ Netlify function temporarily unavailable, using fallback",
+        );
       }
 
       // Return local fallback
@@ -69,19 +81,26 @@ class NetlifyFunctionService {
   // Analyze chapter using Netlify function
   async analyzeChapterWithAI(chapter: any, query: string) {
     try {
-      const result = await this.callFunction('/api/analyze-chapter', { chapter, query });
+      const result = await this.callFunction("/api/analyze-chapter", {
+        chapter,
+        query,
+      });
 
       if (result.success) {
         return result.data;
       } else {
-        console.warn('🔄 Using fallback from Netlify function');
+        console.warn("🔄 Using fallback from Netlify function");
         return result.data; // Fallback is included in data
       }
     } catch (error) {
-      if (error.message === 'FUNCTION_NOT_DEPLOYED') {
-        console.info('📋 Netlify Functions not deployed yet. Using local analysis.');
+      if (error.message === "FUNCTION_NOT_DEPLOYED") {
+        console.info(
+          "📋 Netlify Functions not deployed yet. Using local analysis.",
+        );
       } else {
-        console.warn('⚠️ Netlify function temporarily unavailable, using fallback');
+        console.warn(
+          "⚠️ Netlify function temporarily unavailable, using fallback",
+        );
       }
 
       // Return local fallback
@@ -92,21 +111,29 @@ class NetlifyFunctionService {
   // Generate embeddings using Netlify function
   async generateEmbeddings(query: string): Promise<number[] | null> {
     try {
-      const result = await this.callFunction('/api/generate-embeddings', { query });
+      const result = await this.callFunction("/api/generate-embeddings", {
+        query,
+      });
 
       if (result.success && result.data?.embedding) {
-        console.log(`🧠 Generated embeddings: ${result.data.dimensions} dimensions`);
+        console.log(
+          `🧠 Generated embeddings: ${result.data.dimensions} dimensions`,
+        );
         return result.data.embedding;
       } else {
-        console.warn('❌ Embeddings generation failed');
+        console.warn("❌ Embeddings generation failed");
         return null;
       }
     } catch (error) {
-      if (error.message === 'FUNCTION_NOT_DEPLOYED') {
-        console.info('📋 Netlify Functions not deployed yet. Embeddings unavailable.');
-        console.info('🚀 Deploy by pushing to main branch or using Netlify CLI');
+      if (error.message === "FUNCTION_NOT_DEPLOYED") {
+        console.info(
+          "📋 Netlify Functions not deployed yet. Embeddings unavailable.",
+        );
+        console.info(
+          "🚀 Deploy by pushing to main branch or using Netlify CLI",
+        );
       } else {
-        console.warn('⚠️ Embeddings temporarily unavailable');
+        console.warn("⚠️ Embeddings temporarily unavailable");
       }
       return null;
     }
@@ -115,10 +142,11 @@ class NetlifyFunctionService {
   // Fallback topic analysis when function fails
   private createFallbackTopicAnalysis(topic: string) {
     return {
-      isBroad: topic.split(' ').length <= 2,
-      explanation: topic.split(' ').length <= 2
-        ? `"${topic}" is quite broad. More specific terms would help find targeted content.`
-        : `"${topic}" has good specificity for finding relevant content.`,
+      isBroad: topic.split(" ").length <= 2,
+      explanation:
+        topic.split(" ").length <= 2
+          ? `"${topic}" is quite broad. More specific terms would help find targeted content.`
+          : `"${topic}" has good specificity for finding relevant content.`,
       refinements: [
         {
           label: `${topic} Strategies`,
@@ -141,15 +169,18 @@ class NetlifyFunctionService {
 
   // Fallback chapter analysis when function fails
   private createFallbackChapterAnalysis(chapter: any, query: string) {
-    const score = Math.max(25, Math.round((chapter.similarity_score || 0.5) * 100));
-    
+    const score = Math.max(
+      25,
+      Math.round((chapter.similarity_score || 0.5) * 100),
+    );
+
     return {
       id: chapter.id,
       title: chapter.chapter_title,
-      snippet: chapter.chapter_text?.substring(0, 300) || '',
+      snippet: chapter.chapter_text?.substring(0, 300) || "",
       relevanceScore: score,
       whyRelevant: `This chapter provides relevant insights for ${query} through practical frameworks and actionable strategies.`,
-      keyTopics: this.extractKeywords(chapter.chapter_text || ''),
+      keyTopics: this.extractKeywords(chapter.chapter_text || ""),
       coreLeadershipPrinciples: [
         "Apply evidence-based methods",
         "Focus on measurable outcomes",
@@ -166,9 +197,16 @@ class NetlifyFunctionService {
   private extractKeywords(text: string): string[] {
     const words = text.toLowerCase().match(/\b[a-z]{4,}\b/g) || [];
     const businessTerms = [
-      "strategy", "leadership", "management", "innovation", 
-      "communication", "development", "performance", "growth", 
-      "planning", "execution"
+      "strategy",
+      "leadership",
+      "management",
+      "innovation",
+      "communication",
+      "development",
+      "performance",
+      "growth",
+      "planning",
+      "execution",
     ];
 
     const found = businessTerms.filter((term) => words.includes(term));

@@ -1,15 +1,24 @@
-import React, { useState } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { AlertTriangle, CheckCircle, ExternalLink, Code, X } from 'lucide-react';
+import React, { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import {
+  AlertTriangle,
+  CheckCircle,
+  ExternalLink,
+  Code,
+  X,
+} from "lucide-react";
 
 interface NetlifyDeploymentStatusProps {
   isVisible: boolean;
   onDismiss: () => void;
 }
 
-export default function NetlifyDeploymentStatus({ isVisible, onDismiss }: NetlifyDeploymentStatusProps) {
+export default function NetlifyDeploymentStatus({
+  isVisible,
+  onDismiss,
+}: NetlifyDeploymentStatusProps) {
   if (!isVisible) return null;
 
   return (
@@ -23,27 +32,37 @@ export default function NetlifyDeploymentStatus({ isVisible, onDismiss }: Netlif
                 <h3 className="font-semibold text-blue-800 dark:text-blue-200">
                   Netlify Functions Ready for Deployment
                 </h3>
-                <Badge variant="outline" className="text-blue-700 border-blue-300">
+                <Badge
+                  variant="outline"
+                  className="text-blue-700 border-blue-300"
+                >
                   Development Mode
                 </Badge>
               </div>
-              
+
               <p className="text-sm text-blue-700 dark:text-blue-300 mb-3">
-                Your AI functions are created and ready! Deploy to Netlify to enable full AI-powered features.
+                Your AI functions are created and ready! Deploy to Netlify to
+                enable full AI-powered features.
               </p>
 
               <div className="space-y-2 mb-4">
                 <div className="flex items-center space-x-2">
                   <CheckCircle className="w-4 h-4 text-green-600" />
-                  <span className="text-sm text-blue-700 dark:text-blue-300">Functions created and configured</span>
+                  <span className="text-sm text-blue-700 dark:text-blue-300">
+                    Functions created and configured
+                  </span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <CheckCircle className="w-4 h-4 text-green-600" />
-                  <span className="text-sm text-blue-700 dark:text-blue-300">Fallback AI analysis working</span>
+                  <span className="text-sm text-blue-700 dark:text-blue-300">
+                    Fallback AI analysis working
+                  </span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <AlertTriangle className="w-4 h-4 text-amber-600" />
-                  <span className="text-sm text-blue-700 dark:text-blue-300">Deploy needed for server-side AI features</span>
+                  <span className="text-sm text-blue-700 dark:text-blue-300">
+                    Deploy needed for server-side AI features
+                  </span>
                 </div>
               </div>
 
@@ -52,7 +71,7 @@ export default function NetlifyDeploymentStatus({ isVisible, onDismiss }: Netlif
                   variant="outline"
                   size="sm"
                   className="text-blue-700 border-blue-300 hover:bg-blue-100"
-                  onClick={() => window.open('/NETLIFY_SETUP.md', '_blank')}
+                  onClick={() => window.open("/NETLIFY_SETUP.md", "_blank")}
                 >
                   <ExternalLink className="w-3 h-3 mr-1" />
                   Deployment Guide
@@ -61,7 +80,11 @@ export default function NetlifyDeploymentStatus({ isVisible, onDismiss }: Netlif
                   variant="outline"
                   size="sm"
                   className="text-blue-700 border-blue-300 hover:bg-blue-100"
-                  onClick={() => alert('Quick Deploy:\n\n1. Push this code to your main branch\n2. Functions will auto-deploy with your site\n3. Set OPENAI_API_KEY in Netlify env vars\n4. Enjoy server-side AI features!')}
+                  onClick={() =>
+                    alert(
+                      "Quick Deploy:\n\n1. Push this code to your main branch\n2. Functions will auto-deploy with your site\n3. Set OPENAI_API_KEY in Netlify env vars\n4. Enjoy server-side AI features!",
+                    )
+                  }
                 >
                   🚀 Quick Deploy
                 </Button>

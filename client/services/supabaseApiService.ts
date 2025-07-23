@@ -39,11 +39,17 @@ export async function healthCheck(): Promise<{
         console.log("✅ Netlify Functions deployed and working");
       }
     } catch (error) {
-      if (error.message === 'FUNCTION_NOT_DEPLOYED') {
-        console.info("📋 Netlify Functions not deployed yet. App running in fallback mode.");
-        console.info("🚀 To deploy: Push to main branch or run 'netlify deploy --prod'");
+      if (error.message === "FUNCTION_NOT_DEPLOYED") {
+        console.info(
+          "📋 Netlify Functions not deployed yet. App running in fallback mode.",
+        );
+        console.info(
+          "🚀 To deploy: Push to main branch or run 'netlify deploy --prod'",
+        );
       } else {
-        console.warn("⚠️ Netlify Functions temporarily unavailable, using fallback mode");
+        console.warn(
+          "⚠️ Netlify Functions temporarily unavailable, using fallback mode",
+        );
       }
     }
 
@@ -228,10 +234,16 @@ async function enrichResultsWithAI(
       // Top 5 chapters per book
       console.log(`📄 Processing chapter: "${chapter.chapter_title}"`);
       try {
-        const enrichment = await netlifyFunctionService.analyzeChapterWithAI(chapter, query);
+        const enrichment = await netlifyFunctionService.analyzeChapterWithAI(
+          chapter,
+          query,
+        );
         enrichedChapters.push(enrichment);
       } catch (error) {
-        console.warn(`⚠️ Netlify Function analysis failed for chapter "${chapter.chapter_title}", using fallback:`, error);
+        console.warn(
+          `⚠️ Netlify Function analysis failed for chapter "${chapter.chapter_title}", using fallback:`,
+          error,
+        );
         const fallbackEnrichment = createFallbackEnrichment(chapter, query);
         enrichedChapters.push(fallbackEnrichment);
       }
@@ -302,10 +314,12 @@ export async function analyzeTopicWithAI(topic: string) {
   console.log(`🧠 Analyzing topic: "${topic}"`);
 
   try {
-    console.log('🤖 Calling Netlify Function for topic analysis...');
+    console.log("🤖 Calling Netlify Function for topic analysis...");
     return await netlifyFunctionService.analyzeTopicWithAI(topic);
   } catch (error) {
-    console.info('🔄 Using local fallback analysis (Netlify Functions not deployed)');
+    console.info(
+      "🔄 Using local fallback analysis (Netlify Functions not deployed)",
+    );
     return createFallbackTopicAnalysis(topic);
   }
 }
@@ -314,9 +328,10 @@ export async function analyzeTopicWithAI(topic: string) {
 function createFallbackTopicAnalysis(topic: string) {
   return {
     isBroad: topic.split(" ").length <= 2,
-    explanation: topic.split(" ").length <= 2
-      ? `"${topic}" is quite broad. More specific terms would help find targeted content.`
-      : `"${topic}" has good specificity for finding relevant content.`,
+    explanation:
+      topic.split(" ").length <= 2
+        ? `"${topic}" is quite broad. More specific terms would help find targeted content.`
+        : `"${topic}" has good specificity for finding relevant content.`,
     refinements: [
       {
         label: `${topic} Strategies`,
@@ -343,16 +358,17 @@ export async function inspectDatabaseSchema() {
     console.log("🔍 Inspecting database schema...");
 
     // Get all tables
-    const { data: tables, error: tablesError } = await supabase.rpc('get_schema_info');
+    const { data: tables, error: tablesError } =
+      await supabase.rpc("get_schema_info");
 
     if (tablesError) {
       // Fallback: try to get tables using information_schema
       console.log("📋 Using information_schema fallback...");
 
       const { data: tableList, error: listError } = await supabase
-        .from('pg_tables')
-        .select('tablename')
-        .eq('schemaname', 'public');
+        .from("pg_tables")
+        .select("tablename")
+        .eq("schemaname", "public");
 
       if (listError) {
         console.error("❌ Failed to get tables:", listError);
@@ -362,21 +378,27 @@ export async function inspectDatabaseSchema() {
       console.log("📊 Found tables:", tableList);
 
       // Get sample data from known tables
-      const knownTables = ['books', 'chapters', 'users', 'summaries', 'chapter_ratings'];
+      const knownTables = [
+        "books",
+        "chapters",
+        "users",
+        "summaries",
+        "chapter_ratings",
+      ];
       const schemaInfo = {};
 
       for (const tableName of knownTables) {
         try {
           const { data: sample, error: sampleError } = await supabase
             .from(tableName)
-            .select('*')
+            .select("*")
             .limit(1);
 
           if (!sampleError && sample && sample.length > 0) {
             schemaInfo[tableName] = {
               exists: true,
               columns: Object.keys(sample[0]),
-              sampleRow: sample[0]
+              sampleRow: sample[0],
             };
           }
         } catch (tableError) {
@@ -385,14 +407,13 @@ export async function inspectDatabaseSchema() {
       }
 
       return {
-        method: 'fallback',
+        method: "fallback",
         tables: Object.keys(schemaInfo),
-        schema: schemaInfo
+        schema: schemaInfo,
       };
     }
 
-    return { method: 'rpc', data: tables };
-
+    return { method: "rpc", data: tables };
   } catch (error) {
     console.error("❌ Schema inspection failed:", error);
     return { error: error.message };

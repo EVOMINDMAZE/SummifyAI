@@ -1,9 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { healthCheck } from '@/services/supabaseApiService';
-import { CheckCircle, XCircle, AlertCircle, RefreshCw, ExternalLink } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { healthCheck } from "@/services/supabaseApiService";
+import {
+  CheckCircle,
+  XCircle,
+  AlertCircle,
+  RefreshCw,
+  ExternalLink,
+} from "lucide-react";
 
 interface HealthStatus {
   status: string;
@@ -21,9 +27,9 @@ export default function OpenAIStatus() {
       const result = await healthCheck();
       setHealth(result);
     } catch (error) {
-      console.error('Health check failed:', error);
+      console.error("Health check failed:", error);
       setHealth({
-        status: 'error',
+        status: "error",
         hasDatabase: false,
         hasOpenAI: false,
       });
@@ -49,7 +55,7 @@ export default function OpenAIStatus() {
       <Badge variant={hasService ? "default" : "destructive"}>
         {getStatusIcon(hasService)}
         <span className="ml-1">
-          {serviceName}: {hasService ? 'Connected' : 'Not Available'}
+          {serviceName}: {hasService ? "Connected" : "Not Available"}
         </span>
       </Badge>
     );
@@ -91,8 +97,8 @@ export default function OpenAIStatus() {
         </div>
 
         <div className="space-y-2">
-          {getStatusBadge(health.hasDatabase, 'Database')}
-          {getStatusBadge(health.hasOpenAI, 'Netlify Functions')}
+          {getStatusBadge(health.hasDatabase, "Database")}
+          {getStatusBadge(health.hasOpenAI, "Netlify Functions")}
         </div>
 
         {needsSetup && (
@@ -101,14 +107,16 @@ export default function OpenAIStatus() {
               <AlertCircle className="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" />
               <div className="space-y-2">
                 <p className="text-sm text-amber-800 dark:text-amber-200">
-                  <strong>Running in Fallback Mode:</strong> Netlify Functions not deployed yet. App is fully functional with basic AI features.
+                  <strong>Running in Fallback Mode:</strong> Netlify Functions
+                  not deployed yet. App is fully functional with basic AI
+                  features.
                 </p>
                 <div className="flex gap-2">
                   <Button
                     variant="outline"
                     size="sm"
                     className="text-amber-700 border-amber-300 hover:bg-amber-100"
-                    onClick={() => window.open('/NETLIFY_SETUP.md', '_blank')}
+                    onClick={() => window.open("/NETLIFY_SETUP.md", "_blank")}
                   >
                     📖 Setup Guide
                   </Button>
@@ -116,7 +124,11 @@ export default function OpenAIStatus() {
                     variant="outline"
                     size="sm"
                     className="text-amber-700 border-amber-300 hover:bg-amber-100"
-                    onClick={() => alert('Deploy Netlify Functions:\n\n1. Push code to main branch (auto-deploys)\n2. Or use Netlify CLI: netlify deploy --prod\n3. Set OPENAI_API_KEY in Netlify env vars\n\nSee NETLIFY_SETUP.md for details')}
+                    onClick={() =>
+                      alert(
+                        "Deploy Netlify Functions:\n\n1. Push code to main branch (auto-deploys)\n2. Or use Netlify CLI: netlify deploy --prod\n3. Set OPENAI_API_KEY in Netlify env vars\n\nSee NETLIFY_SETUP.md for details",
+                      )
+                    }
                   >
                     🚀 Deploy Guide
                   </Button>

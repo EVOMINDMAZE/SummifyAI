@@ -2,7 +2,7 @@
 interface LogEntry {
   id: string;
   timestamp: Date;
-  level: 'log' | 'info' | 'warn' | 'error' | 'debug';
+  level: "log" | "info" | "warn" | "error" | "debug";
   message: string;
   data?: any;
   source?: string;
@@ -34,36 +34,36 @@ class LogCapture {
 
   private interceptConsole() {
     console.log = (...args) => {
-      this.addLog('log', args);
+      this.addLog("log", args);
       this.originalConsole.log(...args);
     };
 
     console.info = (...args) => {
-      this.addLog('info', args);
+      this.addLog("info", args);
       this.originalConsole.info(...args);
     };
 
     console.warn = (...args) => {
-      this.addLog('warn', args);
+      this.addLog("warn", args);
       this.originalConsole.warn(...args);
     };
 
     console.error = (...args) => {
-      this.addLog('error', args);
+      this.addLog("error", args);
       this.originalConsole.error(...args);
     };
 
     console.debug = (...args) => {
-      this.addLog('debug', args);
+      this.addLog("debug", args);
       this.originalConsole.debug(...args);
     };
   }
 
-  private addLog(level: LogEntry['level'], args: any[]) {
+  private addLog(level: LogEntry["level"], args: any[]) {
     const message = args
-      .map(arg => {
-        if (typeof arg === 'string') return arg;
-        if (typeof arg === 'object') {
+      .map((arg) => {
+        if (typeof arg === "string") return arg;
+        if (typeof arg === "object") {
           try {
             return JSON.stringify(arg, null, 2);
           } catch {
@@ -72,7 +72,7 @@ class LogCapture {
         }
         return String(arg);
       })
-      .join(' ');
+      .join(" ");
 
     const logEntry: LogEntry = {
       id: Date.now() + Math.random().toString(36).substr(2, 9),
@@ -91,29 +91,37 @@ class LogCapture {
     }
 
     // Notify listeners
-    this.listeners.forEach(listener => listener([...this.logs]));
+    this.listeners.forEach((listener) => listener([...this.logs]));
   }
 
   private detectSource(message: string): string {
-    if (message.includes('🧠') || message.includes('OpenAI') || message.includes('AI')) {
-      return 'AI';
+    if (
+      message.includes("🧠") ||
+      message.includes("OpenAI") ||
+      message.includes("AI")
+    ) {
+      return "AI";
     }
-    if (message.includes('🔗') || message.includes('Supabase') || message.includes('Database')) {
-      return 'Database';
+    if (
+      message.includes("🔗") ||
+      message.includes("Supabase") ||
+      message.includes("Database")
+    ) {
+      return "Database";
     }
-    if (message.includes('🏥') || message.includes('Health')) {
-      return 'Health';
+    if (message.includes("🏥") || message.includes("Health")) {
+      return "Health";
     }
-    if (message.includes('🔍') || message.includes('Search')) {
-      return 'Search';
+    if (message.includes("🔍") || message.includes("Search")) {
+      return "Search";
     }
-    if (message.includes('❌') || message.includes('Error')) {
-      return 'Error';
+    if (message.includes("❌") || message.includes("Error")) {
+      return "Error";
     }
-    if (message.includes('✅') || message.includes('Success')) {
-      return 'Success';
+    if (message.includes("✅") || message.includes("Success")) {
+      return "Success";
     }
-    return 'General';
+    return "General";
   }
 
   subscribe(listener: (logs: LogEntry[]) => void) {
@@ -136,15 +144,16 @@ class LogCapture {
 
   clearLogs() {
     this.logs = [];
-    this.listeners.forEach(listener => listener([]));
+    this.listeners.forEach((listener) => listener([]));
   }
 
   exportLogs(): string {
     return this.logs
-      .map(log => 
-        `[${log.timestamp.toISOString()}] [${log.level.toUpperCase()}] [${log.source}] ${log.message}`
+      .map(
+        (log) =>
+          `[${log.timestamp.toISOString()}] [${log.level.toUpperCase()}] [${log.source}] ${log.message}`,
       )
-      .join('\n');
+      .join("\n");
   }
 }
 

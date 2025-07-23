@@ -1,14 +1,14 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { 
-  X, 
-  Trash2, 
-  Download, 
-  Filter, 
+import React, { useState, useEffect, useRef } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  X,
+  Trash2,
+  Download,
+  Filter,
   Search,
   RefreshCw,
   Terminal,
@@ -16,9 +16,9 @@ import {
   Info,
   AlertTriangle,
   Bug,
-  Activity
-} from 'lucide-react';
-import { logCapture, type LogEntry } from '@/utils/logCapture';
+  Activity,
+} from "lucide-react";
+import { logCapture, type LogEntry } from "@/utils/logCapture";
 
 interface LogsViewerProps {
   isOpen: boolean;
@@ -28,9 +28,9 @@ interface LogsViewerProps {
 export default function LogsViewer({ isOpen, onClose }: LogsViewerProps) {
   const [logs, setLogs] = useState<LogEntry[]>([]);
   const [filteredLogs, setFilteredLogs] = useState<LogEntry[]>([]);
-  const [filter, setFilter] = useState('');
-  const [selectedLevel, setSelectedLevel] = useState<string>('all');
-  const [selectedSource, setSelectedSource] = useState<string>('all');
+  const [filter, setFilter] = useState("");
+  const [selectedLevel, setSelectedLevel] = useState<string>("all");
+  const [selectedSource, setSelectedSource] = useState<string>("all");
   const [autoScroll, setAutoScroll] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -48,19 +48,20 @@ export default function LogsViewer({ isOpen, onClose }: LogsViewerProps) {
     // Apply filters
     let filtered = logs;
 
-    if (selectedLevel !== 'all') {
-      filtered = filtered.filter(log => log.level === selectedLevel);
+    if (selectedLevel !== "all") {
+      filtered = filtered.filter((log) => log.level === selectedLevel);
     }
 
-    if (selectedSource !== 'all') {
-      filtered = filtered.filter(log => log.source === selectedSource);
+    if (selectedSource !== "all") {
+      filtered = filtered.filter((log) => log.source === selectedSource);
     }
 
     if (filter.trim()) {
       const searchTerm = filter.toLowerCase();
-      filtered = filtered.filter(log => 
-        log.message.toLowerCase().includes(searchTerm) ||
-        log.source?.toLowerCase().includes(searchTerm)
+      filtered = filtered.filter(
+        (log) =>
+          log.message.toLowerCase().includes(searchTerm) ||
+          log.source?.toLowerCase().includes(searchTerm),
       );
     }
 
@@ -75,32 +76,48 @@ export default function LogsViewer({ isOpen, onClose }: LogsViewerProps) {
 
   const getLogIcon = (level: string) => {
     switch (level) {
-      case 'error': return <AlertCircle className="w-4 h-4 text-red-500" />;
-      case 'warn': return <AlertTriangle className="w-4 h-4 text-yellow-500" />;
-      case 'info': return <Info className="w-4 h-4 text-blue-500" />;
-      case 'debug': return <Bug className="w-4 h-4 text-purple-500" />;
-      default: return <Terminal className="w-4 h-4 text-gray-500" />;
+      case "error":
+        return <AlertCircle className="w-4 h-4 text-red-500" />;
+      case "warn":
+        return <AlertTriangle className="w-4 h-4 text-yellow-500" />;
+      case "info":
+        return <Info className="w-4 h-4 text-blue-500" />;
+      case "debug":
+        return <Bug className="w-4 h-4 text-purple-500" />;
+      default:
+        return <Terminal className="w-4 h-4 text-gray-500" />;
     }
   };
 
   const getLogBadgeColor = (level: string) => {
     switch (level) {
-      case 'error': return 'destructive';
-      case 'warn': return 'secondary';
-      case 'info': return 'default';
-      case 'debug': return 'outline';
-      default: return 'outline';
+      case "error":
+        return "destructive";
+      case "warn":
+        return "secondary";
+      case "info":
+        return "default";
+      case "debug":
+        return "outline";
+      default:
+        return "outline";
     }
   };
 
   const getSourceBadgeColor = (source: string) => {
     switch (source) {
-      case 'AI': return 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200';
-      case 'Database': return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200';
-      case 'Search': return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
-      case 'Error': return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
-      case 'Success': return 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200';
-      default: return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200';
+      case "AI":
+        return "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200";
+      case "Database":
+        return "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200";
+      case "Search":
+        return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200";
+      case "Error":
+        return "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200";
+      case "Success":
+        return "bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200";
+      default:
+        return "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200";
     }
   };
 
@@ -110,9 +127,9 @@ export default function LogsViewer({ isOpen, onClose }: LogsViewerProps) {
 
   const exportLogs = () => {
     const logText = logCapture.exportLogs();
-    const blob = new Blob([logText], { type: 'text/plain' });
+    const blob = new Blob([logText], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
     a.download = `app-logs-${new Date().toISOString().slice(0, 19)}.txt`;
     document.body.appendChild(a);
@@ -121,7 +138,9 @@ export default function LogsViewer({ isOpen, onClose }: LogsViewerProps) {
     URL.revokeObjectURL(url);
   };
 
-  const uniqueSources = Array.from(new Set(logs.map(log => log.source).filter(Boolean)));
+  const uniqueSources = Array.from(
+    new Set(logs.map((log) => log.source).filter(Boolean)),
+  );
 
   if (!isOpen) return null;
 
@@ -171,8 +190,10 @@ export default function LogsViewer({ isOpen, onClose }: LogsViewerProps) {
               className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800"
             >
               <option value="all">All Sources</option>
-              {uniqueSources.map(source => (
-                <option key={source} value={source}>{source}</option>
+              {uniqueSources.map((source) => (
+                <option key={source} value={source}>
+                  {source}
+                </option>
               ))}
             </select>
 
@@ -180,9 +201,11 @@ export default function LogsViewer({ isOpen, onClose }: LogsViewerProps) {
               variant="outline"
               size="sm"
               onClick={() => setAutoScroll(!autoScroll)}
-              className={autoScroll ? 'bg-blue-50 dark:bg-blue-900' : ''}
+              className={autoScroll ? "bg-blue-50 dark:bg-blue-900" : ""}
             >
-              <RefreshCw className={`w-4 h-4 mr-1 ${autoScroll ? 'animate-spin' : ''}`} />
+              <RefreshCw
+                className={`w-4 h-4 mr-1 ${autoScroll ? "animate-spin" : ""}`}
+              />
               Auto-scroll
             </Button>
 
@@ -198,11 +221,16 @@ export default function LogsViewer({ isOpen, onClose }: LogsViewerProps) {
           </div>
 
           {/* Logs Display */}
-          <ScrollArea ref={scrollRef} className="flex-1 border rounded-lg p-4 bg-gray-50 dark:bg-gray-900">
+          <ScrollArea
+            ref={scrollRef}
+            className="flex-1 border rounded-lg p-4 bg-gray-50 dark:bg-gray-900"
+          >
             <div className="space-y-2">
               {filteredLogs.length === 0 ? (
                 <div className="text-center text-gray-500 py-8">
-                  {logs.length === 0 ? 'No logs captured yet' : 'No logs match current filters'}
+                  {logs.length === 0
+                    ? "No logs captured yet"
+                    : "No logs match current filters"}
                 </div>
               ) : (
                 filteredLogs.map((log) => (
@@ -213,14 +241,19 @@ export default function LogsViewer({ isOpen, onClose }: LogsViewerProps) {
                     <div className="flex-shrink-0 mt-0.5">
                       {getLogIcon(log.level)}
                     </div>
-                    
+
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center space-x-2 mb-1">
-                        <Badge variant={getLogBadgeColor(log.level) as any} className="text-xs">
+                        <Badge
+                          variant={getLogBadgeColor(log.level) as any}
+                          className="text-xs"
+                        >
                           {log.level.toUpperCase()}
                         </Badge>
                         {log.source && (
-                          <Badge className={`text-xs ${getSourceBadgeColor(log.source)}`}>
+                          <Badge
+                            className={`text-xs ${getSourceBadgeColor(log.source)}`}
+                          >
                             {log.source}
                           </Badge>
                         )}
@@ -228,7 +261,7 @@ export default function LogsViewer({ isOpen, onClose }: LogsViewerProps) {
                           {log.timestamp.toLocaleTimeString()}
                         </span>
                       </div>
-                      
+
                       <div className="text-sm font-mono text-gray-900 dark:text-gray-100 whitespace-pre-wrap break-words">
                         {log.message}
                       </div>
@@ -243,7 +276,7 @@ export default function LogsViewer({ isOpen, onClose }: LogsViewerProps) {
           <div className="flex justify-between text-xs text-gray-500">
             <span>Total logs: {logs.length}</span>
             <span>Filtered: {filteredLogs.length}</span>
-            <span>Auto-scroll: {autoScroll ? 'ON' : 'OFF'}</span>
+            <span>Auto-scroll: {autoScroll ? "ON" : "OFF"}</span>
           </div>
         </CardContent>
       </Card>

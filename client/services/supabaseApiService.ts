@@ -81,30 +81,15 @@ export async function healthCheck(): Promise<{
   }
 }
 
-// Generate OpenAI embeddings for the search query
+// Generate embeddings using Supabase Edge Function
 export async function generateQueryEmbeddings(
   query: string,
 ): Promise<number[] | null> {
   try {
-    const openai = await getOpenAI();
-    if (!openai) return null;
-
-    console.log(`🧠 Calling OpenAI embeddings API for: "${query}"`);
-
-    const response = await openai.embeddings.create({
-      model: "text-embedding-3-small",
-      input: query.trim(),
-      encoding_format: "float",
-    });
-
-    const embedding = response.data[0].embedding;
-    console.log(
-      `✅ OpenAI embeddings generated successfully (${embedding.length} dimensions)`,
-    );
-
-    return embedding;
+    console.log(`🧠 Calling Edge Function for embeddings: "${query}"`);
+    return await edgeFunctionService.generateEmbeddings(query);
   } catch (error) {
-    console.error("❌ OpenAI embeddings failed:", error);
+    console.error("❌ Edge Function embeddings failed:", error);
     return null;
   }
 }

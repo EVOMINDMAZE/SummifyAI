@@ -108,6 +108,8 @@ class NetlifyFunctionService {
         console.info(
           "📋 Netlify Functions not deployed yet. Using local analysis.",
         );
+      } else if (error.message === "FUNCTION_NOT_AVAILABLE") {
+        console.info("🔧 Development mode: Netlify Functions not running locally. Using fallback.");
       } else {
         console.warn(
           "⚠️ Netlify function temporarily unavailable, using fallback",

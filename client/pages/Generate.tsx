@@ -7,6 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { searchDatabase, analyzeTopicWithAI, healthCheck } from "@/services/supabaseApiService";
+import type { SearchResults } from "@/lib/supabase";
 import {
   BookOpen,
   Clock,
@@ -142,25 +144,15 @@ export default function Generate() {
     setCurrentOperation("Analyzing your search query...");
 
     try {
-      const response = await fetch("/api/topic/analyze", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ topic: topicToAnalyze.trim() }),
-      });
+      const analysis = await analyzeTopicWithAI(topicToAnalyze.trim());
+      setTopicAnalysis(analysis);
 
-      if (response.ok) {
-        const analysis: TopicAnalysis = await response.json();
-        setTopicAnalysis(analysis);
-
-        if (analysis.isBroad && analysis.refinements.length > 0) {
-          setTopicRefinements(analysis.refinements);
-          setShowRefinements(true);
-        } else {
-          // Topic is specific enough, proceed with database search
-          performDatabaseSearch(topicToAnalyze);
-        }
+      if (analysis.isBroad && analysis.refinements.length > 0) {
+        setTopicRefinements(analysis.refinements);
+        setShowRefinements(true);
+      } else {
+        // Topic is specific enough, proceed with database search
+        performDatabaseSearch(topicToAnalyze);
       }
     } catch (error) {
       console.error("Topic analysis error:", error);
@@ -179,30 +171,8 @@ export default function Generate() {
     setCurrentOperation("Searching knowledge base...");
 
     try {
-      // Use the new database search API that uses real embeddings
       console.log(`🔍 Searching for: "${searchQuery}"`);
-      const response = await fetch(
-        `/api/database?q=${encodeURIComponent(searchQuery)}`,
-      );
-
-      console.log(`📡 API Response status: ${response.status}`);
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error(`❌ API Error Response:`, errorText);
-
-        let errorMessage = "Failed to search database";
-        try {
-          const errorData = JSON.parse(errorText);
-          errorMessage = errorData.error || errorData.details || errorMessage;
-        } catch {
-          errorMessage = errorText || errorMessage;
-        }
-
-        throw new Error(errorMessage);
-      }
-
-      const data: SearchResults = await response.json();
+      const data = await searchDatabase(searchQuery);
 
       console.log(
         `🎯 Found ${data.totalBooks} books with ${data.totalChapters} relevant chapters using ${data.searchType}`,
@@ -244,20 +214,19 @@ export default function Generate() {
     performDatabaseSearch(topic);
   };
 
-  // Debug function to test API connection
+  // Debug function to test Supabase connection
   const testAPIConnection = async () => {
     try {
-      console.log("🔧 Testing API connection...");
-      const response = await fetch("/api/health");
-      const data = await response.json();
-      console.log("✅ API Health Check:", data);
+      console.log("🔧 Testing Supabase connection...");
+      const data = await healthCheck();
+      console.log("✅ Supabase Health Check:", data);
       alert(
-        `API Status: ${data.status}\nDatabase: ${data.hasDatabase ? "Connected" : "Not configured"}\nOpenAI: ${data.hasOpenAI ? "Connected" : "Not configured"}`,
+        `Supabase Status: ${data.status}\nDatabase: ${data.hasDatabase ? "Connected" : "Not configured"}\nOpenAI: ${data.hasOpenAI ? "Connected" : "Not configured"}`,
       );
     } catch (error) {
-      console.error("❌ API Health Check failed:", error);
+      console.error("❌ Supabase Health Check failed:", error);
       alert(
-        "API connection failed: " +
+        "Supabase connection failed: " +
           (error instanceof Error ? error.message : "Unknown error"),
       );
     }

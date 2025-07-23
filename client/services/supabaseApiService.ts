@@ -65,15 +65,15 @@ export async function healthCheck(): Promise<{
   }
 }
 
-// Generate embeddings using Supabase Edge Function
+// Generate embeddings using Netlify Function
 export async function generateQueryEmbeddings(
   query: string,
 ): Promise<number[] | null> {
   try {
-    console.log(`🧠 Calling Edge Function for embeddings: "${query}"`);
-    return await edgeFunctionService.generateEmbeddings(query);
+    console.log(`🧠 Calling Netlify Function for embeddings: "${query}"`);
+    return await netlifyFunctionService.generateEmbeddings(query);
   } catch (error) {
-    console.error("❌ Edge Function embeddings failed:", error);
+    console.error("❌ Netlify Function embeddings failed:", error);
     return null;
   }
 }

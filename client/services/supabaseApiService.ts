@@ -32,11 +32,19 @@ export async function healthCheck(): Promise<{
     // Test edge function availability
     let hasEdgeFunctions = false;
     try {
-      await edgeFunctionService.analyzeTopicWithAI("test");
-      hasEdgeFunctions = true;
-      console.log("✅ Edge Functions available");
+      const result = await edgeFunctionService.analyzeTopicWithAI("test");
+      // If we get a result without errors, edge functions are working
+      if (result) {
+        hasEdgeFunctions = true;
+        console.log("✅ Edge Functions deployed and working");
+      }
     } catch (error) {
-      console.warn("⚠️ Edge Functions not available, using fallback mode");
+      if (error.message === 'FUNCTION_NOT_DEPLOYED') {
+        console.info("📋 Edge Functions not deployed yet. App running in fallback mode.");
+        console.info("🚀 To deploy: See EDGE_FUNCTIONS_SETUP.md");
+      } else {
+        console.warn("⚠️ Edge Functions temporarily unavailable, using fallback mode");
+      }
     }
 
     const healthResult = {

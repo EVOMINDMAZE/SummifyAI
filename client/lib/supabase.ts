@@ -12,12 +12,21 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 const DATABASE_URL = import.meta.env.VITE_DATABASE_URL
 
 export async function getSupabaseClient(): Promise<Client> {
+  console.log('🔌 Creating Supabase PostgreSQL client...')
+  console.log('🔗 Database URL:', DATABASE_URL ? 'Set' : 'Missing')
+
+  if (!DATABASE_URL) {
+    throw new Error('DATABASE_URL environment variable is not set')
+  }
+
   const client = new Client({
     connectionString: DATABASE_URL,
     ssl: { rejectUnauthorized: false },
   })
-  
+
+  console.log('🔌 Connecting to Supabase...')
   await client.connect()
+  console.log('✅ Connected to Supabase successfully')
   return client
 }
 

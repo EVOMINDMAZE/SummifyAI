@@ -35,7 +35,15 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
-const App = () => (
+const App = () => {
+  // Initialize log capture system
+  React.useEffect(() => {
+    console.log('🚀 Application started - Log capture initialized');
+    console.log('📊 Supabase URL:', import.meta.env.VITE_SUPABASE_URL ? 'Configured' : 'Not configured');
+    console.log('🤖 OpenAI API Key:', import.meta.env.VITE_OPENAI_API_KEY ? 'Configured' : 'Not configured');
+  }, []);
+
+  return (
   <ErrorBoundary>
     <QueryClientProvider client={queryClient}>
       <TooltipProvider delayDuration={0}>
@@ -89,6 +97,7 @@ const App = () => (
       </TooltipProvider>
     </QueryClientProvider>
   </ErrorBoundary>
-);
+  );
+};
 
 createRoot(document.getElementById("root")!).render(<App />);

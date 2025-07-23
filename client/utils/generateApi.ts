@@ -156,39 +156,7 @@ export class GenerateAPI {
     poll();
   }
 
-  static createMockProgressStages(): Array<{
-    text: string;
-    duration: number;
-    percent: number;
-  }> {
-    return [
-      {
-        text: "🔍 Searching through millions of books...",
-        duration: 1000,
-        percent: 15,
-      },
-      {
-        text: "📚 Analyzing top 5 most relevant books...",
-        duration: 1200,
-        percent: 35,
-      },
-      {
-        text: "🧠 Extracting key insights and themes...",
-        duration: 1000,
-        percent: 60,
-      },
-      {
-        text: "⚡ Comparing different perspectives...",
-        duration: 800,
-        percent: 80,
-      },
-      {
-        text: "✨ Generating your premium summary...",
-        duration: 600,
-        percent: 100,
-      },
-    ];
-  }
+
 }
 
 export type {

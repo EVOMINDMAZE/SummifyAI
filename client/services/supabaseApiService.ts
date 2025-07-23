@@ -109,113 +109,57 @@ export async function searchDatabase(query: string): Promise<SearchResults> {
     console.log('🔄 Step 1: Generating OpenAI embeddings...')
     const embeddings = await generateQueryEmbeddings(query)
 
-    // Step 2: Connect to database
-    const client = await getSupabaseClient()
-    
+    // Step 2: Search using Supabase client
     let results: any[] = []
     let useVectorSearch = false
 
     try {
-      if (embeddings) {
-        // Check if we have vector embeddings in the database
-        const vectorCount = await client.query(`
-          SELECT COUNT(*) as count 
-          FROM chapters 
-          WHERE vector_embedding IS NOT NULL
+      // For now, use simplified text search with Supabase
+      console.log('🔄 Step 2: Searching database with Supabase...')
+
+      const searchTerms = query.trim().toLowerCase().split(/\s+/)
+      const primaryTerm = searchTerms[0]
+
+      // Search chapters and books using Supabase
+      const { data: searchResults, error } = await supabase
+        .from('chapters')
+        .select(`
+          id,
+          chapter_title,
+          chapter_text,
+          book_id,
+          books!inner (
+            id,
+            title,
+            author_name,
+            author,
+            cover_url,
+            isbn_13
+          )
         `)
-        
-        const hasVectors = parseInt(vectorCount.rows[0].count) > 0
-        
-        if (hasVectors) {
-          console.log('🔄 Step 2: Searching entire database with vector similarity...')
-          useVectorSearch = true
-          
-          // Format embeddings for PostgreSQL
-          const embeddingString = `[${embeddings.join(',')}]`
+        .or(`chapter_title.ilike.%${query}%,chapter_text.ilike.%${query}%,books.title.ilike.%${query}%`)
+        .not('chapter_text', 'is', null)
+        .limit(20)
 
-          // Search the ENTIRE database using pgvector similarity
-          const result = await client.query(`
-            SELECT 
-              c.id,
-              c.chapter_title,
-              c.chapter_text,
-              b.id as book_id,
-              b.title as book_title,
-              COALESCE(b.author_name, b.author) as author_name,
-              b.cover_url,
-              b.isbn_13,
-              c.vector_embedding <=> $1::vector as similarity_score
-            FROM chapters c
-            JOIN books b ON c.book_id = b.id
-            WHERE c.vector_embedding IS NOT NULL 
-              AND c.chapter_text IS NOT NULL
-              AND LENGTH(c.chapter_text) > 100
-            ORDER BY c.vector_embedding <=> $1::vector ASC
-            LIMIT 15;
-          `, [embeddingString])
-
-          results = result.rows.map((row) => ({
-            id: row.id,
-            chapter_title: row.chapter_title,
-            chapter_text: row.chapter_text.substring(0, 800), // First 800 chars
-            book_id: row.book_id,
-            book_title: row.book_title,
-            author_name: row.author_name,
-            cover_url: row.cover_url,
-            isbn_13: row.isbn_13,
-            similarity_score: parseFloat(row.similarity_score),
-          }))
-        }
+      if (error) {
+        console.error('❌ Supabase search error:', error)
+        throw error
       }
 
-      // Fallback to text search if no vector search
-      if (results.length === 0) {
-        console.log('🔄 Using enhanced text search...')
-        useVectorSearch = false
-        
-        const searchTerms = query.trim().toLowerCase().split(/\s+/)
-        const primaryTerm = searchTerms[0]
-        const fullQuery = query.trim()
+      // Transform results to match expected format
+      results = (searchResults || []).map((row: any) => ({
+        id: row.id,
+        chapter_title: row.chapter_title,
+        chapter_text: row.chapter_text?.substring(0, 800) || '', // First 800 chars
+        book_id: row.book_id,
+        book_title: row.books.title,
+        author_name: row.books.author_name || row.books.author,
+        cover_url: row.books.cover_url,
+        isbn_13: row.books.isbn_13,
+        similarity_score: 0.75, // Default similarity score for text search
+      }))
 
-        const textResult = await client.query(`
-          SELECT 
-            c.id,
-            c.chapter_title,
-            SUBSTRING(c.chapter_text, 1, 800) AS chapter_text,
-            c.book_id,
-            b.title AS book_title,
-            COALESCE(b.author_name, b.author) as author_name,
-            b.cover_url,
-            b.isbn_13,
-            CASE 
-              WHEN c.chapter_title ILIKE $1 THEN 0.95
-              WHEN c.chapter_title ILIKE $2 THEN 0.90
-              WHEN c.chapter_text ILIKE $1 THEN 0.85
-              WHEN c.chapter_text ILIKE $2 THEN 0.80
-              WHEN b.title ILIKE $1 THEN 0.75
-              WHEN b.title ILIKE $2 THEN 0.70
-              ELSE 0.50
-            END AS similarity_score
-          FROM chapters c
-          JOIN books b ON c.book_id = b.id
-          WHERE c.chapter_text IS NOT NULL 
-            AND LENGTH(c.chapter_text) > 50
-            AND (
-              c.chapter_title ILIKE $1 
-              OR c.chapter_title ILIKE $2
-              OR c.chapter_text ILIKE $1 
-              OR c.chapter_text ILIKE $2
-              OR b.title ILIKE $1
-              OR b.title ILIKE $2
-            )
-          ORDER BY similarity_score DESC
-          LIMIT 20;
-        `, [`%${fullQuery}%`, `%${primaryTerm}%`])
-
-        results = textResult.rows
-      }
-
-      console.log(`📚 Found ${results.length} chapters from database`)
+      console.log(`📚 Found ${results.length} chapters from Supabase`)
 
       // Step 3: Use OpenAI to analyze and enrich the results
       console.log('🔄 Step 3: Using OpenAI to analyze and enrich results...')
@@ -229,8 +173,9 @@ export async function searchDatabase(query: string): Promise<SearchResults> {
         processingTime: Date.now() - startTime
       }
 
-    } finally {
-      await client.end()
+    } catch (searchError) {
+      console.error('❌ Search error:', searchError)
+      throw searchError
     }
   } catch (error) {
     console.error('❌ AI-powered search failed:', error)

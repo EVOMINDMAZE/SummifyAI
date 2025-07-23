@@ -73,6 +73,18 @@ export default function SearchFilters({
     ...filters,
   });
 
+  // Sync localFilters with props when they change
+  React.useEffect(() => {
+    setLocalFilters({
+      publicationYearRange: [1990, 2024],
+      difficultyLevel: "any",
+      industryFocus: [],
+      bookCategories: [],
+      minRating: 0,
+      ...filters,
+    });
+  }, [filters]);
+
   const updateFilter = <K extends keyof SearchFilters>(
     key: K,
     value: SearchFilters[K],

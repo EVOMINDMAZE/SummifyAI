@@ -75,6 +75,9 @@ class NetlifyFunctionService {
         console.info(
           "🚀 Deploy by pushing to main branch or using Netlify CLI",
         );
+      } else if (error.message === "FUNCTION_NOT_AVAILABLE") {
+        console.info("🔧 Development mode: Netlify Functions not running locally. Using fallback.");
+        console.info('💡 To test functions locally: Run "netlify dev" instead of "npm run dev"');
       } else {
         console.warn(
           "⚠️ Netlify function temporarily unavailable, using fallback",

@@ -30,22 +30,31 @@ async function getOpenAI() {
 
 // Health check
 export async function healthCheck(): Promise<{ status: string; hasDatabase: boolean; hasOpenAI: boolean }> {
+  console.log('🏥 Starting health check...')
+
   try {
+    console.log('🔗 Testing database connection...')
     const client = await getSupabaseClient()
-    
+
     // Test database connection
-    await client.query('SELECT 1')
+    const result = await client.query('SELECT 1 as test')
+    console.log('✅ Database query result:', result.rows)
     await client.end()
-    
+
+    console.log('🤖 Testing OpenAI connection...')
     const openai = await getOpenAI()
-    
-    return {
+    console.log('🤖 OpenAI client status:', !!openai)
+
+    const healthResult = {
       status: 'ok',
       hasDatabase: true,
       hasOpenAI: !!openai
     }
+
+    console.log('✅ Health check completed:', healthResult)
+    return healthResult
   } catch (error) {
-    console.error('Health check failed:', error)
+    console.error('❌ Health check failed:', error)
     return {
       status: 'error',
       hasDatabase: false,

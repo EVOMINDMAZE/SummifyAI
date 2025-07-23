@@ -454,13 +454,6 @@ export default function Generate() {
                     >
                       📋 Logs
                     </Button>
-                    <Button
-                      onClick={() => setShowDeploymentWizard(true)}
-                      variant="outline"
-                      className="h-14 px-4 border-2 border-orange-300 text-orange-700 hover:bg-orange-50"
-                    >
-                      🚀 Deploy
-                    </Button>
                   </div>
 
                   {/* Info about AI features */}

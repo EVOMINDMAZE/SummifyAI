@@ -218,15 +218,15 @@ async function enrichResultsWithAI(
 
     const enrichedChapters: EnrichedChapter[] = [];
 
-    // Use Edge Functions to analyze each chapter
+    // Use Netlify Functions to analyze each chapter
     for (const chapter of bookData.chapters.slice(0, 5)) {
       // Top 5 chapters per book
       console.log(`📄 Processing chapter: "${chapter.chapter_title}"`);
       try {
-        const enrichment = await edgeFunctionService.analyzeChapterWithAI(chapter, query);
+        const enrichment = await netlifyFunctionService.analyzeChapterWithAI(chapter, query);
         enrichedChapters.push(enrichment);
       } catch (error) {
-        console.warn(`⚠️ Edge Function analysis failed for chapter "${chapter.chapter_title}", using fallback:`, error);
+        console.warn(`⚠️ Netlify Function analysis failed for chapter "${chapter.chapter_title}", using fallback:`, error);
         const fallbackEnrichment = createFallbackEnrichment(chapter, query);
         enrichedChapters.push(fallbackEnrichment);
       }

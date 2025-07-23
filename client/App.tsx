@@ -39,9 +39,10 @@ const queryClient = new QueryClient();
 const App = () => {
   // Initialize log capture system
   React.useEffect(() => {
-    console.log('🚀 Application started - Log capture initialized');
-    console.log('📊 Supabase URL:', import.meta.env.VITE_SUPABASE_URL ? 'Configured' : 'Not configured');
-    console.log('🤖 OpenAI API Key:', import.meta.env.VITE_OPENAI_API_KEY ? 'Configured' : 'Not configured');
+    console.log('🚀 Application started - Netlify + Supabase Architecture');
+    console.log('📊 Supabase Database:', import.meta.env.VITE_SUPABASE_URL ? 'Connected' : 'Not configured');
+    console.log('⚡ Netlify Functions:', 'Ready for AI operations');
+    console.log('🏗️ Architecture: Frontend (Netlify) + Database (Supabase) + AI (Netlify Functions)');
   }, []);
 
   return (

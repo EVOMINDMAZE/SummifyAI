@@ -1,8 +1,8 @@
-import React from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Info, Code, Terminal, ExternalLink } from 'lucide-react';
+import React from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Info, Code, Terminal, ExternalLink } from "lucide-react";
 
 export default function DevelopmentModeInfo() {
   return (
@@ -15,19 +15,25 @@ export default function DevelopmentModeInfo() {
               <h3 className="font-semibold text-blue-800 dark:text-blue-200">
                 Development Mode
               </h3>
-              <Badge variant="outline" className="text-blue-700 border-blue-300">
+              <Badge
+                variant="outline"
+                className="text-blue-700 border-blue-300"
+              >
                 Local Fallback Active
               </Badge>
             </div>
-            
+
             <p className="text-sm text-blue-700 dark:text-blue-300 mb-3">
-              Netlify Functions are not running locally. Your app is fully functional with fallback AI analysis.
+              Netlify Functions are not running locally. Your app is fully
+              functional with fallback AI analysis.
             </p>
 
             <div className="bg-blue-100 dark:bg-blue-900/20 rounded-lg p-3 mb-3">
               <div className="flex items-center space-x-2 mb-2">
                 <Terminal className="w-4 h-4 text-blue-600" />
-                <span className="text-sm font-medium text-blue-800 dark:text-blue-200">To test Netlify Functions locally:</span>
+                <span className="text-sm font-medium text-blue-800 dark:text-blue-200">
+                  To test Netlify Functions locally:
+                </span>
               </div>
               <code className="text-xs text-blue-800 dark:text-blue-200 bg-blue-200 dark:bg-blue-800 px-2 py-1 rounded">
                 netlify dev
@@ -42,7 +48,7 @@ export default function DevelopmentModeInfo() {
                 variant="outline"
                 size="sm"
                 className="text-blue-700 border-blue-300 hover:bg-blue-100"
-                onClick={() => window.open('/NETLIFY_SETUP.md', '_blank')}
+                onClick={() => window.open("/NETLIFY_SETUP.md", "_blank")}
               >
                 <ExternalLink className="w-3 h-3 mr-1" />
                 Setup Guide
@@ -51,7 +57,11 @@ export default function DevelopmentModeInfo() {
                 variant="outline"
                 size="sm"
                 className="text-blue-700 border-blue-300 hover:bg-blue-100"
-                onClick={() => alert('To test locally with functions:\n\n1. Install Netlify CLI: npm install -g netlify-cli\n2. Run: netlify dev\n3. Your app will run with local functions\n\nFor production: Deploy to get full AI features!')}
+                onClick={() =>
+                  alert(
+                    "To test locally with functions:\n\n1. Install Netlify CLI: npm install -g netlify-cli\n2. Run: netlify dev\n3. Your app will run with local functions\n\nFor production: Deploy to get full AI features!",
+                  )
+                }
               >
                 <Info className="w-3 h-3 mr-1" />
                 Local Testing

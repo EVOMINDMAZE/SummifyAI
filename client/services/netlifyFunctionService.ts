@@ -42,9 +42,16 @@ class NetlifyFunctionService {
       }
 
       // Handle network errors (like "Failed to fetch" in dev mode)
-      if (error instanceof TypeError && error.message.includes('Failed to fetch')) {
-        console.warn(`⚠️ Netlify functions not available (development mode or network issue)`);
-        console.info(`💡 For local testing: Run 'netlify dev' or deploy functions`);
+      if (
+        error instanceof TypeError &&
+        error.message.includes("Failed to fetch")
+      ) {
+        console.warn(
+          `⚠️ Netlify functions not available (development mode or network issue)`,
+        );
+        console.info(
+          `💡 For local testing: Run 'netlify dev' or deploy functions`,
+        );
         throw new Error("FUNCTION_NOT_AVAILABLE");
       }
 
@@ -76,8 +83,12 @@ class NetlifyFunctionService {
           "🚀 Deploy by pushing to main branch or using Netlify CLI",
         );
       } else if (error.message === "FUNCTION_NOT_AVAILABLE") {
-        console.info("🔧 Development mode: Netlify Functions not running locally. Using fallback.");
-        console.info('💡 To test functions locally: Run "netlify dev" instead of "npm run dev"');
+        console.info(
+          "🔧 Development mode: Netlify Functions not running locally. Using fallback.",
+        );
+        console.info(
+          '💡 To test functions locally: Run "netlify dev" instead of "npm run dev"',
+        );
       } else {
         console.warn(
           "⚠️ Netlify function temporarily unavailable, using fallback",
@@ -109,7 +120,9 @@ class NetlifyFunctionService {
           "📋 Netlify Functions not deployed yet. Using local analysis.",
         );
       } else if (error.message === "FUNCTION_NOT_AVAILABLE") {
-        console.info("🔧 Development mode: Netlify Functions not running locally. Using fallback.");
+        console.info(
+          "🔧 Development mode: Netlify Functions not running locally. Using fallback.",
+        );
       } else {
         console.warn(
           "⚠️ Netlify function temporarily unavailable, using fallback",

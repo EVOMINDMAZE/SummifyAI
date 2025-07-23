@@ -15,7 +15,7 @@ async function getOpenAI() {
     }
   }
 
-  const apiKey = import.meta.env.VITE_OPENAI_API_KEY || 'sk-ZzMLMjxFCM_Bc-1b4AQYHQEqvTfg5CZP6djDMNYNNWlwNlJJPW0MRQ3JyXRuWGRsQT3BlbkFJ6AqGhx-nfW6BFBKhJ6Y3eCGFo9w4QBXGKOa8u2BYhOl1vXyYs0WZ1aAFjYSA'
+  const apiKey = import.meta.env.VITE_OPENAI_API_KEY
   
   if (!apiKey) {
     console.error('❌ OPENAI_API_KEY not configured')

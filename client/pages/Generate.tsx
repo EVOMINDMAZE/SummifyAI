@@ -8,7 +8,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { searchDatabase, analyzeTopicWithAI, healthCheck } from "@/services/supabaseApiService";
-import type { SearchResults } from "@/lib/supabase";
+import type { SearchResults as SupabaseSearchResults } from "@/lib/supabase";
 import {
   BookOpen,
   Clock,

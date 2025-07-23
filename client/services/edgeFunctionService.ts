@@ -66,11 +66,11 @@ class EdgeFunctionService {
     }
   }
 
-  // Analyze chapter using edge function  
+  // Analyze chapter using edge function
   async analyzeChapterWithAI(chapter: any, query: string) {
     try {
       const result = await this.callFunction('analyze-chapter', { chapter, query });
-      
+
       if (result.success) {
         return result.data;
       } else {
@@ -78,7 +78,12 @@ class EdgeFunctionService {
         return result.data; // Fallback is included in data
       }
     } catch (error) {
-      console.error('❌ Chapter analysis edge function failed:', error);
+      if (error.message === 'FUNCTION_NOT_DEPLOYED') {
+        console.info('📋 Edge Functions not deployed yet. Using local analysis.');
+      } else {
+        console.warn('⚠️ Edge function temporarily unavailable, using fallback');
+      }
+
       // Return local fallback
       return this.createFallbackChapterAnalysis(chapter, query);
     }

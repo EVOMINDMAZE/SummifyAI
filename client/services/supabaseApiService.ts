@@ -12,7 +12,7 @@ export async function healthCheck(): Promise<{
   hasOpenAI: boolean;
 }> {
   console.log("🏥 Health Check: Starting comprehensive system health check");
-  console.info("📋 Health Check: Checking Supabase and OpenAI connections");
+  console.info("📋 Health Check: Checking Supabase and Edge Functions");
 
   try {
     console.log("🔗 Testing Supabase connection...");
@@ -27,14 +27,22 @@ export async function healthCheck(): Promise<{
 
     console.log("✅ Supabase connection successful");
 
-    console.log("🤖 Testing OpenAI connection...");
-    const openai = await getOpenAI();
-    console.log("🤖 OpenAI client status:", !!openai);
+    console.log("🤖 Testing Edge Functions...");
+
+    // Test edge function availability
+    let hasEdgeFunctions = false;
+    try {
+      await edgeFunctionService.analyzeTopicWithAI("test");
+      hasEdgeFunctions = true;
+      console.log("✅ Edge Functions available");
+    } catch (error) {
+      console.warn("⚠️ Edge Functions not available, using fallback mode");
+    }
 
     const healthResult = {
       status: "ok",
       hasDatabase: true,
-      hasOpenAI: !!openai,
+      hasOpenAI: hasEdgeFunctions, // Edge functions provide OpenAI functionality
     };
 
     console.log("✅ Health check completed:", healthResult);

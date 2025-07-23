@@ -9,8 +9,8 @@ class NetlifyFunctionService {
 
   private async callFunction(functionPath: string, payload: any) {
     try {
-      console.log(`🔄 Calling Netlify function: ${functionPath}`);
-      
+      console.log(`🔄 Attempting to call Netlify function: ${functionPath}`);
+
       const response = await fetch(`${this.baseUrl}${functionPath}`, {
         method: 'POST',
         headers: {
@@ -20,6 +20,12 @@ class NetlifyFunctionService {
       });
 
       if (!response.ok) {
+        // Check if it's a 404 (function not deployed)
+        if (response.status === 404) {
+          console.warn(`⚠️ Netlify function ${functionPath} not deployed. Using fallback mode.`);
+          console.info(`💡 To deploy: Push to your main branch or deploy manually`);
+          throw new Error('FUNCTION_NOT_DEPLOYED');
+        }
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
 
@@ -28,8 +34,11 @@ class NetlifyFunctionService {
       return result;
 
     } catch (error) {
+      if (error.message === 'FUNCTION_NOT_DEPLOYED') {
+        throw error;
+      }
       console.error(`❌ Failed to call Netlify function ${functionPath}:`, error);
-      throw error;
+      throw new Error('FUNCTION_ERROR');
     }
   }
 

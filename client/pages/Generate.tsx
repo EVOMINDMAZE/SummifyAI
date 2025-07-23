@@ -415,6 +415,9 @@ export default function Generate() {
 
                 </div>
 
+                {/* OpenAI Status */}
+                <OpenAIStatus />
+
                 {/* Loading State */}
                 {(isGenerating || isAnalyzing) && (
                   <div className="mt-8 p-6 bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 rounded-2xl border border-indigo-200 dark:border-indigo-800">

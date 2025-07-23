@@ -97,8 +97,8 @@ export default function SearchFilters({
   const hasActiveFilters = () => {
     return (
       localFilters.difficultyLevel !== "any" ||
-      localFilters.industryFocus.length > 0 ||
-      localFilters.bookCategories.length > 0 ||
+      (localFilters.industryFocus || []).length > 0 ||
+      (localFilters.bookCategories || []).length > 0 ||
       localFilters.minRating > 0 ||
       localFilters.publicationYearRange[0] > 1990 ||
       localFilters.publicationYearRange[1] < new Date().getFullYear()

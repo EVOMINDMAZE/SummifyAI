@@ -101,24 +101,24 @@ export default function OpenAIStatus() {
               <AlertCircle className="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" />
               <div className="space-y-2">
                 <p className="text-sm text-amber-800 dark:text-amber-200">
-                  <strong>Running in Fallback Mode:</strong> App is fully functional! Deploy Edge Functions for enhanced AI features.
+                  <strong>Running in Fallback Mode:</strong> Set your OpenAI API key in Netlify environment variables for enhanced AI features.
                 </p>
                 <div className="flex gap-2">
                   <Button
                     variant="outline"
                     size="sm"
                     className="text-amber-700 border-amber-300 hover:bg-amber-100"
-                    onClick={() => window.open('/EDGE_FUNCTIONS_SETUP.md', '_blank')}
+                    onClick={() => window.open('https://app.netlify.com/teams/your-team/sites/your-site/configuration/env', '_blank')}
                   >
-                    📖 Setup Guide
+                    ⚙️ Set API Key
                   </Button>
                   <Button
                     variant="outline"
                     size="sm"
                     className="text-amber-700 border-amber-300 hover:bg-amber-100"
-                    onClick={() => alert('Quick Deploy:\n\n1. supabase login\n2. supabase link --project-ref voosuqmkazvjzheipbrl\n3. supabase functions deploy\n\nSee EDGE_FUNCTIONS_SETUP.md for details')}
+                    onClick={() => alert('Add OPENAI_API_KEY to your Netlify environment variables:\n\n1. Go to Netlify Dashboard\n2. Site Settings → Environment Variables\n3. Add: OPENAI_API_KEY = your_api_key\n4. Redeploy your site')}
                   >
-                    🚀 Quick Deploy
+                    📖 Instructions
                   </Button>
                 </div>
               </div>

@@ -93,7 +93,7 @@ class EdgeFunctionService {
   async generateEmbeddings(query: string): Promise<number[] | null> {
     try {
       const result = await this.callFunction('generate-embeddings', { query });
-      
+
       if (result.success && result.data?.embedding) {
         console.log(`🧠 Generated embeddings: ${result.data.dimensions} dimensions`);
         return result.data.embedding;
@@ -102,7 +102,12 @@ class EdgeFunctionService {
         return null;
       }
     } catch (error) {
-      console.error('❌ Embeddings edge function failed:', error);
+      if (error.message === 'FUNCTION_NOT_DEPLOYED') {
+        console.info('📋 Edge Functions not deployed yet. Embeddings unavailable.');
+        console.info('🚀 Deploy with: supabase functions deploy generate-embeddings');
+      } else {
+        console.warn('⚠️ Embeddings temporarily unavailable');
+      }
       return null;
     }
   }

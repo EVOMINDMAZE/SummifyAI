@@ -305,7 +305,7 @@ export async function analyzeTopicWithAI(topic: string) {
     console.log('🤖 Calling Netlify Function for topic analysis...');
     return await netlifyFunctionService.analyzeTopicWithAI(topic);
   } catch (error) {
-    console.info('🔄 Using local analysis (Netlify Functions temporarily unavailable)');
+    console.info('🔄 Using local fallback analysis (Netlify Functions not deployed)');
     return createFallbackTopicAnalysis(topic);
   }
 }

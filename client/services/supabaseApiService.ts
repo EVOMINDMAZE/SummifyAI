@@ -239,15 +239,15 @@ async function enrichResultsWithAI(
 
     const enrichedChapters: EnrichedChapter[] = [];
 
-    // Use OpenAI to analyze each chapter
+    // Use Edge Functions to analyze each chapter
     for (const chapter of bookData.chapters.slice(0, 5)) {
       // Top 5 chapters per book
       console.log(`📄 Processing chapter: "${chapter.chapter_title}"`);
       try {
-        const enrichment = await analyzeChapterWithAI(chapter, query, openai);
+        const enrichment = await edgeFunctionService.analyzeChapterWithAI(chapter, query);
         enrichedChapters.push(enrichment);
       } catch (error) {
-        console.warn(`⚠️ OpenAI analysis failed for chapter "${chapter.chapter_title}", using fallback:`, error);
+        console.warn(`⚠️ Edge Function analysis failed for chapter "${chapter.chapter_title}", using fallback:`, error);
         const fallbackEnrichment = createFallbackEnrichment(chapter, query);
         enrichedChapters.push(fallbackEnrichment);
       }

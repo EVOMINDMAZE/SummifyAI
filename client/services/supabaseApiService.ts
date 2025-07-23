@@ -406,31 +406,39 @@ function createFallbackEnrichment(
 
 // AI-powered topic analysis
 export async function analyzeTopicWithAI(topic: string) {
+  console.log(`🧠 Analyzing topic: "${topic}"`);
+
+  // For now, return fallback analysis to avoid OpenAI API issues
+  // TODO: Fix OpenAI API key and re-enable AI analysis
+  const fallbackAnalysis = {
+    isBroad: topic.split(" ").length <= 2,
+    explanation: topic.split(" ").length <= 2
+      ? `"${topic}" is quite broad. More specific terms would help find targeted content.`
+      : `"${topic}" has good specificity for finding relevant content.`,
+    refinements: [
+      {
+        label: `${topic} Strategies`,
+        value: `${topic} strategies`,
+        description: `Focus on practical ${topic} techniques and approaches`,
+      },
+      {
+        label: `Advanced ${topic}`,
+        value: `advanced ${topic}`,
+        description: `Expert-level ${topic} methods and frameworks`,
+      },
+      {
+        label: `${topic} Applications`,
+        value: `${topic} applications`,
+        description: `Real-world ${topic} use cases and implementations`,
+      },
+    ],
+  };
+
   const openai = await getOpenAI();
 
   if (!openai) {
-    // Fallback analysis
-    return {
-      isBroad: topic.split(" ").length <= 2,
-      explanation: `"${topic}" could benefit from more specific focus.`,
-      refinements: [
-        {
-          label: `${topic} Strategies`,
-          value: `${topic} strategies`,
-          description: `Focus on practical ${topic} techniques`,
-        },
-        {
-          label: `Advanced ${topic}`,
-          value: `advanced ${topic}`,
-          description: `Expert-level ${topic} methods`,
-        },
-        {
-          label: `${topic} Applications`,
-          value: `${topic} applications`,
-          description: `Real-world ${topic} use cases`,
-        },
-      ],
-    };
+    console.log("⚠️ Using fallback topic analysis (no OpenAI client)");
+    return fallbackAnalysis;
   }
 
   try {

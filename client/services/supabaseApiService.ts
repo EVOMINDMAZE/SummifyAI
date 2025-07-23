@@ -251,20 +251,13 @@ async function enrichResultsWithAI(
 
     const enrichedChapters: EnrichedChapter[] = [];
 
-    // Analyze each chapter with OpenAI
+    // Use fallback analysis for chapters to avoid OpenAI API errors
     for (const chapter of bookData.chapters.slice(0, 5)) {
       // Top 5 chapters per book
-      try {
-        const enrichment = await analyzeChapterWithAI(chapter, query, openai);
-        enrichedChapters.push(enrichment);
-      } catch (error) {
-        console.warn(
-          `⚠️ Failed to analyze chapter "${chapter.chapter_title}":`,
-          error,
-        );
-        // Add fallback data
-        enrichedChapters.push(createFallbackEnrichment(chapter, query));
-      }
+      console.log(`📄 Processing chapter: "${chapter.chapter_title}"`);
+      // Use fallback enrichment for now to avoid API errors
+      const enrichment = createFallbackEnrichment(chapter, query);
+      enrichedChapters.push(enrichment);
     }
 
     if (enrichedChapters.length > 0) {

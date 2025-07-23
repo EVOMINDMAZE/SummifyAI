@@ -2,40 +2,8 @@ import { supabase } from "@/lib/supabase";
 import type { BookGroup, EnrichedChapter, SearchResults } from "@/lib/supabase";
 import { edgeFunctionService } from "./edgeFunctionService";
 
-// Initialize OpenAI (we'll import it when needed to avoid bundling issues)
-let OpenAI: any = null;
-
-async function getOpenAI() {
-  if (!OpenAI) {
-    try {
-      const openaiModule = await import("openai");
-      OpenAI = openaiModule.default;
-    } catch (error) {
-      console.error("Failed to import OpenAI:", error);
-      return null;
-    }
-  }
-
-  const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
-
-  console.log("🤖 OpenAI Config:", {
-    hasApiKey: !!apiKey,
-    keyLength: apiKey ? apiKey.length : 0,
-    keyPrefix: apiKey ? apiKey.substring(0, 7) + '...' : 'none',
-    envCheck: !!import.meta.env.VITE_OPENAI_API_KEY,
-  });
-
-  if (!apiKey || !apiKey.startsWith('sk-') || apiKey === 'your_openai_api_key_here' || apiKey === 'PASTE_YOUR_API_KEY_HERE') {
-    console.warn("⚠️ OpenAI API key not configured. AI features will use fallback mode.");
-    console.info("ℹ️ To enable full AI features, get your API key from: https://platform.openai.com/api-keys");
-    return null;
-  }
-
-  return new OpenAI({
-    apiKey: apiKey,
-    dangerouslyAllowBrowser: true, // For client-side usage
-  });
-}
+// Edge Functions handle OpenAI integration server-side
+// No client-side OpenAI setup needed anymore!
 
 // Health check
 export async function healthCheck(): Promise<{

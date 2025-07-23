@@ -45,7 +45,7 @@ export async function healthCheck(): Promise<{
     const healthResult = {
       status: "ok",
       hasDatabase: true,
-      hasOpenAI: hasEdgeFunctions, // Edge functions provide OpenAI functionality
+      hasOpenAI: hasNetlifyFunctions, // Netlify functions provide OpenAI functionality
     };
 
     console.log("✅ Health check completed:", healthResult);

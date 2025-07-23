@@ -428,14 +428,23 @@ export default function Generate() {
                     onToggleVisibility={() => setShowFilters(!showFilters)}
                   />
 
-                  {/* Debug Button - Temporary */}
-                  <Button
-                    onClick={testAPIConnection}
-                    variant="outline"
-                    className="h-14 px-6 border-2 border-emerald-300 text-emerald-700 hover:bg-emerald-50"
-                  >
-                    🧪 Test Supabase
-                  </Button>
+                  {/* Debug Buttons - Temporary */}
+                  <div className="flex gap-2">
+                    <Button
+                      onClick={testAPIConnection}
+                      variant="outline"
+                      className="h-14 px-4 border-2 border-emerald-300 text-emerald-700 hover:bg-emerald-50"
+                    >
+                      🧪 Health
+                    </Button>
+                    <Button
+                      onClick={inspectSchema}
+                      variant="outline"
+                      className="h-14 px-4 border-2 border-blue-300 text-blue-700 hover:bg-blue-50"
+                    >
+                      📊 Schema
+                    </Button>
+                  </div>
 
                   {/* Info about AI features */}
 

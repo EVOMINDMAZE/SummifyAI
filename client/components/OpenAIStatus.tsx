@@ -92,7 +92,7 @@ export default function OpenAIStatus() {
 
         <div className="space-y-2">
           {getStatusBadge(health.hasDatabase, 'Database')}
-          {getStatusBadge(health.hasOpenAI, 'OpenAI')}
+          {getStatusBadge(health.hasOpenAI, 'Edge Functions')}
         </div>
 
         {needsSetup && (

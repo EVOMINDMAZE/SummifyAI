@@ -12,6 +12,7 @@
 
 [build.environment]
   NODE_VERSION = "18"
+  # OPENAI_API_KEY should be set in Netlify UI under Site Settings > Environment Variables
 
 # Development settings
 [dev]

@@ -292,15 +292,15 @@ function createFallbackEnrichment(
   };
 }
 
-// AI-powered topic analysis using Edge Functions
+// AI-powered topic analysis using Netlify Functions
 export async function analyzeTopicWithAI(topic: string) {
   console.log(`🧠 Analyzing topic: "${topic}"`);
 
   try {
-    console.log('🤖 Calling Edge Function for topic analysis...');
-    return await edgeFunctionService.analyzeTopicWithAI(topic);
+    console.log('🤖 Calling Netlify Function for topic analysis...');
+    return await netlifyFunctionService.analyzeTopicWithAI(topic);
   } catch (error) {
-    console.info('🔄 Using local analysis (Edge Functions not deployed)');
+    console.info('🔄 Using local analysis (Netlify Functions temporarily unavailable)');
     return createFallbackTopicAnalysis(topic);
   }
 }

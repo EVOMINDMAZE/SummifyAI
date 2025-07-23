@@ -33,13 +33,20 @@ export async function healthCheck(): Promise<{ status: string; hasDatabase: bool
   console.log('🏥 Starting health check...')
 
   try {
-    console.log('🔗 Testing database connection...')
-    const client = await getSupabaseClient()
+    console.log('🔗 Testing Supabase connection...')
 
-    // Test database connection
-    const result = await client.query('SELECT 1 as test')
-    console.log('✅ Database query result:', result.rows)
-    await client.end()
+    // Test database connection using Supabase client
+    const { data, error } = await supabase
+      .from('books')
+      .select('id')
+      .limit(1)
+
+    if (error) {
+      console.error('❌ Supabase connection error:', error)
+      throw error
+    }
+
+    console.log('✅ Supabase connection successful')
 
     console.log('🤖 Testing OpenAI connection...')
     const openai = await getOpenAI()

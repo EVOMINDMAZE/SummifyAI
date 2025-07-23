@@ -189,7 +189,7 @@ async function enrichResultsWithAI(
 ): Promise<SearchResults> {
   const openai = await getOpenAI();
 
-  if (!openai || dbResults.length === 0) {
+  if (!dbResults.length === 0) {
     return {
       query,
       searchType: "database_only",
@@ -241,7 +241,7 @@ async function enrichResultsWithAI(
         enrichedChapters.push(enrichment);
       } catch (error) {
         console.warn(
-          `⚠️ Netlify Function analysis failed for chapter "${chapter.chapter_title}", using fallback:`,
+          `��️ Netlify Function analysis failed for chapter "${chapter.chapter_title}", using fallback:`,
           error,
         );
         const fallbackEnrichment = createFallbackEnrichment(chapter, query);

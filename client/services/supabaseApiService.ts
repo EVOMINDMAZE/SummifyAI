@@ -24,9 +24,9 @@ async function getOpenAI() {
     envCheck: !!import.meta.env.VITE_OPENAI_API_KEY,
   });
 
-  if (!apiKey || !apiKey.startsWith('sk-') || apiKey === 'your_openai_api_key_here') {
-    console.error("❌ Invalid or missing OPENAI_API_KEY. Please set a valid OpenAI API key in your .env file");
-    console.error("Get your API key from: https://platform.openai.com/api-keys");
+  if (!apiKey || !apiKey.startsWith('sk-') || apiKey === 'your_openai_api_key_here' || apiKey === 'PASTE_YOUR_API_KEY_HERE') {
+    console.warn("⚠️ OpenAI API key not configured. AI features will use fallback mode.");
+    console.info("ℹ️ To enable full AI features, get your API key from: https://platform.openai.com/api-keys");
     return null;
   }
 

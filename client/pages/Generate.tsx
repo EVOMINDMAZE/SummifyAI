@@ -112,6 +112,7 @@ export default function Generate() {
       description: string;
     }>
   >([]);
+  const [showLogs, setShowLogs] = useState(false);
   const [searchFilters, setSearchFilters] = useState<ISearchFilters>({
     publicationYearRange: [1990, 2024],
     difficultyLevel: "any",
@@ -175,7 +176,7 @@ export default function Generate() {
       const data = await searchDatabase(searchQuery);
 
       console.log(
-        `🎯 Found ${data.totalBooks} books with ${data.totalChapters} relevant chapters using ${data.searchType}`,
+        `�� Found ${data.totalBooks} books with ${data.totalChapters} relevant chapters using ${data.searchType}`,
       );
 
       // Set the new search results for grid display

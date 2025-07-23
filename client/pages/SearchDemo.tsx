@@ -11,9 +11,9 @@ interface SearchResult {
   cover: string;
   rating: number;
   relevanceScore: number;
-  chapterTitle: string;
-  pageRange: string;
-  whyRelevant: string;
+  chapterTitle?: string;
+  pageRange?: string;
+  whyRelevant?: string;
   keyTopics: string[];
   description: string;
   amazonLink: string;

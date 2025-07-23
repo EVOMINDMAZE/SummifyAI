@@ -495,6 +495,12 @@ Provide JSON response:
     };
   } catch (error) {
     console.error("❌ OpenAI topic analysis failed:", error);
+
+    // Check if it's an authentication error
+    if (error instanceof Error && error.message.includes('401')) {
+      console.error("🔑 Authentication error - check OPENAI_API_KEY");
+    }
+
     // Return fallback
     return {
       isBroad: topic.split(" ").length <= 2,

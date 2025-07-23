@@ -39,7 +39,12 @@ export async function healthCheck(): Promise<{
         console.log("✅ Netlify Functions deployed and working");
       }
     } catch (error) {
-      console.warn("⚠️ Netlify Functions temporarily unavailable, using fallback mode");
+      if (error.message === 'FUNCTION_NOT_DEPLOYED') {
+        console.info("📋 Netlify Functions not deployed yet. App running in fallback mode.");
+        console.info("🚀 To deploy: Push to main branch or run 'netlify deploy --prod'");
+      } else {
+        console.warn("⚠️ Netlify Functions temporarily unavailable, using fallback mode");
+      }
     }
 
     const healthResult = {

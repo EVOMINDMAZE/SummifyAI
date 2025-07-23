@@ -64,7 +64,14 @@ export default function SearchFilters({
   isVisible,
   onToggleVisibility,
 }: SearchFiltersProps) {
-  const [localFilters, setLocalFilters] = useState<SearchFilters>(filters);
+  const [localFilters, setLocalFilters] = useState<SearchFilters>({
+    publicationYearRange: [1990, 2024],
+    difficultyLevel: "any",
+    industryFocus: [],
+    bookCategories: [],
+    minRating: 0,
+    ...filters,
+  });
 
   const updateFilter = <K extends keyof SearchFilters>(
     key: K,

@@ -75,10 +75,11 @@ export default function SearchFilters({
     onFiltersChange(newFilters);
   };
 
-  const toggleArrayFilter = (array: string[], item: string) => {
-    return array.includes(item)
-      ? array.filter((i) => i !== item)
-      : [...array, item];
+  const toggleArrayFilter = (array: string[] | undefined, item: string) => {
+    const safeArray = array || [];
+    return safeArray.includes(item)
+      ? safeArray.filter((i) => i !== item)
+      : [...safeArray, item];
   };
 
   const resetFilters = () => {

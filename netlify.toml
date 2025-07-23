@@ -1,7 +1,6 @@
 [build]
-  publish = "client/dist"
-  command = "cd client && npm install && npm run build"
-  base = "."
+  publish = "dist"
+  command = "npm install && npm run build"
 
 [functions]
   directory = "netlify/functions"
@@ -16,7 +15,7 @@
 
 # Development settings
 [dev]
-  command = "cd client && npm run dev"
+  command = "npm run dev"
   port = 5173
-  publish = "client/dist"
+  publish = "dist"
   functions = "netlify/functions"

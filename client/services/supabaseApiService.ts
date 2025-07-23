@@ -27,24 +27,19 @@ export async function healthCheck(): Promise<{
 
     console.log("✅ Supabase connection successful");
 
-    console.log("🤖 Testing Edge Functions...");
+    console.log("🤖 Testing Netlify Functions...");
 
-    // Test edge function availability
-    let hasEdgeFunctions = false;
+    // Test Netlify function availability
+    let hasNetlifyFunctions = false;
     try {
-      const result = await edgeFunctionService.analyzeTopicWithAI("test");
-      // If we get a result without errors, edge functions are working
+      const result = await netlifyFunctionService.analyzeTopicWithAI("test");
+      // If we get a result without errors, Netlify functions are working
       if (result) {
-        hasEdgeFunctions = true;
-        console.log("✅ Edge Functions deployed and working");
+        hasNetlifyFunctions = true;
+        console.log("✅ Netlify Functions deployed and working");
       }
     } catch (error) {
-      if (error.message === 'FUNCTION_NOT_DEPLOYED') {
-        console.info("📋 Edge Functions not deployed yet. App running in fallback mode.");
-        console.info("🚀 To deploy: See EDGE_FUNCTIONS_SETUP.md");
-      } else {
-        console.warn("⚠️ Edge Functions temporarily unavailable, using fallback mode");
-      }
+      console.warn("⚠️ Netlify Functions temporarily unavailable, using fallback mode");
     }
 
     const healthResult = {

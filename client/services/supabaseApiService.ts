@@ -42,7 +42,8 @@ export async function healthCheck(): Promise<{
   hasDatabase: boolean;
   hasOpenAI: boolean;
 }> {
-  console.log("🏥 Starting health check...");
+  console.log("🏥 Health Check: Starting comprehensive system health check");
+  console.info("📋 Health Check: Checking Supabase and OpenAI connections");
 
   try {
     console.log("🔗 Testing Supabase connection...");

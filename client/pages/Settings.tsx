@@ -9,7 +9,7 @@ import { showNotification } from "../utils/actions";
 export default function Settings() {
   const { user, updateUserSettings } = useAuth();
   const [activeTab, setActiveTab] = useState<
-    "general" | "notifications" | "privacy" | "security" | "team"
+    "general" | "notifications" | "privacy" | "security" | "team" | "subscription"
   >("general");
 
   // Load settings from localStorage or use defaults
@@ -1545,7 +1545,7 @@ export default function Settings() {
                           </div>
                         </div>
                         <button className="mt-3 text-sm text-blue-600 dark:text-blue-400 hover:underline">
-                          🔄 Update Payment Method
+                          ���� Update Payment Method
                         </button>
                       </div>
                     </div>

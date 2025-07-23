@@ -1,5 +1,4 @@
 import { createClient } from '@supabase/supabase-js'
-import { Client } from 'pg'
 
 // Supabase configuration from environment variables
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
@@ -8,26 +7,28 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 // Create Supabase client
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
-// Direct PostgreSQL connection for complex queries (vector search, etc.)
-const DATABASE_URL = import.meta.env.VITE_DATABASE_URL
+// Helper function to execute raw SQL queries using Supabase
+export async function executeQuery(query: string, params: any[] = []) {
+  console.log('🔌 Executing query via Supabase:', query.substring(0, 100) + '...')
 
-export async function getSupabaseClient(): Promise<Client> {
-  console.log('🔌 Creating Supabase PostgreSQL client...')
-  console.log('🔗 Database URL:', DATABASE_URL ? 'Set' : 'Missing')
+  try {
+    const { data, error } = await supabase.rpc('execute_sql', {
+      sql_query: query,
+      params: params
+    })
 
-  if (!DATABASE_URL) {
-    throw new Error('DATABASE_URL environment variable is not set')
+    if (error) {
+      console.error('❌ Supabase query error:', error)
+      throw error
+    }
+
+    console.log('✅ Query executed successfully')
+    return { rows: data || [] }
+  } catch (error) {
+    console.error('❌ Query execution failed:', error)
+    // Fallback: use Supabase client methods for basic queries
+    throw error
   }
-
-  const client = new Client({
-    connectionString: DATABASE_URL,
-    ssl: { rejectUnauthorized: false },
-  })
-
-  console.log('🔌 Connecting to Supabase...')
-  await client.connect()
-  console.log('✅ Connected to Supabase successfully')
-  return client
 }
 
 // Types for database entities

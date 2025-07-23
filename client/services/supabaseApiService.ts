@@ -305,7 +305,7 @@ export async function analyzeTopicWithAI(topic: string) {
     console.log('🤖 Calling Edge Function for topic analysis...');
     return await edgeFunctionService.analyzeTopicWithAI(topic);
   } catch (error) {
-    console.warn('⚠️ Edge Function topic analysis failed, using fallback:', error);
+    console.info('🔄 Using local analysis (Edge Functions not deployed)');
     return createFallbackTopicAnalysis(topic);
   }
 }

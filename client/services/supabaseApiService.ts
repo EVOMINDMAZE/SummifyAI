@@ -86,7 +86,9 @@ export async function generateQueryEmbeddings(
     console.log(`🧠 Attempting to generate embeddings for: "${query}"`);
     return await netlifyFunctionService.generateEmbeddings(query);
   } catch (error) {
-    console.info("💡 Embeddings not available (AI functions not deployed), continuing with text search");
+    console.info(
+      "💡 Embeddings not available (AI functions not deployed), continuing with text search",
+    );
     return null;
   }
 }
@@ -176,7 +178,8 @@ export async function searchDatabase(query: string): Promise<SearchResults> {
     console.error("❌ Search failed:", error);
 
     // Provide a more specific error message
-    const errorMessage = error instanceof Error ? error.message : "Unknown error";
+    const errorMessage =
+      error instanceof Error ? error.message : "Unknown error";
     throw new Error(`Search failed: ${errorMessage}`);
   }
 }
@@ -196,7 +199,9 @@ async function enrichResultsWithAI(
     };
   }
 
-  console.log(`🔄 Attempting to enrich ${dbResults.length} chapters with AI...`);
+  console.log(
+    `🔄 Attempting to enrich ${dbResults.length} chapters with AI...`,
+  );
 
   // Group chapters by book
   const bookGroups = new Map();
@@ -240,10 +245,17 @@ async function enrichResultsWithAI(
           enrichedChapters.push(enrichment);
           aiAnalysisWorking = true;
           useAI = true;
-          console.log("✅ AI analysis working, processing remaining chapters...");
+          console.log(
+            "✅ AI analysis working, processing remaining chapters...",
+          );
         } catch (error) {
-          console.info("💡 AI analysis not available, using enhanced fallback processing");
-          const fallbackEnrichment = createFallbackEnrichment(bookData.chapters[0], query);
+          console.info(
+            "💡 AI analysis not available, using enhanced fallback processing",
+          );
+          const fallbackEnrichment = createFallbackEnrichment(
+            bookData.chapters[0],
+            query,
+          );
           enrichedChapters.push(fallbackEnrichment);
         }
       }
@@ -253,10 +265,8 @@ async function enrichResultsWithAI(
         // Top 5 chapters per book
         if (useAI && aiAnalysisWorking) {
           try {
-            const enrichment = await netlifyFunctionService.analyzeChapterWithAI(
-              chapter,
-              query,
-            );
+            const enrichment =
+              await netlifyFunctionService.analyzeChapterWithAI(chapter, query);
             enrichedChapters.push(enrichment);
           } catch (error) {
             // If AI fails mid-process, fall back
@@ -290,7 +300,9 @@ async function enrichResultsWithAI(
       0,
     );
 
-    const searchType = aiAnalysisWorking ? "ai_enhanced" : "enhanced_text_search";
+    const searchType = aiAnalysisWorking
+      ? "ai_enhanced"
+      : "enhanced_text_search";
     console.log(`✅ Enrichment complete using ${searchType}`);
 
     return {
@@ -304,19 +316,22 @@ async function enrichResultsWithAI(
     console.error("❌ Result enrichment failed:", error);
 
     // Return basic results without enrichment
-    const basicBooks = Array.from(bookGroups.values()).map(bookData => ({
+    const basicBooks = Array.from(bookGroups.values()).map((bookData) => ({
       ...bookData,
       averageRelevance: 50, // Default relevance
-      topChapters: bookData.chapters.slice(0, 3).map(chapter =>
-        createFallbackEnrichment(chapter, query)
-      ),
+      topChapters: bookData.chapters
+        .slice(0, 3)
+        .map((chapter) => createFallbackEnrichment(chapter, query)),
     }));
 
     return {
       query,
       searchType: "basic_search",
       totalBooks: basicBooks.length,
-      totalChapters: basicBooks.reduce((sum, book) => sum + book.topChapters.length, 0),
+      totalChapters: basicBooks.reduce(
+        (sum, book) => sum + book.topChapters.length,
+        0,
+      ),
       books: basicBooks.slice(0, 10),
     };
   }

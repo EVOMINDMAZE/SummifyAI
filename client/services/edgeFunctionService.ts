@@ -10,13 +10,22 @@ class EdgeFunctionService {
 
   private async callFunction(functionName: string, payload: any) {
     try {
-      console.log(`🔄 Calling edge function: ${functionName}`);
-      
+      console.log(`🔄 Attempting to call edge function: ${functionName}`);
+
       const { data, error } = await supabase.functions.invoke(functionName, {
         body: payload,
       });
 
       if (error) {
+        // Check if it's a "function not found" type error
+        if (error.message?.includes('Failed to send a request') ||
+            error.message?.includes('FunctionsFetchError') ||
+            error.message?.includes('not found')) {
+          console.warn(`⚠️ Edge function ${functionName} not deployed. Using fallback mode.`);
+          console.info(`💡 To deploy: supabase functions deploy ${functionName}`);
+          throw new Error('FUNCTION_NOT_DEPLOYED');
+        }
+
         console.error(`❌ Edge function ${functionName} error:`, error);
         throw error;
       }
@@ -25,8 +34,11 @@ class EdgeFunctionService {
       return data;
 
     } catch (error) {
+      if (error.message === 'FUNCTION_NOT_DEPLOYED') {
+        throw error;
+      }
       console.error(`❌ Failed to call edge function ${functionName}:`, error);
-      throw error;
+      throw new Error('FUNCTION_ERROR');
     }
   }
 

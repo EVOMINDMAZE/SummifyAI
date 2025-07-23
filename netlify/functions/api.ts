@@ -384,19 +384,22 @@ async function enrichResultsWithAI(dbResults: any[], query: string) {
 
 // Analyze individual chapter with OpenAI
 async function analyzeChapterWithAI(chapter: any, query: string, openai: any) {
-  const prompt = `Analyze this chapter for relevance to "${query}":
+  const prompt = `As an expert content analyst, analyze this chapter for a user searching for "${query}":
 
 Title: "${chapter.chapter_title}"
-Content: ${chapter.chapter_text.substring(0, 600)}
+Content: ${chapter.chapter_text.substring(0, 800)}
 
-Provide JSON response:
+Provide a JSON response with detailed analysis:
 {
-  "relevanceScore": number (1-100, how relevant to "${query}"),
-  "whyRelevant": "Brief explanation of relevance",
+  "relevanceScore": number (25-100, how relevant this specific chapter is to "${query}"),
+  "whyRelevant": "2-3 sentence explanation of WHY you chose this chapter and HOW it specifically helps with ${query}. Be specific about what the user will learn.",
   "keyTopics": ["topic1", "topic2", "topic3"],
   "coreLeadershipPrinciples": ["principle1", "principle2"],
-  "practicalApplications": ["application1", "application2"]
-}`;
+  "practicalApplications": ["application1", "application2"],
+  "aiExplanation": "Detailed explanation of why this chapter is valuable for someone seeking ${query} knowledge"
+}
+
+Focus on being specific about the practical value and direct relevance to the user's search query.`;
 
   try {
     const response = await openai.chat.completions.create({

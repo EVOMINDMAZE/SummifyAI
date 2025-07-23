@@ -99,93 +99,85 @@ export async function searchDatabase(query: string): Promise<SearchResults> {
     throw new Error("Query parameter is required");
   }
 
-  console.log(`🧠 AI-POWERED SEARCH for: "${query}"`);
+  console.log(`🧠 DATABASE SEARCH for: "${query}"`);
 
   try {
-    // Step 1: Generate OpenAI embeddings for the query
-    console.log("🔄 Step 1: Generating OpenAI embeddings...");
+    // Step 1: Try to generate OpenAI embeddings (optional)
+    console.log("🔄 Step 1: Checking for AI capabilities...");
     const embeddings = await generateQueryEmbeddings(query);
-
-    // Step 2: Search using Supabase client
-    let results: any[] = [];
-    let useVectorSearch = false;
-
-    try {
-      // For now, use simplified text search with Supabase
-      console.log("🔄 Step 2: Searching database with Supabase...");
-
-      const searchTerms = query.trim().toLowerCase().split(/\s+/);
-      const primaryTerm = searchTerms[0];
-
-      // Search chapters and books using Supabase
-      const { data: searchResults, error } = await supabase
-        .from("chapters")
-        .select(
-          `
-          id,
-          chapter_title,
-          chapter_text,
-          book_id,
-          books!inner (
-            id,
-            title,
-            author_name,
-            author,
-            cover_url,
-            isbn_13
-          )
-        `,
-        )
-        .or(
-          `chapter_title.ilike.%${query}%,chapter_text.ilike.%${query}%,books.title.ilike.%${query}%`,
-        )
-        .not("chapter_text", "is", null)
-        .limit(20);
-
-      if (error) {
-        console.error("❌ Supabase search error:", error);
-        throw error;
-      }
-
-      // Transform results to match expected format
-      results = (searchResults || []).map((row: any) => ({
-        id: row.id,
-        chapter_title: row.chapter_title,
-        chapter_text: row.chapter_text?.substring(0, 800) || "", // First 800 chars
-        book_id: row.book_id,
-        book_title: row.books.title,
-        author_name: row.books.author_name || row.books.author,
-        cover_url: row.books.cover_url,
-        isbn_13: row.books.isbn_13,
-        similarity_score: 0.75, // Default similarity score for text search
-      }));
-
-      console.log(`📚 Found ${results.length} chapters from Supabase`);
-
-      // Step 3: Use OpenAI to analyze and enrich the results
-      console.log("🔄 Step 3: Using OpenAI to analyze and enrich results...");
-      const enrichedResults = await enrichResultsWithAI(results, query);
-
-      console.log(
-        `🎯 Returning ${enrichedResults.totalBooks} books with ${enrichedResults.totalChapters} AI-analyzed chapters`,
-      );
-
-      return {
-        ...enrichedResults,
-        searchType: useVectorSearch
-          ? "ai_vector_search"
-          : "enhanced_text_search",
-        processingTime: Date.now() - startTime,
-      };
-    } catch (searchError) {
-      console.error("❌ Search error:", searchError);
-      throw searchError;
+    if (embeddings) {
+      console.log("✅ AI embeddings generated successfully");
+    } else {
+      console.log("⚠️ AI embeddings not available, using text search");
     }
-  } catch (error) {
-    console.error("❌ AI-powered search failed:", error);
-    throw new Error(
-      `AI-powered search failed: ${error instanceof Error ? error.message : "Unknown error"}`,
+
+    // Step 2: Search using Supabase client (this always works)
+    console.log("🔄 Step 2: Searching database with Supabase...");
+
+    // Search chapters and books using Supabase
+    const { data: searchResults, error } = await supabase
+      .from("chapters")
+      .select(
+        `
+        id,
+        chapter_title,
+        chapter_text,
+        book_id,
+        books!inner (
+          id,
+          title,
+          author_name,
+          author,
+          cover_url,
+          isbn_13
+        )
+      `,
+      )
+      .or(
+        `chapter_title.ilike.%${query}%,chapter_text.ilike.%${query}%,books.title.ilike.%${query}%`,
+      )
+      .not("chapter_text", "is", null)
+      .limit(20);
+
+    if (error) {
+      console.error("❌ Supabase search error:", error);
+      throw new Error(`Database search failed: ${error.message}`);
+    }
+
+    // Transform results to match expected format
+    const results = (searchResults || []).map((row: any) => ({
+      id: row.id,
+      chapter_title: row.chapter_title,
+      chapter_text: row.chapter_text?.substring(0, 800) || "", // First 800 chars
+      book_id: row.book_id,
+      book_title: row.books.title,
+      author_name: row.books.author_name || row.books.author,
+      cover_url: row.books.cover_url,
+      isbn_13: row.books.isbn_13,
+      similarity_score: 0.75, // Default similarity score for text search
+    }));
+
+    console.log(`📚 Found ${results.length} chapters from Supabase`);
+
+    // Step 3: Try to enrich with AI (fallback if not available)
+    console.log("🔄 Step 3: Attempting to enrich results with AI...");
+    const enrichedResults = await enrichResultsWithAI(results, query);
+
+    console.log(
+      `🎯 Returning ${enrichedResults.totalBooks} books with ${enrichedResults.totalChapters} chapters`,
     );
+
+    return {
+      ...enrichedResults,
+      searchType: embeddings ? "ai_enhanced_search" : "database_search",
+      processingTime: Date.now() - startTime,
+    };
+  } catch (error) {
+    console.error("❌ Search failed:", error);
+
+    // Provide a more specific error message
+    const errorMessage = error instanceof Error ? error.message : "Unknown error";
+    throw new Error(`Search failed: ${errorMessage}`);
   }
 }
 

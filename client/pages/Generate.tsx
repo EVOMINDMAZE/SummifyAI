@@ -230,6 +230,31 @@ export default function Generate() {
     }
   };
 
+  const inspectSchema = async () => {
+    try {
+      console.log("🔍 Starting schema inspection...");
+      const result = await inspectDatabaseSchema();
+      console.log("📊 Database Schema:", result);
+
+      if (result.error) {
+        alert(`Schema Error: ${result.error}`);
+        return;
+      }
+
+      // Format the output nicely
+      const output = {
+        tables: result.tables || [],
+        schemaDetails: result.schema || {},
+        method: result.method || 'unknown'
+      };
+
+      alert(`Database Schema:\n${JSON.stringify(output, null, 2)}`);
+    } catch (error) {
+      console.error("Schema inspection failed:", error);
+      alert(`Schema inspection failed: ${error}`);
+    }
+  };
+
   const handleBookCardClick = (bookGroup: BookGroup) => {
     console.log(`📖 Viewing details for: ${bookGroup.title}`);
 

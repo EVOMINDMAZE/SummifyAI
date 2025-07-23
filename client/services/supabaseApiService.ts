@@ -1,4 +1,4 @@
-import { getSupabaseClient } from '@/lib/supabase'
+import { supabase } from '@/lib/supabase'
 import type { BookGroup, EnrichedChapter, SearchResults } from '@/lib/supabase'
 
 // Initialize OpenAI (we'll import it when needed to avoid bundling issues)

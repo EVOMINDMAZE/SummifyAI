@@ -101,24 +101,24 @@ export default function OpenAIStatus() {
               <AlertCircle className="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" />
               <div className="space-y-2">
                 <p className="text-sm text-amber-800 dark:text-amber-200">
-                  <strong>Running in Fallback Mode:</strong> Set your OpenAI API key in Netlify environment variables for enhanced AI features.
+                  <strong>Running in Fallback Mode:</strong> Netlify Functions not deployed yet. App is fully functional with basic AI features.
                 </p>
                 <div className="flex gap-2">
                   <Button
                     variant="outline"
                     size="sm"
                     className="text-amber-700 border-amber-300 hover:bg-amber-100"
-                    onClick={() => window.open('https://app.netlify.com/teams/your-team/sites/your-site/configuration/env', '_blank')}
+                    onClick={() => window.open('/NETLIFY_SETUP.md', '_blank')}
                   >
-                    ⚙️ Set API Key
+                    📖 Setup Guide
                   </Button>
                   <Button
                     variant="outline"
                     size="sm"
                     className="text-amber-700 border-amber-300 hover:bg-amber-100"
-                    onClick={() => alert('Add OPENAI_API_KEY to your Netlify environment variables:\n\n1. Go to Netlify Dashboard\n2. Site Settings → Environment Variables\n3. Add: OPENAI_API_KEY = your_api_key\n4. Redeploy your site')}
+                    onClick={() => alert('Deploy Netlify Functions:\n\n1. Push code to main branch (auto-deploys)\n2. Or use Netlify CLI: netlify deploy --prod\n3. Set OPENAI_API_KEY in Netlify env vars\n\nSee NETLIFY_SETUP.md for details')}
                   >
-                    📖 Instructions
+                    🚀 Deploy Guide
                   </Button>
                 </div>
               </div>

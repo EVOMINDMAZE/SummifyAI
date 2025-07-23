@@ -155,8 +155,6 @@ export class GenerateAPI {
 
     poll();
   }
-
-
 }
 
 export type {

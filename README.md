@@ -5,6 +5,7 @@ A serverless React application that uses AI to discover relevant book chapters b
 ## Architecture
 
 This application uses a **serverless-only architecture**:
+
 - **Frontend**: React + Vite for client-side application
 - **Backend**: Netlify Functions for serverless API endpoints
 - **Database**: PostgreSQL with pgvector for AI embeddings
@@ -33,6 +34,7 @@ npm run build
 ## Serverless Functions
 
 All backend logic runs in `/netlify/functions/`:
+
 - `api.ts` - Main API handler for all routes:
   - `GET /api/health` - Health check
   - `GET /api/database?q={query}` - Chapter search with AI analysis
@@ -41,6 +43,7 @@ All backend logic runs in `/netlify/functions/`:
 ## Environment Variables
 
 Required for production:
+
 ```
 DATABASE_URL=postgresql://...
 OPENAI_API_KEY=sk-...
@@ -55,6 +58,7 @@ OPENAI_MODEL=gpt-4o-nano
 ## Deployment
 
 Deploy to Netlify with automatic serverless function deployment:
+
 1. Connect repository to Netlify
 2. Set environment variables
 3. Deploy - functions are automatically deployed to `/.netlify/functions/`

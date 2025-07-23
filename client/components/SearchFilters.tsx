@@ -195,7 +195,7 @@ export default function SearchFilters({
                 <div className="grid grid-cols-2 gap-2 max-h-32 overflow-y-auto">
                   {BOOK_CATEGORIES.map((category) => {
                     const isSelected =
-                      localFilters.bookCategories.includes(category);
+                      (localFilters.bookCategories || []).includes(category);
                     return (
                       <button
                         key={category}

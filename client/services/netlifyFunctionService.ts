@@ -66,11 +66,11 @@ class NetlifyFunctionService {
     }
   }
 
-  // Analyze chapter using Netlify function  
+  // Analyze chapter using Netlify function
   async analyzeChapterWithAI(chapter: any, query: string) {
     try {
       const result = await this.callFunction('/api/analyze-chapter', { chapter, query });
-      
+
       if (result.success) {
         return result.data;
       } else {
@@ -78,8 +78,12 @@ class NetlifyFunctionService {
         return result.data; // Fallback is included in data
       }
     } catch (error) {
-      console.warn('⚠️ Netlify function temporarily unavailable, using fallback');
-      
+      if (error.message === 'FUNCTION_NOT_DEPLOYED') {
+        console.info('📋 Netlify Functions not deployed yet. Using local analysis.');
+      } else {
+        console.warn('⚠️ Netlify function temporarily unavailable, using fallback');
+      }
+
       // Return local fallback
       return this.createFallbackChapterAnalysis(chapter, query);
     }

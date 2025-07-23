@@ -9,7 +9,7 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIU
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
 // Direct PostgreSQL connection for complex queries (vector search, etc.)
-const DATABASE_URL = import.meta.env.VITE_DATABASE_URL || 'postgresql://postgres:yahya3793@db.voosuqmkazvjzheipbrl.supabase.co:5432/postgres'
+const DATABASE_URL = import.meta.env.VITE_DATABASE_URL
 
 export async function getSupabaseClient(): Promise<Client> {
   const client = new Client({

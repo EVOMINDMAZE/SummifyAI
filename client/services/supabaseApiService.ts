@@ -491,6 +491,68 @@ function createFallbackTopicAnalysis(topic: string) {
   };
 }
 
+// Database schema inspection
+export async function inspectDatabaseSchema() {
+  try {
+    console.log("🔍 Inspecting database schema...");
+
+    // Get all tables
+    const { data: tables, error: tablesError } = await supabase.rpc('get_schema_info');
+
+    if (tablesError) {
+      // Fallback: try to get tables using information_schema
+      console.log("📋 Using information_schema fallback...");
+
+      const { data: tableList, error: listError } = await supabase
+        .from('pg_tables')
+        .select('tablename')
+        .eq('schemaname', 'public');
+
+      if (listError) {
+        console.error("❌ Failed to get tables:", listError);
+        return { error: listError.message };
+      }
+
+      console.log("📊 Found tables:", tableList);
+
+      // Get sample data from known tables
+      const knownTables = ['books', 'chapters', 'users', 'summaries', 'chapter_ratings'];
+      const schemaInfo = {};
+
+      for (const tableName of knownTables) {
+        try {
+          const { data: sample, error: sampleError } = await supabase
+            .from(tableName)
+            .select('*')
+            .limit(1);
+
+          if (!sampleError && sample && sample.length > 0) {
+            schemaInfo[tableName] = {
+              exists: true,
+              columns: Object.keys(sample[0]),
+              sampleRow: sample[0]
+            };
+          }
+        } catch (tableError) {
+          console.log(`⚠️ Table ${tableName} might not exist`);
+        }
+      }
+
+      return {
+        method: 'fallback',
+        tables: Object.keys(schemaInfo),
+        schema: schemaInfo
+      };
+    }
+
+    return { method: 'rpc', data: tables };
+
+  } catch (error) {
+    console.error("❌ Schema inspection failed:", error);
+    return { error: error.message };
+  }
+}
+
 // Helper function to extract keywords from text
 function extractKeywords(text: string): string[] {
   const words = text.toLowerCase().match(/\b[a-z]{4,}\b/g) || [];

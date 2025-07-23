@@ -196,83 +196,130 @@ async function enrichResultsWithAI(
     };
   }
 
-  console.log(`🧠 Using OpenAI to analyze ${dbResults.length} chapters...`);
+  console.log(`🔄 Attempting to enrich ${dbResults.length} chapters with AI...`);
 
   // Group chapters by book
   const bookGroups = new Map();
 
-  for (const chapter of dbResults) {
-    if (!bookGroups.has(chapter.book_id)) {
-      bookGroups.set(chapter.book_id, {
-        id: chapter.book_id.toString(),
-        title: chapter.book_title,
-        author: chapter.author_name || "Unknown Author",
-        cover:
-          chapter.cover_url ||
-          `https://via.placeholder.com/300x450/4361EE/FFFFFF?text=${encodeURIComponent(chapter.book_title.slice(0, 20))}`,
-        isbn: chapter.isbn_13 || "",
-        chapters: [],
-      });
+  try {
+    for (const chapter of dbResults) {
+      if (!bookGroups.has(chapter.book_id)) {
+        bookGroups.set(chapter.book_id, {
+          id: chapter.book_id.toString(),
+          title: chapter.book_title,
+          author: chapter.author_name || "Unknown Author",
+          cover:
+            chapter.cover_url ||
+            `https://via.placeholder.com/300x450/4361EE/FFFFFF?text=${encodeURIComponent(chapter.book_title.slice(0, 20))}`,
+          isbn: chapter.isbn_13 || "",
+          chapters: [],
+        });
+      }
+
+      bookGroups.get(chapter.book_id).chapters.push(chapter);
     }
 
-    bookGroups.get(chapter.book_id).chapters.push(chapter);
-  }
+    // Process each book with AI analysis (or fallback)
+    const enrichedBooks: BookGroup[] = [];
+    let aiAnalysisWorking = false;
 
-  // Process each book with AI analysis
-  const enrichedBooks: BookGroup[] = [];
+    for (const [bookId, bookData] of bookGroups) {
+      console.log(`🔍 Processing book: "${bookData.title}"`);
 
-  for (const [bookId, bookData] of bookGroups) {
-    console.log(`🔍 AI analyzing book: "${bookData.title}"`);
+      const enrichedChapters: EnrichedChapter[] = [];
 
-    const enrichedChapters: EnrichedChapter[] = [];
+      // Try AI analysis for first chapter to test if functions are working
+      let useAI = false;
+      if (!aiAnalysisWorking) {
+        try {
+          const testChapter = bookData.chapters[0];
+          const enrichment = await netlifyFunctionService.analyzeChapterWithAI(
+            testChapter,
+            query,
+          );
+          enrichedChapters.push(enrichment);
+          aiAnalysisWorking = true;
+          useAI = true;
+          console.log("✅ AI analysis working, processing remaining chapters...");
+        } catch (error) {
+          console.info("💡 AI analysis not available, using enhanced fallback processing");
+          const fallbackEnrichment = createFallbackEnrichment(bookData.chapters[0], query);
+          enrichedChapters.push(fallbackEnrichment);
+        }
+      }
 
-    // Use Netlify Functions to analyze each chapter
-    for (const chapter of bookData.chapters.slice(0, 5)) {
-      // Top 5 chapters per book
-      console.log(`📄 Processing chapter: "${chapter.chapter_title}"`);
-      try {
-        const enrichment = await netlifyFunctionService.analyzeChapterWithAI(
-          chapter,
-          query,
-        );
-        enrichedChapters.push(enrichment);
-      } catch (error) {
-        console.warn(
-          `⚠️ Netlify Function analysis failed for chapter "${chapter.chapter_title}", using fallback:`,
-          error,
-        );
-        const fallbackEnrichment = createFallbackEnrichment(chapter, query);
-        enrichedChapters.push(fallbackEnrichment);
+      // Process remaining chapters based on AI availability
+      for (const chapter of bookData.chapters.slice(1, 5)) {
+        // Top 5 chapters per book
+        if (useAI && aiAnalysisWorking) {
+          try {
+            const enrichment = await netlifyFunctionService.analyzeChapterWithAI(
+              chapter,
+              query,
+            );
+            enrichedChapters.push(enrichment);
+          } catch (error) {
+            // If AI fails mid-process, fall back
+            const fallbackEnrichment = createFallbackEnrichment(chapter, query);
+            enrichedChapters.push(fallbackEnrichment);
+          }
+        } else {
+          // Use fallback processing
+          const fallbackEnrichment = createFallbackEnrichment(chapter, query);
+          enrichedChapters.push(fallbackEnrichment);
+        }
+      }
+
+      if (enrichedChapters.length > 0) {
+        enrichedBooks.push({
+          ...bookData,
+          averageRelevance: Math.round(
+            enrichedChapters.reduce((sum, ch) => sum + ch.relevanceScore, 0) /
+              enrichedChapters.length,
+          ),
+          topChapters: enrichedChapters,
+        });
       }
     }
 
-    if (enrichedChapters.length > 0) {
-      enrichedBooks.push({
-        ...bookData,
-        averageRelevance: Math.round(
-          enrichedChapters.reduce((sum, ch) => sum + ch.relevanceScore, 0) /
-            enrichedChapters.length,
-        ),
-        topChapters: enrichedChapters,
-      });
-    }
+    // Sort books by relevance
+    enrichedBooks.sort((a, b) => b.averageRelevance - a.averageRelevance);
+
+    const totalChapters = enrichedBooks.reduce(
+      (sum, book) => sum + book.topChapters.length,
+      0,
+    );
+
+    const searchType = aiAnalysisWorking ? "ai_enhanced" : "enhanced_text_search";
+    console.log(`✅ Enrichment complete using ${searchType}`);
+
+    return {
+      query,
+      searchType,
+      totalBooks: enrichedBooks.length,
+      totalChapters,
+      books: enrichedBooks.slice(0, 10), // Top 10 books
+    };
+  } catch (error) {
+    console.error("❌ Result enrichment failed:", error);
+
+    // Return basic results without enrichment
+    const basicBooks = Array.from(bookGroups.values()).map(bookData => ({
+      ...bookData,
+      averageRelevance: 50, // Default relevance
+      topChapters: bookData.chapters.slice(0, 3).map(chapter =>
+        createFallbackEnrichment(chapter, query)
+      ),
+    }));
+
+    return {
+      query,
+      searchType: "basic_search",
+      totalBooks: basicBooks.length,
+      totalChapters: basicBooks.reduce((sum, book) => sum + book.topChapters.length, 0),
+      books: basicBooks.slice(0, 10),
+    };
   }
-
-  // Sort books by relevance
-  enrichedBooks.sort((a, b) => b.averageRelevance - a.averageRelevance);
-
-  const totalChapters = enrichedBooks.reduce(
-    (sum, book) => sum + book.topChapters.length,
-    0,
-  );
-
-  return {
-    query,
-    searchType: "ai_vector_search",
-    totalBooks: enrichedBooks.length,
-    totalChapters,
-    books: enrichedBooks.slice(0, 10), // Top 10 books
-  };
 }
 
 // Chapter analysis is now handled by Edge Functions

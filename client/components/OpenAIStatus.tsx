@@ -96,22 +96,32 @@ export default function OpenAIStatus() {
         </div>
 
         {needsSetup && (
-          <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-3">
+          <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3">
             <div className="flex items-start space-x-2">
-              <AlertCircle className="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" />
+              <AlertCircle className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
               <div className="space-y-2">
-                <p className="text-sm text-amber-800 dark:text-amber-200">
-                  <strong>OpenAI Setup Required:</strong> To enable AI-powered search analysis, add your OpenAI API key to the <code>.env</code> file.
+                <p className="text-sm text-blue-800 dark:text-blue-200">
+                  <strong>AI Features in Fallback Mode:</strong> The app works without OpenAI, but you'll get enhanced AI analysis with an API key.
                 </p>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="text-amber-700 border-amber-300 hover:bg-amber-100"
-                  onClick={() => window.open('https://platform.openai.com/api-keys', '_blank')}
-                >
-                  <ExternalLink className="w-3 h-3 mr-1" />
-                  Get API Key
-                </Button>
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-blue-700 border-blue-300 hover:bg-blue-100"
+                    onClick={() => window.open('https://platform.openai.com/api-keys', '_blank')}
+                  >
+                    <ExternalLink className="w-3 h-3 mr-1" />
+                    Get API Key
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-blue-700 border-blue-300 hover:bg-blue-100"
+                    onClick={() => window.open('/OPENAI_SETUP_GUIDE.md', '_blank')}
+                  >
+                    📖 Setup Guide
+                  </Button>
+                </div>
               </div>
             </div>
           </div>

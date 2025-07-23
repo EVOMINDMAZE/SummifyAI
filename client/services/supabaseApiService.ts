@@ -46,6 +46,9 @@ export async function healthCheck(): Promise<{
         console.info(
           "🚀 To deploy: Push to main branch or run 'netlify deploy --prod'",
         );
+      } else if (error.message === "FUNCTION_NOT_AVAILABLE") {
+        console.info("🔧 Development mode: Netlify Functions not running locally.");
+        console.info('💡 For local functions: Run "netlify dev" instead of "npm run dev"');
       } else {
         console.warn(
           "⚠️ Netlify Functions temporarily unavailable, using fallback mode",

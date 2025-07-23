@@ -855,6 +855,27 @@ export default function Generate() {
 
         {/* Logs Viewer */}
         <LogsViewer isOpen={showLogs} onClose={() => setShowLogs(false)} />
+
+        {/* Deployment Wizard */}
+        {showDeploymentWizard && (
+          <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+            <div className="bg-white dark:bg-gray-800 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-auto">
+              <div className="p-4 border-b flex justify-between items-center">
+                <h2 className="text-lg font-semibold">Deploy Edge Functions</h2>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setShowDeploymentWizard(false)}
+                >
+                  ✕
+                </Button>
+              </div>
+              <div className="p-4">
+                <DeploymentWizard />
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -40,6 +40,14 @@ class NetlifyFunctionService {
       if (error.message === "FUNCTION_NOT_DEPLOYED") {
         throw error;
       }
+
+      // Handle network errors (like "Failed to fetch" in dev mode)
+      if (error instanceof TypeError && error.message.includes('Failed to fetch')) {
+        console.warn(`⚠️ Netlify functions not available (development mode or network issue)`);
+        console.info(`💡 For local testing: Run 'netlify dev' or deploy functions`);
+        throw new Error("FUNCTION_NOT_AVAILABLE");
+      }
+
       console.error(
         `❌ Failed to call Netlify function ${functionPath}:`,
         error,

@@ -46,7 +46,7 @@ class EdgeFunctionService {
   async analyzeTopicWithAI(topic: string) {
     try {
       const result = await this.callFunction('analyze-topic', { topic });
-      
+
       if (result.success) {
         return result.data;
       } else {
@@ -54,7 +54,13 @@ class EdgeFunctionService {
         return result.fallback;
       }
     } catch (error) {
-      console.error('❌ Topic analysis edge function failed:', error);
+      if (error.message === 'FUNCTION_NOT_DEPLOYED') {
+        console.info('📋 Edge Functions not deployed yet. Using local analysis.');
+        console.info('🚀 Deploy with: supabase functions deploy analyze-topic');
+      } else {
+        console.warn('⚠️ Edge function temporarily unavailable, using fallback');
+      }
+
       // Return local fallback
       return this.createFallbackTopicAnalysis(topic);
     }

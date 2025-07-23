@@ -145,6 +145,9 @@ class NetlifyFunctionService {
         console.info(
           "🚀 Deploy by pushing to main branch or using Netlify CLI",
         );
+      } else if (error.message === "FUNCTION_NOT_AVAILABLE") {
+        console.info("🔧 Development mode: Embeddings not available locally.");
+        console.info('💡 To test functions locally: Run "netlify dev"');
       } else {
         console.warn("⚠️ Embeddings temporarily unavailable");
       }

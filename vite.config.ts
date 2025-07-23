@@ -6,7 +6,7 @@ import path from "path";
 export default defineConfig(({ mode }) => {
   // Load env file based on `mode` in the current working directory.
   // Set the third parameter to '' to load all env regardless of the `VITE_` prefix.
-  const env = loadEnv(mode, process.cwd(), '')
+  const env = loadEnv(mode, process.cwd(), "");
 
   return {
     server: {
@@ -24,11 +24,21 @@ export default defineConfig(({ mode }) => {
     },
     // Make environment variables available to the client
     define: {
-      'import.meta.env.VITE_SUPABASE_URL': JSON.stringify(env.VITE_SUPABASE_URL),
-      'import.meta.env.VITE_SUPABASE_ANON_KEY': JSON.stringify(env.VITE_SUPABASE_ANON_KEY),
-      'import.meta.env.VITE_DATABASE_URL': JSON.stringify(env.VITE_DATABASE_URL),
-      'import.meta.env.VITE_OPENAI_API_KEY': JSON.stringify(env.VITE_OPENAI_API_KEY),
-      'import.meta.env.VITE_OPENAI_MODEL': JSON.stringify(env.VITE_OPENAI_MODEL),
-    }
-  }
+      "import.meta.env.VITE_SUPABASE_URL": JSON.stringify(
+        env.VITE_SUPABASE_URL,
+      ),
+      "import.meta.env.VITE_SUPABASE_ANON_KEY": JSON.stringify(
+        env.VITE_SUPABASE_ANON_KEY,
+      ),
+      "import.meta.env.VITE_DATABASE_URL": JSON.stringify(
+        env.VITE_DATABASE_URL,
+      ),
+      "import.meta.env.VITE_OPENAI_API_KEY": JSON.stringify(
+        env.VITE_OPENAI_API_KEY,
+      ),
+      "import.meta.env.VITE_OPENAI_MODEL": JSON.stringify(
+        env.VITE_OPENAI_MODEL,
+      ),
+    },
+  };
 });

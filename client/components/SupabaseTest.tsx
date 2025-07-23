@@ -1,31 +1,31 @@
-import React, { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { healthCheck } from '@/services/supabaseApiService'
+import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { healthCheck } from "@/services/supabaseApiService";
 
 export default function SupabaseTest() {
-  const [testResult, setTestResult] = useState<any>(null)
-  const [isLoading, setIsLoading] = useState(false)
+  const [testResult, setTestResult] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const runTest = async () => {
-    setIsLoading(true)
-    setTestResult(null)
+    setIsLoading(true);
+    setTestResult(null);
 
     try {
-      console.log('🧪 Testing Supabase connection...')
-      const result = await healthCheck()
-      setTestResult(result)
-      console.log('✅ Supabase test completed:', result)
+      console.log("🧪 Testing Supabase connection...");
+      const result = await healthCheck();
+      setTestResult(result);
+      console.log("✅ Supabase test completed:", result);
     } catch (error) {
-      console.error('❌ Supabase test failed:', error)
-      setTestResult({ 
-        error: error instanceof Error ? error.message : 'Unknown error',
-        status: 'failed'
-      })
+      console.error("❌ Supabase test failed:", error);
+      setTestResult({
+        error: error instanceof Error ? error.message : "Unknown error",
+        status: "failed",
+      });
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
     <Card className="w-full max-w-md">
@@ -33,12 +33,8 @@ export default function SupabaseTest() {
         <CardTitle>🧪 Supabase Connection Test</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        <Button 
-          onClick={runTest} 
-          disabled={isLoading}
-          className="w-full"
-        >
-          {isLoading ? 'Testing...' : 'Test Supabase Connection'}
+        <Button onClick={runTest} disabled={isLoading} className="w-full">
+          {isLoading ? "Testing..." : "Test Supabase Connection"}
         </Button>
 
         {testResult && (
@@ -59,5 +55,5 @@ export default function SupabaseTest() {
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

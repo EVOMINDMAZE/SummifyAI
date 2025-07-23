@@ -7,7 +7,11 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { searchDatabase, analyzeTopicWithAI, healthCheck } from "@/services/supabaseApiService";
+import {
+  searchDatabase,
+  analyzeTopicWithAI,
+  healthCheck,
+} from "@/services/supabaseApiService";
 import type { SearchResults as SupabaseSearchResults } from "@/lib/supabase";
 import {
   BookOpen,
@@ -89,9 +93,8 @@ export default function Generate() {
   const [topic, setTopic] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [searchResults, setSearchResults] = useState<SupabaseSearchResults | null>(
-    null,
-  );
+  const [searchResults, setSearchResults] =
+    useState<SupabaseSearchResults | null>(null);
   const [generatedSummary, setGeneratedSummary] = useState<string | null>(null);
   const [currentOperation, setCurrentOperation] = useState("");
   const [topicAnalysis, setTopicAnalysis] = useState<TopicAnalysis | null>(

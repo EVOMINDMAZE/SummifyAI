@@ -176,7 +176,7 @@ export default function Generate() {
       const data = await searchDatabase(searchQuery);
 
       console.log(
-        `�� Found ${data.totalBooks} books with ${data.totalChapters} relevant chapters using ${data.searchType}`,
+        `🎯 Found ${data.totalBooks} books with ${data.totalChapters} relevant chapters using ${data.searchType}`,
       );
 
       // Set the new search results for grid display
@@ -446,6 +446,13 @@ export default function Generate() {
                       className="h-14 px-4 border-2 border-blue-300 text-blue-700 hover:bg-blue-50"
                     >
                       📊 Schema
+                    </Button>
+                    <Button
+                      onClick={() => setShowLogs(true)}
+                      variant="outline"
+                      className="h-14 px-4 border-2 border-purple-300 text-purple-700 hover:bg-purple-50"
+                    >
+                      📋 Logs
                     </Button>
                   </div>
 

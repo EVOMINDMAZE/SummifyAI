@@ -9,6 +9,10 @@
     "typecheck": "tsc"
   },
   "dependencies": {
+    "@radix-ui/react-dialog": "^1.1.2",
+    "@radix-ui/react-select": "^2.1.1",
+    "@radix-ui/react-toast": "^1.2.1",
+    "@radix-ui/react-tooltip": "^1.1.4",
     "@react-pdf/renderer": "^4.3.0",
     "@stripe/react-stripe-js": "^3.7.0",
     "@stripe/stripe-js": "^7.5.0",
@@ -24,14 +28,11 @@
     "shepherd.js": "^14.5.0",
     "socket.io-client": "^4.8.1",
     "speakeasy": "^2.0.0",
-    "zod": "^3.23.8",
-    "@radix-ui/react-dialog": "^1.1.2",
-    "@radix-ui/react-select": "^2.1.1",
-    "@radix-ui/react-toast": "^1.2.1",
-    "@radix-ui/react-tooltip": "^1.1.4"
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@hookform/resolvers": "^3.9.0",
+    "@netlify/functions": "^4.1.15",
     "@radix-ui/react-accordion": "^1.2.0",
     "@radix-ui/react-alert-dialog": "^1.1.1",
     "@radix-ui/react-aspect-ratio": "^1.1.0",

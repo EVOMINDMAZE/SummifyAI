@@ -83,10 +83,10 @@ export async function generateQueryEmbeddings(
   query: string,
 ): Promise<number[] | null> {
   try {
-    console.log(`🧠 Calling Netlify Function for embeddings: "${query}"`);
+    console.log(`🧠 Attempting to generate embeddings for: "${query}"`);
     return await netlifyFunctionService.generateEmbeddings(query);
   } catch (error) {
-    console.error("❌ Netlify Function embeddings failed:", error);
+    console.info("💡 Embeddings not available (AI functions not deployed), continuing with text search");
     return null;
   }
 }

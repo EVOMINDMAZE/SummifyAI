@@ -40,6 +40,8 @@ import SearchFilters, {
 } from "@/components/SearchFilters";
 import AIRelevanceScore from "@/components/AIRelevanceScore";
 import OpenAIStatus from "@/components/OpenAIStatus";
+import LogsViewer from "@/components/LogsViewer";
+import { logCapture } from "@/utils/logCapture";
 
 // Interface definitions
 interface EnrichedChapter {

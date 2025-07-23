@@ -93,7 +93,7 @@ class NetlifyFunctionService {
   async generateEmbeddings(query: string): Promise<number[] | null> {
     try {
       const result = await this.callFunction('/api/generate-embeddings', { query });
-      
+
       if (result.success && result.data?.embedding) {
         console.log(`🧠 Generated embeddings: ${result.data.dimensions} dimensions`);
         return result.data.embedding;
@@ -102,7 +102,12 @@ class NetlifyFunctionService {
         return null;
       }
     } catch (error) {
-      console.warn('⚠️ Embeddings temporarily unavailable');
+      if (error.message === 'FUNCTION_NOT_DEPLOYED') {
+        console.info('📋 Netlify Functions not deployed yet. Embeddings unavailable.');
+        console.info('🚀 Deploy by pushing to main branch or using Netlify CLI');
+      } else {
+        console.warn('⚠️ Embeddings temporarily unavailable');
+      }
       return null;
     }
   }

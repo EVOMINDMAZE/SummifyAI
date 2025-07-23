@@ -70,14 +70,6 @@ interface BookGroup {
   chapterRelevanceScore?: number;
 }
 
-interface SearchResults {
-  query: string;
-  searchType: string;
-  totalBooks: number;
-  totalChapters: number;
-  books: BookGroup[];
-}
-
 interface TopicAnalysis {
   isBroad: boolean;
   explanation: string;

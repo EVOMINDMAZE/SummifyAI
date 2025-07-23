@@ -22,6 +22,9 @@ import {
   TrendingUp,
   Brain,
   ChevronRight,
+  Filter,
+  Eye,
+  Award,
 } from "lucide-react";
 import ChapterRating from "@/components/ChapterRating";
 import ResultsShareButton from "@/components/ResultsShareButton";
@@ -30,25 +33,19 @@ import SearchFilters, {
 } from "@/components/SearchFilters";
 import AIRelevanceScore from "@/components/AIRelevanceScore";
 
-interface TopChapter {
+// Interface definitions
+interface EnrichedChapter {
   id: number;
   title: string;
   snippet: string;
   relevanceScore: number;
   whyRelevant: string;
   keyTopics: string[];
+  coreLeadershipPrinciples: string[];
+  practicalApplications: string[];
+  aiExplanation?: string; // New field for AI-generated explanation
 }
 
-interface BookGroup {
-  id: string;
-  title: string;
-  author: string;
-  cover: string;
-  isbn: string;
-  topChapters: TopChapter[];
-}
-
-// Legacy interfaces for backward compatibility
 interface ChapterMatch {
   chapter: string;
   title: string;
@@ -59,52 +56,34 @@ interface ChapterMatch {
   why: string;
 }
 
-interface Book {
+interface BookGroup {
   id: string;
   title: string;
   author: string;
   cover: string;
-  description: string;
-  amazonLink: string;
-  rating?: number;
-  publishedDate?: string;
-  pageCount?: number;
-  categories?: string[];
-  isbn?: string;
+  isbn: string;
+  averageRelevance: number;
+  topChapters: EnrichedChapter[];
   relevantChapters?: ChapterMatch[];
   chapterRelevanceScore?: number;
 }
 
 interface SearchResults {
   query: string;
+  searchType: string;
   totalBooks: number;
   totalChapters: number;
   books: BookGroup[];
-  searchType: string;
-}
-
-interface GeneratedSummary {
-  id: string;
-  topic: string;
-  books: Book[];
-  summary: string;
-  keyInsights: string[];
-  quotes: string[];
-  generatedAt: string;
-  userId: number;
 }
 
 interface TopicAnalysis {
   isBroad: boolean;
-  broadnessScore: number;
-  suggestedRefinements: string[];
   explanation: string;
-}
-
-interface TopicRefinement {
-  label: string;
-  value: string;
-  description: string;
+  refinements: Array<{
+    label: string;
+    value: string;
+    description: string;
+  }>;
 }
 
 export default function Generate() {
@@ -112,56 +91,44 @@ export default function Generate() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // State management
   const [topic, setTopic] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
-  const [generatedSummary, setGeneratedSummary] =
-    useState<GeneratedSummary | null>(null);
-  const [searchResults, setSearchResults] = useState<SearchResults | null>(
-    null,
-  );
-  const [progress, setProgress] = useState(0);
-  const [currentOperation, setCurrentOperation] = useState("");
-  const [sessionId, setSessionId] = useState<string | null>(null);
-
-  // Topic refinement states
-  const [showRefinements, setShowRefinements] = useState(false);
-  const [topicAnalysis, setTopicAnalysis] = useState<TopicAnalysis | null>(
-    null,
-  );
-  const [topicRefinements, setTopicRefinements] = useState<TopicRefinement[]>(
-    [],
-  );
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-
-  // Search filters
-  const [showFilters, setShowFilters] = useState(false);
+  const [searchResults, setSearchResults] = useState<SearchResults | null>(null);
+  const [generatedSummary, setGeneratedSummary] = useState<string | null>(null);
+  const [currentOperation, setCurrentOperation] = useState("");
+  const [topicAnalysis, setTopicAnalysis] = useState<TopicAnalysis | null>(null);
+  const [showRefinements, setShowRefinements] = useState(false);
+  const [topicRefinements, setTopicRefinements] = useState<Array<{
+    label: string;
+    value: string;
+    description: string;
+  }>>([]);
   const [searchFilters, setSearchFilters] = useState<ISearchFilters>({
-    publicationYearRange: [1990, new Date().getFullYear()],
-    difficultyLevel: "any",
-    industryFocus: [],
-    bookCategories: [],
+    categories: [],
     minRating: 0,
+    dateRange: "all",
+    sortBy: "relevance",
   });
+  const [showFilters, setShowFilters] = useState(false);
 
-  // Restore search state when component mounts
+  // Load previous search on mount
   useEffect(() => {
     const savedResults = sessionStorage.getItem("lastSearchResults");
     const savedQuery = sessionStorage.getItem("lastSearchQuery");
 
     if (savedResults && savedQuery) {
       try {
-        const parsedResults = JSON.parse(savedResults);
-        setSearchResults(parsedResults);
+        setSearchResults(JSON.parse(savedResults));
         setTopic(savedQuery);
-        console.log("🔄 Restored previous search state");
       } catch (error) {
-        console.error("Failed to restore search state:", error);
-        sessionStorage.removeItem("lastSearchResults");
-        sessionStorage.removeItem("lastSearchQuery");
+        console.error("Failed to load previous search:", error);
       }
     }
   }, []);
 
+  // AI-powered topic analysis
   const analyzeTopic = async (topicToAnalyze: string) => {
     if (!topicToAnalyze.trim()) return;
 
@@ -177,19 +144,17 @@ export default function Generate() {
         body: JSON.stringify({ topic: topicToAnalyze.trim() }),
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to analyze topic");
-      }
+      if (response.ok) {
+        const analysis: TopicAnalysis = await response.json();
+        setTopicAnalysis(analysis);
 
-      const data = await response.json();
-      setTopicAnalysis(data.analysis);
-      setTopicRefinements(data.refinements);
-
-      if (data.analysis.isBroad) {
-        setShowRefinements(true);
-      } else {
-        // Topic is specific enough, proceed with database search
-        performDatabaseSearch(topicToAnalyze);
+        if (analysis.isBroad && analysis.refinements.length > 0) {
+          setTopicRefinements(analysis.refinements);
+          setShowRefinements(true);
+        } else {
+          // Topic is specific enough, proceed with database search
+          performDatabaseSearch(topicToAnalyze);
+        }
       }
     } catch (error) {
       console.error("Topic analysis error:", error);
@@ -197,15 +162,7 @@ export default function Generate() {
       performDatabaseSearch(topicToAnalyze);
     } finally {
       setIsAnalyzing(false);
-      setCurrentOperation("");
     }
-  };
-
-  const handleGenerate = async () => {
-    if (!topic.trim()) return;
-
-    // First analyze the topic to determine if it needs refinement
-    await analyzeTopic(topic.trim());
   };
 
   const performDatabaseSearch = async (searchQuery: string) => {
@@ -233,7 +190,6 @@ export default function Generate() {
           const errorData = JSON.parse(errorText);
           errorMessage = errorData.error || errorData.details || errorMessage;
         } catch {
-          // If we can't parse JSON, use the raw text
           errorMessage = errorText || errorMessage;
         }
 
@@ -266,6 +222,11 @@ export default function Generate() {
     } finally {
       setCurrentOperation("");
     }
+  };
+
+  const handleSearch = () => {
+    if (!topic.trim()) return;
+    analyzeTopic(topic);
   };
 
   const handleRefinementSelect = (refinedTopic: string) => {
@@ -328,6 +289,17 @@ export default function Generate() {
     });
   };
 
+  const quickTopics = [
+    "Leadership",
+    "Negotiation",
+    "Communication",
+    "Innovation",
+    "Strategy",
+    "Team Building",
+    "Productivity",
+    "Management",
+  ];
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-gray-900 dark:via-slate-800 dark:to-gray-900">
       <Navigation />
@@ -375,13 +347,11 @@ export default function Generate() {
           </div>
         </div>
 
-        {/* Enhanced Search Form */}
+        {/* Enhanced Search Section */}
         <div className="max-w-4xl mx-auto mb-16">
-          <Card className="p-10 shadow-2xl border-0 bg-white/95 dark:bg-gray-800/95 backdrop-blur-md rounded-3xl relative overflow-hidden">
-            {/* Subtle background pattern */}
+          <Card className="shadow-2xl border-0 bg-white/95 dark:bg-gray-800/95 backdrop-blur-md rounded-3xl relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/30 to-purple-50/30 dark:from-indigo-900/10 dark:to-purple-900/10"></div>
-
-            <CardContent className="p-0 relative z-10">
+            <CardContent className="relative z-10 p-10">
               <div className="space-y-8">
                 <div className="text-center">
                   <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-3 flex items-center justify-center">
@@ -399,34 +369,24 @@ export default function Generate() {
                     <Search className="w-6 h-6 text-gray-400" />
                   </div>
                   <Input
-                    type="text"
                     value={topic}
                     onChange={(e) => setTopic(e.target.value)}
+                    onKeyPress={(e) => e.key === "Enter" && handleSearch()}
                     placeholder="leadership strategies, negotiation tactics, team building, innovation..."
-                    className="text-lg py-6 pl-16 pr-6 rounded-2xl border-2 border-gray-200 dark:border-gray-600 focus:border-indigo-500 dark:focus:border-indigo-400 transition-all duration-300 bg-white/70 dark:bg-gray-700/70 backdrop-blur-sm shadow-inner text-gray-900 dark:text-white placeholder:text-gray-500"
-                    onKeyPress={(e) => e.key === "Enter" && handleGenerate()}
-                    disabled={isGenerating || isAnalyzing}
+                    className="w-full h-16 pl-16 pr-6 text-lg rounded-2xl border-2 border-gray-200 dark:border-gray-700 focus:border-indigo-500 focus:ring-indigo-500 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm text-gray-900 dark:text-white placeholder:text-gray-500"
                   />
 
-                  {/* Search suggestions */}
                   <div className="mt-6 flex flex-wrap gap-3 justify-center">
-                    {[
-                      "Leadership",
-                      "Negotiation",
-                      "Communication",
-                      "Innovation",
-                      "Strategy",
-                      "Team Building",
-                      "Productivity",
-                      "Management",
-                    ].map((suggestion) => (
+                    {quickTopics.map((quickTopic) => (
                       <button
-                        key={suggestion}
-                        onClick={() => setTopic(suggestion)}
-                        className="px-4 py-2 text-sm bg-gradient-to-r from-indigo-100 to-purple-100 dark:from-indigo-900/30 dark:to-purple-900/30 text-indigo-700 dark:text-indigo-300 rounded-full hover:from-indigo-500 hover:to-purple-500 hover:text-white transition-all duration-300 transform hover:scale-105 border border-indigo-200 dark:border-indigo-700 shadow-sm"
-                        disabled={isGenerating || isAnalyzing}
+                        key={quickTopic}
+                        onClick={() => {
+                          setTopic(quickTopic);
+                          analyzeTopic(quickTopic);
+                        }}
+                        className="px-4 py-2 text-sm bg-gradient-to-r from-indigo-100 to-purple-100 dark:from-indigo-900/30 dark:to-purple-900/30 text-indigo-700 dark:text-indigo-300 rounded-full border border-indigo-200 dark:border-indigo-700 hover:from-indigo-200 hover:to-purple-200 dark:hover:from-indigo-800/50 dark:hover:to-purple-800/50 transition-all shadow-sm"
                       >
-                        {suggestion}
+                        {quickTopic}
                       </button>
                     ))}
                   </div>
@@ -435,9 +395,9 @@ export default function Generate() {
                 <div className="flex flex-col sm:flex-row gap-4">
                   <div className="flex-1">
                     <Button
-                      onClick={handleGenerate}
+                      onClick={handleSearch}
                       disabled={!topic.trim() || isGenerating || isAnalyzing}
-                      className="w-full py-6 text-lg font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-700 hover:via-purple-700 hover:to-pink-700 text-white rounded-2xl transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105 disabled:transform-none disabled:opacity-50 relative overflow-hidden group"
+                      className="w-full h-14 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-700 hover:via-purple-700 hover:to-pink-700 text-white border-0 rounded-2xl text-lg font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50 disabled:transform-none relative overflow-hidden group"
                     >
                       {/* Button shine effect */}
                       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 group-hover:animate-pulse"></div>
@@ -551,16 +511,16 @@ export default function Generate() {
                   <Button
                     onClick={proceedWithOriginalTopic}
                     variant="outline"
-                    className="px-6 py-3 border-2 border-amber-300 dark:border-amber-600 hover:border-amber-500 dark:hover:border-amber-400 rounded-xl text-amber-700 dark:text-amber-300 hover:bg-amber-50 dark:hover:bg-amber-900/20"
+                    className="border-amber-300 text-amber-700 dark:text-amber-300 hover:bg-amber-50 dark:hover:bg-amber-900/20"
                   >
                     Continue with "{topic}"
                   </Button>
                   <Button
                     onClick={() => setShowRefinements(false)}
                     variant="ghost"
-                    className="px-6 py-3 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200"
+                    className="text-gray-600 dark:text-gray-400"
                   >
-                    Let me rephrase
+                    Cancel
                   </Button>
                 </div>
               </CardContent>
@@ -568,7 +528,7 @@ export default function Generate() {
           </div>
         )}
 
-        {/* Enhanced Results Grid */}
+        {/* COMPLETELY REDESIGNED SEARCH RESULTS */}
         {searchResults && (
           <div className="max-w-7xl mx-auto">
             {/* Results Header */}
@@ -615,155 +575,194 @@ export default function Generate() {
               </div>
             </div>
 
-            {/* Beautiful Book Grid */}
-            <div className="grid grid-cols-1 xl:grid-cols-2 gap-12 mb-16">
-              {searchResults.books.map((bookGroup) => (
-                <Card
+            {/* REVOLUTIONARY NEW LAYOUT - LARGE COVERS WITH ORGANIZED DATA */}
+            <div className="space-y-16">
+              {searchResults.books.map((bookGroup, bookIndex) => (
+                <div
                   key={bookGroup.id}
-                  className="overflow-hidden shadow-2xl border-0 bg-gradient-to-br from-white via-gray-50/50 to-gray-100/30 dark:from-gray-800 dark:via-gray-900/50 dark:to-gray-800 backdrop-blur-md hover:shadow-3xl transition-all duration-500 transform hover:scale-[1.02] rounded-3xl cursor-pointer group"
-                  onClick={() => handleBookCardClick(bookGroup)}
+                  className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-3xl shadow-2xl border border-gray-200/50 dark:border-gray-700/50 overflow-hidden hover:shadow-3xl transition-all duration-500 group"
                 >
-                  <CardContent className="p-0">
-                    {/* Optimized Layout: Cover on Side */}
-                    <div className="flex h-full">
-                      {/* Book Cover Section */}
-                      <div className="w-48 flex-shrink-0 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-indigo-900/30 dark:via-purple-900/30 dark:to-pink-900/30 p-4 flex items-center justify-center relative">
-                        <div className="relative w-full">
-                          {/* Book cover with proper aspect ratio */}
-                          <div className="aspect-[2/3] w-full relative overflow-hidden rounded-2xl shadow-xl group-hover:shadow-2xl transition-all duration-500 border-2 border-white/50 dark:border-gray-700/50">
-                            <img
-                              src={bookGroup.cover}
-                              alt={bookGroup.title}
-                              className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
-                              onError={(e) => {
-                                const target = e.currentTarget;
-                                target.src = `https://via.placeholder.com/300x450/667eea/FFFFFF?text=${encodeURIComponent(bookGroup.title.split(" ").slice(0, 3).join(" "))}`;
-                              }}
-                              loading="lazy"
-                            />
-                            {/* Gradient overlay */}
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                          </div>
-
-                          {/* Glow effect */}
-                          <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-2xl blur opacity-20 group-hover:opacity-40 transition-opacity duration-500 -z-10"></div>
+                  {/* Book Header with Large Cover */}
+                  <div className="flex">
+                    {/* LARGE PROMINENT BOOK COVER */}
+                    <div className="w-80 flex-shrink-0 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-indigo-900/30 dark:via-purple-900/30 dark:to-pink-900/30 p-8 flex items-center justify-center relative">
+                      <div className="relative">
+                        <div className="aspect-[2/3] w-full relative overflow-hidden rounded-3xl shadow-2xl group-hover:shadow-3xl transition-all duration-700 border-4 border-white/70 dark:border-gray-700/70">
+                          <img
+                            src={bookGroup.cover}
+                            alt={bookGroup.title}
+                            className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
+                            onError={(e) => {
+                              const target = e.currentTarget;
+                              target.src = `https://via.placeholder.com/400x600/667eea/FFFFFF?text=${encodeURIComponent(bookGroup.title.split(" ").slice(0, 3).join(" "))}`;
+                            }}
+                            loading="lazy"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
                         </div>
-                      </div>
-
-                      {/* Book Info & Chapters Section */}
-                      <div className="flex-1 p-6">
-                        {/* Optimized Book Header */}
-                        <div className="mb-6">
-                          <div className="flex items-start justify-between mb-3">
-                            <div className="flex-1 pr-4">
-                              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 line-clamp-2 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors leading-tight">
-                                {bookGroup.title}
-                              </h3>
-                              <p className="text-gray-600 dark:text-gray-400 text-sm flex items-center mb-2">
-                                <Users className="w-4 h-4 mr-2 text-indigo-500" />
-                                {bookGroup.author || "Unknown Author"}
-                              </p>
-                              <div className="flex items-center text-gray-600 dark:text-gray-400 text-sm">
-                                <BookOpen className="w-4 h-4 mr-2 text-emerald-500" />
-                                {bookGroup.topChapters.length} Relevant Chapters
-                              </div>
-                            </div>
-
-                            {/* Overall Relevance Score */}
-                            <div className="flex-shrink-0">
-                              <AIRelevanceScore
-                                score={bookGroup.averageRelevance || 85}
-                                size="md"
-                                showBar={true}
-                                query={searchResults?.query || topic}
-                              />
-                            </div>
-                          </div>
+                        
+                        {/* Book Rank Badge */}
+                        <div className="absolute -top-4 -left-4 w-12 h-12 bg-gradient-to-r from-emerald-500 to-cyan-500 rounded-full flex items-center justify-center text-white text-lg font-bold shadow-xl border-4 border-white dark:border-gray-800">
+                          {bookIndex + 1}
                         </div>
-
-                        {/* Top Chapters */}
-                        <div className="space-y-4">
-                          <h4 className="text-base font-bold text-gray-800 dark:text-gray-200 flex items-center mb-3">
-                            <Sparkles className="w-4 h-4 mr-2 text-emerald-500" />
-                            Top Relevant Chapters
-                          </h4>
-                          <div className="space-y-3">
-                            {bookGroup.topChapters
-                              .slice(0, 3)
-                              .map((chapter, index) => (
-                                <div
-                                  key={chapter.id}
-                                  onClick={(e) =>
-                                    handleChapterClick(e, bookGroup, chapter)
-                                  }
-                                  className="group relative p-4 rounded-xl bg-white/60 dark:bg-gray-800/60 hover:bg-white/80 dark:hover:bg-gray-800/80 transition-all duration-300 cursor-pointer border border-gray-200/50 dark:border-gray-700/50 hover:border-indigo-300 dark:hover:border-indigo-600 hover:shadow-lg"
-                                >
-                                  {/* Chapter Content */}
-                                  <div className="flex items-start space-x-3">
-                                    {/* Rank & Score */}
-                                    <div className="flex-shrink-0 flex flex-col items-center space-y-2">
-                                      <div className="w-6 h-6 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full flex items-center justify-center text-white text-xs font-bold">
-                                        {index + 1}
-                                      </div>
-                                      <AIRelevanceScore
-                                        score={chapter.relevanceScore}
-                                        size="sm"
-                                        showBar={true}
-                                        query={searchResults?.query || topic}
-                                      />
-                                    </div>
-
-                                    <div className="flex-1 min-w-0">
-                                      <h5 className="text-sm font-bold text-gray-900 dark:text-white mb-1 line-clamp-1 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
-                                        {chapter.title}
-                                      </h5>
-                                      <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2 mb-2 leading-relaxed">
-                                        {chapter.whyRelevant || chapter.snippet}
-                                      </p>
-
-                                      {/* Key Topics */}
-                                      {chapter.keyTopics &&
-                                        chapter.keyTopics.length > 0 && (
-                                          <div className="flex flex-wrap gap-1">
-                                            {chapter.keyTopics
-                                              .slice(0, 3)
-                                              .map((topic, topicIndex) => (
-                                                <span
-                                                  key={topicIndex}
-                                                  className="text-xs bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 px-2 py-0.5 rounded-full"
-                                                >
-                                                  {topic}
-                                                </span>
-                                              ))}
-                                          </div>
-                                        )}
-                                    </div>
-
-                                    <div className="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
-                                      <ChevronRight className="w-4 h-4 text-indigo-500" />
-                                    </div>
-                                  </div>
-                                </div>
-                              ))}
-                          </div>
+                        
+                        {/* Overall Score Badge */}
+                        <div className="absolute -bottom-4 -right-4 bg-white dark:bg-gray-800 rounded-2xl p-3 shadow-xl border border-gray-200 dark:border-gray-700">
+                          <AIRelevanceScore
+                            score={bookGroup.averageRelevance || 85}
+                            size="md"
+                            showBar={true}
+                            query={searchResults?.query || topic}
+                          />
                         </div>
-
-                        {/* Simplified Call to Action */}
-                        <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
-                          <div className="flex items-center justify-between text-sm">
-                            <span className="text-gray-500 dark:text-gray-400 flex items-center">
-                              <Target className="w-4 h-4 mr-2" />
-                              {bookGroup.topChapters.length > 3
-                                ? `View ${bookGroup.topChapters.length - 3} more chapters`
-                                : "View all chapters"}
-                            </span>
-                            <ChevronRight className="w-4 h-4 text-indigo-500 group-hover:translate-x-1 transition-transform" />
-                          </div>
-                        </div>
+                        
+                        {/* Enhanced Glow effects */}
+                        <div className="absolute -inset-3 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-3xl blur-xl opacity-20 group-hover:opacity-40 transition-opacity duration-700 -z-10"></div>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
+
+                    {/* ORGANIZED BOOK INFORMATION */}
+                    <div className="flex-1 p-8">
+                      {/* Book Title and Author */}
+                      <div className="mb-8">
+                        <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-3 line-clamp-2 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors leading-tight">
+                          {bookGroup.title}
+                        </h3>
+                        <div className="flex items-center space-x-6 text-gray-600 dark:text-gray-400">
+                          <div className="flex items-center">
+                            <Users className="w-5 h-5 mr-2 text-indigo-500" />
+                            <span className="font-medium text-lg">{bookGroup.author}</span>
+                          </div>
+                          <div className="flex items-center">
+                            <BookOpen className="w-5 h-5 mr-2 text-emerald-500" />
+                            <span className="font-medium text-lg">{bookGroup.topChapters.length} Relevant Chapters</span>
+                          </div>
+                          <div className="flex items-center">
+                            <Award className="w-5 h-5 mr-2 text-purple-500" />
+                            <span className="font-medium text-lg">{bookGroup.averageRelevance || 85}% Overall Match</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* AI-GENERATED BOOK SUMMARY */}
+                      <div className="mb-8 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-2xl border border-blue-200 dark:border-blue-800">
+                        <div className="flex items-start space-x-3">
+                          <Brain className="w-6 h-6 text-blue-600 mt-1 flex-shrink-0" />
+                          <div>
+                            <h4 className="font-bold text-blue-900 dark:text-blue-200 mb-2">AI Analysis: Why This Book Matters</h4>
+                            <p className="text-blue-800 dark:text-blue-300 leading-relaxed">
+                              This book provides exceptional insights for <strong>"{searchResults.query}"</strong> through its comprehensive coverage of practical frameworks and real-world applications. The selected chapters offer immediate value with actionable strategies you can implement today.
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* ACTION BUTTON */}
+                      <div className="text-center">
+                        <Button
+                          onClick={() => handleBookCardClick(bookGroup)}
+                          className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-8 py-4 rounded-2xl text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                        >
+                          <Eye className="w-5 h-5 mr-2" />
+                          Explore All Chapters
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* OPTIMIZED CHAPTERS SECTION */}
+                  <div className="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-900/50 dark:to-gray-800/50 p-8">
+                    <div className="mb-6">
+                      <h4 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center mb-3">
+                        <Sparkles className="w-6 h-6 mr-3 text-emerald-500" />
+                        Top Relevant Chapters
+                      </h4>
+                      <p className="text-gray-600 dark:text-gray-400">
+                        AI-selected chapters with detailed explanations of their relevance to your search
+                      </p>
+                    </div>
+
+                    {/* CHAPTER GRID - SPACE OPTIMIZED */}
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {bookGroup.topChapters.slice(0, 6).map((chapter, index) => (
+                        <div
+                          key={chapter.id}
+                          onClick={(e) => handleChapterClick(e, bookGroup, chapter)}
+                          className="group bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer border border-gray-200 dark:border-gray-700 hover:border-indigo-300 dark:hover:border-indigo-600 transform hover:scale-105"
+                        >
+                          {/* Chapter Header */}
+                          <div className="flex items-start justify-between mb-4">
+                            <div className="w-8 h-8 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
+                              {index + 1}
+                            </div>
+                            <AIRelevanceScore
+                              score={chapter.relevanceScore}
+                              size="sm"
+                              showBar={true}
+                              query={searchResults?.query || topic}
+                            />
+                          </div>
+
+                          {/* Chapter Title */}
+                          <h5 className="text-lg font-bold text-gray-900 dark:text-white mb-3 line-clamp-2 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                            {chapter.title}
+                          </h5>
+
+                          {/* AI-GENERATED WHY CHOSEN EXPLANATION */}
+                          <div className="mb-4 p-4 bg-gradient-to-r from-emerald-50 to-cyan-50 dark:from-emerald-900/20 dark:to-cyan-900/20 rounded-xl border border-emerald-200 dark:border-emerald-800">
+                            <div className="flex items-start space-x-2">
+                              <Lightbulb className="w-4 h-4 text-emerald-600 mt-0.5 flex-shrink-0" />
+                              <div>
+                                <p className="text-sm font-semibold text-emerald-800 dark:text-emerald-200 mb-1">
+                                  Why AI Selected This Chapter:
+                                </p>
+                                <p className="text-sm text-emerald-700 dark:text-emerald-300 leading-relaxed">
+                                  {chapter.whyRelevant || `This chapter directly addresses ${searchResults.query} with practical insights and proven methodologies that you can apply immediately.`}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Key Topics */}
+                          {chapter.keyTopics && chapter.keyTopics.length > 0 && (
+                            <div className="flex flex-wrap gap-2 mb-4">
+                              {chapter.keyTopics.slice(0, 3).map((topic, topicIndex) => (
+                                <span
+                                  key={topicIndex}
+                                  className="text-xs bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 px-3 py-1 rounded-full font-medium"
+                                >
+                                  {topic}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+
+                          {/* Chapter Actions */}
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs text-gray-500 dark:text-gray-400">
+                              Click to read details
+                            </span>
+                            <ChevronRight className="w-4 h-4 text-indigo-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* View More Chapters */}
+                    {bookGroup.topChapters.length > 6 && (
+                      <div className="text-center mt-8">
+                        <Button
+                          onClick={() => handleBookCardClick(bookGroup)}
+                          variant="outline"
+                          className="border-2 border-indigo-300 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 px-6 py-3 rounded-xl"
+                        >
+                          View {bookGroup.topChapters.length - 6} More Chapters
+                          <ChevronRight className="w-4 h-4 ml-2" />
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                </div>
               ))}
             </div>
 

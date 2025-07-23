@@ -24,8 +24,9 @@ async function getOpenAI() {
     envCheck: !!import.meta.env.VITE_OPENAI_API_KEY,
   });
 
-  if (!apiKey || !apiKey.startsWith('sk-')) {
-    console.error("❌ Invalid or missing OPENAI_API_KEY - must start with 'sk-'");
+  if (!apiKey || !apiKey.startsWith('sk-') || apiKey === 'your_openai_api_key_here') {
+    console.error("❌ Invalid or missing OPENAI_API_KEY. Please set a valid OpenAI API key in your .env file");
+    console.error("Get your API key from: https://platform.openai.com/api-keys");
     return null;
   }
 
@@ -251,13 +252,18 @@ async function enrichResultsWithAI(
 
     const enrichedChapters: EnrichedChapter[] = [];
 
-    // Use fallback analysis for chapters to avoid OpenAI API errors
+    // Use OpenAI to analyze each chapter
     for (const chapter of bookData.chapters.slice(0, 5)) {
       // Top 5 chapters per book
       console.log(`📄 Processing chapter: "${chapter.chapter_title}"`);
-      // Use fallback enrichment for now to avoid API errors
-      const enrichment = createFallbackEnrichment(chapter, query);
-      enrichedChapters.push(enrichment);
+      try {
+        const enrichment = await analyzeChapterWithAI(chapter, query, openai);
+        enrichedChapters.push(enrichment);
+      } catch (error) {
+        console.warn(`⚠️ OpenAI analysis failed for chapter "${chapter.chapter_title}", using fallback:`, error);
+        const fallbackEnrichment = createFallbackEnrichment(chapter, query);
+        enrichedChapters.push(fallbackEnrichment);
+      }
     }
 
     if (enrichedChapters.length > 0) {
@@ -401,9 +407,66 @@ function createFallbackEnrichment(
 export async function analyzeTopicWithAI(topic: string) {
   console.log(`🧠 Analyzing topic: "${topic}"`);
 
-  // For now, return fallback analysis to avoid OpenAI API issues
-  // TODO: Fix OpenAI API key and re-enable AI analysis
-  const fallbackAnalysis = {
+  const openai = await getOpenAI();
+
+  if (!openai) {
+    console.log("⚠️ Using fallback topic analysis (no OpenAI client)");
+    return createFallbackTopicAnalysis(topic);
+  }
+
+  try {
+    console.log('🤖 Calling OpenAI for topic analysis...');
+
+    const prompt = `Analyze the search topic "${topic}" for a business book search platform:
+
+1. Is this topic too broad or specific enough?
+2. Suggest 3 refined search variations that would yield better results
+3. Explain why each refinement is useful
+
+Respond with JSON:
+{
+  "isBroad": boolean,
+  "explanation": "explanation of topic specificity",
+  "refinements": [
+    {
+      "label": "display name",
+      "value": "search term",
+      "description": "why this refinement helps"
+    }
+  ]
+}`;
+
+    const response = await openai.chat.completions.create({
+      model: import.meta.env.VITE_OPENAI_MODEL || "gpt-4o-mini",
+      messages: [
+        {
+          role: "system",
+          content: "You are an expert search analyst for business books. Always respond with valid JSON only."
+        },
+        { role: "user", content: prompt }
+      ],
+      max_tokens: 300,
+      temperature: 0.3,
+    });
+
+    const result = JSON.parse(response.choices[0]?.message?.content?.trim() || '{}');
+
+    console.log('✅ OpenAI topic analysis completed successfully');
+
+    return {
+      isBroad: result.isBroad || false,
+      explanation: result.explanation || `Analysis of "${topic}" completed successfully.`,
+      refinements: Array.isArray(result.refinements) ? result.refinements.slice(0, 3) : createFallbackTopicAnalysis(topic).refinements
+    };
+  } catch (error) {
+    console.warn('⚠️ OpenAI topic analysis failed, using fallback:', error);
+    return createFallbackTopicAnalysis(topic);
+  }
+}
+
+// Fallback topic analysis when OpenAI is unavailable
+function createFallbackTopicAnalysis(topic: string) {
+  return {
     isBroad: topic.split(" ").length <= 2,
     explanation: topic.split(" ").length <= 2
       ? `"${topic}" is quite broad. More specific terms would help find targeted content.`
@@ -426,17 +489,6 @@ export async function analyzeTopicWithAI(topic: string) {
       },
     ],
   };
-
-  const openai = await getOpenAI();
-
-  if (!openai) {
-    console.log("⚠️ Using fallback topic analysis (no OpenAI client)");
-    return fallbackAnalysis;
-  }
-
-  // For now, skip OpenAI API call and use fallback to avoid authentication errors
-  console.log("⚠️ Using fallback topic analysis to avoid OpenAI API issues");
-  return fallbackAnalysis;
 }
 
 // Helper function to extract keywords from text

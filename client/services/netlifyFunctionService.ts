@@ -46,7 +46,7 @@ class NetlifyFunctionService {
   async analyzeTopicWithAI(topic: string) {
     try {
       const result = await this.callFunction('/api/analyze-topic', { topic });
-      
+
       if (result.success) {
         return result.data;
       } else {
@@ -54,8 +54,13 @@ class NetlifyFunctionService {
         return result.fallback;
       }
     } catch (error) {
-      console.warn('⚠️ Netlify function temporarily unavailable, using fallback');
-      
+      if (error.message === 'FUNCTION_NOT_DEPLOYED') {
+        console.info('📋 Netlify Functions not deployed yet. Using local analysis.');
+        console.info('🚀 Deploy by pushing to main branch or using Netlify CLI');
+      } else {
+        console.warn('⚠️ Netlify function temporarily unavailable, using fallback');
+      }
+
       // Return local fallback
       return this.createFallbackTopicAnalysis(topic);
     }

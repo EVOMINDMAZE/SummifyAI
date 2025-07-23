@@ -89,7 +89,7 @@ export default function Generate() {
   const [topic, setTopic] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [searchResults, setSearchResults] = useState<SearchResults | null>(
+  const [searchResults, setSearchResults] = useState<SupabaseSearchResults | null>(
     null,
   );
   const [generatedSummary, setGeneratedSummary] = useState<string | null>(null);

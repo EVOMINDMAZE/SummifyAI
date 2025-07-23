@@ -95,16 +95,22 @@ export default function Generate() {
   const [topic, setTopic] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [searchResults, setSearchResults] = useState<SearchResults | null>(null);
+  const [searchResults, setSearchResults] = useState<SearchResults | null>(
+    null,
+  );
   const [generatedSummary, setGeneratedSummary] = useState<string | null>(null);
   const [currentOperation, setCurrentOperation] = useState("");
-  const [topicAnalysis, setTopicAnalysis] = useState<TopicAnalysis | null>(null);
+  const [topicAnalysis, setTopicAnalysis] = useState<TopicAnalysis | null>(
+    null,
+  );
   const [showRefinements, setShowRefinements] = useState(false);
-  const [topicRefinements, setTopicRefinements] = useState<Array<{
-    label: string;
-    value: string;
-    description: string;
-  }>>([]);
+  const [topicRefinements, setTopicRefinements] = useState<
+    Array<{
+      label: string;
+      value: string;
+      description: string;
+    }>
+  >([]);
   const [searchFilters, setSearchFilters] = useState<ISearchFilters>({
     categories: [],
     minRating: 0,
@@ -600,12 +606,12 @@ export default function Generate() {
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
                         </div>
-                        
+
                         {/* Book Rank Badge */}
                         <div className="absolute -top-4 -left-4 w-12 h-12 bg-gradient-to-r from-emerald-500 to-cyan-500 rounded-full flex items-center justify-center text-white text-lg font-bold shadow-xl border-4 border-white dark:border-gray-800">
                           {bookIndex + 1}
                         </div>
-                        
+
                         {/* Overall Score Badge */}
                         <div className="absolute -bottom-4 -right-4 bg-white dark:bg-gray-800 rounded-2xl p-3 shadow-xl border border-gray-200 dark:border-gray-700">
                           <AIRelevanceScore
@@ -615,7 +621,7 @@ export default function Generate() {
                             query={searchResults?.query || topic}
                           />
                         </div>
-                        
+
                         {/* Enhanced Glow effects */}
                         <div className="absolute -inset-3 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-3xl blur-xl opacity-20 group-hover:opacity-40 transition-opacity duration-700 -z-10"></div>
                       </div>
@@ -631,15 +637,21 @@ export default function Generate() {
                         <div className="flex items-center space-x-6 text-gray-600 dark:text-gray-400">
                           <div className="flex items-center">
                             <Users className="w-5 h-5 mr-2 text-indigo-500" />
-                            <span className="font-medium text-lg">{bookGroup.author}</span>
+                            <span className="font-medium text-lg">
+                              {bookGroup.author}
+                            </span>
                           </div>
                           <div className="flex items-center">
                             <BookOpen className="w-5 h-5 mr-2 text-emerald-500" />
-                            <span className="font-medium text-lg">{bookGroup.topChapters.length} Relevant Chapters</span>
+                            <span className="font-medium text-lg">
+                              {bookGroup.topChapters.length} Relevant Chapters
+                            </span>
                           </div>
                           <div className="flex items-center">
                             <Award className="w-5 h-5 mr-2 text-purple-500" />
-                            <span className="font-medium text-lg">{bookGroup.averageRelevance || 85}% Overall Match</span>
+                            <span className="font-medium text-lg">
+                              {bookGroup.averageRelevance || 85}% Overall Match
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -649,9 +661,16 @@ export default function Generate() {
                         <div className="flex items-start space-x-3">
                           <Brain className="w-6 h-6 text-blue-600 mt-1 flex-shrink-0" />
                           <div>
-                            <h4 className="font-bold text-blue-900 dark:text-blue-200 mb-2">AI Analysis: Why This Book Matters</h4>
+                            <h4 className="font-bold text-blue-900 dark:text-blue-200 mb-2">
+                              AI Analysis: Why This Book Matters
+                            </h4>
                             <p className="text-blue-800 dark:text-blue-300 leading-relaxed">
-                              This book provides exceptional insights for <strong>"{searchResults.query}"</strong> through its comprehensive coverage of practical frameworks and real-world applications. The selected chapters offer immediate value with actionable strategies you can implement today.
+                              This book provides exceptional insights for{" "}
+                              <strong>"{searchResults.query}"</strong> through
+                              its comprehensive coverage of practical frameworks
+                              and real-world applications. The selected chapters
+                              offer immediate value with actionable strategies
+                              you can implement today.
                             </p>
                           </div>
                         </div>
@@ -678,74 +697,83 @@ export default function Generate() {
                         Top Relevant Chapters
                       </h4>
                       <p className="text-gray-600 dark:text-gray-400">
-                        AI-selected chapters with detailed explanations of their relevance to your search
+                        AI-selected chapters with detailed explanations of their
+                        relevance to your search
                       </p>
                     </div>
 
                     {/* CHAPTER GRID - SPACE OPTIMIZED */}
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                      {bookGroup.topChapters.slice(0, 6).map((chapter, index) => (
-                        <div
-                          key={chapter.id}
-                          onClick={(e) => handleChapterClick(e, bookGroup, chapter)}
-                          className="group bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer border border-gray-200 dark:border-gray-700 hover:border-indigo-300 dark:hover:border-indigo-600 transform hover:scale-105"
-                        >
-                          {/* Chapter Header */}
-                          <div className="flex items-start justify-between mb-4">
-                            <div className="w-8 h-8 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
-                              {index + 1}
+                      {bookGroup.topChapters
+                        .slice(0, 6)
+                        .map((chapter, index) => (
+                          <div
+                            key={chapter.id}
+                            onClick={(e) =>
+                              handleChapterClick(e, bookGroup, chapter)
+                            }
+                            className="group bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer border border-gray-200 dark:border-gray-700 hover:border-indigo-300 dark:hover:border-indigo-600 transform hover:scale-105"
+                          >
+                            {/* Chapter Header */}
+                            <div className="flex items-start justify-between mb-4">
+                              <div className="w-8 h-8 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
+                                {index + 1}
+                              </div>
+                              <AIRelevanceScore
+                                score={chapter.relevanceScore}
+                                size="sm"
+                                showBar={true}
+                                query={searchResults?.query || topic}
+                              />
                             </div>
-                            <AIRelevanceScore
-                              score={chapter.relevanceScore}
-                              size="sm"
-                              showBar={true}
-                              query={searchResults?.query || topic}
-                            />
-                          </div>
 
-                          {/* Chapter Title */}
-                          <h5 className="text-lg font-bold text-gray-900 dark:text-white mb-3 line-clamp-2 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
-                            {chapter.title}
-                          </h5>
+                            {/* Chapter Title */}
+                            <h5 className="text-lg font-bold text-gray-900 dark:text-white mb-3 line-clamp-2 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                              {chapter.title}
+                            </h5>
 
-                          {/* AI-GENERATED WHY CHOSEN EXPLANATION */}
-                          <div className="mb-4 p-4 bg-gradient-to-r from-emerald-50 to-cyan-50 dark:from-emerald-900/20 dark:to-cyan-900/20 rounded-xl border border-emerald-200 dark:border-emerald-800">
-                            <div className="flex items-start space-x-2">
-                              <Lightbulb className="w-4 h-4 text-emerald-600 mt-0.5 flex-shrink-0" />
-                              <div>
-                                <p className="text-sm font-semibold text-emerald-800 dark:text-emerald-200 mb-1">
-                                  Why AI Selected This Chapter:
-                                </p>
-                                <p className="text-sm text-emerald-700 dark:text-emerald-300 leading-relaxed">
-                                  {chapter.whyRelevant || `This chapter directly addresses ${searchResults.query} with practical insights and proven methodologies that you can apply immediately.`}
-                                </p>
+                            {/* AI-GENERATED WHY CHOSEN EXPLANATION */}
+                            <div className="mb-4 p-4 bg-gradient-to-r from-emerald-50 to-cyan-50 dark:from-emerald-900/20 dark:to-cyan-900/20 rounded-xl border border-emerald-200 dark:border-emerald-800">
+                              <div className="flex items-start space-x-2">
+                                <Lightbulb className="w-4 h-4 text-emerald-600 mt-0.5 flex-shrink-0" />
+                                <div>
+                                  <p className="text-sm font-semibold text-emerald-800 dark:text-emerald-200 mb-1">
+                                    Why AI Selected This Chapter:
+                                  </p>
+                                  <p className="text-sm text-emerald-700 dark:text-emerald-300 leading-relaxed">
+                                    {chapter.whyRelevant ||
+                                      `This chapter directly addresses ${searchResults.query} with practical insights and proven methodologies that you can apply immediately.`}
+                                  </p>
+                                </div>
                               </div>
                             </div>
-                          </div>
 
-                          {/* Key Topics */}
-                          {chapter.keyTopics && chapter.keyTopics.length > 0 && (
-                            <div className="flex flex-wrap gap-2 mb-4">
-                              {chapter.keyTopics.slice(0, 3).map((topic, topicIndex) => (
-                                <span
-                                  key={topicIndex}
-                                  className="text-xs bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 px-3 py-1 rounded-full font-medium"
-                                >
-                                  {topic}
-                                </span>
-                              ))}
+                            {/* Key Topics */}
+                            {chapter.keyTopics &&
+                              chapter.keyTopics.length > 0 && (
+                                <div className="flex flex-wrap gap-2 mb-4">
+                                  {chapter.keyTopics
+                                    .slice(0, 3)
+                                    .map((topic, topicIndex) => (
+                                      <span
+                                        key={topicIndex}
+                                        className="text-xs bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 px-3 py-1 rounded-full font-medium"
+                                      >
+                                        {topic}
+                                      </span>
+                                    ))}
+                                </div>
+                              )}
+
+                            {/* Chapter Actions */}
+                            <div className="flex items-center justify-between">
+                              <span className="text-xs text-gray-500 dark:text-gray-400">
+                                Click to read details
+                              </span>
+                              <ChevronRight className="w-4 h-4 text-indigo-500 opacity-0 group-hover:opacity-100 transition-opacity" />
                             </div>
-                          )}
-
-                          {/* Chapter Actions */}
-                          <div className="flex items-center justify-between">
-                            <span className="text-xs text-gray-500 dark:text-gray-400">
-                              Click to read details
-                            </span>
-                            <ChevronRight className="w-4 h-4 text-indigo-500 opacity-0 group-hover:opacity-100 transition-opacity" />
                           </div>
-                        </div>
-                      ))}
+                        ))}
                     </div>
 
                     {/* View More Chapters */}

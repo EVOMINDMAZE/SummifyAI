@@ -338,7 +338,10 @@ async function enrichResultsWithAI(dbResults: any[], query: string) {
           id: chapter.id,
           title: chapter.chapter_title,
           snippet: chapter.chapter_text.substring(0, 300),
-          relevanceScore: Math.max(25, Math.round((1 - chapter.similarity_score) * 100)),
+          relevanceScore: Math.max(
+            25,
+            Math.round((1 - chapter.similarity_score) * 100),
+          ),
           whyRelevant: `This chapter was selected because it directly addresses ${query} with practical frameworks and actionable strategies that provide immediate value for your specific needs.`,
           keyTopics: extractKeywords(chapter.chapter_text),
           coreLeadershipPrinciples: [
@@ -444,8 +447,12 @@ Focus on being specific about the practical value and direct relevance to the us
         : ["Apply systematic thinking", "Focus on measurable results"],
       practicalApplications: Array.isArray(aiResult.practicalApplications)
         ? aiResult.practicalApplications.slice(0, 3)
-        : [`Apply these ${query} insights to daily practice`, "Implement systematic approaches"],
-      aiExplanation: aiResult.aiExplanation ||
+        : [
+            `Apply these ${query} insights to daily practice`,
+            "Implement systematic approaches",
+          ],
+      aiExplanation:
+        aiResult.aiExplanation ||
         `Selected for its comprehensive coverage of ${query} concepts with proven methodologies and real-world applications.`,
     };
   } catch (error) {

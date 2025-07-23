@@ -427,23 +427,25 @@ Focus on being specific about the practical value and direct relevance to the us
       relevanceScore: Math.min(
         100,
         Math.max(
-          1,
+          25,
           aiResult.relevanceScore ||
             Math.round((1 - chapter.similarity_score) * 100),
         ),
       ),
       whyRelevant:
         aiResult.whyRelevant ||
-        `This chapter provides valuable insights for ${query}.`,
+        `This chapter directly addresses ${query} by providing practical frameworks and actionable strategies that you can implement immediately in your work.`,
       keyTopics: Array.isArray(aiResult.keyTopics)
         ? aiResult.keyTopics.slice(0, 4)
         : extractKeywords(chapter.chapter_text),
       coreLeadershipPrinciples: Array.isArray(aiResult.coreLeadershipPrinciples)
         ? aiResult.coreLeadershipPrinciples.slice(0, 3)
-        : ["Apply systematic thinking", "Focus on results"],
+        : ["Apply systematic thinking", "Focus on measurable results"],
       practicalApplications: Array.isArray(aiResult.practicalApplications)
         ? aiResult.practicalApplications.slice(0, 3)
-        : [`Apply these insights to ${query}`, "Practice in real situations"],
+        : [`Apply these ${query} insights to daily practice`, "Implement systematic approaches"],
+      aiExplanation: aiResult.aiExplanation ||
+        `Selected for its comprehensive coverage of ${query} concepts with proven methodologies and real-world applications.`,
     };
   } catch (error) {
     console.warn("⚠️ OpenAI chapter analysis failed, using fallback:", error);

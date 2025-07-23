@@ -390,63 +390,15 @@ function createFallbackEnrichment(
   };
 }
 
-// AI-powered topic analysis
+// AI-powered topic analysis using Edge Functions
 export async function analyzeTopicWithAI(topic: string) {
   console.log(`🧠 Analyzing topic: "${topic}"`);
 
-  const openai = await getOpenAI();
-
-  if (!openai) {
-    console.log("⚠️ Using fallback topic analysis (no OpenAI client)");
-    return createFallbackTopicAnalysis(topic);
-  }
-
   try {
-    console.log('🤖 Calling OpenAI for topic analysis...');
-
-    const prompt = `Analyze the search topic "${topic}" for a business book search platform:
-
-1. Is this topic too broad or specific enough?
-2. Suggest 3 refined search variations that would yield better results
-3. Explain why each refinement is useful
-
-Respond with JSON:
-{
-  "isBroad": boolean,
-  "explanation": "explanation of topic specificity",
-  "refinements": [
-    {
-      "label": "display name",
-      "value": "search term",
-      "description": "why this refinement helps"
-    }
-  ]
-}`;
-
-    const response = await openai.chat.completions.create({
-      model: import.meta.env.VITE_OPENAI_MODEL || "gpt-4o-mini",
-      messages: [
-        {
-          role: "system",
-          content: "You are an expert search analyst for business books. Always respond with valid JSON only."
-        },
-        { role: "user", content: prompt }
-      ],
-      max_tokens: 300,
-      temperature: 0.3,
-    });
-
-    const result = JSON.parse(response.choices[0]?.message?.content?.trim() || '{}');
-
-    console.log('✅ OpenAI topic analysis completed successfully');
-
-    return {
-      isBroad: result.isBroad || false,
-      explanation: result.explanation || `Analysis of "${topic}" completed successfully.`,
-      refinements: Array.isArray(result.refinements) ? result.refinements.slice(0, 3) : createFallbackTopicAnalysis(topic).refinements
-    };
+    console.log('🤖 Calling Edge Function for topic analysis...');
+    return await edgeFunctionService.analyzeTopicWithAI(topic);
   } catch (error) {
-    console.warn('⚠️ OpenAI topic analysis failed, using fallback:', error);
+    console.warn('⚠️ Edge Function topic analysis failed, using fallback:', error);
     return createFallbackTopicAnalysis(topic);
   }
 }

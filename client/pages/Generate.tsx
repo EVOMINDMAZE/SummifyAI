@@ -404,6 +404,15 @@ export default function Generate() {
                     isVisible={showFilters}
                     onToggleVisibility={() => setShowFilters(!showFilters)}
                   />
+
+                  {/* Debug Button - Temporary */}
+                  <Button
+                    onClick={testAPIConnection}
+                    variant="outline"
+                    className="h-14 px-6 border-2 border-emerald-300 text-emerald-700 hover:bg-emerald-50"
+                  >
+                    🧪 Test Supabase
+                  </Button>
                 </div>
 
                 {/* Loading State */}

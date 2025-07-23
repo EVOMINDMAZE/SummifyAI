@@ -38,6 +38,7 @@ import SearchFilters, {
   SearchFilters as ISearchFilters,
 } from "@/components/SearchFilters";
 import AIRelevanceScore from "@/components/AIRelevanceScore";
+import OpenAIStatus from "@/components/OpenAIStatus";
 
 // Interface definitions
 interface EnrichedChapter {

@@ -92,7 +92,7 @@ export default function OpenAIStatus() {
 
         <div className="space-y-2">
           {getStatusBadge(health.hasDatabase, 'Database')}
-          {getStatusBadge(health.hasOpenAI, 'Edge Functions')}
+          {getStatusBadge(health.hasOpenAI, 'Netlify Functions')}
         </div>
 
         {needsSetup && (

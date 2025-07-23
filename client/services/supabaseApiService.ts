@@ -2,8 +2,8 @@ import { supabase } from "@/lib/supabase";
 import type { BookGroup, EnrichedChapter, SearchResults } from "@/lib/supabase";
 import { netlifyFunctionService } from "./netlifyFunctionService";
 
-// Edge Functions handle OpenAI integration server-side
-// No client-side OpenAI setup needed anymore!
+// Netlify Functions handle OpenAI integration server-side
+// Architecture: Frontend (Netlify) + Database (Supabase) + AI (Netlify Functions)
 
 // Health check
 export async function healthCheck(): Promise<{

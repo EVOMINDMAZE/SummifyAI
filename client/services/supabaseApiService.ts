@@ -474,8 +474,10 @@ export async function inspectDatabaseSchema() {
 
     return { method: "rpc", data: tables };
   } catch (error) {
-    console.error("❌ Schema inspection failed:", error);
-    return { error: error.message };
+    console.error("❌ Schema inspection failed:", error instanceof Error ? error.message : error);
+    return {
+      error: error instanceof Error ? error.message : "Schema inspection failed"
+    };
   }
 }
 

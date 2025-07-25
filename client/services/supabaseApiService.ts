@@ -421,20 +421,9 @@ export async function inspectDatabaseSchema() {
       await supabase.rpc("get_schema_info");
 
     if (tablesError) {
-      // Fallback: try to get tables using information_schema
-      console.log("📋 Using information_schema fallback...");
-
-      const { data: tableList, error: listError } = await supabase
-        .from("pg_tables")
-        .select("tablename")
-        .eq("schemaname", "public");
-
-      if (listError) {
-        console.error("❌ Failed to get tables:", listError.message || listError);
-        return { error: listError.message || "Failed to retrieve table information" };
-      }
-
-      console.log("📊 Found tables:", tableList);
+      // Fallback: directly check known tables instead of using system tables
+      console.log("📋 Using direct table inspection fallback...");
+      console.info("💡 RPC get_schema_info not available, checking known tables directly");
 
       // Get sample data from known tables
       const knownTables = [
@@ -445,30 +434,40 @@ export async function inspectDatabaseSchema() {
         "chapter_ratings",
       ];
       const schemaInfo = {};
+      const existingTables = [];
 
       for (const tableName of knownTables) {
         try {
+          console.log(`🔍 Checking table: ${tableName}`);
           const { data: sample, error: sampleError } = await supabase
             .from(tableName)
             .select("*")
             .limit(1);
 
-          if (!sampleError && sample && sample.length > 0) {
+          if (!sampleError && sample !== null) {
+            existingTables.push(tableName);
             schemaInfo[tableName] = {
               exists: true,
-              columns: Object.keys(sample[0]),
-              sampleRow: sample[0],
+              columns: sample.length > 0 ? Object.keys(sample[0]) : [],
+              sampleRow: sample.length > 0 ? sample[0] : null,
+              rowCount: sample.length,
             };
+            console.log(`✅ Table ${tableName} exists with ${sample.length} sample rows`);
+          } else {
+            console.log(`⚠️ Table ${tableName} not accessible: ${sampleError?.message || 'No data'}`);
           }
         } catch (tableError) {
-          console.log(`⚠️ Table ${tableName} might not exist`);
+          console.log(`❌ Table ${tableName} error:`, tableError instanceof Error ? tableError.message : tableError);
         }
       }
 
+      console.log(`📊 Found ${existingTables.length} accessible tables:`, existingTables);
+
       return {
-        method: "fallback",
-        tables: Object.keys(schemaInfo),
+        method: "direct_inspection",
+        tables: existingTables,
         schema: schemaInfo,
+        totalTables: existingTables.length,
       };
     }
 

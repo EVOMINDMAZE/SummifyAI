@@ -430,8 +430,8 @@ export async function inspectDatabaseSchema() {
         .eq("schemaname", "public");
 
       if (listError) {
-        console.error("❌ Failed to get tables:", listError);
-        return { error: listError.message };
+        console.error("❌ Failed to get tables:", listError.message || listError);
+        return { error: listError.message || "Failed to retrieve table information" };
       }
 
       console.log("📊 Found tables:", tableList);

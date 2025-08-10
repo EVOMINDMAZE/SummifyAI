@@ -238,7 +238,7 @@ export async function searchDatabase(query: string): Promise<SearchResults> {
     console.log(`📚 Found ${results.length} chapters from Supabase`);
 
     // Step 3: Try to enrich with AI (fallback if not available)
-    console.log("🔄 Step 3: Attempting to enrich results with AI...");
+    console.log("��� Step 3: Attempting to enrich results with AI...");
     const enrichedResults = await enrichResultsWithAI(results, query);
 
     console.log(
@@ -322,10 +322,18 @@ async function enrichResultsWithAI(
       if (!aiAnalysisWorking) {
         try {
           const testChapter = bookData.chapters[0];
-          const enrichment = await netlifyFunctionService.analyzeChapterWithAI(
+
+          // Add timeout for AI analysis to prevent hanging
+          const analysisPromise = netlifyFunctionService.analyzeChapterWithAI(
             testChapter,
             query,
           );
+
+          const timeoutPromise = new Promise((_, reject) =>
+            setTimeout(() => reject(new Error('AI analysis timeout')), 3000)
+          );
+
+          const enrichment = await Promise.race([analysisPromise, timeoutPromise]);
           enrichedChapters.push(enrichment);
           aiAnalysisWorking = true;
           useAI = true;
@@ -334,7 +342,7 @@ async function enrichResultsWithAI(
           );
         } catch (error) {
           console.info(
-            "💡 AI analysis not available, using enhanced fallback processing",
+            "💡 AI analysis not available or timed out, using enhanced fallback processing",
           );
           const fallbackEnrichment = createFallbackEnrichment(
             bookData.chapters[0],

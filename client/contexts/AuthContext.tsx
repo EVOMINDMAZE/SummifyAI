@@ -269,6 +269,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       }
 
       console.log("✅ Sign in successful for user:", data.user?.email);
+      console.log("🔄 Waiting for auth state change to complete...");
       // User will be set via onAuthStateChange listener
     } catch (error) {
       console.error("❌ Sign in failed:", error);

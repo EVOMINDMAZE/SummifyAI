@@ -118,7 +118,7 @@ export default function Support() {
       category: "Features & Usage",
       questions: [
         {
-          q: "What makes SummifyAI different from other book services?",
+          q: "What makes SummifyIO different from other book services?",
           a: "Instead of generic book summaries, we find exact chapters and page numbers that answer your specific questions. This saves you hours of reading time.",
         },
         {

@@ -41,9 +41,14 @@ export default function SignIn() {
     try {
       setIsLoading(true);
       setError("");
-      // TODO: Implement OAuth with Supabase social providers
-      setError(`${provider} sign-in is coming soon! Please use email/password for now.`);
-    } catch (err) {
+
+      if (provider === "google") {
+        await signInWithGoogle();
+      } else {
+        setError(`${provider} sign-in is coming soon! Please use email/password for now.`);
+      }
+    } catch (err: any) {
+      console.error(`${provider} sign in error:`, err);
       setError(`Failed to sign in with ${provider}. Please try again.`);
     } finally {
       setIsLoading(false);

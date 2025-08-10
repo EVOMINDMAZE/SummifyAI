@@ -56,10 +56,27 @@ export default function SignIn() {
       setError("");
       await signIn(data.email, data.password);
       navigate("/dashboard");
-    } catch (err) {
-      setError(
-        "Invalid email or password. Please check your credentials and try again.",
-      );
+    } catch (err: any) {
+      console.error("Sign in error:", err);
+
+      // Provide helpful error messages based on the error
+      if (err.message?.includes("Invalid login credentials")) {
+        setError(
+          "Invalid email or password. Please check your credentials or create an account if you don't have one yet."
+        );
+      } else if (err.message?.includes("Email not confirmed")) {
+        setError(
+          "Please check your email and click the confirmation link before signing in."
+        );
+      } else if (err.message?.includes("Too many requests")) {
+        setError(
+          "Too many sign-in attempts. Please wait a few minutes before trying again."
+        );
+      } else {
+        setError(
+          "Unable to sign in. Please check your credentials and try again."
+        );
+      }
     } finally {
       setIsLoading(false);
     }

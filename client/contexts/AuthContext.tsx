@@ -63,6 +63,7 @@ interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [authPromiseResolver, setAuthPromiseResolver] = useState<((value: void) => void) | null>(null);
 
   useEffect(() => {
     // Check for existing Supabase session

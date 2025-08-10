@@ -178,7 +178,7 @@ export async function searchDatabase(query: string): Promise<SearchResults> {
             isbn_13
           )
         `)
-        .ilike("books.title", `%${query}%`)
+        .ilike("books.title", `%${sanitizedQuery}%`)
         .not("chapter_text", "is", null)
         .limit(10)
     ];

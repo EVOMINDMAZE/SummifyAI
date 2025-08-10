@@ -158,6 +158,62 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
               adFreeUntil: profileData.ad_free_until,
             };
             setUser(userData);
+          } else {
+            // Profile doesn't exist, create one for OAuth users
+            const fullName = session.user.user_metadata?.full_name || session.user.email || '';
+            const [firstName, ...lastNameParts] = fullName.split(' ');
+            const lastName = lastNameParts.join(' ');
+
+            const { error: profileError } = await supabase
+              .from('profiles')
+              .insert({
+                user_id: session.user.id,
+                first_name: firstName,
+                last_name: lastName,
+                search_count: 0,
+                monthly_search_limit: 3,
+                search_count_reset_date: new Date().toISOString().split('T')[0],
+                plan_type: 'free',
+                notification_search_results: true,
+                notification_usage_alerts: true,
+                notification_product_updates: false,
+              });
+
+            if (profileError) {
+              console.error("OAuth profile creation failed:", profileError);
+            } else {
+              // Fetch the newly created profile
+              const { data: newProfileData } = await supabase
+                .from('profiles')
+                .select('*')
+                .eq('user_id', session.user.id)
+                .single();
+
+              if (newProfileData) {
+                const userData: User = {
+                  id: newProfileData.user_id,
+                  email: session.user.email || '',
+                  firstName: newProfileData.first_name || '',
+                  lastName: newProfileData.last_name || '',
+                  searchCount: newProfileData.search_count || 0,
+                  monthlySearchLimit: newProfileData.monthly_search_limit || 3,
+                  searchCountResetDate: newProfileData.search_count_reset_date || '',
+                  planType: newProfileData.plan_type || 'free',
+                  notificationSearchResults: newProfileData.notification_search_results || false,
+                  notificationUsageAlerts: newProfileData.notification_usage_alerts || false,
+                  notificationProductUpdates: newProfileData.notification_product_updates || false,
+                  createdAt: newProfileData.created_at || '',
+                  updatedAt: newProfileData.updated_at || '',
+                  stripeCustomerId: newProfileData.stripe_customer_id,
+                  stripeSubscriptionId: newProfileData.stripe_subscription_id,
+                  subscriptionStatus: newProfileData.subscription_status,
+                  subscriptionEndDate: newProfileData.subscription_end_date,
+                  adPreferences: newProfileData.ad_preferences,
+                  adFreeUntil: newProfileData.ad_free_until,
+                };
+                setUser(userData);
+              }
+            }
           }
         }
       }

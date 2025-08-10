@@ -80,7 +80,7 @@ export default function Help() {
     {
       id: "1",
       title: "How to Generate Your First Chapter Discovery",
-      content: `Welcome to SummifyAI! This guide will walk you through generating your first chapter discovery.
+      content: `Welcome to SummifyIO! This guide will walk you through generating your first chapter discovery.
 
 ## Step 1: Enter Your Topic
 Start by entering a specific question or topic in the search box. For example:

@@ -240,11 +240,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const signOut = async () => {
     try {
-      // TODO: Call logout API
-      localStorage.removeItem("auth_token");
-      setUser(null);
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        throw error;
+      }
+      // User will be set to null via onAuthStateChange listener
     } catch (error) {
       console.error("Sign out failed:", error);
+      throw error;
     }
   };
 

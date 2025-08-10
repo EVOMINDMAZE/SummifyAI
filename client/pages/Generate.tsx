@@ -389,31 +389,29 @@ export default function Generate() {
                 </div>
                 </div>
 
+                {/* Search Actions */}
                 <div className="flex flex-col sm:flex-row gap-4">
                   <div className="flex-1">
                     <Button
                       onClick={handleSearch}
                       disabled={!topic.trim() || isGenerating || isAnalyzing}
-                      className="w-full h-14 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-700 hover:via-purple-700 hover:to-pink-700 text-white border-0 rounded-2xl text-lg font-semibold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50 disabled:transform-none relative overflow-hidden group"
+                      className="w-full h-12 bg-[#FFFD63] hover:bg-yellow-300 text-[#0A0B1E] border-0 rounded-xl text-lg font-bold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50 disabled:transform-none"
                     >
-                      {/* Button shine effect */}
-                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 group-hover:animate-pulse"></div>
-
-                      <div className="relative z-10 flex items-center justify-center">
+                      <div className="flex items-center justify-center">
                         {isAnalyzing ? (
                           <>
-                            <Brain className="w-6 h-6 mr-3 animate-pulse" />
-                            <span>Analyzing Query...</span>
+                            <Brain className="w-5 h-5 mr-2 animate-pulse" />
+                            <span>Analyzing...</span>
                           </>
                         ) : isGenerating ? (
                           <>
-                            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white mr-3"></div>
-                            <span>Searching Knowledge...</span>
+                            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-[#0A0B1E] mr-2"></div>
+                            <span>Finding Chapters...</span>
                           </>
                         ) : (
                           <>
-                            <Sparkles className="w-6 h-6 mr-3" />
-                            <span>Search with AI</span>
+                            <Sparkles className="w-5 h-5 mr-2" />
+                            <span>Find Exact Chapters</span>
                           </>
                         )}
                       </div>

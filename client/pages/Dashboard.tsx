@@ -55,7 +55,7 @@ export default function Dashboard() {
                 </Link>
                 <Link
                   to="/search-history"
-                  className="bg-transparent border-2 border-white/30 hover:border-white/50 text-white px-6 py-3 rounded-xl font-medium transition-colors"
+                  className="bg-transparent border-2 border-[#0A0B1E]/30 dark:border-white/30 hover:border-[#0A0B1E]/50 dark:hover:border-white/50 text-[#0A0B1E] dark:text-white px-6 py-3 rounded-xl font-medium transition-colors"
                 >
                   📚 Search History
                 </Link>

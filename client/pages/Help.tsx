@@ -307,7 +307,7 @@ All API requests require authentication using your API key:
 \`\`\`bash
 curl -H "Authorization: Bearer YOUR_API_KEY" \\
      -H "Content-Type: application/json" \\
-     https://api.summifyai.com/v1/discoveries
+     https://api.summifyio.com/v1/discoveries
 \`\`\`
 
 ### Base URL

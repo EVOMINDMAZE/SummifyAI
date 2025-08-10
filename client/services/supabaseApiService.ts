@@ -205,10 +205,8 @@ export async function searchDatabase(query: string): Promise<SearchResults> {
     const searchResults = uniqueResults.slice(0, 20); // Limit final results
     console.log(`📚 Combined search found ${searchResults.length} unique chapters`);
 
-    // Note: Error handling is now done above in the Promise.all section
-
     // Transform results to match expected format
-    const results = (searchResults || []).map((row: any) => ({
+    const results = searchResults.map((row: any) => ({
       id: row.id,
       chapter_title: row.chapter_title,
       chapter_text: row.chapter_text?.substring(0, 800) || "", // First 800 chars

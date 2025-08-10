@@ -111,7 +111,6 @@ export default function Generate() {
       description: string;
     }>
   >([]);
-  const [showLogs, setShowLogs] = useState(false);
   const [searchFilters, setSearchFilters] = useState<ISearchFilters>({
     publicationYearRange: [1990, 2024],
     difficultyLevel: "any",

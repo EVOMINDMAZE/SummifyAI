@@ -164,10 +164,10 @@ export default function Dashboard() {
             >
               <div className="text-2xl mb-2">🚀</div>
               <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
-                Generate Summary
+                Search Chapters
               </h3>
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                Create a new book summary with AI
+                Find exact chapters from any topic
               </p>
             </Link>
 

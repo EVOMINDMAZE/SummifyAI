@@ -193,47 +193,46 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const signUp = async (email: string, password: string, name: string) => {
     try {
       setIsLoading(true);
-      const response = await fetch("/api/auth/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password, name }),
+
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Sign up failed");
+      if (error) {
+        throw error;
       }
 
-      const data = await response.json();
-      localStorage.setItem("auth_token", data.token);
-      setUser({
-        id: data.user.id.toString(),
-        email: data.user.email,
-        name: data.user.name,
-        tier: data.user.tier,
-        queriesUsed: data.user.queriesUsed,
-        queriesLimit: data.user.queryLimit,
-        credits: data.user.credits,
-        referralCode: data.user.referralCode,
-        referralsCount: data.user.referralsCount,
-        createdAt: data.user.createdAt,
-      });
+      if (data.user) {
+        // Create user profile
+        const [firstName, ...lastNameParts] = name.split(' ');
+        const lastName = lastNameParts.join(' ');
+
+        const { error: profileError } = await supabase
+          .from('profiles')
+          .insert({
+            user_id: data.user.id,
+            first_name: firstName,
+            last_name: lastName,
+            search_count: 0,
+            monthly_search_limit: 3,
+            search_count_reset_date: new Date().toISOString().split('T')[0],
+            plan_type: 'free',
+            notification_search_results: true,
+            notification_usage_alerts: true,
+            notification_product_updates: false,
+          });
+
+        if (profileError) {
+          console.error("Profile creation failed:", profileError);
+          // Don't throw error here, user can be created manually
+        }
+      }
+
+      console.log("Sign up successful");
     } catch (error) {
-      // For demo purposes, create a mock user
-      const mockUser: User = {
-        id: "1",
-        email,
-        name,
-        tier: "free",
-        queriesUsed: 0,
-        queriesLimit: 3,
-        credits: 3,
-        referralCode: `${name.replace(/\s+/g, "").toUpperCase()}123`,
-        referralsCount: 0,
-        createdAt: new Date().toISOString(),
-      };
-      localStorage.setItem("auth_token", "demo_token");
-      setUser(mockUser);
+      console.error("Sign up failed:", error);
+      throw error;
     } finally {
       setIsLoading(false);
     }

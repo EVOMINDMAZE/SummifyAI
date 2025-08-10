@@ -42,7 +42,7 @@ export default function Dashboard() {
               <h1 className="text-3xl md:text-4xl font-bold mb-2">
                 Welcome back, {user.firstName}! 👋
               </h1>
-              <p className="text-white/80 text-lg">
+              <p className="text-[#0A0B1E]/80 dark:text-gray-300 text-lg">
                 Ready to discover exact chapters and pages? Let's find precisely
                 what you need to learn.
               </p>

@@ -257,7 +257,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       });
 
       if (error) {
-        console.error("�� Sign in error:", error);
+        console.error("❌ Sign in error:", error);
         console.error("Error details:", {
           message: error.message,
           status: error.status,
@@ -279,6 +279,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const signInWithGoogle = async () => {
     try {
       setIsLoading(true);
+      console.log("🔐 Attempting Google OAuth sign in...");
 
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: "google",
@@ -288,12 +289,26 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       });
 
       if (error) {
+        console.error("❌ Google OAuth error:", error);
+        console.error("Error details:", {
+          message: error.message,
+          status: error.status,
+          statusText: error.name
+        });
+
+        // Check for specific Google OAuth configuration issues
+        if (error.message.includes('OAuth') || error.message.includes('provider')) {
+          console.error("🔧 Google OAuth may not be properly configured in Supabase dashboard");
+          console.error("Please check: Authentication > Providers > Google in Supabase dashboard");
+        }
+
         throw error;
       }
 
-      console.log("Google sign in initiated");
+      console.log("✅ Google OAuth initiated successfully");
+      console.log("🔄 Redirecting to Google for authentication...");
     } catch (error) {
-      console.error("Google sign in failed:", error);
+      console.error("❌ Google sign in failed:", error);
       throw error;
     } finally {
       setIsLoading(false);

@@ -248,7 +248,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const signIn = async (email: string, password: string) => {
     try {
-      setIsLoading(true);
       console.log("🔐 Attempting sign in for:", email);
 
       const { data, error } = await supabase.auth.signInWithPassword({
@@ -271,8 +270,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     } catch (error) {
       console.error("❌ Sign in failed:", error);
       throw error;
-    } finally {
-      setIsLoading(false);
     }
   };
 

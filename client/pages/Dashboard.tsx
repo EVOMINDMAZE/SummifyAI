@@ -134,18 +134,18 @@ export default function Dashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                  Referrals
+                  Member Since
                 </p>
                 <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                  {user?.referralsCount || 0}
+                  {user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : "N/A"}
                 </p>
                 <p className="text-xs text-gray-500 dark:text-gray-500">
-                  Friends invited
+                  Account created
                 </p>
               </div>
               <div className="w-12 h-12 bg-yellow-100 dark:bg-yellow-900 rounded-xl flex items-center justify-center">
                 <span className="text-yellow-600 dark:text-yellow-400 text-2xl">
-                  👥
+                  🎯
                 </span>
               </div>
             </div>

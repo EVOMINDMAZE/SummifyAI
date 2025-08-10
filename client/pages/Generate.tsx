@@ -426,26 +426,53 @@ export default function Generate() {
                   />
 
 
-                  {/* Info about AI features */}
                 </div>
+
+                {/* Smart Marketing Messages */}
+                {!isGenerating && !isAnalyzing && !searchResults && (
+                  <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl p-6 border border-blue-200 dark:border-blue-800">
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <div>
+                        <h3 className="font-bold text-blue-900 dark:text-blue-200 mb-2">
+                          ⚡ Get Results in Under 30 Seconds
+                        </h3>
+                        <ul className="text-sm text-blue-800 dark:text-blue-300 space-y-1">
+                          <li>• Exact page numbers and chapter titles</li>
+                          <li>• AI explains why each chapter matters</li>
+                          <li>• Save 20+ hours of reading per search</li>
+                        </ul>
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-green-900 dark:text-green-200 mb-2">
+                          🎯 Better Than Reading Entire Books
+                        </h3>
+                        <ul className="text-sm text-green-800 dark:text-green-300 space-y-1">
+                          <li>• Focus on exactly what you need</li>
+                          <li>• Multiple expert perspectives</li>
+                          <li>• Actionable insights, not fluff</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                )}
 
                 {/* OpenAI Status */}
                 <OpenAIStatus />
 
-                {/* Loading State */}
+                {/* Enhanced Loading State */}
                 {(isGenerating || isAnalyzing) && (
-                  <div className="mt-8 p-6 bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 rounded-2xl border border-indigo-200 dark:border-indigo-800">
+                  <div className="bg-gradient-to-r from-[#FFFD63]/10 to-yellow-100/50 dark:from-yellow-900/20 dark:to-amber-900/20 rounded-xl p-6 border border-[#FFFD63]/30">
                     <div className="flex items-center justify-center space-x-4">
                       <div className="relative">
-                        <div className="animate-spin rounded-full h-8 w-8 border-3 border-indigo-600 border-t-transparent"></div>
-                        <div className="absolute inset-0 animate-ping rounded-full h-8 w-8 border border-indigo-600 opacity-20"></div>
+                        <div className="animate-spin rounded-full h-8 w-8 border-3 border-[#FFFD63] border-t-transparent"></div>
+                        <div className="absolute inset-0 animate-ping rounded-full h-8 w-8 border border-[#FFFD63] opacity-20"></div>
                       </div>
                       <div className="text-center">
-                        <div className="text-lg font-semibold text-gray-800 dark:text-gray-200">
-                          {currentOperation || "Processing..."}
+                        <div className="text-lg font-bold text-[#0A0B1E] dark:text-white">
+                          {currentOperation || "🧠 AI is working its magic..."}
                         </div>
                         <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                          AI is analyzing your request
+                          {isAnalyzing ? "Analyzing your query for best results" : "Searching through 10,000+ business books"}
                         </div>
                       </div>
                     </div>

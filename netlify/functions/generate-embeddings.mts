@@ -19,7 +19,7 @@ export default async (req: Request, context: Context) => {
     }
 
     // Get OpenAI API key from Netlify environment variables
-    const openaiApiKey = Netlify.env.get("OPENAI_API_KEY");
+    const openaiApiKey = process.env.OPENAI_API_KEY;
     if (!openaiApiKey) {
       return new Response(
         JSON.stringify({ error: "OpenAI API key not configured" }),

@@ -253,10 +253,18 @@ export async function searchDatabase(query: string): Promise<SearchResults> {
   } catch (error) {
     console.error("❌ Search failed:", error);
 
-    // Provide a more specific error message
-    const errorMessage =
-      error instanceof Error ? error.message : "Unknown error";
-    throw new Error(`Search failed: ${errorMessage}`);
+    // Always return some results rather than failing completely
+    // This prevents infinite loading states
+    console.log("🔄 Returning fallback empty results to prevent infinite loading");
+
+    return {
+      query,
+      searchType: "search_failed",
+      totalBooks: 0,
+      totalChapters: 0,
+      books: [],
+      processingTime: Date.now() - startTime,
+    };
   }
 }
 

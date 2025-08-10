@@ -163,6 +163,7 @@ export default function Generate() {
   };
 
   const performDatabaseSearch = async (searchQuery: string) => {
+    console.log(`🔍 Starting database search for: "${searchQuery}"`);
     setIsGenerating(true);
     setShowRefinements(false);
     setSearchResults(null);
@@ -170,16 +171,19 @@ export default function Generate() {
     setCurrentOperation("Searching knowledge base...");
 
     try {
-      console.log(`🔍 Searching for: "${searchQuery}"`);
+      console.log(`🔄 Calling searchDatabase function...`);
       const data = await searchDatabase(searchQuery);
 
-      console.log(
-        `🎯 Found ${data.totalBooks} books with ${data.totalChapters} relevant chapters using ${data.searchType}`,
-      );
+      console.log(`✅ Search completed successfully:`, {
+        totalBooks: data.totalBooks,
+        totalChapters: data.totalChapters,
+        searchType: data.searchType,
+        hasBooks: data.books?.length > 0,
+        processingTime: data.processingTime
+      });
 
       // Set the new search results for grid display
       setSearchResults(data);
-      setIsGenerating(false);
 
       // Save search state for navigation preservation
       sessionStorage.setItem("lastSearchResults", JSON.stringify(data));
@@ -195,8 +199,7 @@ export default function Generate() {
         }
       }
     } catch (error) {
-      console.error("Database search error:", error);
-      setIsGenerating(false);
+      console.error("❌ Database search error:", error);
 
       // Show user-friendly error with better UX
       const errorMessage =
@@ -205,6 +208,8 @@ export default function Generate() {
         `Search failed: ${errorMessage}. Please check your connection and try again.`,
       );
     } finally {
+      console.log("🏁 Search process completed, clearing loading states");
+      setIsGenerating(false);
       setCurrentOperation("");
     }
   };

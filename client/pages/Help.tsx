@@ -120,7 +120,7 @@ That's it! You're now ready to discover exactly what chapters to read instead of
     {
       id: "2",
       title: "Understanding Different Generation Types",
-      content: `SummifyAI offers two types of chapter generation to meet different needs and budgets.
+      content: `SummifyIO offers two types of chapter generation to meet different needs and budgets.
 
 ## Standard Generation (Free)
 - **Processing Time**: ~60 seconds

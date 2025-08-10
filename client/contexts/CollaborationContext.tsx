@@ -72,6 +72,27 @@ export const CollaborationProvider: React.FC<{ children: React.ReactNode }> = ({
   const [activeUsers, setActiveUsers] = useState<CollaborationUser[]>([]);
   const [messages, setMessages] = useState<CollaborationMessage[]>([]);
 
+  // Don't initialize collaboration features while auth is loading
+  if (isLoading) {
+    return (
+      <CollaborationContext.Provider value={{
+        isConnected: false,
+        currentSession: null,
+        activeUsers: [],
+        messages: [],
+        createSession: async () => { throw new Error("Auth loading"); },
+        joinSession: async () => { throw new Error("Auth loading"); },
+        leaveSession: () => {},
+        sendMessage: () => {},
+        shareBook: () => {},
+        inviteUser: async () => { throw new Error("Auth loading"); },
+        updateUserStatus: () => {},
+      }}>
+        {children}
+      </CollaborationContext.Provider>
+    );
+  }
+
   // Initialize socket connection
   useEffect(() => {
     if (user && !isLoading) {

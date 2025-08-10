@@ -49,7 +49,7 @@ export default function Dashboard() {
               <div className="mt-6 flex flex-col sm:flex-row gap-4">
                 <Link
                   to="/generate"
-                  className="bg-white/20 hover:bg-white/30 text-white px-6 py-3 rounded-xl font-medium transition-colors"
+                  className="bg-[#0A0B1E] hover:bg-[#0A0B1E]/90 text-[#FFFD63] px-6 py-3 rounded-xl font-medium transition-colors"
                 >
                   🚀 Search Chapters
                 </Link>

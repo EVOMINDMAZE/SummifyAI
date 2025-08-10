@@ -11,37 +11,27 @@ import type { User as SupabaseUser } from "@supabase/supabase-js";
 export interface User {
   id: string;
   email: string;
-  name: string;
-  tier: "free" | "premium";
-  queriesUsed: number;
-  queriesLimit: number;
-  credits: number;
-  subscriptionId?: string;
+  firstName: string;
+  lastName: string;
+  searchCount: number;
+  monthlySearchLimit: number;
+  searchCountResetDate: string;
+  planType: "free" | "pro" | "premium";
+  notificationSearchResults: boolean;
+  notificationUsageAlerts: boolean;
+  notificationProductUpdates: boolean;
   createdAt: string;
-  referralCode: string;
-  referralsCount: number;
-  settings?: {
-    theme?: "light" | "dark" | "system";
-    language?: string;
-    timezone?: string;
-    defaultSummaryLength?: "short" | "medium" | "long";
-    autoSave?: boolean;
-    notifications?: {
-      emailWeeklyReport?: boolean;
-      emailCreditUpdates?: boolean;
-      emailFeatureUpdates?: boolean;
-      emailMarketing?: boolean;
-      browserSummaryComplete?: boolean;
-    };
-    privacy?: {
-      allowAnalytics?: boolean;
-      saveSearchHistory?: boolean;
-    };
-    advanced?: {
-      developerMode?: boolean;
-      betaFeatures?: boolean;
-    };
-  };
+  updatedAt: string;
+  stripeCustomerId?: string;
+  stripeSubscriptionId?: string;
+  subscriptionStatus?: string;
+  subscriptionEndDate?: string;
+  adPreferences?: any;
+  adFreeUntil?: string;
+}
+
+export interface UserProfile {
+  profiles: User;
 }
 
 interface AuthContextType {

@@ -41,17 +41,30 @@ export default function SignIn() {
     try {
       setIsLoading(true);
       setError("");
+      console.log(`🔐 Starting ${provider} OAuth sign in...`);
 
       if (provider === "google") {
         await signInWithGoogle();
+        console.log("✅ Google OAuth sign in initiated successfully");
       } else {
         setError(
           `${provider} sign-in is coming soon! Please use email/password for now.`,
         );
       }
     } catch (err: any) {
-      console.error(`${provider} sign in error:`, err);
-      setError(`Failed to sign in with ${provider}. Please try again.`);
+      console.error(`❌ ${provider} sign in error:`, err);
+
+      let errorMessage = `Failed to sign in with ${provider}.`;
+
+      if (err.message?.includes('OAuth') && provider === 'google') {
+        errorMessage = "Google sign-in is not properly configured. Please contact support or try email/password login.";
+      } else if (err.message?.includes('Network')) {
+        errorMessage = "Network connection issue. Please check your internet connection and try again.";
+      } else if (err.message) {
+        errorMessage = `${provider} sign-in failed: ${err.message}`;
+      }
+
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }

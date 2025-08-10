@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Separator } from "@/components/ui/separator";
 import { Eye, EyeOff, Loader2, Mail, Lock, Chrome, Github, Twitter } from "lucide-react";
+import AuthTest from "@/components/AuthTest";
 
 export default function SignIn() {
   const navigate = useNavigate();

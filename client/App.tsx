@@ -73,6 +73,7 @@ const App = () => {
                     <Route path="/insights-demo" element={<InsightsDemo />} />
                     <Route path="/results" element={<Results />} />
                     <Route path="/results/:id" element={<Results />} />
+                    <Route path="/search-history" element={<SearchHistory />} />
                     <Route
                       path="/account-settings"
                       element={<AccountSettings />}

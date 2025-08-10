@@ -337,7 +337,7 @@ export default function Contact() {
               <div className="space-y-4">
                 <div>
                   <h4 className="font-medium text-gray-900 dark:text-white mb-1">
-                    How does SummifyAI work?
+                    How does SummifyIO work?
                   </h4>
                   <p className="text-gray-600 dark:text-gray-400 text-sm">
                     Our AI analyzes millions of books to find exact chapters and

@@ -16,7 +16,7 @@ This application uses **Supabase as the complete backend**:
 ## Key Features
 
 - **AI-Powered Search**: Uses OpenAI embeddings for semantic chapter discovery
-- **Real-time Analysis**: GPT-4.1-nano analyzes relevance and generates explanations
+- **Real-time Analysis**: GPT-4o analyzes relevance and generates explanations
 - **Supabase Integration**: Leverages Supabase's full-stack platform
 - **Vector Search**: PostgreSQL with pgvector for similarity matching
 - **Client-side Architecture**: Direct browser-to-Supabase communication

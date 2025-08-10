@@ -86,7 +86,7 @@ export default function Contact() {
             Get In Touch
           </h1>
           <p className="text-xl text-[#0A0B1E]/80 max-w-2xl mx-auto mb-8 leading-relaxed">
-            Have questions about SummifyAI? Want to learn more about finding
+            Have questions about SummifyIO? Want to learn more about finding
             exact chapters? We're here to help!
           </p>
           <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 max-w-2xl mx-auto">

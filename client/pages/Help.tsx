@@ -226,7 +226,7 @@ You can upgrade any standard generation to priority generation while it's proces
     {
       id: "4",
       title: "Billing and Subscription Management",
-      content: `Learn how to manage your SummifyAI subscription, billing, and payment methods.
+      content: `Learn how to manage your SummifyIO subscription, billing, and payment methods.
 
 ## Subscription Plans
 

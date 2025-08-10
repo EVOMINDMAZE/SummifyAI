@@ -153,7 +153,7 @@ export default function SignUp() {
                 </span>
               </div>
               <span className="text-xl font-bold text-[#0A0B1E] dark:text-white">
-                SummifyAI
+                SummifyIO
               </span>
             </Link>
             <div className="flex items-center gap-4">

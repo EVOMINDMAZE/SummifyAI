@@ -342,15 +342,15 @@ export default function Generate() {
         <div className="max-w-5xl mx-auto mb-16">
           <Card className="shadow-xl border-0 bg-white dark:bg-gray-800 rounded-3xl overflow-hidden">
             <CardContent className="p-8">
-              <div className="space-y-8">
+              <div className="space-y-6">
+                {/* Search Header */}
                 <div className="text-center">
-                  <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-3 flex items-center justify-center">
-                    <Search className="w-8 h-8 mr-3 text-indigo-600" />
-                    What knowledge are you seeking?
+                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-3 flex items-center justify-center">
+                    <Search className="w-6 h-6 mr-3 text-[#FFFD63]" />
+                    What specific knowledge do you need?
                   </h2>
-                  <p className="text-gray-600 dark:text-gray-400 text-lg">
-                    Enter any business topic and discover relevant insights from
-                    our curated book collection
+                  <p className="text-gray-600 dark:text-gray-400">
+                    Enter a business topic and get exact chapters with page numbers in seconds
                   </p>
                 </div>
 

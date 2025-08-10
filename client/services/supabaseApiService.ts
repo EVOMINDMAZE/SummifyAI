@@ -129,7 +129,6 @@ export async function searchDatabase(query: string): Promise<SearchResults> {
           id,
           title,
           author_name,
-          author,
           cover_url,
           isbn_13
         )

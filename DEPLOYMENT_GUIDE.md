@@ -30,7 +30,7 @@ Ensure these are set in your Netlify environment:
 ```
 DATABASE_URL=your_neon_database_url
 OPENAI_API_KEY=your_openai_api_key
-OPENAI_MODEL=gpt-4o-nano
+OPENAI_MODEL=gpt-4o
 GOOGLE_BOOKS_API_KEY=your_google_books_key (optional)
 NODE_ENV=production
 ```

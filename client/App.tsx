@@ -32,6 +32,7 @@ import Support from "./pages/Support";
 import Contact from "./pages/Contact";
 import Help from "./pages/Help";
 import ChapterDetail from "./pages/ChapterDetail";
+import SearchHistory from "./pages/SearchHistory";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();

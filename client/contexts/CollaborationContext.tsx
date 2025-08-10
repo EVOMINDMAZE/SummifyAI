@@ -64,7 +64,7 @@ const CollaborationContext = createContext<
 export const CollaborationProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const { user } = useAuth();
+  const { user, isLoading } = useAuth();
   const [socket, setSocket] = useState<Socket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
   const [currentSession, setCurrentSession] =

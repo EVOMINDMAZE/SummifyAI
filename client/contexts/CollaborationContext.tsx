@@ -142,7 +142,7 @@ export const CollaborationProvider: React.FC<{ children: React.ReactNode }> = ({
         newSocket.close();
       };
     }
-  }, [user]);
+  }, [user, isLoading]);
 
   const addSystemMessage = (message: string) => {
     const systemMessage: CollaborationMessage = {

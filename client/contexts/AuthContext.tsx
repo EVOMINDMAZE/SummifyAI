@@ -241,6 +241,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           }
         }
       }
+
+      // Always reset loading state after auth state change
+      setIsLoading(false);
     });
 
     return () => subscription.unsubscribe();

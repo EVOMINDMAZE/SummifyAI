@@ -51,7 +51,7 @@ export default function Dashboard() {
                   to="/generate"
                   className="bg-white/20 hover:bg-white/30 text-white px-6 py-3 rounded-xl font-medium transition-colors"
                 >
-                  🚀 Generate New Summary
+                  🚀 Search Chapters
                 </Link>
                 <Link
                   to="/results"

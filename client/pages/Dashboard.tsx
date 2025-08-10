@@ -113,18 +113,18 @@ export default function Dashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                  Membership
+                  Search Reset
                 </p>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white capitalize">
-                  {user?.tier || "Free"}
+                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                  {user?.searchCountResetDate ? new Date(user.searchCountResetDate).toLocaleDateString() : "N/A"}
                 </p>
                 <p className="text-xs text-gray-500 dark:text-gray-500">
-                  Current plan
+                  Next reset date
                 </p>
               </div>
               <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-xl flex items-center justify-center">
                 <span className="text-purple-600 dark:text-purple-400 text-2xl">
-                  ⭐
+                  📅
                 </span>
               </div>
             </div>

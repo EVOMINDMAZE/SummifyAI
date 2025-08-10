@@ -272,42 +272,66 @@ export default function Generate() {
       <Navigation />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Beautiful Hero Section */}
-        <div className="text-center mb-16">
-          <div className="relative bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 rounded-3xl p-12 text-white overflow-hidden shadow-2xl">
-            {/* Animated background elements */}
-            <div className="absolute -top-4 -right-4 w-72 h-72 bg-white/10 rounded-full blur-xl animate-pulse"></div>
-            <div className="absolute -bottom-8 -left-8 w-96 h-96 bg-white/5 rounded-full blur-2xl"></div>
-            <div className="absolute top-1/2 left-1/2 w-32 h-32 bg-white/10 rounded-full blur-xl animate-bounce"></div>
+        {/* Dashboard-Style Hero Section with Smart Marketing */}
+        <div className="mb-8">
+          <div className="bg-[#FFFD63] dark:bg-gray-800 rounded-3xl p-8 text-[#0A0B1E] dark:text-white relative overflow-hidden shadow-xl">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-32 translate-x-32"></div>
+            <div className="absolute bottom-0 left-0 w-48 h-48 bg-[#0A0B1E]/10 dark:bg-white/10 rounded-full translate-y-24 -translate-x-24"></div>
 
             <div className="relative z-10">
-              <div className="inline-flex items-center justify-center w-20 h-20 bg-white/20 rounded-full mb-6 backdrop-blur-sm">
-                <Brain className="w-10 h-10 text-white" />
+              <div className="flex items-center gap-4 mb-6">
+                <div className="w-16 h-16 bg-[#0A0B1E] dark:bg-[#FFFD63] rounded-xl flex items-center justify-center shadow-lg">
+                  <Brain className="w-8 h-8 text-[#FFFD63] dark:text-[#0A0B1E]" />
+                </div>
+                <div>
+                  <h1 className="text-3xl md:text-4xl font-bold mb-2">
+                    Find Exact Chapters, Skip Entire Books! 🎯
+                  </h1>
+                  <p className="text-[#0A0B1E]/80 dark:text-gray-300 text-lg">
+                    Save <strong>20+ hours per week</strong> with AI-powered chapter discovery. Get precise page numbers and insights instantly.
+                  </p>
+                </div>
               </div>
-              <h1 className="text-5xl md:text-6xl font-extrabold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white via-blue-100 to-white">
-                AI Knowledge Discovery
-              </h1>
-              <p className="text-xl text-white/90 mb-8 max-w-4xl mx-auto leading-relaxed">
-                Unlock insights from thousands of business books instantly. Our
-                AI-powered search finds exactly what you need with semantic
-                understanding.
-              </p>
-              <div className="flex flex-wrap justify-center gap-4 text-sm">
-                <div className="bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 flex items-center">
-                  <Zap className="w-4 h-4 mr-2" />
-                  Instant AI Analysis
+
+              {/* Smart Marketing CTAs */}
+              <div className="grid md:grid-cols-3 gap-4 mb-6">
+                <div className="bg-white/20 dark:bg-black/20 rounded-xl p-4 backdrop-blur-sm border border-white/30 dark:border-gray-600">
+                  <div className="flex items-center gap-3 mb-2">
+                    <Clock className="w-5 h-5 text-green-600" />
+                    <span className="font-bold text-green-600">10X Faster</span>
+                  </div>
+                  <p className="text-sm text-[#0A0B1E]/70 dark:text-gray-400">
+                    Minutes instead of hours of reading
+                  </p>
                 </div>
-                <div className="bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 flex items-center">
-                  <Sparkles className="w-4 h-4 mr-2" />
-                  Smart Refinements
+
+                <div className="bg-white/20 dark:bg-black/20 rounded-xl p-4 backdrop-blur-sm border border-white/30 dark:border-gray-600">
+                  <div className="flex items-center gap-3 mb-2">
+                    <Target className="w-5 h-5 text-blue-600" />
+                    <span className="font-bold text-blue-600">99.9% Accurate</span>
+                  </div>
+                  <p className="text-sm text-[#0A0B1E]/70 dark:text-gray-400">
+                    Precise chapter recommendations
+                  </p>
                 </div>
-                <div className="bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 flex items-center">
-                  <BookOpen className="w-4 h-4 mr-2" />
-                  Real Book Database
+
+                <div className="bg-white/20 dark:bg-black/20 rounded-xl p-4 backdrop-blur-sm border border-white/30 dark:border-gray-600">
+                  <div className="flex items-center gap-3 mb-2">
+                    <BookOpen className="w-5 h-5 text-purple-600" />
+                    <span className="font-bold text-purple-600">10,000+ Books</span>
+                  </div>
+                  <p className="text-sm text-[#0A0B1E]/70 dark:text-gray-400">
+                    Curated business library
+                  </p>
                 </div>
-                <div className="bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 flex items-center">
-                  <TrendingUp className="w-4 h-4 mr-2" />
-                  Relevance Scoring
+              </div>
+
+              {/* Quick Action Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4">
+                <div className="text-center sm:text-left">
+                  <p className="text-sm text-[#0A0B1E]/60 dark:text-gray-400 mb-2">
+                    💡 <strong>Pro Tip:</strong> Be specific for better results (e.g., "team building strategies for remote workers")
+                  </p>
                 </div>
               </div>
             </div>

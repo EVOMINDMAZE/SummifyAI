@@ -276,7 +276,7 @@ export default function Contact() {
                       Email
                     </div>
                     <div className="text-gray-600 dark:text-gray-400 text-sm">
-                      hello@summifyai.com
+                      hello@summifyio.com
                     </div>
                   </div>
                 </div>

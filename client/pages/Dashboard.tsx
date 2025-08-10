@@ -92,18 +92,18 @@ export default function Dashboard() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                  Credits
+                  Plan Type
                 </p>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                  {user?.credits || 0}
+                <p className="text-2xl font-bold text-gray-900 dark:text-white capitalize">
+                  {user?.planType || "Free"}
                 </p>
                 <p className="text-xs text-gray-500 dark:text-gray-500">
-                  Available credits
+                  Current subscription
                 </p>
               </div>
               <div className="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-xl flex items-center justify-center">
                 <span className="text-green-600 dark:text-green-400 text-2xl">
-                  💰
+                  📋
                 </span>
               </div>
             </div>

@@ -146,10 +146,18 @@ export default function SignIn() {
           <div className="bg-white dark:bg-gray-800 py-8 px-4 shadow-lg border border-gray-200 dark:border-gray-700 sm:rounded-2xl sm:px-10">
             <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
               {error && (
-                <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 px-4 py-3 rounded-lg">
-                  {error}
-                </div>
-              )}
+              <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 px-4 py-3 rounded-lg">
+                {error}
+              </div>
+            )}
+
+            {/* Helpful message for new users */}
+            <div className="bg-[#FFFD63]/10 border border-[#FFFD63]/30 text-[#0A0B1E] dark:text-gray-300 px-4 py-3 rounded-lg">
+              <p className="text-sm">
+                <strong>New to SummifyIO?</strong> Create an account to start discovering exact chapters from business books.
+                Don't have an account yet? <Link to="/signup" className="font-semibold text-[#0A0B1E] dark:text-[#FFFD63] hover:underline">Sign up here</Link>
+              </p>
+            </div>
 
               <div>
                 <label

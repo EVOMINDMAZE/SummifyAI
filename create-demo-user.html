@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Demo User - SummifyIO</title>
+    <style>
+        body { 
+            font-family: system-ui; 
+            margin: 20px; 
+            background: #FFFD63;
+            color: #0A0B1E;
+        }
+        .container { 
+            max-width: 600px; 
+            margin: 0 auto; 
+            background: white; 
+            padding: 30px; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        h1 { color: #0A0B1E; text-align: center; }
+        .form-group { margin: 20px 0; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input { 
+            width: 100%; 
+            padding: 12px; 
+            border: 2px solid #ddd; 
+            border-radius: 8px; 
+            font-size: 16px;
+        }
+        input:focus { border-color: #0A0B1E; outline: none; }
+        button { 
+            background: #0A0B1E; 
+            color: #FFFD63; 
+            padding: 12px 24px; 
+            border: none; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-size: 16px; 
+            width: 100%;
+            font-weight: bold;
+        }
+        button:hover { opacity: 0.9; }
+        button:disabled { opacity: 0.5; cursor: not-allowed; }
+        .result { 
+            margin: 20px 0; 
+            padding: 15px; 
+            border-radius: 8px; 
+            font-weight: bold;
+        }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        .existing-users { 
+            background: #f8f9fa; 
+            padding: 15px; 
+            border-radius: 8px; 
+            margin: 20px 0;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>🔐 Create Demo User for SummifyIO</h1>
+        <p>Use this tool to create a test user account for testing the authentication system.</p>
+        
+        <form id="createUserForm">
+            <div class="form-group">
+                <label for="name">Full Name:</label>
+                <input type="text" id="name" value="Demo User" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" value="demo@summifyio.com" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" value="DemoPass123!" required>
+                <small>Password must be at least 8 characters with uppercase, lowercase, and number</small>
+            </div>
+            
+            <button type="submit" id="createBtn">Create Demo User</button>
+        </form>
+        
+        <div id="result"></div>
+        
+        <div class="existing-users">
+            <h3>🎯 Quick Test Credentials</h3>
+            <p><strong>Email:</strong> demo@summifyio.com</p>
+            <p><strong>Password:</strong> DemoPass123!</p>
+            <p><em>Use these credentials to test sign-in after creating the user.</em></p>
+        </div>
+        
+        <div class="info">
+            <strong>💡 How to use:</strong>
+            <ol>
+                <li>Click "Create Demo User" to create a test account</li>
+                <li>Go to your SummifyIO app and try signing in with the credentials above</li>
+                <li>The user will be created in your Supabase database with a profile</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        // Supabase configuration
+        const SUPABASE_URL = 'https://voosuqmkazvjzheipbrl.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZvb3N1cW1rYXp2anpoZWlwYnJsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMwMjAxNzcsImV4cCI6MjA2ODU5NjE3N30.AU0ew4-Un_g4nLkdGXcwSfIj6R1mwY_JDbHcSXJFe0E';
+        
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        function showResult(message, type = 'info') {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = `<div class="${type}">${message}</div>`;
+        }
+
+        document.getElementById('createUserForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const createBtn = document.getElementById('createBtn');
+            
+            try {
+                createBtn.disabled = true;
+                createBtn.textContent = 'Creating User...';
+                showResult('Creating user account...', 'info');
+                
+                console.log('Attempting to create user:', { email, name });
+                
+                // Step 1: Create the user account
+                const { data: authData, error: authError } = await supabase.auth.signUp({
+                    email: email,
+                    password: password,
+                });
+
+                if (authError) {
+                    console.error('Auth error:', authError);
+                    throw authError;
+                }
+
+                console.log('User created in auth:', authData);
+
+                if (authData.user) {
+                    // Step 2: Create user profile
+                    const [firstName, ...lastNameParts] = name.split(' ');
+                    const lastName = lastNameParts.join(' ');
+
+                    console.log('Creating profile for user:', authData.user.id);
+
+                    const { error: profileError } = await supabase
+                        .from('profiles')
+                        .insert({
+                            user_id: authData.user.id,
+                            first_name: firstName,
+                            last_name: lastName,
+                            search_count: 0,
+                            monthly_search_limit: 10,
+                            search_count_reset_date: new Date().toISOString().split('T')[0],
+                            plan_type: 'free',
+                            notification_search_results: true,
+                            notification_usage_alerts: true,
+                            notification_product_updates: false,
+                        });
+
+                    if (profileError) {
+                        console.error('Profile creation error:', profileError);
+                        showResult(`⚠️ User created but profile failed: ${profileError.message}. You may need to create the profile manually.`, 'error');
+                    } else {
+                        console.log('Profile created successfully');
+                        showResult(`✅ Demo user created successfully!<br><br><strong>Email:</strong> ${email}<br><strong>Password:</strong> ${password}<br><br>You can now sign in to SummifyIO with these credentials.`, 'success');
+                    }
+                } else {
+                    showResult('❌ User creation failed: No user data returned', 'error');
+                }
+
+            } catch (error) {
+                console.error('Error creating user:', error);
+                
+                if (error.message?.includes('User already registered')) {
+                    showResult(`ℹ️ User with email "${email}" already exists. You can try signing in with the existing account or use a different email.`, 'info');
+                } else if (error.message?.includes('Password should be at least')) {
+                    showResult('❌ Password is too weak. Please use at least 8 characters with uppercase, lowercase, and numbers.', 'error');
+                } else {
+                    showResult(`❌ Error creating user: ${error.message}`, 'error');
+                }
+            } finally {
+                createBtn.disabled = false;
+                createBtn.textContent = 'Create Demo User';
+            }
+        });
+
+        // Show initial status
+        showResult('Ready to create a demo user account.', 'info');
+    </script>
+</body>
+</html>

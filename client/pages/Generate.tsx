@@ -223,7 +223,6 @@ export default function Generate() {
     performDatabaseSearch(topic);
   };
 
-
   const handleBookCardClick = (bookGroup: BookGroup) => {
     console.log(`📖 Viewing details for: ${bookGroup.title}`);
 
@@ -288,7 +287,9 @@ export default function Generate() {
                     Find Exact Chapters, Skip Entire Books! 🎯
                   </h1>
                   <p className="text-[#0A0B1E]/80 dark:text-gray-300 text-lg">
-                    Save <strong>20+ hours per week</strong> with AI-powered chapter discovery. Get precise page numbers and insights instantly.
+                    Save <strong>20+ hours per week</strong> with AI-powered
+                    chapter discovery. Get precise page numbers and insights
+                    instantly.
                   </p>
                 </div>
               </div>
@@ -308,7 +309,9 @@ export default function Generate() {
                 <div className="bg-white/20 dark:bg-black/20 rounded-xl p-4 backdrop-blur-sm border border-white/30 dark:border-gray-600">
                   <div className="flex items-center gap-3 mb-2">
                     <Target className="w-5 h-5 text-blue-600" />
-                    <span className="font-bold text-blue-600">99.9% Accurate</span>
+                    <span className="font-bold text-blue-600">
+                      99.9% Accurate
+                    </span>
                   </div>
                   <p className="text-sm text-[#0A0B1E]/70 dark:text-gray-400">
                     Precise chapter recommendations
@@ -318,7 +321,9 @@ export default function Generate() {
                 <div className="bg-white/20 dark:bg-black/20 rounded-xl p-4 backdrop-blur-sm border border-white/30 dark:border-gray-600">
                   <div className="flex items-center gap-3 mb-2">
                     <BookOpen className="w-5 h-5 text-purple-600" />
-                    <span className="font-bold text-purple-600">10,000+ Books</span>
+                    <span className="font-bold text-purple-600">
+                      10,000+ Books
+                    </span>
                   </div>
                   <p className="text-sm text-[#0A0B1E]/70 dark:text-gray-400">
                     Curated business library
@@ -330,7 +335,8 @@ export default function Generate() {
               <div className="flex flex-col sm:flex-row gap-4">
                 <div className="text-center sm:text-left">
                   <p className="text-sm text-[#0A0B1E]/60 dark:text-gray-400 mb-2">
-                    💡 <strong>Pro Tip:</strong> Be specific for better results (e.g., "team building strategies for remote workers")
+                    💡 <strong>Pro Tip:</strong> Be specific for better results
+                    (e.g., "team building strategies for remote workers")
                   </p>
                 </div>
               </div>
@@ -350,7 +356,8 @@ export default function Generate() {
                     What specific knowledge do you need?
                   </h2>
                   <p className="text-gray-600 dark:text-gray-400">
-                    Enter a business topic and get exact chapters with page numbers in seconds
+                    Enter a business topic and get exact chapters with page
+                    numbers in seconds
                   </p>
                 </div>
 
@@ -367,26 +374,26 @@ export default function Generate() {
                     className="w-full h-14 pl-14 pr-6 text-lg rounded-xl border-2 border-gray-200 dark:border-gray-700 focus:border-[#FFFD63] focus:ring-[#FFFD63] bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder:text-gray-500"
                   />
 
-                {/* Quick Topic Suggestions */}
-                <div className="space-y-3">
-                  <p className="text-sm font-medium text-gray-700 dark:text-gray-300 text-center">
-                    💡 Popular searches this week:
-                  </p>
-                  <div className="flex flex-wrap gap-2 justify-center">
-                    {quickTopics.map((quickTopic) => (
-                      <button
-                        key={quickTopic}
-                        onClick={() => {
-                          setTopic(quickTopic);
-                          analyzeTopic(quickTopic);
-                        }}
-                        className="px-4 py-2 text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-[#FFFD63] hover:text-[#0A0B1E] transition-all shadow-sm border border-gray-200 dark:border-gray-600"
-                      >
-                        {quickTopic}
-                      </button>
-                    ))}
+                  {/* Quick Topic Suggestions */}
+                  <div className="space-y-3">
+                    <p className="text-sm font-medium text-gray-700 dark:text-gray-300 text-center">
+                      💡 Popular searches this week:
+                    </p>
+                    <div className="flex flex-wrap gap-2 justify-center">
+                      {quickTopics.map((quickTopic) => (
+                        <button
+                          key={quickTopic}
+                          onClick={() => {
+                            setTopic(quickTopic);
+                            analyzeTopic(quickTopic);
+                          }}
+                          className="px-4 py-2 text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-[#FFFD63] hover:text-[#0A0B1E] transition-all shadow-sm border border-gray-200 dark:border-gray-600"
+                        >
+                          {quickTopic}
+                        </button>
+                      ))}
+                    </div>
                   </div>
-                </div>
                 </div>
 
                 {/* Search Actions */}
@@ -424,8 +431,6 @@ export default function Generate() {
                     isVisible={showFilters}
                     onToggleVisibility={() => setShowFilters(!showFilters)}
                   />
-
-
                 </div>
 
                 {/* Smart Marketing Messages */}
@@ -472,7 +477,9 @@ export default function Generate() {
                           {currentOperation || "🧠 AI is working its magic..."}
                         </div>
                         <div className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                          {isAnalyzing ? "Analyzing your query for best results" : "Searching through 10,000+ business books"}
+                          {isAnalyzing
+                            ? "Analyzing your query for best results"
+                            : "Searching through 10,000+ business books"}
                         </div>
                       </div>
                     </div>
@@ -839,7 +846,6 @@ export default function Generate() {
             )}
           </div>
         )}
-
       </div>
     </div>
   );

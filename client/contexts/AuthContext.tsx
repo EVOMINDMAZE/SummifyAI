@@ -68,7 +68,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     // Check for existing Supabase session
     const checkAuth = async () => {
       try {
-        const { data: { session }, error } = await supabase.auth.getSession();
+        const {
+          data: { session },
+          error,
+        } = await supabase.auth.getSession();
 
         if (error) {
           console.error("Session check failed:", error);
@@ -78,9 +81,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         if (session?.user) {
           // Fetch user profile from database
           const { data: profileData, error: profileError } = await supabase
-            .from('profiles')
-            .select('*')
-            .eq('user_id', session.user.id)
+            .from("profiles")
+            .select("*")
+            .eq("user_id", session.user.id)
             .single();
 
           if (profileError) {
@@ -91,18 +94,21 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           if (profileData) {
             const userData: User = {
               id: profileData.user_id,
-              email: session.user.email || '',
-              firstName: profileData.first_name || '',
-              lastName: profileData.last_name || '',
+              email: session.user.email || "",
+              firstName: profileData.first_name || "",
+              lastName: profileData.last_name || "",
               searchCount: profileData.search_count || 0,
               monthlySearchLimit: profileData.monthly_search_limit || 3,
-              searchCountResetDate: profileData.search_count_reset_date || '',
-              planType: profileData.plan_type || 'free',
-              notificationSearchResults: profileData.notification_search_results || false,
-              notificationUsageAlerts: profileData.notification_usage_alerts || false,
-              notificationProductUpdates: profileData.notification_product_updates || false,
-              createdAt: profileData.created_at || '',
-              updatedAt: profileData.updated_at || '',
+              searchCountResetDate: profileData.search_count_reset_date || "",
+              planType: profileData.plan_type || "free",
+              notificationSearchResults:
+                profileData.notification_search_results || false,
+              notificationUsageAlerts:
+                profileData.notification_usage_alerts || false,
+              notificationProductUpdates:
+                profileData.notification_product_updates || false,
+              createdAt: profileData.created_at || "",
+              updatedAt: profileData.updated_at || "",
               stripeCustomerId: profileData.stripe_customer_id,
               stripeSubscriptionId: profileData.stripe_subscription_id,
               subscriptionStatus: profileData.subscription_status,
@@ -123,101 +129,109 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     checkAuth();
 
     // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        if (event === 'SIGNED_OUT' || !session) {
-          setUser(null);
-        } else if (event === 'SIGNED_IN' && session) {
-          // Fetch user profile when signed in
-          const { data: profileData } = await supabase
-            .from('profiles')
-            .select('*')
-            .eq('user_id', session.user.id)
-            .single();
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === "SIGNED_OUT" || !session) {
+        setUser(null);
+      } else if (event === "SIGNED_IN" && session) {
+        // Fetch user profile when signed in
+        const { data: profileData } = await supabase
+          .from("profiles")
+          .select("*")
+          .eq("user_id", session.user.id)
+          .single();
 
-          if (profileData) {
-            const userData: User = {
-              id: profileData.user_id,
-              email: session.user.email || '',
-              firstName: profileData.first_name || '',
-              lastName: profileData.last_name || '',
-              searchCount: profileData.search_count || 0,
-              monthlySearchLimit: profileData.monthly_search_limit || 3,
-              searchCountResetDate: profileData.search_count_reset_date || '',
-              planType: profileData.plan_type || 'free',
-              notificationSearchResults: profileData.notification_search_results || false,
-              notificationUsageAlerts: profileData.notification_usage_alerts || false,
-              notificationProductUpdates: profileData.notification_product_updates || false,
-              createdAt: profileData.created_at || '',
-              updatedAt: profileData.updated_at || '',
-              stripeCustomerId: profileData.stripe_customer_id,
-              stripeSubscriptionId: profileData.stripe_subscription_id,
-              subscriptionStatus: profileData.subscription_status,
-              subscriptionEndDate: profileData.subscription_end_date,
-              adPreferences: profileData.ad_preferences,
-              adFreeUntil: profileData.ad_free_until,
-            };
-            setUser(userData);
+        if (profileData) {
+          const userData: User = {
+            id: profileData.user_id,
+            email: session.user.email || "",
+            firstName: profileData.first_name || "",
+            lastName: profileData.last_name || "",
+            searchCount: profileData.search_count || 0,
+            monthlySearchLimit: profileData.monthly_search_limit || 3,
+            searchCountResetDate: profileData.search_count_reset_date || "",
+            planType: profileData.plan_type || "free",
+            notificationSearchResults:
+              profileData.notification_search_results || false,
+            notificationUsageAlerts:
+              profileData.notification_usage_alerts || false,
+            notificationProductUpdates:
+              profileData.notification_product_updates || false,
+            createdAt: profileData.created_at || "",
+            updatedAt: profileData.updated_at || "",
+            stripeCustomerId: profileData.stripe_customer_id,
+            stripeSubscriptionId: profileData.stripe_subscription_id,
+            subscriptionStatus: profileData.subscription_status,
+            subscriptionEndDate: profileData.subscription_end_date,
+            adPreferences: profileData.ad_preferences,
+            adFreeUntil: profileData.ad_free_until,
+          };
+          setUser(userData);
+        } else {
+          // Profile doesn't exist, create one for OAuth users
+          const fullName =
+            session.user.user_metadata?.full_name || session.user.email || "";
+          const [firstName, ...lastNameParts] = fullName.split(" ");
+          const lastName = lastNameParts.join(" ");
+
+          const { error: profileError } = await supabase
+            .from("profiles")
+            .insert({
+              user_id: session.user.id,
+              first_name: firstName,
+              last_name: lastName,
+              search_count: 0,
+              monthly_search_limit: 3,
+              search_count_reset_date: new Date().toISOString().split("T")[0],
+              plan_type: "free",
+              notification_search_results: true,
+              notification_usage_alerts: true,
+              notification_product_updates: false,
+            });
+
+          if (profileError) {
+            console.error("OAuth profile creation failed:", profileError);
           } else {
-            // Profile doesn't exist, create one for OAuth users
-            const fullName = session.user.user_metadata?.full_name || session.user.email || '';
-            const [firstName, ...lastNameParts] = fullName.split(' ');
-            const lastName = lastNameParts.join(' ');
+            // Fetch the newly created profile
+            const { data: newProfileData } = await supabase
+              .from("profiles")
+              .select("*")
+              .eq("user_id", session.user.id)
+              .single();
 
-            const { error: profileError } = await supabase
-              .from('profiles')
-              .insert({
-                user_id: session.user.id,
-                first_name: firstName,
-                last_name: lastName,
-                search_count: 0,
-                monthly_search_limit: 3,
-                search_count_reset_date: new Date().toISOString().split('T')[0],
-                plan_type: 'free',
-                notification_search_results: true,
-                notification_usage_alerts: true,
-                notification_product_updates: false,
-              });
-
-            if (profileError) {
-              console.error("OAuth profile creation failed:", profileError);
-            } else {
-              // Fetch the newly created profile
-              const { data: newProfileData } = await supabase
-                .from('profiles')
-                .select('*')
-                .eq('user_id', session.user.id)
-                .single();
-
-              if (newProfileData) {
-                const userData: User = {
-                  id: newProfileData.user_id,
-                  email: session.user.email || '',
-                  firstName: newProfileData.first_name || '',
-                  lastName: newProfileData.last_name || '',
-                  searchCount: newProfileData.search_count || 0,
-                  monthlySearchLimit: newProfileData.monthly_search_limit || 3,
-                  searchCountResetDate: newProfileData.search_count_reset_date || '',
-                  planType: newProfileData.plan_type || 'free',
-                  notificationSearchResults: newProfileData.notification_search_results || false,
-                  notificationUsageAlerts: newProfileData.notification_usage_alerts || false,
-                  notificationProductUpdates: newProfileData.notification_product_updates || false,
-                  createdAt: newProfileData.created_at || '',
-                  updatedAt: newProfileData.updated_at || '',
-                  stripeCustomerId: newProfileData.stripe_customer_id,
-                  stripeSubscriptionId: newProfileData.stripe_subscription_id,
-                  subscriptionStatus: newProfileData.subscription_status,
-                  subscriptionEndDate: newProfileData.subscription_end_date,
-                  adPreferences: newProfileData.ad_preferences,
-                  adFreeUntil: newProfileData.ad_free_until,
-                };
-                setUser(userData);
-              }
+            if (newProfileData) {
+              const userData: User = {
+                id: newProfileData.user_id,
+                email: session.user.email || "",
+                firstName: newProfileData.first_name || "",
+                lastName: newProfileData.last_name || "",
+                searchCount: newProfileData.search_count || 0,
+                monthlySearchLimit: newProfileData.monthly_search_limit || 3,
+                searchCountResetDate:
+                  newProfileData.search_count_reset_date || "",
+                planType: newProfileData.plan_type || "free",
+                notificationSearchResults:
+                  newProfileData.notification_search_results || false,
+                notificationUsageAlerts:
+                  newProfileData.notification_usage_alerts || false,
+                notificationProductUpdates:
+                  newProfileData.notification_product_updates || false,
+                createdAt: newProfileData.created_at || "",
+                updatedAt: newProfileData.updated_at || "",
+                stripeCustomerId: newProfileData.stripe_customer_id,
+                stripeSubscriptionId: newProfileData.stripe_subscription_id,
+                subscriptionStatus: newProfileData.subscription_status,
+                subscriptionEndDate: newProfileData.subscription_end_date,
+                adPreferences: newProfileData.ad_preferences,
+                adFreeUntil: newProfileData.ad_free_until,
+              };
+              setUser(userData);
             }
           }
         }
       }
-    );
+    });
 
     return () => subscription.unsubscribe();
   }, []);
@@ -250,10 +264,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setIsLoading(true);
 
       const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
+        provider: "google",
         options: {
-          redirectTo: `${window.location.origin}/dashboard`
-        }
+          redirectTo: `${window.location.origin}/dashboard`,
+        },
       });
 
       if (error) {
@@ -284,23 +298,21 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       if (data.user) {
         // Create user profile
-        const [firstName, ...lastNameParts] = name.split(' ');
-        const lastName = lastNameParts.join(' ');
+        const [firstName, ...lastNameParts] = name.split(" ");
+        const lastName = lastNameParts.join(" ");
 
-        const { error: profileError } = await supabase
-          .from('profiles')
-          .insert({
-            user_id: data.user.id,
-            first_name: firstName,
-            last_name: lastName,
-            search_count: 0,
-            monthly_search_limit: 3,
-            search_count_reset_date: new Date().toISOString().split('T')[0],
-            plan_type: 'free',
-            notification_search_results: true,
-            notification_usage_alerts: true,
-            notification_product_updates: false,
-          });
+        const { error: profileError } = await supabase.from("profiles").insert({
+          user_id: data.user.id,
+          first_name: firstName,
+          last_name: lastName,
+          search_count: 0,
+          monthly_search_limit: 3,
+          search_count_reset_date: new Date().toISOString().split("T")[0],
+          plan_type: "free",
+          notification_search_results: true,
+          notification_usage_alerts: true,
+          notification_product_updates: false,
+        });
 
         if (profileError) {
           console.error("Profile creation failed:", profileError);
@@ -322,10 +334,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setIsLoading(true);
 
       const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
+        provider: "google",
         options: {
-          redirectTo: `${window.location.origin}/dashboard`
-        }
+          redirectTo: `${window.location.origin}/dashboard`,
+        },
       });
 
       if (error) {
@@ -359,9 +371,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     try {
       const { error } = await supabase
-        .from('profiles')
+        .from("profiles")
         .update(updates)
-        .eq('user_id', user.id);
+        .eq("user_id", user.id);
 
       if (error) {
         throw error;
@@ -392,7 +404,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       throw error;
     }
   };
-
 
   const value = {
     user,

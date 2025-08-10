@@ -3,17 +3,17 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { 
-  Search, 
-  Sparkles, 
-  ArrowRight, 
-  BookOpen, 
+import {
+  Search,
+  Sparkles,
+  ArrowRight,
+  BookOpen,
   TrendingUp,
   Target,
   Lightbulb,
   MessageCircle,
   HelpCircle,
-  Zap
+  Zap,
 } from "lucide-react";
 import { analyzeTopicWithAI } from "@/services/supabaseApiService";
 
@@ -30,9 +30,15 @@ interface TopicSuggestion {
   category: string;
 }
 
-export default function SmartSearchInterface({ onSearch, isLoading, user }: SmartSearchProps) {
+export default function SmartSearchInterface({
+  onSearch,
+  isLoading,
+  user,
+}: SmartSearchProps) {
   const [query, setQuery] = useState("");
-  const [currentStep, setCurrentStep] = useState<"welcome" | "input" | "refine" | "suggestions">("welcome");
+  const [currentStep, setCurrentStep] = useState<
+    "welcome" | "input" | "refine" | "suggestions"
+  >("welcome");
   const [topicAnalysis, setTopicAnalysis] = useState<any>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [showQuickTopics, setShowQuickTopics] = useState(false);
@@ -41,24 +47,66 @@ export default function SmartSearchInterface({ onSearch, isLoading, user }: Smar
     {
       icon: <MessageCircle className="h-5 w-5 text-[#FFFD63]" />,
       title: "Hi there! What would you like to learn about today?",
-      subtitle: "I'll help you find the exact chapters that answer your question."
+      subtitle:
+        "I'll help you find the exact chapters that answer your question.",
     },
     {
       icon: <HelpCircle className="h-5 w-5 text-[#FFFD63]" />,
       title: "Tell me more about what you're looking for",
-      subtitle: "The more specific you are, the better results I can find for you."
-    }
+      subtitle:
+        "The more specific you are, the better results I can find for you.",
+    },
   ];
 
   const quickTopics = [
-    { label: "Leadership Skills", value: "leadership development", category: "Management", description: "Building effective leadership capabilities" },
-    { label: "Team Communication", value: "team communication strategies", category: "Communication", description: "Improving workplace collaboration" },
-    { label: "Negotiation Tactics", value: "negotiation techniques", category: "Business", description: "Mastering deal-making skills" },
-    { label: "Innovation Process", value: "innovation methodologies", category: "Strategy", description: "Creating breakthrough ideas" },
-    { label: "Productivity Hacks", value: "productivity improvement", category: "Personal Development", description: "Optimizing your workflow" },
-    { label: "Financial Strategy", value: "financial planning strategies", category: "Finance", description: "Smart money management" },
-    { label: "Digital Marketing", value: "digital marketing tactics", category: "Marketing", description: "Online growth strategies" },
-    { label: "Customer Service", value: "customer service excellence", category: "Service", description: "Delivering exceptional experiences" }
+    {
+      label: "Leadership Skills",
+      value: "leadership development",
+      category: "Management",
+      description: "Building effective leadership capabilities",
+    },
+    {
+      label: "Team Communication",
+      value: "team communication strategies",
+      category: "Communication",
+      description: "Improving workplace collaboration",
+    },
+    {
+      label: "Negotiation Tactics",
+      value: "negotiation techniques",
+      category: "Business",
+      description: "Mastering deal-making skills",
+    },
+    {
+      label: "Innovation Process",
+      value: "innovation methodologies",
+      category: "Strategy",
+      description: "Creating breakthrough ideas",
+    },
+    {
+      label: "Productivity Hacks",
+      value: "productivity improvement",
+      category: "Personal Development",
+      description: "Optimizing your workflow",
+    },
+    {
+      label: "Financial Strategy",
+      value: "financial planning strategies",
+      category: "Finance",
+      description: "Smart money management",
+    },
+    {
+      label: "Digital Marketing",
+      value: "digital marketing tactics",
+      category: "Marketing",
+      description: "Online growth strategies",
+    },
+    {
+      label: "Customer Service",
+      value: "customer service excellence",
+      category: "Service",
+      description: "Delivering exceptional experiences",
+    },
   ];
 
   const handleInitialSearch = async () => {
@@ -70,7 +118,7 @@ export default function SmartSearchInterface({ onSearch, isLoading, user }: Smar
     try {
       const analysis = await analyzeTopicWithAI(query);
       setTopicAnalysis(analysis);
-      
+
       if (analysis.isBroad && analysis.refinements?.length > 0) {
         setCurrentStep("suggestions");
       } else {
@@ -109,11 +157,12 @@ export default function SmartSearchInterface({ onSearch, isLoading, user }: Smar
               </div>
             </div>
             <h1 className="text-3xl md:text-4xl font-bold text-[#0A0B1E] dark:text-white mb-4">
-              Hi {user?.firstName || 'there'}! 👋
+              Hi {user?.firstName || "there"}! 👋
             </h1>
             <p className="text-lg text-[#0A0B1E]/80 dark:text-gray-300 mb-6">
-              What would you like to learn about today? I'll help you find the exact chapters 
-              that answer your question from our library of business books.
+              What would you like to learn about today? I'll help you find the
+              exact chapters that answer your question from our library of
+              business books.
             </p>
             <div className="flex justify-center">
               <Button
@@ -141,7 +190,9 @@ export default function SmartSearchInterface({ onSearch, isLoading, user }: Smar
                 className="h-auto p-3 text-left flex flex-col items-start hover:border-[#FFFD63] hover:bg-[#FFFD63]/5"
               >
                 <span className="font-medium text-sm">{topic.label}</span>
-                <span className="text-xs text-gray-500 mt-1">{topic.category}</span>
+                <span className="text-xs text-gray-500 mt-1">
+                  {topic.category}
+                </span>
               </Button>
             ))}
           </div>
@@ -164,7 +215,8 @@ export default function SmartSearchInterface({ onSearch, isLoading, user }: Smar
                 What specific topic interests you?
               </h2>
               <p className="text-gray-600 dark:text-gray-400">
-                Be as specific as possible - I'll find the most relevant chapters for you.
+                Be as specific as possible - I'll find the most relevant
+                chapters for you.
               </p>
             </div>
 
@@ -175,7 +227,7 @@ export default function SmartSearchInterface({ onSearch, isLoading, user }: Smar
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder="e.g., 'effective delegation strategies for managers' or 'building team trust'"
                   className="h-14 pl-12 pr-4 text-lg border-[#FFFD63]/30 focus:border-[#FFFD63]"
-                  onKeyPress={(e) => e.key === 'Enter' && handleInitialSearch()}
+                  onKeyPress={(e) => e.key === "Enter" && handleInitialSearch()}
                 />
                 <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
               </div>
@@ -219,8 +271,12 @@ export default function SmartSearchInterface({ onSearch, isLoading, user }: Smar
                       <CardContent className="p-4">
                         <div className="flex justify-between items-start">
                           <div>
-                            <h4 className="font-medium text-sm">{topic.label}</h4>
-                            <p className="text-xs text-gray-500 mt-1">{topic.description}</p>
+                            <h4 className="font-medium text-sm">
+                              {topic.label}
+                            </h4>
+                            <p className="text-xs text-gray-500 mt-1">
+                              {topic.description}
+                            </p>
                           </div>
                           <Badge variant="outline" className="text-xs">
                             {topic.category}
@@ -254,7 +310,10 @@ export default function SmartSearchInterface({ onSearch, isLoading, user }: Smar
               <p className="text-gray-600 dark:text-gray-400 mb-4">
                 {topicAnalysis.explanation}
               </p>
-              <Badge variant="outline" className="bg-[#FFFD63]/10 text-[#0A0B1E] border-[#FFFD63]/30">
+              <Badge
+                variant="outline"
+                className="bg-[#FFFD63]/10 text-[#0A0B1E] border-[#FFFD63]/30"
+              >
                 Your search: "{query}"
               </Badge>
             </div>
@@ -266,27 +325,29 @@ export default function SmartSearchInterface({ onSearch, isLoading, user }: Smar
                   Here are some focused alternatives:
                 </h3>
                 <div className="grid gap-4">
-                  {topicAnalysis.refinements?.map((refinement: any, index: number) => (
-                    <Card
-                      key={index}
-                      className="cursor-pointer hover:border-[#FFFD63]/50 transition-colors"
-                      onClick={() => handleRefinedSearch(refinement.value)}
-                    >
-                      <CardContent className="p-6">
-                        <div className="flex justify-between items-start">
-                          <div className="flex-1">
-                            <h4 className="font-semibold text-gray-900 dark:text-white mb-2">
-                              {refinement.label}
-                            </h4>
-                            <p className="text-gray-600 dark:text-gray-400 text-sm">
-                              {refinement.description}
-                            </p>
+                  {topicAnalysis.refinements?.map(
+                    (refinement: any, index: number) => (
+                      <Card
+                        key={index}
+                        className="cursor-pointer hover:border-[#FFFD63]/50 transition-colors"
+                        onClick={() => handleRefinedSearch(refinement.value)}
+                      >
+                        <CardContent className="p-6">
+                          <div className="flex justify-between items-start">
+                            <div className="flex-1">
+                              <h4 className="font-semibold text-gray-900 dark:text-white mb-2">
+                                {refinement.label}
+                              </h4>
+                              <p className="text-gray-600 dark:text-gray-400 text-sm">
+                                {refinement.description}
+                              </p>
+                            </div>
+                            <ArrowRight className="h-5 w-5 text-[#FFFD63] ml-4" />
                           </div>
-                          <ArrowRight className="h-5 w-5 text-[#FFFD63] ml-4" />
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
+                        </CardContent>
+                      </Card>
+                    ),
+                  )}
                 </div>
               </div>
 

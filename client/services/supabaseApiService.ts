@@ -117,15 +117,18 @@ export async function searchDatabase(query: string): Promise<SearchResults> {
     console.log("🔄 Step 2: Searching database with Supabase...");
 
     // Sanitize query to prevent SQL injection and parsing issues
-    const sanitizedQuery = query.trim().replace(/[%_]/g, '\\$&');
-    console.log(`🔍 Executing search query: "${query}" (sanitized: "${sanitizedQuery}")`);
+    const sanitizedQuery = query.trim().replace(/[%_]/g, "\\$&");
+    console.log(
+      `🔍 Executing search query: "${query}" (sanitized: "${sanitizedQuery}")`,
+    );
 
     // Search in three separate queries and combine results
     const searchPromises = [
       // Search in chapter titles
       supabase
         .from("chapters")
-        .select(`
+        .select(
+          `
           id,
           chapter_title,
           chapter_text,
@@ -137,7 +140,8 @@ export async function searchDatabase(query: string): Promise<SearchResults> {
             cover_url,
             isbn_13
           )
-        `)
+        `,
+        )
         .ilike("chapter_title", `%${sanitizedQuery}%`)
         .not("chapter_text", "is", null)
         .limit(10),
@@ -145,7 +149,8 @@ export async function searchDatabase(query: string): Promise<SearchResults> {
       // Search in chapter text
       supabase
         .from("chapters")
-        .select(`
+        .select(
+          `
           id,
           chapter_title,
           chapter_text,
@@ -157,7 +162,8 @@ export async function searchDatabase(query: string): Promise<SearchResults> {
             cover_url,
             isbn_13
           )
-        `)
+        `,
+        )
         .ilike("chapter_text", `%${sanitizedQuery}%`)
         .not("chapter_text", "is", null)
         .limit(10),
@@ -165,7 +171,8 @@ export async function searchDatabase(query: string): Promise<SearchResults> {
       // Search in book titles
       supabase
         .from("chapters")
-        .select(`
+        .select(
+          `
           id,
           chapter_title,
           chapter_text,
@@ -177,35 +184,43 @@ export async function searchDatabase(query: string): Promise<SearchResults> {
             cover_url,
             isbn_13
           )
-        `)
+        `,
+        )
         .ilike("books.title", `%${sanitizedQuery}%`)
         .not("chapter_text", "is", null)
-        .limit(10)
+        .limit(10),
     ];
 
-    const [titleResults, textResults, bookResults] = await Promise.all(searchPromises);
+    const [titleResults, textResults, bookResults] =
+      await Promise.all(searchPromises);
 
     // Check for errors in any of the searches
     if (titleResults.error || textResults.error || bookResults.error) {
-      const error = titleResults.error || textResults.error || bookResults.error;
+      const error =
+        titleResults.error || textResults.error || bookResults.error;
       console.error("❌ Supabase search error:", error);
-      throw new Error(`Database search failed: ${error.message || 'Search query failed'}`);
+      throw new Error(
+        `Database search failed: ${error.message || "Search query failed"}`,
+      );
     }
 
     // Combine and deduplicate results
     const allResults = [
       ...(titleResults.data || []),
       ...(textResults.data || []),
-      ...(bookResults.data || [])
+      ...(bookResults.data || []),
     ];
 
     // Remove duplicates based on chapter ID
-    const uniqueResults = allResults.filter((result, index, array) =>
-      array.findIndex(r => r.id === result.id) === index
+    const uniqueResults = allResults.filter(
+      (result, index, array) =>
+        array.findIndex((r) => r.id === result.id) === index,
     );
 
     const searchResults = uniqueResults.slice(0, 20); // Limit final results
-    console.log(`📚 Combined search found ${searchResults.length} unique chapters`);
+    console.log(
+      `📚 Combined search found ${searchResults.length} unique chapters`,
+    );
 
     // Transform results to match expected format
     const results = searchResults.map((row: any) => ({
@@ -484,7 +499,9 @@ export async function inspectDatabaseSchema() {
     if (tablesError) {
       // Fallback: directly check known tables instead of using system tables
       console.log("📋 Using direct table inspection fallback...");
-      console.info("💡 RPC get_schema_info not available, checking known tables directly");
+      console.info(
+        "💡 RPC get_schema_info not available, checking known tables directly",
+      );
 
       // Get sample data from known tables
       const knownTables = [
@@ -513,16 +530,26 @@ export async function inspectDatabaseSchema() {
               sampleRow: sample.length > 0 ? sample[0] : null,
               rowCount: sample.length,
             };
-            console.log(`✅ Table ${tableName} exists with ${sample.length} sample rows`);
+            console.log(
+              `✅ Table ${tableName} exists with ${sample.length} sample rows`,
+            );
           } else {
-            console.log(`⚠️ Table ${tableName} not accessible: ${sampleError?.message || 'No data'}`);
+            console.log(
+              `⚠️ Table ${tableName} not accessible: ${sampleError?.message || "No data"}`,
+            );
           }
         } catch (tableError) {
-          console.log(`❌ Table ${tableName} error:`, tableError instanceof Error ? tableError.message : tableError);
+          console.log(
+            `❌ Table ${tableName} error:`,
+            tableError instanceof Error ? tableError.message : tableError,
+          );
         }
       }
 
-      console.log(`📊 Found ${existingTables.length} accessible tables:`, existingTables);
+      console.log(
+        `📊 Found ${existingTables.length} accessible tables:`,
+        existingTables,
+      );
 
       return {
         method: "direct_inspection",
@@ -534,9 +561,13 @@ export async function inspectDatabaseSchema() {
 
     return { method: "rpc", data: tables };
   } catch (error) {
-    console.error("❌ Schema inspection failed:", error instanceof Error ? error.message : error);
+    console.error(
+      "❌ Schema inspection failed:",
+      error instanceof Error ? error.message : error,
+    );
     return {
-      error: error instanceof Error ? error.message : "Schema inspection failed"
+      error:
+        error instanceof Error ? error.message : "Schema inspection failed",
     };
   }
 }

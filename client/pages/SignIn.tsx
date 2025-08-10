@@ -45,7 +45,9 @@ export default function SignIn() {
       if (provider === "google") {
         await signInWithGoogle();
       } else {
-        setError(`${provider} sign-in is coming soon! Please use email/password for now.`);
+        setError(
+          `${provider} sign-in is coming soon! Please use email/password for now.`,
+        );
       }
     } catch (err: any) {
       console.error(`${provider} sign in error:`, err);
@@ -67,19 +69,19 @@ export default function SignIn() {
       // Provide helpful error messages based on the error
       if (err.message?.includes("Invalid login credentials")) {
         setError(
-          "Invalid email or password. Please check your credentials or create an account if you don't have one yet."
+          "Invalid email or password. Please check your credentials or create an account if you don't have one yet.",
         );
       } else if (err.message?.includes("Email not confirmed")) {
         setError(
-          "Please check your email and click the confirmation link before signing in."
+          "Please check your email and click the confirmation link before signing in.",
         );
       } else if (err.message?.includes("Too many requests")) {
         setError(
-          "Too many sign-in attempts. Please wait a few minutes before trying again."
+          "Too many sign-in attempts. Please wait a few minutes before trying again.",
         );
       } else {
         setError(
-          "Unable to sign in. Please check your credentials and try again."
+          "Unable to sign in. Please check your credentials and try again.",
         );
       }
     } finally {
@@ -151,18 +153,25 @@ export default function SignIn() {
           <div className="bg-white dark:bg-gray-800 py-8 px-4 shadow-lg border border-gray-200 dark:border-gray-700 sm:rounded-2xl sm:px-10">
             <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
               {error && (
-              <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 px-4 py-3 rounded-lg">
-                {error}
-              </div>
-            )}
+                <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 px-4 py-3 rounded-lg">
+                  {error}
+                </div>
+              )}
 
-            {/* Helpful message for new users */}
-            <div className="bg-[#FFFD63]/10 border border-[#FFFD63]/30 text-[#0A0B1E] dark:text-gray-300 px-4 py-3 rounded-lg">
-              <p className="text-sm">
-                <strong>New to SummifyIO?</strong> Create an account to start discovering exact chapters from business books.
-                Don't have an account yet? <Link to="/signup" className="font-semibold text-[#0A0B1E] dark:text-[#FFFD63] hover:underline">Sign up here</Link>
-              </p>
-            </div>
+              {/* Helpful message for new users */}
+              <div className="bg-[#FFFD63]/10 border border-[#FFFD63]/30 text-[#0A0B1E] dark:text-gray-300 px-4 py-3 rounded-lg">
+                <p className="text-sm">
+                  <strong>New to SummifyIO?</strong> Create an account to start
+                  discovering exact chapters from business books. Don't have an
+                  account yet?{" "}
+                  <Link
+                    to="/signup"
+                    className="font-semibold text-[#0A0B1E] dark:text-[#FFFD63] hover:underline"
+                  >
+                    Sign up here
+                  </Link>
+                </p>
+              </div>
 
               <div>
                 <label

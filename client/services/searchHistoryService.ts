@@ -11,7 +11,10 @@ export interface SearchHistoryItem {
 
 export interface SearchHistoryService {
   saveSearch: (userId: string, query: string, results: any) => Promise<void>;
-  getUserSearchHistory: (userId: string, limit?: number) => Promise<SearchHistoryItem[]>;
+  getUserSearchHistory: (
+    userId: string,
+    limit?: number,
+  ) => Promise<SearchHistoryItem[]>;
   deleteSearchHistory: (userId: string, searchId: string) => Promise<void>;
   clearAllSearchHistory: (userId: string) => Promise<void>;
   getSearchStats: (userId: string) => Promise<{
@@ -22,19 +25,16 @@ export interface SearchHistoryService {
 }
 
 class SearchHistoryServiceImpl implements SearchHistoryService {
-  
   async saveSearch(userId: string, query: string, results: any): Promise<void> {
     try {
       console.log(`💾 Saving search history for user ${userId}: "${query}"`);
-      
-      const { error } = await supabase
-        .from('user_searches')
-        .insert({
-          user_id: userId,
-          query: query.trim(),
-          results_count: results.totalChapters || 0,
-          search_results: results,
-        });
+
+      const { error } = await supabase.from("user_searches").insert({
+        user_id: userId,
+        query: query.trim(),
+        results_count: results.totalChapters || 0,
+        search_results: results,
+      });
 
       if (error) {
         throw error;
@@ -42,7 +42,7 @@ class SearchHistoryServiceImpl implements SearchHistoryService {
 
       // Update user's search count
       await this.incrementUserSearchCount(userId);
-      
+
       console.log(`✅ Search history saved successfully`);
     } catch (error) {
       console.error("❌ Failed to save search history:", error);
@@ -50,15 +50,18 @@ class SearchHistoryServiceImpl implements SearchHistoryService {
     }
   }
 
-  async getUserSearchHistory(userId: string, limit: number = 20): Promise<SearchHistoryItem[]> {
+  async getUserSearchHistory(
+    userId: string,
+    limit: number = 20,
+  ): Promise<SearchHistoryItem[]> {
     try {
       console.log(`📋 Fetching search history for user ${userId}`);
-      
+
       const { data, error } = await supabase
-        .from('user_searches')
-        .select('*')
-        .eq('user_id', userId)
-        .order('created_at', { ascending: false })
+        .from("user_searches")
+        .select("*")
+        .eq("user_id", userId)
+        .order("created_at", { ascending: false })
         .limit(limit);
 
       if (error) {
@@ -75,13 +78,15 @@ class SearchHistoryServiceImpl implements SearchHistoryService {
 
   async deleteSearchHistory(userId: string, searchId: string): Promise<void> {
     try {
-      console.log(`🗑️ Deleting search history item ${searchId} for user ${userId}`);
-      
+      console.log(
+        `🗑️ Deleting search history item ${searchId} for user ${userId}`,
+      );
+
       const { error } = await supabase
-        .from('user_searches')
+        .from("user_searches")
         .delete()
-        .eq('id', searchId)
-        .eq('user_id', userId); // Ensure user can only delete their own searches
+        .eq("id", searchId)
+        .eq("user_id", userId); // Ensure user can only delete their own searches
 
       if (error) {
         throw error;
@@ -97,11 +102,11 @@ class SearchHistoryServiceImpl implements SearchHistoryService {
   async clearAllSearchHistory(userId: string): Promise<void> {
     try {
       console.log(`🗑️ Clearing all search history for user ${userId}`);
-      
+
       const { error } = await supabase
-        .from('user_searches')
+        .from("user_searches")
         .delete()
-        .eq('user_id', userId);
+        .eq("user_id", userId);
 
       if (error) {
         throw error;
@@ -121,12 +126,12 @@ class SearchHistoryServiceImpl implements SearchHistoryService {
   }> {
     try {
       console.log(`📊 Fetching search statistics for user ${userId}`);
-      
+
       // Get total searches count
       const { count: totalSearches, error: totalError } = await supabase
-        .from('user_searches')
-        .select('*', { count: 'exact', head: true })
-        .eq('user_id', userId);
+        .from("user_searches")
+        .select("*", { count: "exact", head: true })
+        .eq("user_id", userId);
 
       if (totalError) {
         throw totalError;
@@ -138,10 +143,10 @@ class SearchHistoryServiceImpl implements SearchHistoryService {
       startOfMonth.setHours(0, 0, 0, 0);
 
       const { count: thisMonthSearches, error: monthError } = await supabase
-        .from('user_searches')
-        .select('*', { count: 'exact', head: true })
-        .eq('user_id', userId)
-        .gte('created_at', startOfMonth.toISOString());
+        .from("user_searches")
+        .select("*", { count: "exact", head: true })
+        .eq("user_id", userId)
+        .gte("created_at", startOfMonth.toISOString());
 
       if (monthError) {
         throw monthError;
@@ -149,10 +154,10 @@ class SearchHistoryServiceImpl implements SearchHistoryService {
 
       // Get top queries (simplified - just get recent unique queries)
       const { data: recentQueries, error: queriesError } = await supabase
-        .from('user_searches')
-        .select('query')
-        .eq('user_id', userId)
-        .order('created_at', { ascending: false })
+        .from("user_searches")
+        .select("query")
+        .eq("user_id", userId)
+        .order("created_at", { ascending: false })
         .limit(50);
 
       if (queriesError) {
@@ -163,7 +168,10 @@ class SearchHistoryServiceImpl implements SearchHistoryService {
       const queryCount = new Map<string, number>();
       recentQueries?.forEach(({ query }) => {
         const normalizedQuery = query.toLowerCase().trim();
-        queryCount.set(normalizedQuery, (queryCount.get(normalizedQuery) || 0) + 1);
+        queryCount.set(
+          normalizedQuery,
+          (queryCount.get(normalizedQuery) || 0) + 1,
+        );
       });
 
       // Get top 5 most frequent queries
@@ -173,7 +181,7 @@ class SearchHistoryServiceImpl implements SearchHistoryService {
         .map(([query, count]) => ({ query, count }));
 
       console.log(`✅ Search statistics retrieved successfully`);
-      
+
       return {
         totalSearches: totalSearches || 0,
         thisMonthSearches: thisMonthSearches || 0,
@@ -189,23 +197,26 @@ class SearchHistoryServiceImpl implements SearchHistoryService {
     try {
       // Get current search count
       const { data: profileData, error: fetchError } = await supabase
-        .from('profiles')
-        .select('search_count')
-        .eq('user_id', userId)
+        .from("profiles")
+        .select("search_count")
+        .eq("user_id", userId)
         .single();
 
       if (fetchError) {
-        console.warn("Could not fetch user profile for search count update:", fetchError);
+        console.warn(
+          "Could not fetch user profile for search count update:",
+          fetchError,
+        );
         return;
       }
 
       // Increment search count
       const newSearchCount = (profileData?.search_count || 0) + 1;
-      
+
       const { error: updateError } = await supabase
-        .from('profiles')
+        .from("profiles")
         .update({ search_count: newSearchCount })
-        .eq('user_id', userId);
+        .eq("user_id", userId);
 
       if (updateError) {
         console.warn("Could not update user search count:", updateError);

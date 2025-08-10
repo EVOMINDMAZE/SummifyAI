@@ -495,7 +495,8 @@ export default function Results() {
                 Your Search Results 📊
               </h1>
               <p className="text-[#0A0B1E]/80 dark:text-gray-300 text-lg mb-6">
-                View and manage your chapter discoveries and insights from our AI analysis
+                View and manage your chapter discoveries and insights from our
+                AI analysis
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <div className="bg-[#0A0B1E]/10 dark:bg-white/10 rounded-xl px-6 py-3 flex items-center">

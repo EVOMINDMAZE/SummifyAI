@@ -3,19 +3,23 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { 
-  Database, 
-  Search, 
-  CheckCircle, 
-  XCircle, 
+import {
+  Database,
+  Search,
+  CheckCircle,
+  XCircle,
   AlertTriangle,
   RefreshCw,
   Eye,
   BookOpen,
   FileText,
-  Zap
+  Zap,
 } from "lucide-react";
-import { healthCheck, inspectDatabaseSchema, searchDatabase } from "@/services/supabaseApiService";
+import {
+  healthCheck,
+  inspectDatabaseSchema,
+  searchDatabase,
+} from "@/services/supabaseApiService";
 
 interface BackendStats {
   connection: boolean;
@@ -39,7 +43,7 @@ export default function BackendStatus() {
       connection: false,
       hasBooks: false,
       hasChapters: false,
-      searchWorks: false
+      searchWorks: false,
     };
 
     try {
@@ -59,8 +63,8 @@ export default function BackendStatus() {
       if (testStats.connection) {
         try {
           const schema = await inspectDatabaseSchema();
-          testStats.hasBooks = schema.tables?.includes('books') || false;
-          testStats.hasChapters = schema.tables?.includes('chapters') || false;
+          testStats.hasBooks = schema.tables?.includes("books") || false;
+          testStats.hasChapters = schema.tables?.includes("chapters") || false;
           console.log("✅ Schema inspection:", schema);
         } catch (error) {
           console.error("❌ Schema inspection failed:", error);
@@ -77,7 +81,7 @@ export default function BackendStatus() {
           testStats.sampleSearch = {
             query: "leadership",
             results: searchResult.totalBooks,
-            searchType: searchResult.searchType
+            searchType: searchResult.searchType,
           };
           console.log("✅ Search test:", searchResult);
         } catch (error) {
@@ -87,12 +91,11 @@ export default function BackendStatus() {
       }
 
       setStats(testStats);
-
     } catch (error) {
       console.error("❌ Comprehensive test failed:", error);
       setStats({
         ...testStats,
-        error: `Comprehensive test failed: ${error.message}`
+        error: `Comprehensive test failed: ${error.message}`,
       });
     } finally {
       setIsLoading(false);
@@ -104,9 +107,11 @@ export default function BackendStatus() {
   }, []);
 
   const getStatusIcon = (status: boolean) => {
-    return status ? 
-      <CheckCircle className="h-4 w-4 text-green-600" /> : 
-      <XCircle className="h-4 w-4 text-red-600" />;
+    return status ? (
+      <CheckCircle className="h-4 w-4 text-green-600" />
+    ) : (
+      <XCircle className="h-4 w-4 text-red-600" />
+    );
   };
 
   const getStatusColor = (status: boolean) => {
@@ -119,15 +124,17 @@ export default function BackendStatus() {
         <CardTitle className="flex items-center gap-2">
           <Database className="h-5 w-5" />
           Backend System Status
-          <Button 
-            variant="outline" 
-            size="sm" 
+          <Button
+            variant="outline"
+            size="sm"
             onClick={runComprehensiveTest}
             disabled={isLoading}
             className="ml-auto"
           >
-            <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
-            {isLoading ? 'Testing...' : 'Refresh'}
+            <RefreshCw
+              className={`h-4 w-4 ${isLoading ? "animate-spin" : ""}`}
+            />
+            {isLoading ? "Testing..." : "Refresh"}
           </Button>
         </CardTitle>
       </CardHeader>
@@ -145,7 +152,7 @@ export default function BackendStatus() {
                 {getStatusIcon(stats.connection)}
                 <span className="text-sm">Database Connection</span>
                 <Badge variant={getStatusColor(stats.connection)}>
-                  {stats.connection ? 'Connected' : 'Failed'}
+                  {stats.connection ? "Connected" : "Failed"}
                 </Badge>
               </div>
 
@@ -154,7 +161,7 @@ export default function BackendStatus() {
                 <BookOpen className="h-4 w-4" />
                 <span className="text-sm">Books Table</span>
                 <Badge variant={getStatusColor(stats.hasBooks)}>
-                  {stats.hasBooks ? 'Ready' : 'Missing'}
+                  {stats.hasBooks ? "Ready" : "Missing"}
                 </Badge>
               </div>
 
@@ -163,7 +170,7 @@ export default function BackendStatus() {
                 <FileText className="h-4 w-4" />
                 <span className="text-sm">Chapters Table</span>
                 <Badge variant={getStatusColor(stats.hasChapters)}>
-                  {stats.hasChapters ? 'Ready' : 'Missing'}
+                  {stats.hasChapters ? "Ready" : "Missing"}
                 </Badge>
               </div>
 
@@ -172,7 +179,7 @@ export default function BackendStatus() {
                 <Search className="h-4 w-4" />
                 <span className="text-sm">Search Function</span>
                 <Badge variant={getStatusColor(stats.searchWorks)}>
-                  {stats.searchWorks ? 'Working' : 'Failed'}
+                  {stats.searchWorks ? "Working" : "Failed"}
                 </Badge>
               </div>
             </div>
@@ -191,8 +198,12 @@ export default function BackendStatus() {
                   <div className="text-xs text-gray-600">Chapters Indexed</div>
                 </div>
                 <div>
-                  <div className="text-2xl font-bold text-purple-600">{stats.bookCount || 0}</div>
-                  <div className="text-xs text-gray-600">Last Search Results</div>
+                  <div className="text-2xl font-bold text-purple-600">
+                    {stats.bookCount || 0}
+                  </div>
+                  <div className="text-xs text-gray-600">
+                    Last Search Results
+                  </div>
                 </div>
               </div>
             )}
@@ -202,7 +213,8 @@ export default function BackendStatus() {
               <div className="flex items-start gap-2 p-3 bg-red-50 border border-red-200 rounded-lg">
                 <AlertTriangle className="h-4 w-4 text-red-600 mt-0.5" />
                 <div className="text-sm text-red-800">
-                  <strong>Issue Detected:</strong><br />
+                  <strong>Issue Detected:</strong>
+                  <br />
                   {stats.error}
                 </div>
               </div>
@@ -210,13 +222,13 @@ export default function BackendStatus() {
 
             {/* Details Toggle */}
             <div className="flex justify-center">
-              <Button 
-                variant="ghost" 
+              <Button
+                variant="ghost"
                 size="sm"
                 onClick={() => setShowDetails(!showDetails)}
               >
                 <Eye className="h-4 w-4 mr-1" />
-                {showDetails ? 'Hide' : 'Show'} Technical Details
+                {showDetails ? "Hide" : "Show"} Technical Details
               </Button>
             </div>
 
@@ -231,15 +243,20 @@ export default function BackendStatus() {
             )}
 
             {/* Success Message */}
-            {stats.connection && stats.hasBooks && stats.hasChapters && stats.searchWorks && (
-              <div className="flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-lg">
-                <Zap className="h-4 w-4 text-green-600" />
-                <div className="text-sm text-green-800">
-                  <strong>🎉 All Systems Operational!</strong><br />
-                  Your SummifyIO backend is ready for full search functionality.
+            {stats.connection &&
+              stats.hasBooks &&
+              stats.hasChapters &&
+              stats.searchWorks && (
+                <div className="flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-lg">
+                  <Zap className="h-4 w-4 text-green-600" />
+                  <div className="text-sm text-green-800">
+                    <strong>🎉 All Systems Operational!</strong>
+                    <br />
+                    Your SummifyIO backend is ready for full search
+                    functionality.
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
           </>
         )}
       </CardContent>

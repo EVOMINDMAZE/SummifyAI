@@ -1,253 +1,306 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Supabase Backend Debug Tool</title>
     <style>
-        body { font-family: system-ui; margin: 20px; }
-        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 8px; }
-        .success { background: #d4edda; border-color: #c3e6cb; }
-        .error { background: #f8d7da; border-color: #f5c6cb; }
-        .info { background: #d1ecf1; border-color: #bee5eb; }
-        pre { background: #f8f9fa; padding: 10px; border-radius: 4px; overflow-x: auto; }
-        button { padding: 8px 16px; margin: 5px; cursor: pointer; }
-        .loading { opacity: 0.6; pointer-events: none; }
+      body {
+        font-family: system-ui;
+        margin: 20px;
+      }
+      .test-section {
+        margin: 20px 0;
+        padding: 15px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+      }
+      .success {
+        background: #d4edda;
+        border-color: #c3e6cb;
+      }
+      .error {
+        background: #f8d7da;
+        border-color: #f5c6cb;
+      }
+      .info {
+        background: #d1ecf1;
+        border-color: #bee5eb;
+      }
+      pre {
+        background: #f8f9fa;
+        padding: 10px;
+        border-radius: 4px;
+        overflow-x: auto;
+      }
+      button {
+        padding: 8px 16px;
+        margin: 5px;
+        cursor: pointer;
+      }
+      .loading {
+        opacity: 0.6;
+        pointer-events: none;
+      }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-</head>
-<body>
+  </head>
+  <body>
     <h1>🔍 Supabase Backend Analysis for SummifyIO</h1>
-    
+
     <div class="test-section info">
-        <h3>📋 Configuration Check</h3>
-        <div id="config-info">Loading...</div>
+      <h3>📋 Configuration Check</h3>
+      <div id="config-info">Loading...</div>
     </div>
 
     <div class="test-section">
-        <h3>🔗 Database Connection Test</h3>
-        <button onclick="testConnection()">Test Connection</button>
-        <div id="connection-result"></div>
+      <h3>🔗 Database Connection Test</h3>
+      <button onclick="testConnection()">Test Connection</button>
+      <div id="connection-result"></div>
     </div>
 
     <div class="test-section">
-        <h3>📊 Table Structure Analysis</h3>
-        <button onclick="analyzeSchema()">Analyze Database Schema</button>
-        <div id="schema-result"></div>
+      <h3>📊 Table Structure Analysis</h3>
+      <button onclick="analyzeSchema()">Analyze Database Schema</button>
+      <div id="schema-result"></div>
     </div>
 
     <div class="test-section">
-        <h3>📚 Books Data Test</h3>
-        <button onclick="testBooksTable()">Test Books Table</button>
-        <div id="books-result"></div>
+      <h3>📚 Books Data Test</h3>
+      <button onclick="testBooksTable()">Test Books Table</button>
+      <div id="books-result"></div>
     </div>
 
     <div class="test-section">
-        <h3>📖 Chapters Data Test</h3>
-        <button onclick="testChaptersTable()">Test Chapters Table</button>
-        <div id="chapters-result"></div>
+      <h3>📖 Chapters Data Test</h3>
+      <button onclick="testChaptersTable()">Test Chapters Table</button>
+      <div id="chapters-result"></div>
     </div>
 
     <div class="test-section">
-        <h3>🔍 Search Functionality Test</h3>
-        <button onclick="testSearch()">Test Search</button>
-        <div id="search-result"></div>
+      <h3>🔍 Search Functionality Test</h3>
+      <button onclick="testSearch()">Test Search</button>
+      <div id="search-result"></div>
     </div>
 
     <script>
-        // Configuration
-        const SUPABASE_URL = 'https://voosuqmkazvjzheipbrl.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZvb3N1cW1rYXp2anpoZWlwYnJsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMwMjAxNzcsImV4cCI6MjA2ODU5NjE3N30.AU0ew4-Un_g4nLkdGXcwSfIj6R1mwY_JDbHcSXJFe0E';
-        
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      // Configuration
+      const SUPABASE_URL = "https://voosuqmkazvjzheipbrl.supabase.co";
+      const SUPABASE_ANON_KEY =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZvb3N1cW1rYXp2anpoZWlwYnJsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMwMjAxNzcsImV4cCI6MjA2ODU5NjE3N30.AU0ew4-Un_g4nLkdGXcwSfIj6R1mwY_JDbHcSXJFe0E";
 
-        // Show configuration
-        document.getElementById('config-info').innerHTML = `
+      const supabase = window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY,
+      );
+
+      // Show configuration
+      document.getElementById("config-info").innerHTML = `
             <strong>Supabase URL:</strong> ${SUPABASE_URL}<br>
             <strong>Has Anon Key:</strong> ${!!SUPABASE_ANON_KEY}<br>
             <strong>Client Created:</strong> ${!!supabase}
         `;
 
-        function setResult(elementId, content, type = 'info') {
-            const element = document.getElementById(elementId);
-            element.innerHTML = content;
-            element.parentElement.className = `test-section ${type}`;
-        }
+      function setResult(elementId, content, type = "info") {
+        const element = document.getElementById(elementId);
+        element.innerHTML = content;
+        element.parentElement.className = `test-section ${type}`;
+      }
 
-        function setLoading(elementId, isLoading) {
-            const element = document.getElementById(elementId);
-            element.parentElement.classList.toggle('loading', isLoading);
-        }
+      function setLoading(elementId, isLoading) {
+        const element = document.getElementById(elementId);
+        element.parentElement.classList.toggle("loading", isLoading);
+      }
 
-        async function testConnection() {
-            setLoading('connection-result', true);
+      async function testConnection() {
+        setLoading("connection-result", true);
+        try {
+          console.log("🔗 Testing Supabase connection...");
+
+          // Try a simple query to test connection
+          const { data, error } = await supabase
+            .from("books")
+            .select("id")
+            .limit(1);
+
+          if (error) {
+            throw error;
+          }
+
+          setResult(
+            "connection-result",
+            `✅ <strong>Connection Successful!</strong><br>
+                    <pre>${JSON.stringify({ success: true, sampleQuery: "books table accessible" }, null, 2)}</pre>`,
+            "success",
+          );
+        } catch (error) {
+          console.error("❌ Connection test failed:", error);
+          setResult(
+            "connection-result",
+            `❌ <strong>Connection Failed!</strong><br>
+                    <pre>${JSON.stringify({ error: error.message, details: error }, null, 2)}</pre>`,
+            "error",
+          );
+        } finally {
+          setLoading("connection-result", false);
+        }
+      }
+
+      async function analyzeSchema() {
+        setLoading("schema-result", true);
+        try {
+          console.log("📊 Analyzing database schema...");
+
+          // Test known tables
+          const knownTables = [
+            "books",
+            "chapters",
+            "users",
+            "summaries",
+            "chapter_ratings",
+          ];
+          const schemaInfo = {};
+
+          for (const tableName of knownTables) {
             try {
-                console.log('🔗 Testing Supabase connection...');
-                
-                // Try a simple query to test connection
-                const { data, error } = await supabase
-                    .from('books')
-                    .select('id')
-                    .limit(1);
+              const { data: sample, error } = await supabase
+                .from(tableName)
+                .select("*")
+                .limit(1);
 
-                if (error) {
-                    throw error;
-                }
-
-                setResult('connection-result', 
-                    `✅ <strong>Connection Successful!</strong><br>
-                    <pre>${JSON.stringify({ success: true, sampleQuery: 'books table accessible' }, null, 2)}</pre>`, 
-                    'success'
-                );
-            } catch (error) {
-                console.error('❌ Connection test failed:', error);
-                setResult('connection-result', 
-                    `❌ <strong>Connection Failed!</strong><br>
-                    <pre>${JSON.stringify({ error: error.message, details: error }, null, 2)}</pre>`, 
-                    'error'
-                );
-            } finally {
-                setLoading('connection-result', false);
+              if (!error && sample !== null) {
+                schemaInfo[tableName] = {
+                  exists: true,
+                  columns: sample.length > 0 ? Object.keys(sample[0]) : [],
+                  sampleRowCount: sample.length,
+                };
+              } else {
+                schemaInfo[tableName] = {
+                  exists: false,
+                  error: error?.message || "No data",
+                };
+              }
+            } catch (tableError) {
+              schemaInfo[tableName] = {
+                exists: false,
+                error: tableError.message,
+              };
             }
+          }
+
+          const existingTables = Object.keys(schemaInfo).filter(
+            (t) => schemaInfo[t].exists,
+          );
+
+          setResult(
+            "schema-result",
+            `📊 <strong>Schema Analysis Complete</strong><br>
+                    <strong>Existing Tables (${existingTables.length}):</strong> ${existingTables.join(", ")}<br>
+                    <pre>${JSON.stringify(schemaInfo, null, 2)}</pre>`,
+            existingTables.length > 0 ? "success" : "error",
+          );
+        } catch (error) {
+          console.error("❌ Schema analysis failed:", error);
+          setResult(
+            "schema-result",
+            `❌ <strong>Schema Analysis Failed!</strong><br>
+                    <pre>${JSON.stringify({ error: error.message }, null, 2)}</pre>`,
+            "error",
+          );
+        } finally {
+          setLoading("schema-result", false);
         }
+      }
 
-        async function analyzeSchema() {
-            setLoading('schema-result', true);
-            try {
-                console.log('📊 Analyzing database schema...');
-                
-                // Test known tables
-                const knownTables = ['books', 'chapters', 'users', 'summaries', 'chapter_ratings'];
-                const schemaInfo = {};
-                
-                for (const tableName of knownTables) {
-                    try {
-                        const { data: sample, error } = await supabase
-                            .from(tableName)
-                            .select('*')
-                            .limit(1);
-                        
-                        if (!error && sample !== null) {
-                            schemaInfo[tableName] = {
-                                exists: true,
-                                columns: sample.length > 0 ? Object.keys(sample[0]) : [],
-                                sampleRowCount: sample.length
-                            };
-                        } else {
-                            schemaInfo[tableName] = {
-                                exists: false,
-                                error: error?.message || 'No data'
-                            };
-                        }
-                    } catch (tableError) {
-                        schemaInfo[tableName] = {
-                            exists: false,
-                            error: tableError.message
-                        };
-                    }
-                }
+      async function testBooksTable() {
+        setLoading("books-result", true);
+        try {
+          console.log("📚 Testing books table...");
 
-                const existingTables = Object.keys(schemaInfo).filter(t => schemaInfo[t].exists);
-                
-                setResult('schema-result', 
-                    `📊 <strong>Schema Analysis Complete</strong><br>
-                    <strong>Existing Tables (${existingTables.length}):</strong> ${existingTables.join(', ')}<br>
-                    <pre>${JSON.stringify(schemaInfo, null, 2)}</pre>`, 
-                    existingTables.length > 0 ? 'success' : 'error'
-                );
-            } catch (error) {
-                console.error('❌ Schema analysis failed:', error);
-                setResult('schema-result', 
-                    `❌ <strong>Schema Analysis Failed!</strong><br>
-                    <pre>${JSON.stringify({ error: error.message }, null, 2)}</pre>`, 
-                    'error'
-                );
-            } finally {
-                setLoading('schema-result', false);
-            }
-        }
+          const { data, error, count } = await supabase
+            .from("books")
+            .select("*", { count: "exact" })
+            .limit(5);
 
-        async function testBooksTable() {
-            setLoading('books-result', true);
-            try {
-                console.log('📚 Testing books table...');
-                
-                const { data, error, count } = await supabase
-                    .from('books')
-                    .select('*', { count: 'exact' })
-                    .limit(5);
+          if (error) {
+            throw error;
+          }
 
-                if (error) {
-                    throw error;
-                }
-
-                setResult('books-result', 
-                    `📚 <strong>Books Table Analysis</strong><br>
-                    <strong>Total Books:</strong> ${count || 'unknown'}<br>
+          setResult(
+            "books-result",
+            `📚 <strong>Books Table Analysis</strong><br>
+                    <strong>Total Books:</strong> ${count || "unknown"}<br>
                     <strong>Sample Data (${data?.length || 0} rows):</strong><br>
-                    <pre>${JSON.stringify(data || [], null, 2)}</pre>`, 
-                    'success'
-                );
-            } catch (error) {
-                console.error('❌ Books table test failed:', error);
-                setResult('books-result', 
-                    `❌ <strong>Books Table Error!</strong><br>
-                    <pre>${JSON.stringify({ error: error.message }, null, 2)}</pre>`, 
-                    'error'
-                );
-            } finally {
-                setLoading('books-result', false);
-            }
+                    <pre>${JSON.stringify(data || [], null, 2)}</pre>`,
+            "success",
+          );
+        } catch (error) {
+          console.error("❌ Books table test failed:", error);
+          setResult(
+            "books-result",
+            `❌ <strong>Books Table Error!</strong><br>
+                    <pre>${JSON.stringify({ error: error.message }, null, 2)}</pre>`,
+            "error",
+          );
+        } finally {
+          setLoading("books-result", false);
         }
+      }
 
-        async function testChaptersTable() {
-            setLoading('chapters-result', true);
-            try {
-                console.log('📖 Testing chapters table...');
-                
-                const { data, error, count } = await supabase
-                    .from('chapters')
-                    .select(`
+      async function testChaptersTable() {
+        setLoading("chapters-result", true);
+        try {
+          console.log("📖 Testing chapters table...");
+
+          const { data, error, count } = await supabase
+            .from("chapters")
+            .select(
+              `
                         id,
                         chapter_title,
                         book_id,
                         books!inner (title, author_name)
-                    `, { count: 'exact' })
-                    .limit(5);
+                    `,
+              { count: "exact" },
+            )
+            .limit(5);
 
-                if (error) {
-                    throw error;
-                }
+          if (error) {
+            throw error;
+          }
 
-                setResult('chapters-result', 
-                    `📖 <strong>Chapters Table Analysis</strong><br>
-                    <strong>Total Chapters:</strong> ${count || 'unknown'}<br>
+          setResult(
+            "chapters-result",
+            `📖 <strong>Chapters Table Analysis</strong><br>
+                    <strong>Total Chapters:</strong> ${count || "unknown"}<br>
                     <strong>Sample Data (${data?.length || 0} rows):</strong><br>
-                    <pre>${JSON.stringify(data || [], null, 2)}</pre>`, 
-                    'success'
-                );
-            } catch (error) {
-                console.error('❌ Chapters table test failed:', error);
-                setResult('chapters-result', 
-                    `❌ <strong>Chapters Table Error!</strong><br>
-                    <pre>${JSON.stringify({ error: error.message }, null, 2)}</pre>`, 
-                    'error'
-                );
-            } finally {
-                setLoading('chapters-result', false);
-            }
+                    <pre>${JSON.stringify(data || [], null, 2)}</pre>`,
+            "success",
+          );
+        } catch (error) {
+          console.error("❌ Chapters table test failed:", error);
+          setResult(
+            "chapters-result",
+            `❌ <strong>Chapters Table Error!</strong><br>
+                    <pre>${JSON.stringify({ error: error.message }, null, 2)}</pre>`,
+            "error",
+          );
+        } finally {
+          setLoading("chapters-result", false);
         }
+      }
 
-        async function testSearch() {
-            setLoading('search-result', true);
-            try {
-                console.log('🔍 Testing search functionality...');
-                
-                const searchQuery = 'leadership';
-                
-                const { data, error } = await supabase
-                    .from('chapters')
-                    .select(`
+      async function testSearch() {
+        setLoading("search-result", true);
+        try {
+          console.log("🔍 Testing search functionality...");
+
+          const searchQuery = "leadership";
+
+          const { data, error } = await supabase
+            .from("chapters")
+            .select(
+              `
                         id,
                         chapter_title,
                         chapter_text,
@@ -257,39 +310,44 @@
                             author_name,
                             cover_url
                         )
-                    `)
-                    .or(`chapter_title.ilike.%${searchQuery}%,chapter_text.ilike.%${searchQuery}%,books.title.ilike.%${searchQuery}%`)
-                    .not('chapter_text', 'is', null)
-                    .limit(10);
+                    `,
+            )
+            .or(
+              `chapter_title.ilike.%${searchQuery}%,chapter_text.ilike.%${searchQuery}%,books.title.ilike.%${searchQuery}%`,
+            )
+            .not("chapter_text", "is", null)
+            .limit(10);
 
-                if (error) {
-                    throw error;
-                }
+          if (error) {
+            throw error;
+          }
 
-                setResult('search-result', 
-                    `🔍 <strong>Search Test Results</strong><br>
+          setResult(
+            "search-result",
+            `🔍 <strong>Search Test Results</strong><br>
                     <strong>Query:</strong> "${searchQuery}"<br>
                     <strong>Results Found:</strong> ${data?.length || 0}<br>
                     <strong>Sample Results:</strong><br>
-                    <pre>${JSON.stringify(data || [], null, 2)}</pre>`, 
-                    data && data.length > 0 ? 'success' : 'error'
-                );
-            } catch (error) {
-                console.error('❌ Search test failed:', error);
-                setResult('search-result', 
-                    `❌ <strong>Search Test Failed!</strong><br>
-                    <pre>${JSON.stringify({ error: error.message }, null, 2)}</pre>`, 
-                    'error'
-                );
-            } finally {
-                setLoading('search-result', false);
-            }
+                    <pre>${JSON.stringify(data || [], null, 2)}</pre>`,
+            data && data.length > 0 ? "success" : "error",
+          );
+        } catch (error) {
+          console.error("❌ Search test failed:", error);
+          setResult(
+            "search-result",
+            `❌ <strong>Search Test Failed!</strong><br>
+                    <pre>${JSON.stringify({ error: error.message }, null, 2)}</pre>`,
+            "error",
+          );
+        } finally {
+          setLoading("search-result", false);
         }
+      }
 
-        // Auto-run connection test on load
-        window.addEventListener('load', () => {
-            setTimeout(testConnection, 1000);
-        });
+      // Auto-run connection test on load
+      window.addEventListener("load", () => {
+        setTimeout(testConnection, 1000);
+      });
     </script>
-</body>
+  </body>
 </html>

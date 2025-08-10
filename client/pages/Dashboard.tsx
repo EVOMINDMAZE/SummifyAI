@@ -76,7 +76,9 @@ export default function Dashboard() {
                   {user?.searchCount || 0}
                 </p>
                 <p className="text-xs text-gray-500 dark:text-gray-500">
-                  {user?.monthlySearchLimit ? `of ${user.monthlySearchLimit}` : "unlimited"}{" "}
+                  {user?.monthlySearchLimit
+                    ? `of ${user.monthlySearchLimit}`
+                    : "unlimited"}{" "}
                   this month
                 </p>
               </div>
@@ -116,7 +118,9 @@ export default function Dashboard() {
                   Search Reset
                 </p>
                 <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                  {user?.searchCountResetDate ? new Date(user.searchCountResetDate).toLocaleDateString() : "N/A"}
+                  {user?.searchCountResetDate
+                    ? new Date(user.searchCountResetDate).toLocaleDateString()
+                    : "N/A"}
                 </p>
                 <p className="text-xs text-gray-500 dark:text-gray-500">
                   Next reset date
@@ -137,7 +141,9 @@ export default function Dashboard() {
                   Member Since
                 </p>
                 <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                  {user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : "N/A"}
+                  {user?.createdAt
+                    ? new Date(user.createdAt).toLocaleDateString()
+                    : "N/A"}
                 </p>
                 <p className="text-xs text-gray-500 dark:text-gray-500">
                   Account created

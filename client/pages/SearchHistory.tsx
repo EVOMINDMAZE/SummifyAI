@@ -19,7 +19,10 @@ import {
   Eye,
   ChevronRight,
 } from "lucide-react";
-import { searchHistoryService, type SearchHistoryItem } from "@/services/searchHistoryService";
+import {
+  searchHistoryService,
+  type SearchHistoryItem,
+} from "@/services/searchHistoryService";
 
 export default function SearchHistory() {
   const { user } = useAuth();
@@ -41,7 +44,10 @@ export default function SearchHistory() {
 
     try {
       setIsLoading(true);
-      const history = await searchHistoryService.getUserSearchHistory(user.id, 50);
+      const history = await searchHistoryService.getUserSearchHistory(
+        user.id,
+        50,
+      );
       setSearchHistory(history);
     } catch (error) {
       console.error("Failed to load search history:", error);
@@ -67,7 +73,7 @@ export default function SearchHistory() {
     try {
       setIsDeleting(searchId);
       await searchHistoryService.deleteSearchHistory(user.id, searchId);
-      setSearchHistory(prev => prev.filter(item => item.id !== searchId));
+      setSearchHistory((prev) => prev.filter((item) => item.id !== searchId));
     } catch (error) {
       console.error("Failed to delete search:", error);
     } finally {
@@ -79,7 +85,7 @@ export default function SearchHistory() {
     if (!user?.id) return;
 
     const confirmed = window.confirm(
-      "Are you sure you want to clear all your search history? This action cannot be undone."
+      "Are you sure you want to clear all your search history? This action cannot be undone.",
     );
 
     if (confirmed) {
@@ -116,7 +122,8 @@ export default function SearchHistory() {
       return "Just now";
     } else if (diffInHours < 24) {
       return `${Math.floor(diffInHours)} hours ago`;
-    } else if (diffInHours < 168) { // 7 days
+    } else if (diffInHours < 168) {
+      // 7 days
       return `${Math.floor(diffInHours / 24)} days ago`;
     } else {
       return date.toLocaleDateString();
@@ -252,7 +259,9 @@ export default function SearchHistory() {
             <Card className="border-[#FFFD63]/20">
               <CardContent className="p-8 text-center">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#FFFD63] mx-auto mb-4"></div>
-                <p className="text-gray-600 dark:text-gray-400">Loading your search history...</p>
+                <p className="text-gray-600 dark:text-gray-400">
+                  Loading your search history...
+                </p>
               </CardContent>
             </Card>
           ) : searchHistory.length === 0 ? (
@@ -263,7 +272,8 @@ export default function SearchHistory() {
                   No searches yet
                 </h3>
                 <p className="text-gray-600 dark:text-gray-400 mb-4">
-                  Start exploring our book database to build your search history.
+                  Start exploring our book database to build your search
+                  history.
                 </p>
                 <Button
                   onClick={() => navigate("/generate")}
@@ -275,7 +285,10 @@ export default function SearchHistory() {
             </Card>
           ) : (
             searchHistory.map((searchItem) => (
-              <Card key={searchItem.id} className="border-[#FFFD63]/20 hover:border-[#FFFD63]/50 transition-colors">
+              <Card
+                key={searchItem.id}
+                className="border-[#FFFD63]/20 hover:border-[#FFFD63]/50 transition-colors"
+              >
                 <CardContent className="p-6">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
@@ -284,7 +297,10 @@ export default function SearchHistory() {
                         <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                           {searchItem.query}
                         </h3>
-                        <Badge variant="outline" className="bg-[#FFFD63]/10 text-[#0A0B1E] border-[#FFFD63]/30">
+                        <Badge
+                          variant="outline"
+                          className="bg-[#FFFD63]/10 text-[#0A0B1E] border-[#FFFD63]/30"
+                        >
                           {searchItem.results_count} results
                         </Badge>
                       </div>
@@ -295,7 +311,8 @@ export default function SearchHistory() {
                         </div>
                         <div className="flex items-center gap-1">
                           <BookOpen className="h-4 w-4" />
-                          {searchItem.search_results?.totalBooks || 0} books found
+                          {searchItem.search_results?.totalBooks || 0} books
+                          found
                         </div>
                       </div>
                     </div>
@@ -359,7 +376,9 @@ export default function SearchHistory() {
                   >
                     <div className="text-left">
                       <div className="font-medium">{queryItem.query}</div>
-                      <div className="text-xs text-gray-500">{queryItem.count} searches</div>
+                      <div className="text-xs text-gray-500">
+                        {queryItem.count} searches
+                      </div>
                     </div>
                     <ChevronRight className="h-4 w-4" />
                   </Button>

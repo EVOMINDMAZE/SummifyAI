@@ -61,10 +61,13 @@ export default function SignIn() {
     try {
       setIsLoading(true);
       setError("");
+      console.log("🔐 Starting sign in process...");
+
       await signIn(data.email, data.password);
+      console.log("✅ Sign in completed, navigating to dashboard...");
       navigate("/dashboard");
     } catch (err: any) {
-      console.error("Sign in error:", err);
+      console.error("❌ Sign in error:", err);
 
       // Provide helpful error messages based on the error
       if (err.message?.includes("Invalid login credentials")) {
@@ -79,9 +82,17 @@ export default function SignIn() {
         setError(
           "Too many sign-in attempts. Please wait a few minutes before trying again.",
         );
+      } else if (err.message?.includes("Network")) {
+        setError(
+          "Network connection issue. Please check your internet connection and try again.",
+        );
+      } else if (err.message?.includes("fetch")) {
+        setError(
+          "Connection to authentication service failed. Please try again in a moment.",
+        );
       } else {
         setError(
-          "Unable to sign in. Please check your credentials and try again.",
+          `Unable to sign in: ${err.message || "Unknown error"}. Please try again.`,
         );
       }
     } finally {

@@ -296,9 +296,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     signOut,
     updateUser,
     updateUserSettings,
-    addCredits,
-    useCredits,
-    shareContent,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

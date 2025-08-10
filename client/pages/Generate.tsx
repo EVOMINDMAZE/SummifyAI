@@ -785,8 +785,6 @@ export default function Generate() {
           </div>
         )}
 
-        {/* Logs Viewer */}
-        <LogsViewer isOpen={showLogs} onClose={() => setShowLogs(false)} />
       </div>
     </div>
   );

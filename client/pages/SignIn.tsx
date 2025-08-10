@@ -370,6 +370,9 @@ export default function SignIn() {
           </div>
         </div>
       </div>
+
+      {/* Debug component for development */}
+      <AuthTest />
     </div>
   );
 }

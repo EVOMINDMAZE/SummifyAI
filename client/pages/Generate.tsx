@@ -460,6 +460,9 @@ export default function Generate() {
                   {/* Info about AI features */}
                 </div>
 
+                {/* Backend Status for Debugging */}
+                <BackendStatus />
+
                 {/* OpenAI Status */}
                 <OpenAIStatus />
 

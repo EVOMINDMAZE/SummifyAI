@@ -198,7 +198,7 @@ export default function Support() {
                 Support Center
               </h1>
               <p className="text-gray-600 dark:text-gray-400">
-                Get help with SummifyAI, find answers to common questions, or
+                Get help with SummifyIO, find answers to common questions, or
                 contact our support team
               </p>
             </div>

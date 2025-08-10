@@ -188,6 +188,16 @@ export default function Generate() {
       // Save search state for navigation preservation
       sessionStorage.setItem("lastSearchResults", JSON.stringify(data));
       sessionStorage.setItem("lastSearchQuery", searchQuery);
+
+      // Save search to database if user is logged in
+      if (user?.id) {
+        try {
+          await searchHistoryService.saveSearch(user.id, searchQuery, data);
+        } catch (historyError) {
+          console.warn("Failed to save search history:", historyError);
+          // Don't break the user experience if history saving fails
+        }
+      }
     } catch (error) {
       console.error("Database search error:", error);
       setIsGenerating(false);

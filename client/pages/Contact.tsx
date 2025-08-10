@@ -322,7 +322,7 @@ export default function Contact() {
                       Twitter
                     </div>
                     <div className="text-gray-600 dark:text-gray-400 text-sm">
-                      @SummifyAI
+                      @SummifyIO
                     </div>
                   </div>
                 </div>

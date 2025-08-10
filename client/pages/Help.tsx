@@ -165,7 +165,7 @@ You can upgrade any standard generation to priority generation while it's proces
     {
       id: "3",
       title: "How to Set Up Team Collaboration",
-      content: `SummifyAI's collaboration features help teams work together on research and share discoveries efficiently.
+      content: `SummifyIO's collaboration features help teams work together on research and share discoveries efficiently.
 
 ## Setting Up Your Team
 

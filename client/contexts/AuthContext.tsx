@@ -170,48 +170,21 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const signIn = async (email: string, password: string) => {
     try {
       setIsLoading(true);
-      const response = await fetch("/api/auth/signin", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Sign in failed");
+      if (error) {
+        throw error;
       }
 
-      const data = await response.json();
-      localStorage.setItem("auth_token", data.token);
-      setUser({
-        id: data.user.id.toString(),
-        email: data.user.email,
-        name: data.user.name,
-        tier: data.user.tier,
-        queriesUsed: data.user.queriesUsed,
-        queriesLimit: data.user.queryLimit,
-        credits: data.user.credits,
-        referralCode: data.user.referralCode,
-        referralsCount: data.user.referralsCount,
-        createdAt: data.user.createdAt,
-      });
+      // User will be set via onAuthStateChange listener
+      console.log("Sign in successful");
     } catch (error) {
-      // Fall back to demo user for development
-      console.warn("Auth failed, using demo user:", error);
-      const mockUser: User = {
-        id: "1",
-        email,
-        name: email.split("@")[0],
-        tier: "free",
-        queriesUsed: 0,
-        queriesLimit: 3,
-        credits: 3,
-        referralCode: `${email.split("@")[0].toUpperCase()}123`,
-        referralsCount: 0,
-        createdAt: new Date().toISOString(),
-      };
-      localStorage.setItem("auth_token", "demo_token");
-      setUser(mockUser);
+      console.error("Sign in failed:", error);
+      throw error;
     } finally {
       setIsLoading(false);
     }

@@ -74,7 +74,7 @@ export const CollaborationProvider: React.FC<{ children: React.ReactNode }> = ({
 
   // Initialize socket connection
   useEffect(() => {
-    if (user) {
+    if (user && !isLoading) {
       // In a real app, this would connect to your backend
       // For demo purposes, we'll simulate a connection
       const newSocket = io("ws://localhost:3001", {

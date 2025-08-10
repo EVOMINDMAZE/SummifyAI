@@ -116,29 +116,94 @@ export async function searchDatabase(query: string): Promise<SearchResults> {
     // Step 2: Search using Supabase client (this always works)
     console.log("🔄 Step 2: Searching database with Supabase...");
 
-    // Use a safer search approach with multiple conditions
+    // Use a safer search approach by breaking down the query
     console.log(`🔍 Executing search query: "${query}"`);
 
-    const { data: searchResults, error } = await supabase
-      .from("chapters")
-      .select(
-        `
-        id,
-        chapter_title,
-        chapter_text,
-        book_id,
-        books!inner (
+    // Search in three separate queries and combine results
+    const searchPromises = [
+      // Search in chapter titles
+      supabase
+        .from("chapters")
+        .select(`
           id,
-          title,
-          author_name,
-          cover_url,
-          isbn_13
-        )
-      `,
-      )
-      .or(`chapter_title.ilike.%${query}%,chapter_text.ilike.%${query}%,books.title.ilike.%${query}%`)
-      .not("chapter_text", "is", null)
-      .limit(20);
+          chapter_title,
+          chapter_text,
+          book_id,
+          books!inner (
+            id,
+            title,
+            author_name,
+            cover_url,
+            isbn_13
+          )
+        `)
+        .ilike("chapter_title", `%${query}%`)
+        .not("chapter_text", "is", null)
+        .limit(10),
+
+      // Search in chapter text
+      supabase
+        .from("chapters")
+        .select(`
+          id,
+          chapter_title,
+          chapter_text,
+          book_id,
+          books!inner (
+            id,
+            title,
+            author_name,
+            cover_url,
+            isbn_13
+          )
+        `)
+        .ilike("chapter_text", `%${query}%`)
+        .not("chapter_text", "is", null)
+        .limit(10),
+
+      // Search in book titles
+      supabase
+        .from("chapters")
+        .select(`
+          id,
+          chapter_title,
+          chapter_text,
+          book_id,
+          books!inner (
+            id,
+            title,
+            author_name,
+            cover_url,
+            isbn_13
+          )
+        `)
+        .ilike("books.title", `%${query}%`)
+        .not("chapter_text", "is", null)
+        .limit(10)
+    ];
+
+    const [titleResults, textResults, bookResults] = await Promise.all(searchPromises);
+
+    // Check for errors in any of the searches
+    if (titleResults.error || textResults.error || bookResults.error) {
+      const error = titleResults.error || textResults.error || bookResults.error;
+      throw error;
+    }
+
+    // Combine and deduplicate results
+    const allResults = [
+      ...(titleResults.data || []),
+      ...(textResults.data || []),
+      ...(bookResults.data || [])
+    ];
+
+    // Remove duplicates based on chapter ID
+    const uniqueResults = allResults.filter((result, index, array) =>
+      array.findIndex(r => r.id === result.id) === index
+    );
+
+    const searchResults = uniqueResults.slice(0, 20); // Limit final results
+    console.log(`📚 Combined search found ${searchResults.length} unique chapters`);
 
     if (error) {
       console.error("❌ Supabase search error:", error);

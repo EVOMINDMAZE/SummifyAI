@@ -152,7 +152,7 @@ export async function searchDatabase(query: string): Promise<SearchResults> {
       chapter_text: row.chapter_text?.substring(0, 800) || "", // First 800 chars
       book_id: row.book_id,
       book_title: row.books.title,
-      author_name: row.books.author_name || row.books.author,
+      author_name: row.books.author_name,
       cover_url: row.books.cover_url,
       isbn_13: row.books.isbn_13,
       similarity_score: 0.75, // Default similarity score for text search

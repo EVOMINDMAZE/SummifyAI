@@ -275,7 +275,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const signInWithGoogle = async () => {
     try {
-      setIsLoading(true);
       console.log("🔐 Attempting Google OAuth sign in...");
 
       const { data, error } = await supabase.auth.signInWithOAuth({
@@ -307,8 +306,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     } catch (error) {
       console.error("❌ Google sign in failed:", error);
       throw error;
-    } finally {
-      setIsLoading(false);
     }
   };
 

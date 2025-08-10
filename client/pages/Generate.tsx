@@ -10,8 +10,6 @@ import { Separator } from "@/components/ui/separator";
 import {
   searchDatabase,
   analyzeTopicWithAI,
-  healthCheck,
-  inspectDatabaseSchema,
 } from "@/services/supabaseApiService";
 import type { SearchResults as SupabaseSearchResults } from "@/lib/supabase";
 import {

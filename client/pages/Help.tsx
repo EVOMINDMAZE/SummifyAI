@@ -311,7 +311,7 @@ curl -H "Authorization: Bearer YOUR_API_KEY" \\
 \`\`\`
 
 ### Base URL
-\`https://api.summifyai.com/v1\`
+\`https://api.summifyio.com/v1\`
 
 ## Core Endpoints
 

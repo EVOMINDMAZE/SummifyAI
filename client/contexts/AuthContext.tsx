@@ -269,8 +269,28 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       }
 
       console.log("✅ Sign in successful for user:", data.user?.email);
-      console.log("🔄 Waiting for auth state change to complete...");
-      // User will be set via onAuthStateChange listener
+
+      // Wait for user state to be updated by the auth state change listener
+      // with a reasonable timeout
+      return new Promise<void>((resolve, reject) => {
+        const timeout = setTimeout(() => {
+          reject(new Error("Auth state update timeout"));
+        }, 10000); // 10 second timeout for state update
+
+        const checkUserState = () => {
+          if (user && user.email === data.user?.email) {
+            clearTimeout(timeout);
+            console.log("🎉 User state updated successfully");
+            resolve();
+          } else {
+            // Check again in 100ms
+            setTimeout(checkUserState, 100);
+          }
+        };
+
+        // Start checking after a brief delay to allow state change to propagate
+        setTimeout(checkUserState, 100);
+      });
     } catch (error) {
       console.error("❌ Sign in failed:", error);
       throw error;

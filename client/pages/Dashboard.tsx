@@ -177,10 +177,10 @@ export default function Dashboard() {
             >
               <div className="text-2xl mb-2">📚</div>
               <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
-                View Library
+                Search History
               </h3>
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                Browse your saved summaries
+                View your previous searches
               </p>
             </Link>
 

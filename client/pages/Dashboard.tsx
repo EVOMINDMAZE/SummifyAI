@@ -40,7 +40,7 @@ export default function Dashboard() {
             <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-32 translate-x-32"></div>
             <div className="relative z-10">
               <h1 className="text-3xl md:text-4xl font-bold mb-2">
-                Welcome back, {user.name}! 👋
+                Welcome back, {user.firstName}! 👋
               </h1>
               <p className="text-white/80 text-lg">
                 Ready to discover exact chapters and pages? Let's find precisely

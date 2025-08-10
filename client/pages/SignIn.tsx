@@ -109,6 +109,10 @@ export default function SignIn() {
         setError(
           "Connection to authentication service failed. Please try again in a moment.",
         );
+      } else if (err.message?.includes("timeout")) {
+        setError(
+          "Sign in is taking longer than expected. Please try again or check your connection.",
+        );
       } else {
         setError(
           `Unable to sign in: ${err.message || "Unknown error"}. Please try again.`,

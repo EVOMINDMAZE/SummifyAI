@@ -82,9 +82,31 @@ export default function SignUp() {
       setIsLoading(true);
       setError("");
       await signUp(data.email, data.password, data.name);
-      navigate("/dashboard");
-    } catch (err) {
-      setError("Failed to create account. Please try again.");
+
+      // Show success message and redirect
+      alert("Account created successfully! Please check your email for confirmation if required.");
+      navigate("/signin");
+    } catch (err: any) {
+      console.error("Sign up error:", err);
+
+      // Provide helpful error messages based on the error
+      if (err.message?.includes("User already registered")) {
+        setError(
+          "An account with this email already exists. Please try signing in instead."
+        );
+      } else if (err.message?.includes("Password should be at least")) {
+        setError(
+          "Password is too weak. Please choose a stronger password."
+        );
+      } else if (err.message?.includes("Invalid email")) {
+        setError(
+          "Please enter a valid email address."
+        );
+      } else {
+        setError(
+          "Unable to create account. Please check your information and try again."
+        );
+      }
     } finally {
       setIsLoading(false);
     }

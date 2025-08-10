@@ -187,7 +187,8 @@ export async function searchDatabase(query: string): Promise<SearchResults> {
     // Check for errors in any of the searches
     if (titleResults.error || textResults.error || bookResults.error) {
       const error = titleResults.error || textResults.error || bookResults.error;
-      throw error;
+      console.error("❌ Supabase search error:", error);
+      throw new Error(`Database search failed: ${error.message || 'Search query failed'}`);
     }
 
     // Combine and deduplicate results

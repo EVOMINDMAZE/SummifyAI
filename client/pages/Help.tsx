@@ -297,7 +297,7 @@ Contact our sales team for custom enterprise solutions with:
     {
       id: "5",
       title: "API Documentation and Integration Guide",
-      content: `SummifyAI provides a comprehensive REST API for developers to integrate chapter discovery into their applications.
+      content: `SummifyIO provides a comprehensive REST API for developers to integrate chapter discovery into their applications.
 
 ## Getting Started with the API
 

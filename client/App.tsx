@@ -33,6 +33,7 @@ import Contact from "./pages/Contact";
 import Help from "./pages/Help";
 import ChapterDetail from "./pages/ChapterDetail";
 import SearchHistory from "./pages/SearchHistory";
+import AuthTestPage from "./pages/AuthTestPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();

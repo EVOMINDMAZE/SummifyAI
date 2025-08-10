@@ -104,6 +104,10 @@ export default function SignIn() {
         setError(
           "Connection to authentication service failed. Please try again in a moment.",
         );
+      } else if (err.message?.includes("Auth state update timeout")) {
+        setError(
+          "Account verification is taking longer than expected. Your account may need to be set up. Please contact support if this continues.",
+        );
       } else if (err.message?.includes("timeout")) {
         setError(
           "Sign in is taking longer than expected. Please try again or check your connection.",

@@ -54,7 +54,7 @@ export default function Dashboard() {
                   🚀 Search Chapters
                 </Link>
                 <Link
-                  to="/results"
+                  to="/search-history"
                   className="bg-transparent border-2 border-white/30 hover:border-white/50 text-white px-6 py-3 rounded-xl font-medium transition-colors"
                 >
                   📚 Search History

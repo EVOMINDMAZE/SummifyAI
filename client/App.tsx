@@ -108,7 +108,11 @@ const App = () => {
 };
 
 const container = document.getElementById("root")!;
-if (!container._reactRootContainer) {
-  const root = createRoot(container);
-  root.render(<App />);
+let root = (container as any)._reactRoot;
+
+if (!root) {
+  root = createRoot(container);
+  (container as any)._reactRoot = root;
 }
+
+root.render(<App />);

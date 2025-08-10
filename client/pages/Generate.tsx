@@ -367,7 +367,12 @@ export default function Generate() {
                     className="w-full h-14 pl-14 pr-6 text-lg rounded-xl border-2 border-gray-200 dark:border-gray-700 focus:border-[#FFFD63] focus:ring-[#FFFD63] bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder:text-gray-500"
                   />
 
-                  <div className="mt-6 flex flex-wrap gap-3 justify-center">
+                {/* Quick Topic Suggestions */}
+                <div className="space-y-3">
+                  <p className="text-sm font-medium text-gray-700 dark:text-gray-300 text-center">
+                    💡 Popular searches this week:
+                  </p>
+                  <div className="flex flex-wrap gap-2 justify-center">
                     {quickTopics.map((quickTopic) => (
                       <button
                         key={quickTopic}
@@ -375,12 +380,13 @@ export default function Generate() {
                           setTopic(quickTopic);
                           analyzeTopic(quickTopic);
                         }}
-                        className="px-4 py-2 text-sm bg-gradient-to-r from-indigo-100 to-purple-100 dark:from-indigo-900/30 dark:to-purple-900/30 text-indigo-700 dark:text-indigo-300 rounded-full border border-indigo-200 dark:border-indigo-700 hover:from-indigo-200 hover:to-purple-200 dark:hover:from-indigo-800/50 dark:hover:to-purple-800/50 transition-all shadow-sm"
+                        className="px-4 py-2 text-sm bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full hover:bg-[#FFFD63] hover:text-[#0A0B1E] transition-all shadow-sm border border-gray-200 dark:border-gray-600"
                       >
                         {quickTopic}
                       </button>
                     ))}
                   </div>
+                </div>
                 </div>
 
                 <div className="flex flex-col sm:flex-row gap-4">

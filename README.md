@@ -9,7 +9,7 @@ This application uses **Supabase as the complete backend**:
 - **Frontend**: React + Vite for client-side application
 - **Backend**: Supabase PostgreSQL database with edge functions
 - **Database**: PostgreSQL with pgvector for AI embeddings
-- **AI**: OpenAI GPT-4.1-nano and embeddings for semantic search
+- **AI**: OpenAI GPT-4o and embeddings for semantic search
 - **Authentication**: Supabase Auth (ready for implementation)
 - **Real-time**: Supabase real-time subscriptions (ready for implementation)
 

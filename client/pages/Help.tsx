@@ -904,7 +904,7 @@ When contacting support, please include:
           <h2 className="text-2xl font-bold mb-4">Still need help?</h2>
           <p className="text-blue-100 mb-6 max-w-2xl mx-auto">
             Can't find what you're looking for? Our support team is here to help
-            you get the most out of SummifyAI.
+            you get the most out of SummifyIO.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link

@@ -40,7 +40,7 @@ export default function SignUp() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const { signUp } = useAuth();
+  const { signUp, signUpWithGoogle } = useAuth();
   const navigate = useNavigate();
 
   const {

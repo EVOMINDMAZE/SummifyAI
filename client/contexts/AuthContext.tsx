@@ -30,10 +30,6 @@ export interface User {
   adFreeUntil?: string;
 }
 
-export interface UserProfile {
-  profiles: User;
-}
-
 interface AuthContextType {
   user: User | null;
   isLoading: boolean;
@@ -63,161 +59,33 @@ interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [authPromiseResolver, setAuthPromiseResolver] = useState<((value: void) => void) | null>(null);
 
-  useEffect(() => {
-    // Check for existing Supabase session
-    const checkAuth = async () => {
-      try {
-        console.log("🔍 Checking authentication status...");
-        const {
-          data: { session },
-          error,
-        } = await supabase.auth.getSession();
+  // Helper function to fetch and create user profile
+  const fetchUserProfile = async (supabaseUser: SupabaseUser): Promise<User | null> => {
+    try {
+      console.log("📋 Fetching profile for user:", supabaseUser.email);
 
-        if (error) {
-          console.error("❌ Session check failed:", error);
-          setIsLoading(false);
-          return;
-        }
+      const { data: profileData, error: profileError } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("user_id", supabaseUser.id)
+        .single();
 
-        console.log("📊 Session check result:", session ? "Session found" : "No session");
-
-        if (session?.user) {
-          console.log("👤 User found, fetching profile...");
-          // Fetch user profile from database
-          const { data: profileData, error: profileError } = await supabase
-            .from("profiles")
-            .select("*")
-            .eq("user_id", session.user.id)
-            .single();
-
-          if (profileError) {
-            console.error("❌ Profile fetch failed:", profileError);
-            if (profileError.code === 'PGRST116') {
-              console.log("🔧 Profile not found, user may need to sign up again or profile creation failed");
-            }
-            setIsLoading(false);
-            return;
-          }
-
-          if (profileData) {
-            console.log("✅ Profile found, setting user data");
-            const userData: User = {
-              id: profileData.user_id,
-              email: session.user.email || "",
-              firstName: profileData.first_name || "",
-              lastName: profileData.last_name || "",
-              searchCount: profileData.search_count || 0,
-              monthlySearchLimit: profileData.monthly_search_limit || 3,
-              searchCountResetDate: profileData.search_count_reset_date || "",
-              planType: profileData.plan_type || "free",
-              notificationSearchResults:
-                profileData.notification_search_results || false,
-              notificationUsageAlerts:
-                profileData.notification_usage_alerts || false,
-              notificationProductUpdates:
-                profileData.notification_product_updates || false,
-              createdAt: profileData.created_at || "",
-              updatedAt: profileData.updated_at || "",
-              stripeCustomerId: profileData.stripe_customer_id,
-              stripeSubscriptionId: profileData.stripe_subscription_id,
-              subscriptionStatus: profileData.subscription_status,
-              subscriptionEndDate: profileData.subscription_end_date,
-              adPreferences: profileData.ad_preferences,
-              adFreeUntil: profileData.ad_free_until,
-            };
-            setUser(userData);
-          }
-        }
-      } catch (error) {
-        console.error("❌ Auth check failed:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    checkAuth();
-
-    // Listen for auth changes
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (event, session) => {
-      console.log(`🔄 Auth state changed: ${event}`, session?.user?.email);
-
-      if (event === "SIGNED_OUT" || !session) {
-        setUser(null);
-        console.log("🔓 User signed out");
-      } else if (event === "SIGNED_IN" && session) {
-        console.log("🔐 User signed in, fetching profile...");
-        // Fetch user profile when signed in
-        const { data: profileData, error: profileError } = await supabase
-          .from("profiles")
-          .select("*")
-          .eq("user_id", session.user.id)
-          .single();
-
-        console.log("Profile fetch result:", {
-          hasData: !!profileData,
-          hasError: !!profileError,
-          errorMessage: profileError?.message
-        });
-
-        if (profileData) {
-          console.log("✅ Profile data found, creating user object");
-          try {
-            const userData: User = {
-              id: profileData.user_id,
-              email: session.user.email || "",
-              firstName: profileData.first_name || "",
-              lastName: profileData.last_name || "",
-              searchCount: profileData.search_count || 0,
-              monthlySearchLimit: profileData.monthly_search_limit || 3,
-              searchCountResetDate: profileData.search_count_reset_date || "",
-              planType: profileData.plan_type || "free",
-              notificationSearchResults:
-                profileData.notification_search_results || false,
-              notificationUsageAlerts:
-                profileData.notification_usage_alerts || false,
-              notificationProductUpdates:
-                profileData.notification_product_updates || false,
-              createdAt: profileData.created_at || "",
-              updatedAt: profileData.updated_at || "",
-              stripeCustomerId: profileData.stripe_customer_id,
-              stripeSubscriptionId: profileData.stripe_subscription_id,
-              subscriptionStatus: profileData.subscription_status,
-              subscriptionEndDate: profileData.subscription_end_date,
-              adPreferences: profileData.ad_preferences,
-              adFreeUntil: profileData.ad_free_until,
-            };
-            setUser(userData);
-            console.log("✅ User object created and set");
-
-            // Resolve any pending sign-in promise
-            if (authPromiseResolver) {
-              console.log("✅ Resolving sign-in promise");
-              authPromiseResolver();
-              setAuthPromiseResolver(null);
-            }
-          } catch (error) {
-            console.error("❌ Error creating user object:", error);
-            // Resolve promise even on error to prevent hanging
-            if (authPromiseResolver) {
-              authPromiseResolver();
-              setAuthPromiseResolver(null);
-            }
-          }
-        } else {
-          // Profile doesn't exist, create one for OAuth users
-          const fullName =
-            session.user.user_metadata?.full_name || session.user.email || "";
+      if (profileError) {
+        console.log("Profile error:", profileError);
+        
+        // If profile doesn't exist, create one
+        if (profileError.code === 'PGRST116') {
+          console.log("📝 Creating new profile for user...");
+          
+          const fullName = supabaseUser.user_metadata?.full_name || supabaseUser.email || "";
           const [firstName, ...lastNameParts] = fullName.split(" ");
           const lastName = lastNameParts.join(" ");
 
-          const { error: profileError } = await supabase
+          const { error: createError } = await supabase
             .from("profiles")
             .insert({
-              user_id: session.user.id,
+              user_id: supabaseUser.id,
               first_name: firstName,
               last_name: lastName,
               search_count: 0,
@@ -229,55 +97,107 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
               notification_product_updates: false,
             });
 
-          if (profileError) {
-            console.error("OAuth profile creation failed:", profileError);
-          } else {
-            // Fetch the newly created profile
-            const { data: newProfileData } = await supabase
-              .from("profiles")
-              .select("*")
-              .eq("user_id", session.user.id)
-              .single();
-
-            if (newProfileData) {
-              const userData: User = {
-                id: newProfileData.user_id,
-                email: session.user.email || "",
-                firstName: newProfileData.first_name || "",
-                lastName: newProfileData.last_name || "",
-                searchCount: newProfileData.search_count || 0,
-                monthlySearchLimit: newProfileData.monthly_search_limit || 3,
-                searchCountResetDate:
-                  newProfileData.search_count_reset_date || "",
-                planType: newProfileData.plan_type || "free",
-                notificationSearchResults:
-                  newProfileData.notification_search_results || false,
-                notificationUsageAlerts:
-                  newProfileData.notification_usage_alerts || false,
-                notificationProductUpdates:
-                  newProfileData.notification_product_updates || false,
-                createdAt: newProfileData.created_at || "",
-                updatedAt: newProfileData.updated_at || "",
-                stripeCustomerId: newProfileData.stripe_customer_id,
-                stripeSubscriptionId: newProfileData.stripe_subscription_id,
-                subscriptionStatus: newProfileData.subscription_status,
-                subscriptionEndDate: newProfileData.subscription_end_date,
-                adPreferences: newProfileData.ad_preferences,
-                adFreeUntil: newProfileData.ad_free_until,
-              };
-              setUser(userData);
-
-              // Resolve any pending sign-in promise
-              if (authPromiseResolver) {
-                authPromiseResolver();
-                setAuthPromiseResolver(null);
-              }
-            }
+          if (createError) {
+            console.error("❌ Profile creation failed:", createError);
+            return null;
           }
+
+          // Fetch the newly created profile
+          const { data: newProfileData } = await supabase
+            .from("profiles")
+            .select("*")
+            .eq("user_id", supabaseUser.id)
+            .single();
+
+          profileData = newProfileData;
         }
       }
 
-      // Always reset loading state after auth state change
+      if (profileData) {
+        const userData: User = {
+          id: profileData.user_id,
+          email: supabaseUser.email || "",
+          firstName: profileData.first_name || "",
+          lastName: profileData.last_name || "",
+          searchCount: profileData.search_count || 0,
+          monthlySearchLimit: profileData.monthly_search_limit || 3,
+          searchCountResetDate: profileData.search_count_reset_date || "",
+          planType: profileData.plan_type || "free",
+          notificationSearchResults:
+            profileData.notification_search_results || false,
+          notificationUsageAlerts:
+            profileData.notification_usage_alerts || false,
+          notificationProductUpdates:
+            profileData.notification_product_updates || false,
+          createdAt: profileData.created_at || "",
+          updatedAt: profileData.updated_at || "",
+          stripeCustomerId: profileData.stripe_customer_id,
+          stripeSubscriptionId: profileData.stripe_subscription_id,
+          subscriptionStatus: profileData.subscription_status,
+          subscriptionEndDate: profileData.subscription_end_date,
+          adPreferences: profileData.ad_preferences,
+          adFreeUntil: profileData.ad_free_until,
+        };
+
+        console.log("✅ User profile loaded:", userData.email);
+        return userData;
+      }
+
+      return null;
+    } catch (error) {
+      console.error("❌ Error fetching user profile:", error);
+      return null;
+    }
+  };
+
+  // Initialize auth state
+  useEffect(() => {
+    const initializeAuth = async () => {
+      try {
+        console.log("🔍 Initializing authentication...");
+        
+        const {
+          data: { session },
+          error,
+        } = await supabase.auth.getSession();
+
+        if (error) {
+          console.error("❌ Session check failed:", error);
+          return;
+        }
+
+        if (session?.user) {
+          console.log("👤 Existing session found for:", session.user.email);
+          const userData = await fetchUserProfile(session.user);
+          setUser(userData);
+        } else {
+          console.log("📭 No existing session found");
+        }
+      } catch (error) {
+        console.error("❌ Auth initialization failed:", error);
+      } finally {
+        setIsLoading(false);
+        console.log("🏁 Auth initialization completed");
+      }
+    };
+
+    initializeAuth();
+
+    // Listen for auth changes
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
+      console.log(`🔄 Auth state changed: ${event}`);
+
+      if (event === "SIGNED_OUT" || !session) {
+        setUser(null);
+        console.log("🔓 User signed out");
+      } else if (event === "SIGNED_IN" && session) {
+        console.log("🔐 User signed in:", session.user.email);
+        const userData = await fetchUserProfile(session.user);
+        setUser(userData);
+      }
+
       setIsLoading(false);
     });
 
@@ -285,202 +205,143 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, []);
 
   const signIn = async (email: string, password: string) => {
-    try {
-      console.log("🔐 Attempting sign in for:", email);
+    console.log("🔐 Starting sign in for:", email);
+    
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
 
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      if (error) {
-        console.error("❌ Sign in error:", error);
-        console.error("Error details:", {
-          message: error.message,
-          status: error.status,
-          statusText: error.name
-        });
-        throw error;
-      }
-
-      console.log("✅ Sign in successful for user:", data.user?.email);
-      console.log("🔄 Waiting for auth state change to complete...");
-
-      // Wait for user state to be updated by the auth state change listener
-      return new Promise<void>((resolve, reject) => {
-        const timeout = setTimeout(() => {
-          setAuthPromiseResolver(null);
-          reject(new Error("Auth state update timeout - profile may not exist"));
-        }, 8000); // 8 second timeout for state update
-
-        setAuthPromiseResolver(() => {
-          clearTimeout(timeout);
-          console.log("🎉 Auth state updated successfully");
-          resolve();
-        });
-      });
-    } catch (error) {
+    if (error) {
       console.error("❌ Sign in failed:", error);
       throw error;
     }
+
+    console.log("✅ Sign in successful");
+    // User state will be updated by onAuthStateChange listener
   };
 
   const signInWithGoogle = async () => {
-    try {
-      console.log("🔐 Attempting Google OAuth sign in...");
+    console.log("🔐 Starting Google OAuth sign in...");
+    
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/dashboard`,
+      },
+    });
 
-      const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo: `${window.location.origin}/dashboard`,
-        },
-      });
-
-      if (error) {
-        console.error("❌ Google OAuth error:", error);
-        console.error("Error details:", {
-          message: error.message,
-          status: error.status,
-          statusText: error.name
-        });
-
-        // Check for specific Google OAuth configuration issues
-        if (error.message.includes('OAuth') || error.message.includes('provider')) {
-          console.error("🔧 Google OAuth may not be properly configured in Supabase dashboard");
-          console.error("Please check: Authentication > Providers > Google in Supabase dashboard");
-        }
-
-        throw error;
-      }
-
-      console.log("✅ Google OAuth initiated successfully");
-      console.log("🔄 Redirecting to Google for authentication...");
-    } catch (error) {
-      console.error("❌ Google sign in failed:", error);
+    if (error) {
+      console.error("❌ Google OAuth failed:", error);
       throw error;
     }
+
+    console.log("✅ Google OAuth initiated");
   };
 
   const signUp = async (email: string, password: string, name: string) => {
-    try {
-      setIsLoading(true);
+    console.log("📝 Starting sign up for:", email);
+    
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          full_name: name,
+        },
+      },
+    });
 
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-      });
-
-      if (error) {
-        throw error;
-      }
-
-      if (data.user) {
-        // Create user profile
-        const [firstName, ...lastNameParts] = name.split(" ");
-        const lastName = lastNameParts.join(" ");
-
-        const { error: profileError } = await supabase.from("profiles").insert({
-          user_id: data.user.id,
-          first_name: firstName,
-          last_name: lastName,
-          search_count: 0,
-          monthly_search_limit: 3,
-          search_count_reset_date: new Date().toISOString().split("T")[0],
-          plan_type: "free",
-          notification_search_results: true,
-          notification_usage_alerts: true,
-          notification_product_updates: false,
-        });
-
-        if (profileError) {
-          console.error("Profile creation failed:", profileError);
-          // Don't throw error here, user can be created manually
-        }
-      }
-
-      console.log("Sign up successful");
-    } catch (error) {
-      console.error("Sign up failed:", error);
+    if (error) {
+      console.error("❌ Sign up failed:", error);
       throw error;
-    } finally {
-      setIsLoading(false);
     }
+
+    console.log("✅ Sign up successful");
+    // Profile will be created by onAuthStateChange listener when email is confirmed
   };
 
   const signUpWithGoogle = async () => {
-    try {
-      setIsLoading(true);
+    console.log("📝 Starting Google OAuth sign up...");
+    
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/dashboard`,
+      },
+    });
 
-      const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo: `${window.location.origin}/dashboard`,
-        },
-      });
-
-      if (error) {
-        throw error;
-      }
-
-      console.log("Google sign up initiated");
-    } catch (error) {
-      console.error("Google sign up failed:", error);
+    if (error) {
+      console.error("❌ Google OAuth sign up failed:", error);
       throw error;
-    } finally {
-      setIsLoading(false);
     }
+
+    console.log("✅ Google OAuth sign up initiated");
   };
 
   const signOut = async () => {
-    try {
-      const { error } = await supabase.auth.signOut();
-      if (error) {
-        throw error;
-      }
-      // User will be set to null via onAuthStateChange listener
-    } catch (error) {
-      console.error("Sign out failed:", error);
+    console.log("🔓 Signing out...");
+    
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      console.error("❌ Sign out failed:", error);
       throw error;
     }
+
+    console.log("✅ Sign out successful");
+    // User state will be cleared by onAuthStateChange listener
   };
 
   const updateUser = async (updates: Partial<User>) => {
-    if (!user) return;
+    if (!user) {
+      throw new Error("No user logged in");
+    }
 
-    try {
-      const { error } = await supabase
-        .from("profiles")
-        .update(updates)
-        .eq("user_id", user.id);
+    console.log("📝 Updating user profile...");
+    
+    const { error } = await supabase
+      .from("profiles")
+      .update({
+        first_name: updates.firstName,
+        last_name: updates.lastName,
+        search_count: updates.searchCount,
+        monthly_search_limit: updates.monthlySearchLimit,
+        search_count_reset_date: updates.searchCountResetDate,
+        plan_type: updates.planType,
+        notification_search_results: updates.notificationSearchResults,
+        notification_usage_alerts: updates.notificationUsageAlerts,
+        notification_product_updates: updates.notificationProductUpdates,
+        stripe_customer_id: updates.stripeCustomerId,
+        stripe_subscription_id: updates.stripeSubscriptionId,
+        subscription_status: updates.subscriptionStatus,
+        subscription_end_date: updates.subscriptionEndDate,
+        ad_preferences: updates.adPreferences,
+        ad_free_until: updates.adFreeUntil,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("user_id", user.id);
 
-      if (error) {
-        throw error;
-      }
-
-      // Update local state
-      setUser({ ...user, ...updates });
-    } catch (error) {
-      console.error("User update failed:", error);
+    if (error) {
+      console.error("❌ User update failed:", error);
       throw error;
     }
+
+    // Update local state
+    setUser({ ...user, ...updates });
+    console.log("✅ User profile updated");
   };
 
   const updateUserSettings = async (settings: any) => {
-    if (!user) return;
-
-    try {
-      const updates = {
-        notification_search_results: settings.notificationSearchResults,
-        notification_usage_alerts: settings.notificationUsageAlerts,
-        notification_product_updates: settings.notificationProductUpdates,
-        ad_preferences: settings.adPreferences,
-      };
-
-      await updateUser(updates);
-    } catch (error) {
-      console.error("Settings update failed:", error);
-      throw error;
+    if (!user) {
+      throw new Error("No user logged in");
     }
+
+    await updateUser({
+      notificationSearchResults: settings.notificationSearchResults,
+      notificationUsageAlerts: settings.notificationUsageAlerts,
+      notificationProductUpdates: settings.notificationProductUpdates,
+      adPreferences: settings.adPreferences,
+    });
   };
 
   const value = {

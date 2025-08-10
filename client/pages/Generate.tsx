@@ -223,48 +223,6 @@ export default function Generate() {
     performDatabaseSearch(topic);
   };
 
-  // Debug function to test Supabase connection
-  const testAPIConnection = async () => {
-    try {
-      console.log("🔧 Testing Supabase connection...");
-      const data = await healthCheck();
-      console.log("✅ Supabase Health Check:", data);
-      alert(
-        `Supabase Status: ${data.status}\nDatabase: ${data.hasDatabase ? "Connected" : "Not configured"}\nOpenAI: ${data.hasOpenAI ? "Connected" : "Not configured"}`,
-      );
-    } catch (error) {
-      console.error("❌ Supabase Health Check failed:", error);
-      alert(
-        "Supabase connection failed: " +
-          (error instanceof Error ? error.message : "Unknown error"),
-      );
-    }
-  };
-
-  const inspectSchema = async () => {
-    try {
-      console.log("🔍 Starting schema inspection...");
-      const result = await inspectDatabaseSchema();
-      console.log("📊 Database Schema:", result);
-
-      if (result.error) {
-        alert(`Schema Error: ${result.error}`);
-        return;
-      }
-
-      // Format the output nicely
-      const output = {
-        tables: result.tables || [],
-        schemaDetails: result.schema || {},
-        method: result.method || "unknown",
-      };
-
-      alert(`Database Schema:\n${JSON.stringify(output, null, 2)}`);
-    } catch (error) {
-      console.error("Schema inspection failed:", error);
-      alert(`Schema inspection failed: ${error}`);
-    }
-  };
 
   const handleBookCardClick = (bookGroup: BookGroup) => {
     console.log(`📖 Viewing details for: ${bookGroup.title}`);

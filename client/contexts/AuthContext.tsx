@@ -249,6 +249,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const signIn = async (email: string, password: string) => {
     try {
       setIsLoading(true);
+      console.log("🔐 Attempting sign in for:", email);
 
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
@@ -256,13 +257,19 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       });
 
       if (error) {
+        console.error("�� Sign in error:", error);
+        console.error("Error details:", {
+          message: error.message,
+          status: error.status,
+          statusText: error.name
+        });
         throw error;
       }
 
+      console.log("✅ Sign in successful for user:", data.user?.email);
       // User will be set via onAuthStateChange listener
-      console.log("Sign in successful");
     } catch (error) {
-      console.error("Sign in failed:", error);
+      console.error("❌ Sign in failed:", error);
       throw error;
     } finally {
       setIsLoading(false);

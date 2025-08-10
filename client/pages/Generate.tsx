@@ -139,26 +139,40 @@ export default function Generate() {
   const analyzeTopic = async (topicToAnalyze: string) => {
     if (!topicToAnalyze.trim()) return;
 
+    console.log(`🧠 Starting topic analysis for: "${topicToAnalyze}"`);
     setIsAnalyzing(true);
     setCurrentOperation("Analyzing your search query...");
 
     try {
-      const analysis = await analyzeTopicWithAI(topicToAnalyze.trim());
+      // Add timeout for topic analysis
+      const analysisPromise = analyzeTopicWithAI(topicToAnalyze.trim());
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Topic analysis timeout')), 5000)
+      );
+
+      const analysis = await Promise.race([analysisPromise, timeoutPromise]);
+      console.log("�� Topic analysis completed:", analysis);
+
       setTopicAnalysis(analysis);
 
       if (analysis.isBroad && analysis.refinements.length > 0) {
+        console.log("📋 Topic is broad, showing refinements");
         setTopicRefinements(analysis.refinements);
         setShowRefinements(true);
       } else {
+        console.log("🎯 Topic is specific, proceeding with search");
         // Topic is specific enough, proceed with database search
         performDatabaseSearch(topicToAnalyze);
       }
     } catch (error) {
-      console.error("Topic analysis error:", error);
+      console.error("❌ Topic analysis error:", error);
+      console.log("🔄 Proceeding with database search despite analysis failure");
       // If analysis fails, proceed with database search anyway
       performDatabaseSearch(topicToAnalyze);
     } finally {
+      console.log("🏁 Topic analysis completed, clearing loading state");
       setIsAnalyzing(false);
+      setCurrentOperation("");
     }
   };
 

@@ -76,7 +76,13 @@ export default function SignIn() {
       setError("");
       console.log("🔐 Starting sign in process...");
 
-      await signIn(data.email, data.password);
+      // Add timeout protection to prevent infinite loading
+      const signInPromise = signIn(data.email, data.password);
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Sign in timeout')), 30000) // 30 second timeout
+      );
+
+      await Promise.race([signInPromise, timeoutPromise]);
       console.log("✅ Sign in completed, navigating to dashboard...");
       navigate("/dashboard");
     } catch (err: any) {

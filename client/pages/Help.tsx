@@ -371,9 +371,9 @@ Configure webhooks to receive real-time updates:
 
 ## SDK Libraries
 We provide official SDKs for:
-- **JavaScript/Node.js**: \`npm install @summifyai/sdk\`
-- **Python**: \`pip install summifyai\`
-- **PHP**: \`composer require summifyai/sdk\`
+- **JavaScript/Node.js**: \`npm install @summifyio/sdk\`
+- **Python**: \`pip install summifyio\`
+- **PHP**: \`composer require summifyio/sdk\`
 
 ## Error Handling
 The API uses conventional HTTP response codes:

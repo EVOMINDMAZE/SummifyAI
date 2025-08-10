@@ -485,25 +485,31 @@ export default function Results() {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <Navigation />
 
-      {/* Header */}
-      <div className="bg-white dark:bg-gray-800 py-12">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="flex justify-between items-center">
-            <div>
-              <h1 className="text-3xl font-bold text-[#0A0B1E] dark:text-white mb-2">
-                Your Search Results
+      {/* Header with Dashboard Style */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="mb-8">
+          <div className="bg-[#FFFD63] dark:bg-gray-800 rounded-3xl p-8 text-[#0A0B1E] dark:text-white relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-32 translate-x-32"></div>
+            <div className="relative z-10">
+              <h1 className="text-3xl md:text-4xl font-bold mb-2">
+                Your Search Results 📊
               </h1>
-              <p className="text-gray-600 dark:text-gray-300">
-                View and manage your generated book summaries and insights
+              <p className="text-[#0A0B1E]/80 dark:text-gray-300 text-lg mb-6">
+                View and manage your chapter discoveries and insights from our AI analysis
               </p>
-            </div>
-            <div className="text-right">
-              <div className="text-sm text-gray-500 mb-1">
-                Searches this month
-              </div>
-              <div className="text-2xl font-bold text-[#0A0B1E] dark:text-white">
-                {user?.queriesUsed} /{" "}
-                {user?.tier === "premium" ? "∞" : user?.queriesLimit}
+              <div className="flex flex-col sm:flex-row gap-4">
+                <div className="bg-[#0A0B1E]/10 dark:bg-white/10 rounded-xl px-6 py-3 flex items-center">
+                  <span className="font-bold text-lg mr-2">
+                    {user?.searchCount || 0}
+                  </span>
+                  <span className="text-sm">Searches Used</span>
+                </div>
+                <div className="bg-[#0A0B1E]/10 dark:bg-white/10 rounded-xl px-6 py-3 flex items-center">
+                  <span className="font-bold text-lg mr-2 capitalize">
+                    {user?.planType || "Free"}
+                  </span>
+                  <span className="text-sm">Plan</span>
+                </div>
               </div>
             </div>
           </div>

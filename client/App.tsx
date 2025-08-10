@@ -60,45 +60,45 @@ const App = () => {
           <ThemeProvider>
             <AuthProvider>
               <BrowserRouter>
-                  <Routes>
-                    <Route path="/" element={<Index />} />
-                    <Route path="/signin" element={<SignIn />} />
-                    <Route path="/signup" element={<SignUp />} />
-                    <Route path="/dashboard" element={<Dashboard />} />
-                    <Route path="/generate" element={<Generate />} />
-                    <Route path="/pricing" element={<Pricing />} />
-                    <Route path="/admin" element={<Admin />} />
-                    <Route path="/how-it-works" element={<HowItWorks />} />
-                    <Route path="/insights-demo" element={<InsightsDemo />} />
-                    <Route path="/results" element={<Results />} />
-                    <Route path="/results/:id" element={<Results />} />
-                    <Route path="/search-history" element={<SearchHistory />} />
-                    <Route
-                      path="/account-settings"
-                      element={<AccountSettings />}
-                    />
-                    <Route
-                      path="/summary-showcase"
-                      element={<SummaryShowcase />}
-                    />
-                    <Route
-                      path="/library-showcase"
-                      element={<LibraryShowcase />}
-                    />
-                    <Route path="/search-demo" element={<SearchDemo />} />
-                    <Route path="/analysis-demo" element={<AnalysisDemo />} />
-                    <Route path="/settings" element={<Settings />} />
-                    <Route path="/support" element={<Support />} />
-                    <Route path="/contact" element={<Contact />} />
-                    <Route path="/help" element={<Help />} />
-                    <Route
-                      path="/chapter/:bookId/:chapterId"
-                      element={<ChapterDetail />}
-                    />
-                    {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                    <Route path="*" element={<NotFound />} />
-                  </Routes>
-                </BrowserRouter>
+                <Routes>
+                  <Route path="/" element={<Index />} />
+                  <Route path="/signin" element={<SignIn />} />
+                  <Route path="/signup" element={<SignUp />} />
+                  <Route path="/dashboard" element={<Dashboard />} />
+                  <Route path="/generate" element={<Generate />} />
+                  <Route path="/pricing" element={<Pricing />} />
+                  <Route path="/admin" element={<Admin />} />
+                  <Route path="/how-it-works" element={<HowItWorks />} />
+                  <Route path="/insights-demo" element={<InsightsDemo />} />
+                  <Route path="/results" element={<Results />} />
+                  <Route path="/results/:id" element={<Results />} />
+                  <Route path="/search-history" element={<SearchHistory />} />
+                  <Route
+                    path="/account-settings"
+                    element={<AccountSettings />}
+                  />
+                  <Route
+                    path="/summary-showcase"
+                    element={<SummaryShowcase />}
+                  />
+                  <Route
+                    path="/library-showcase"
+                    element={<LibraryShowcase />}
+                  />
+                  <Route path="/search-demo" element={<SearchDemo />} />
+                  <Route path="/analysis-demo" element={<AnalysisDemo />} />
+                  <Route path="/settings" element={<Settings />} />
+                  <Route path="/support" element={<Support />} />
+                  <Route path="/contact" element={<Contact />} />
+                  <Route path="/help" element={<Help />} />
+                  <Route
+                    path="/chapter/:bookId/:chapterId"
+                    element={<ChapterDetail />}
+                  />
+                  {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </BrowserRouter>
             </AuthProvider>
           </ThemeProvider>
         </TooltipProvider>

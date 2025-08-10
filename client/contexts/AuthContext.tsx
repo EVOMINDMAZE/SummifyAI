@@ -68,17 +68,22 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     // Check for existing Supabase session
     const checkAuth = async () => {
       try {
+        console.log("🔍 Checking authentication status...");
         const {
           data: { session },
           error,
         } = await supabase.auth.getSession();
 
         if (error) {
-          console.error("Session check failed:", error);
+          console.error("❌ Session check failed:", error);
+          setIsLoading(false);
           return;
         }
 
+        console.log("📊 Session check result:", session ? "Session found" : "No session");
+
         if (session?.user) {
+          console.log("👤 User found, fetching profile...");
           // Fetch user profile from database
           const { data: profileData, error: profileError } = await supabase
             .from("profiles")
@@ -87,11 +92,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             .single();
 
           if (profileError) {
-            console.error("Profile fetch failed:", profileError);
+            console.error("❌ Profile fetch failed:", profileError);
+            if (profileError.code === 'PGRST116') {
+              console.log("🔧 Profile not found, user may need to sign up again or profile creation failed");
+            }
+            setIsLoading(false);
             return;
           }
 
           if (profileData) {
+            console.log("✅ Profile found, setting user data");
             const userData: User = {
               id: profileData.user_id,
               email: session.user.email || "",
@@ -120,7 +130,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           }
         }
       } catch (error) {
-        console.error("Auth check failed:", error);
+        console.error("❌ Auth check failed:", error);
       } finally {
         setIsLoading(false);
       }

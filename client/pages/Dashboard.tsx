@@ -57,7 +57,7 @@ export default function Dashboard() {
                   to="/results"
                   className="bg-transparent border-2 border-white/30 hover:border-white/50 text-white px-6 py-3 rounded-xl font-medium transition-colors"
                 >
-                  📚 View Library
+                  📚 Search History
                 </Link>
               </div>
             </div>

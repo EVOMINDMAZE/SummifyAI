@@ -205,10 +205,7 @@ export async function searchDatabase(query: string): Promise<SearchResults> {
     const searchResults = uniqueResults.slice(0, 20); // Limit final results
     console.log(`📚 Combined search found ${searchResults.length} unique chapters`);
 
-    if (error) {
-      console.error("❌ Supabase search error:", error);
-      throw new Error(`Database search failed: ${error.message}`);
-    }
+    // Note: Error handling is now done above in the Promise.all section
 
     // Transform results to match expected format
     const results = (searchResults || []).map((row: any) => ({

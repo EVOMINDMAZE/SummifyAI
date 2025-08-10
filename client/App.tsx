@@ -96,6 +96,7 @@ const App = () => {
                     path="/chapter/:bookId/:chapterId"
                     element={<ChapterDetail />}
                   />
+                  <Route path="/auth-test" element={<AuthTestPage />} />
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                   <Route path="*" element={<NotFound />} />
                 </Routes>

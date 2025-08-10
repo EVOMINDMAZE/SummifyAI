@@ -142,7 +142,7 @@ export default function SignIn() {
               Welcome back
             </h2>
             <p className="mt-2 text-gray-600 dark:text-gray-400">
-              Sign in to your SummifyAI account
+              Sign in to your SummifyIO account
             </p>
           </div>
         </div>

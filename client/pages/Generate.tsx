@@ -338,11 +338,10 @@ export default function Generate() {
           </div>
         </div>
 
-        {/* Enhanced Search Section */}
-        <div className="max-w-4xl mx-auto mb-16">
-          <Card className="shadow-2xl border-0 bg-white/95 dark:bg-gray-800/95 backdrop-blur-md rounded-3xl relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/30 to-purple-50/30 dark:from-indigo-900/10 dark:to-purple-900/10"></div>
-            <CardContent className="relative z-10 p-10">
+        {/* Enhanced Search Interface with Dashboard Style */}
+        <div className="max-w-5xl mx-auto mb-16">
+          <Card className="shadow-xl border-0 bg-white dark:bg-gray-800 rounded-3xl overflow-hidden">
+            <CardContent className="p-8">
               <div className="space-y-8">
                 <div className="text-center">
                   <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-3 flex items-center justify-center">

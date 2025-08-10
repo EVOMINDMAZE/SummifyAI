@@ -61,7 +61,7 @@ Focus on being specific about the practical value and direct relevance to the us
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "gpt-4o-mini",
+        model: "gpt-4o",
         messages: [
           {
             role: "system",

@@ -11,13 +11,20 @@ class NetlifyFunctionService {
     try {
       console.log(`🔄 Attempting to call Netlify function: ${functionPath}`);
 
+      // Add timeout to prevent hanging
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+
       const response = await fetch(`${this.baseUrl}${functionPath}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(payload),
+        signal: controller.signal,
       });
+
+      clearTimeout(timeout);
 
       if (!response.ok) {
         // Check if it's a 404 (function not deployed)
@@ -41,10 +48,16 @@ class NetlifyFunctionService {
         throw error;
       }
 
+      // Handle timeout errors
+      if (error.name === 'AbortError') {
+        console.warn(`⚠️ Netlify function ${functionPath} timed out. Using fallback.`);
+        throw new Error("FUNCTION_NOT_AVAILABLE");
+      }
+
       // Handle network errors (like "Failed to fetch" in dev mode)
       if (
         error instanceof TypeError &&
-        error.message.includes("Failed to fetch")
+        (error.message.includes("Failed to fetch") || error.message.includes("NetworkError"))
       ) {
         console.warn(
           `⚠️ Netlify functions not available (development mode or network issue)`,

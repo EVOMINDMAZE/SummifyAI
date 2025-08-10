@@ -244,6 +244,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
                 adFreeUntil: newProfileData.ad_free_until,
               };
               setUser(userData);
+
+              // Resolve any pending sign-in promise
+              if (authPromiseResolver) {
+                authPromiseResolver();
+                setAuthPromiseResolver(null);
+              }
             }
           }
         }

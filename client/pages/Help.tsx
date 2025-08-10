@@ -36,7 +36,7 @@ export default function Help() {
       id: "getting-started",
       name: "Getting Started",
       icon: "🚀",
-      description: "Learn the basics of SummifyAI",
+      description: "Learn the basics of SummifyIO",
       articles: 8,
     },
     {

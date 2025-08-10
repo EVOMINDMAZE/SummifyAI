@@ -179,6 +179,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             adFreeUntil: profileData.ad_free_until,
           };
           setUser(userData);
+
+          // Resolve any pending sign-in promise
+          if (authPromiseResolver) {
+            authPromiseResolver();
+            setAuthPromiseResolver(null);
+          }
         } else {
           // Profile doesn't exist, create one for OAuth users
           const fullName =

@@ -251,9 +251,24 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  const updateUser = (updates: Partial<User>) => {
-    if (user) {
+  const updateUser = async (updates: Partial<User>) => {
+    if (!user) return;
+
+    try {
+      const { error } = await supabase
+        .from('profiles')
+        .update(updates)
+        .eq('user_id', user.id);
+
+      if (error) {
+        throw error;
+      }
+
+      // Update local state
       setUser({ ...user, ...updates });
+    } catch (error) {
+      console.error("User update failed:", error);
+      throw error;
     }
   };
 
@@ -261,29 +276,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     if (!user) return;
 
     try {
-      // Import SummifyAPI here to avoid circular dependencies
-      const { SummifyAPI } = await import("../utils/api");
-      await SummifyAPI.updateUserSettings(parseInt(user.id), settings);
+      const updates = {
+        notification_search_results: settings.notificationSearchResults,
+        notification_usage_alerts: settings.notificationUsageAlerts,
+        notification_product_updates: settings.notificationProductUpdates,
+        ad_preferences: settings.adPreferences,
+      };
 
-      // Update local user state
-      setUser({
-        ...user,
-        settings: { ...user.settings, ...settings },
-      });
+      await updateUser(updates);
     } catch (error) {
-      console.warn("Settings API failed, using local storage:", error);
-      // Fallback to localStorage for demo
-      const currentSettings = user.settings || {};
-      const newSettings = { ...currentSettings, ...settings };
-      localStorage.setItem(
-        `user_settings_${user.id}`,
-        JSON.stringify(newSettings),
-      );
-
-      setUser({
-        ...user,
-        settings: newSettings,
-      });
+      console.error("Settings update failed:", error);
+      throw error;
     }
   };
 

@@ -59,8 +59,7 @@ const App = () => {
           <Sonner />
           <ThemeProvider>
             <AuthProvider>
-              <CollaborationProvider>
-                <BrowserRouter>
+              <BrowserRouter>
                   <Routes>
                     <Route path="/" element={<Index />} />
                     <Route path="/signin" element={<SignIn />} />
@@ -100,7 +99,6 @@ const App = () => {
                     <Route path="*" element={<NotFound />} />
                   </Routes>
                 </BrowserRouter>
-              </CollaborationProvider>
             </AuthProvider>
           </ThemeProvider>
         </TooltipProvider>

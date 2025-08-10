@@ -354,16 +354,17 @@ export default function Generate() {
                   </p>
                 </div>
 
+                {/* Main Search Input */}
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none">
-                    <Search className="w-6 h-6 text-gray-400" />
+                    <Search className="w-5 h-5 text-gray-400" />
                   </div>
                   <Input
                     value={topic}
                     onChange={(e) => setTopic(e.target.value)}
                     onKeyPress={(e) => e.key === "Enter" && handleSearch()}
-                    placeholder="leadership strategies, negotiation tactics, team building, innovation..."
-                    className="w-full h-16 pl-16 pr-6 text-lg rounded-2xl border-2 border-gray-200 dark:border-gray-700 focus:border-indigo-500 focus:ring-indigo-500 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm text-gray-900 dark:text-white placeholder:text-gray-500"
+                    placeholder="e.g., 'team building strategies for remote workers' or 'negotiation techniques for startups'"
+                    className="w-full h-14 pl-14 pr-6 text-lg rounded-xl border-2 border-gray-200 dark:border-gray-700 focus:border-[#FFFD63] focus:ring-[#FFFD63] bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder:text-gray-500"
                   />
 
                   <div className="mt-6 flex flex-wrap gap-3 justify-center">

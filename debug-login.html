@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Debug Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <h1>Login Debug Test</h1>
+    
+    <div id="status">Initializing...</div>
+    
+    <div style="margin: 20px 0;">
+        <h3>Email/Password Login Test</h3>
+        <input type="email" id="email" placeholder="Email" value="test@example.com">
+        <input type="password" id="password" placeholder="Password" value="test123">
+        <button onclick="testEmailLogin()">Test Email Login</button>
+    </div>
+    
+    <div style="margin: 20px 0;">
+        <h3>Google OAuth Test</h3>
+        <button onclick="testGoogleLogin()">Test Google Login</button>
+    </div>
+    
+    <div style="margin: 20px 0;">
+        <h3>Session Check</h3>
+        <button onclick="checkSession()">Check Current Session</button>
+    </div>
+    
+    <div id="logs" style="background: #f5f5f5; padding: 20px; margin: 20px 0; white-space: pre-wrap; font-family: monospace;"></div>
+
+    <script>
+        const supabaseUrl = 'https://voosuqmkazvjzheipbrl.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZvb3N1cW1rYXp2anpoZWlwYnJsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMwMjAxNzcsImV4cCI6MjA2ODU5NjE3N30.AU0ew4-Un_g4nLkdGXcwSfIj6R1mwY_JDbHcSXJFe0E';
+        
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+        
+        function log(message) {
+            const timestamp = new Date().toLocaleTimeString();
+            document.getElementById('logs').textContent += `[${timestamp}] ${message}\n`;
+            console.log(message);
+        }
+        
+        function updateStatus(message) {
+            document.getElementById('status').textContent = message;
+            log(`Status: ${message}`);
+        }
+        
+        async function testEmailLogin() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            log(`Attempting email login with: ${email}`);
+            updateStatus('Testing email login...');
+            
+            try {
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email: email,
+                    password: password
+                });
+                
+                if (error) {
+                    log(`Login error: ${error.message}`);
+                    updateStatus(`Login failed: ${error.message}`);
+                } else {
+                    log(`Login successful! User: ${JSON.stringify(data.user, null, 2)}`);
+                    updateStatus('Login successful!');
+                }
+            } catch (err) {
+                log(`Exception during login: ${err.message}`);
+                updateStatus(`Exception: ${err.message}`);
+            }
+        }
+        
+        async function testGoogleLogin() {
+            log('Attempting Google OAuth login...');
+            updateStatus('Testing Google login...');
+            
+            try {
+                const { data, error } = await supabase.auth.signInWithOAuth({
+                    provider: 'google',
+                    options: {
+                        redirectTo: window.location.origin
+                    }
+                });
+                
+                if (error) {
+                    log(`Google login error: ${error.message}`);
+                    updateStatus(`Google login failed: ${error.message}`);
+                } else {
+                    log(`Google login initiated: ${JSON.stringify(data, null, 2)}`);
+                    updateStatus('Google login initiated...');
+                }
+            } catch (err) {
+                log(`Exception during Google login: ${err.message}`);
+                updateStatus(`Exception: ${err.message}`);
+            }
+        }
+        
+        async function checkSession() {
+            log('Checking current session...');
+            updateStatus('Checking session...');
+            
+            try {
+                const { data: { session }, error } = await supabase.auth.getSession();
+                
+                if (error) {
+                    log(`Session check error: ${error.message}`);
+                    updateStatus(`Session check failed: ${error.message}`);
+                } else if (session) {
+                    log(`Active session found: ${JSON.stringify(session.user, null, 2)}`);
+                    updateStatus('Active session found!');
+                } else {
+                    log('No active session');
+                    updateStatus('No active session');
+                }
+            } catch (err) {
+                log(`Exception during session check: ${err.message}`);
+                updateStatus(`Exception: ${err.message}`);
+            }
+        }
+        
+        // Initialize
+        updateStatus('Ready for testing');
+        log('Login debug page loaded');
+        log(`Supabase URL: ${supabaseUrl}`);
+        log(`Using key: ${supabaseKey.substring(0, 20)}...`);
+        
+        // Listen for auth changes
+        supabase.auth.onAuthStateChange((event, session) => {
+            log(`Auth state changed: ${event}`);
+            if (session) {
+                log(`New session: ${JSON.stringify(session.user, null, 2)}`);
+            }
+        });
+    </script>
+</body>
+</html>

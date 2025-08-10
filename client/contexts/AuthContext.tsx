@@ -143,11 +143,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
+      console.log(`🔄 Auth state changed: ${event}`, session?.user?.email);
+
       if (event === "SIGNED_OUT" || !session) {
         setUser(null);
+        console.log("🔓 User signed out");
       } else if (event === "SIGNED_IN" && session) {
+        console.log("🔐 User signed in, fetching profile...");
         // Fetch user profile when signed in
-        const { data: profileData } = await supabase
+        const { data: profileData, error: profileError } = await supabase
           .from("profiles")
           .select("*")
           .eq("user_id", session.user.id)

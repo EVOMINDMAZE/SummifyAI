@@ -138,7 +138,7 @@ export async function searchDatabase(query: string): Promise<SearchResults> {
             isbn_13
           )
         `)
-        .ilike("chapter_title", `%${query}%`)
+        .ilike("chapter_title", `%${sanitizedQuery}%`)
         .not("chapter_text", "is", null)
         .limit(10),
 
@@ -290,7 +290,7 @@ async function enrichResultsWithAI(
     let aiAnalysisWorking = false;
 
     for (const [bookId, bookData] of bookGroups) {
-      console.log(`�� Processing book: "${bookData.title}"`);
+      console.log(`🔍 Processing book: "${bookData.title}"`);
 
       const enrichedChapters: EnrichedChapter[] = [];
 

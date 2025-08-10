@@ -172,7 +172,7 @@ export default function Dashboard() {
             </Link>
 
             <Link
-              to="/results"
+              to="/search-history"
               className="p-4 border border-gray-200 dark:border-gray-600 rounded-xl hover:border-blue-300 dark:hover:border-blue-600 transition-colors group"
             >
               <div className="text-2xl mb-2">📚</div>

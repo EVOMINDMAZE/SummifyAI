@@ -40,11 +40,8 @@ interface AuthContextType {
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string, name: string) => Promise<void>;
   signOut: () => Promise<void>;
-  updateUser: (updates: Partial<User>) => void;
+  updateUser: (updates: Partial<User>) => Promise<void>;
   updateUserSettings: (settings: any) => Promise<void>;
-  addCredits: (amount: number, reason: string) => void;
-  useCredits: (amount: number) => boolean;
-  shareContent: (type: "summary" | "referral", contentId?: string) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);

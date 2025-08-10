@@ -116,8 +116,9 @@ export async function searchDatabase(query: string): Promise<SearchResults> {
     // Step 2: Search using Supabase client (this always works)
     console.log("🔄 Step 2: Searching database with Supabase...");
 
-    // Use a safer search approach by breaking down the query
-    console.log(`🔍 Executing search query: "${query}"`);
+    // Sanitize query to prevent SQL injection and parsing issues
+    const sanitizedQuery = query.trim().replace(/[%_]/g, '\\$&');
+    console.log(`🔍 Executing search query: "${query}" (sanitized: "${sanitizedQuery}")`);
 
     // Search in three separate queries and combine results
     const searchPromises = [
@@ -289,7 +290,7 @@ async function enrichResultsWithAI(
     let aiAnalysisWorking = false;
 
     for (const [bookId, bookData] of bookGroups) {
-      console.log(`🔍 Processing book: "${bookData.title}"`);
+      console.log(`�� Processing book: "${bookData.title}"`);
 
       const enrichedChapters: EnrichedChapter[] = [];
 

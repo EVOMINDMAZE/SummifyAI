@@ -73,11 +73,11 @@ export default function Dashboard() {
                   Searches Used
                 </p>
                 <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                  {user?.queriesUsed || 0}
+                  {user?.searchCount || 0}
                 </p>
                 <p className="text-xs text-gray-500 dark:text-gray-500">
-                  {user?.queriesLimit ? `of ${user.queriesLimit}` : "unlimited"}{" "}
-                  remaining
+                  {user?.monthlySearchLimit ? `of ${user.monthlySearchLimit}` : "unlimited"}{" "}
+                  this month
                 </p>
               </div>
               <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-xl flex items-center justify-center">

@@ -68,26 +68,8 @@ export default function SignUp() {
     try {
       setIsLoading(true);
       setError("");
-      // Simulate social login API call
-      console.log(`Signing up with ${provider}`);
-      // In real implementation, this would integrate with OAuth providers
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      // Mock successful social signup
-      const mockUser = {
-        id: "1",
-        email: `user@${provider}.com`,
-        name: `${provider.charAt(0).toUpperCase() + provider.slice(1)} User`,
-        avatar: `https://api.dicebear.com/7.x/initials/svg?seed=${provider}`,
-      };
-
-      // Use the existing signUp method with social provider data
-      await signUp(
-        `user@${provider}.com`,
-        "social-signup",
-        `${provider.charAt(0).toUpperCase() + provider.slice(1)} User`,
-      );
-      navigate("/dashboard");
+      // TODO: Implement OAuth with Supabase social providers
+      setError(`${provider} sign-up is coming soon! Please use email/password for now.`);
     } catch (err) {
       setError(`Failed to sign up with ${provider}. Please try again.`);
     } finally {

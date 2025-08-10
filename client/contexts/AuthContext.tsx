@@ -164,36 +164,48 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         });
 
         if (profileData) {
-          const userData: User = {
-            id: profileData.user_id,
-            email: session.user.email || "",
-            firstName: profileData.first_name || "",
-            lastName: profileData.last_name || "",
-            searchCount: profileData.search_count || 0,
-            monthlySearchLimit: profileData.monthly_search_limit || 3,
-            searchCountResetDate: profileData.search_count_reset_date || "",
-            planType: profileData.plan_type || "free",
-            notificationSearchResults:
-              profileData.notification_search_results || false,
-            notificationUsageAlerts:
-              profileData.notification_usage_alerts || false,
-            notificationProductUpdates:
-              profileData.notification_product_updates || false,
-            createdAt: profileData.created_at || "",
-            updatedAt: profileData.updated_at || "",
-            stripeCustomerId: profileData.stripe_customer_id,
-            stripeSubscriptionId: profileData.stripe_subscription_id,
-            subscriptionStatus: profileData.subscription_status,
-            subscriptionEndDate: profileData.subscription_end_date,
-            adPreferences: profileData.ad_preferences,
-            adFreeUntil: profileData.ad_free_until,
-          };
-          setUser(userData);
+          console.log("✅ Profile data found, creating user object");
+          try {
+            const userData: User = {
+              id: profileData.user_id,
+              email: session.user.email || "",
+              firstName: profileData.first_name || "",
+              lastName: profileData.last_name || "",
+              searchCount: profileData.search_count || 0,
+              monthlySearchLimit: profileData.monthly_search_limit || 3,
+              searchCountResetDate: profileData.search_count_reset_date || "",
+              planType: profileData.plan_type || "free",
+              notificationSearchResults:
+                profileData.notification_search_results || false,
+              notificationUsageAlerts:
+                profileData.notification_usage_alerts || false,
+              notificationProductUpdates:
+                profileData.notification_product_updates || false,
+              createdAt: profileData.created_at || "",
+              updatedAt: profileData.updated_at || "",
+              stripeCustomerId: profileData.stripe_customer_id,
+              stripeSubscriptionId: profileData.stripe_subscription_id,
+              subscriptionStatus: profileData.subscription_status,
+              subscriptionEndDate: profileData.subscription_end_date,
+              adPreferences: profileData.ad_preferences,
+              adFreeUntil: profileData.ad_free_until,
+            };
+            setUser(userData);
+            console.log("✅ User object created and set");
 
-          // Resolve any pending sign-in promise
-          if (authPromiseResolver) {
-            authPromiseResolver();
-            setAuthPromiseResolver(null);
+            // Resolve any pending sign-in promise
+            if (authPromiseResolver) {
+              console.log("✅ Resolving sign-in promise");
+              authPromiseResolver();
+              setAuthPromiseResolver(null);
+            }
+          } catch (error) {
+            console.error("❌ Error creating user object:", error);
+            // Resolve promise even on error to prevent hanging
+            if (authPromiseResolver) {
+              authPromiseResolver();
+              setAuthPromiseResolver(null);
+            }
           }
         } else {
           // Profile doesn't exist, create one for OAuth users

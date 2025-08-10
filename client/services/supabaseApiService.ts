@@ -398,8 +398,10 @@ async function enrichResultsWithAI(
     };
   } catch (error) {
     console.error("❌ Result enrichment failed:", error);
+    console.log("🔄 Falling back to basic results without AI enrichment");
 
-    // Return basic results without enrichment
+    // Always return results, even if enrichment fails
+    // This prevents infinite loading states
     const basicBooks = Array.from(bookGroups.values()).map((bookData) => ({
       ...bookData,
       averageRelevance: 50, // Default relevance
@@ -407,6 +409,8 @@ async function enrichResultsWithAI(
         .slice(0, 3)
         .map((chapter) => createFallbackEnrichment(chapter, query)),
     }));
+
+    console.log(`✅ Returning ${basicBooks.length} books with basic enrichment`);
 
     return {
       query,

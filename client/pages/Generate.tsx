@@ -43,6 +43,7 @@ import OpenAIStatus from "@/components/OpenAIStatus";
 import LogsViewer from "@/components/LogsViewer";
 import SmartSearchInterface from "@/components/SmartSearchInterface";
 import { logCapture } from "@/utils/logCapture";
+import { searchHistoryService } from "@/services/searchHistoryService";
 
 // Interface definitions
 interface EnrichedChapter {

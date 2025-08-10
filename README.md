@@ -61,7 +61,7 @@ DATABASE_URL=postgresql://postgres:password@db.your-project.supabase.co:5432/pos
 
 # OpenAI Configuration
 OPENAI_API_KEY=sk-your-openai-key
-OPENAI_MODEL=gpt-4o-nano
+OPENAI_MODEL=gpt-4o
 ```
 
 ## API Services

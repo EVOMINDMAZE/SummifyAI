@@ -721,7 +721,7 @@ When contacting support, please include:
             📚 Help Center
           </h1>
           <p className="text-xl text-white/90 max-w-3xl mx-auto mb-8 leading-relaxed">
-            Find answers, learn features, and get the most out of SummifyAI.
+            Find answers, learn features, and get the most out of SummifyIO.
             Everything you need to become a chapter discovery expert.
           </p>
 

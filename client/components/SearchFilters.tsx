@@ -150,7 +150,10 @@ export default function SearchFilters({
 
       {/* Filters Panel */}
       {isVisible && (
-        <Card className="absolute top-12 right-0 z-50 w-96 max-w-[calc(100vw-2rem)] shadow-xl border-0 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-2xl md:right-0 sm:right-0 xs:right-[-1rem]">
+        <Card className="absolute top-12 right-0 z-50 w-96 max-w-[min(384px,calc(100vw-2rem))] shadow-xl border-0 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-2xl origin-top-right"
+              style={{
+                transform: 'translateX(min(0px, calc(-100% + 100vw - 2rem)))'
+              }}>
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white">

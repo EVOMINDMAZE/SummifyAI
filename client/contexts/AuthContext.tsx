@@ -157,6 +157,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           .eq("user_id", session.user.id)
           .single();
 
+        console.log("Profile fetch result:", {
+          hasData: !!profileData,
+          hasError: !!profileError,
+          errorMessage: profileError?.message
+        });
+
         if (profileData) {
           const userData: User = {
             id: profileData.user_id,

@@ -41,7 +41,6 @@ import SearchFilters, {
 import AIRelevanceScore from "@/components/AIRelevanceScore";
 import OpenAIStatus from "@/components/OpenAIStatus";
 import LogsViewer from "@/components/LogsViewer";
-import BackendStatus from "@/components/BackendStatus";
 import { logCapture } from "@/utils/logCapture";
 
 // Interface definitions

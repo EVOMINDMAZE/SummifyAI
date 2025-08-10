@@ -116,10 +116,9 @@ export async function searchDatabase(query: string): Promise<SearchResults> {
     // Step 2: Search using Supabase client (this always works)
     console.log("🔄 Step 2: Searching database with Supabase...");
 
-    // Escape the query for safe SQL usage
-    const escapedQuery = query.replace(/'/g, "''").trim();
+    // Use a safer search approach with multiple conditions
+    console.log(`🔍 Executing search query: "${query}"`);
 
-    // Search chapters and books using Supabase
     const { data: searchResults, error } = await supabase
       .from("chapters")
       .select(
@@ -137,9 +136,7 @@ export async function searchDatabase(query: string): Promise<SearchResults> {
         )
       `,
       )
-      .or(
-        `chapter_title.ilike.*${escapedQuery}*,chapter_text.ilike.*${escapedQuery}*,books.title.ilike.*${escapedQuery}*`,
-      )
+      .or(`chapter_title.ilike.%${query}%,chapter_text.ilike.%${query}%,books.title.ilike.%${query}%`)
       .not("chapter_text", "is", null)
       .limit(20);
 

@@ -500,8 +500,8 @@ The API uses conventional HTTP response codes:
 
 If these solutions don't resolve your issue:
 
-1. **Check Status Page**: Visit status.summifyai.com
-2. **Contact Support**: Use the chat widget or email support@summifyai.com
+1. **Check Status Page**: Visit status.summifyio.com
+2. **Contact Support**: Use the chat widget or email support@summifyio.com
 3. **Community Forum**: Join our community discussions
 4. **Video Tutorials**: Watch our YouTube channel
 

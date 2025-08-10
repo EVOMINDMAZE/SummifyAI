@@ -1,166 +1,143 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import ThemeToggle from "@/components/ThemeToggle";
-import AuthStatus from "@/components/AuthStatus";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-
-const signInSchema = z.object({
-  email: z.string().email("Please enter a valid email address"),
-  password: z.string().min(1, "Password is required"),
-  rememberMe: z.boolean().optional(),
-});
-
-type SignInFormData = z.infer<typeof signInSchema>;
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Separator } from "@/components/ui/separator";
+import { Eye, EyeOff, Loader2, Mail, Lock, Chrome, Github, Twitter } from "lucide-react";
 
 export default function SignIn() {
-  const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
-  const { signIn, signInWithGoogle } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const { user, signIn, signInWithGoogle, isLoading } = useAuth();
+  
+  // Form state
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  
+  // UI state
+  const [isSigningIn, setIsSigningIn] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isValid, dirtyFields },
-  } = useForm<SignInFormData>({
-    resolver: zodResolver(signInSchema),
-    mode: "onChange",
-    defaultValues: {
-      email: "",
-      password: "",
-      rememberMe: false,
-    },
-  });
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (user && !isLoading) {
+      const from = location.state?.from?.pathname || "/dashboard";
+      navigate(from, { replace: true });
+    }
+  }, [user, isLoading, navigate, location]);
 
-  const handleSocialLogin = async (
-    provider: "google" | "github" | "twitter",
-  ) => {
+  // Form validation
+  const isFormValid = email.trim() !== "" && password.trim() !== "";
+
+  // Handle email/password sign in
+  const handleEmailSignIn = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!isFormValid) {
+      setError("Please fill in all fields");
+      return;
+    }
+
+    setIsSigningIn(true);
+    setError("");
+    setSuccess("");
+
     try {
-      setIsLoading(true);
-      setError("");
-      console.log(`🔐 Starting ${provider} OAuth sign in...`);
-
-      if (provider === "google") {
-        await signInWithGoogle();
-        console.log("✅ Google OAuth sign in initiated successfully");
-      } else {
-        setError(
-          `${provider} sign-in is coming soon! Please use email/password for now.`,
-        );
-      }
+      await signIn(email.trim(), password);
+      setSuccess("Sign in successful! Redirecting...");
+      
+      // Navigation will happen automatically via useEffect when user state updates
     } catch (err: any) {
-      console.error(`❌ ${provider} sign in error:`, err);
-
-      let errorMessage = `Failed to sign in with ${provider}.`;
-
-      if (err.message?.includes('OAuth') && provider === 'google') {
-        errorMessage = "Google sign-in is not properly configured. Please contact support or try email/password login.";
-      } else if (err.message?.includes('Network')) {
-        errorMessage = "Network connection issue. Please check your internet connection and try again.";
-      } else if (err.message) {
-        errorMessage = `${provider} sign-in failed: ${err.message}`;
+      console.error("Sign in error:", err);
+      
+      // Provide specific error messages
+      if (err.message?.includes("Invalid login credentials")) {
+        setError("Invalid email or password. Please check your credentials.");
+      } else if (err.message?.includes("Email not confirmed")) {
+        setError("Please verify your email address before signing in.");
+      } else if (err.message?.includes("Too many requests")) {
+        setError("Too many sign-in attempts. Please wait a moment before trying again.");
+      } else if (err.message?.includes("network") || err.message?.includes("fetch")) {
+        setError("Network error. Please check your connection and try again.");
+      } else {
+        setError(err.message || "An unexpected error occurred. Please try again.");
       }
-
-      setError(errorMessage);
     } finally {
-      setIsLoading(false);
+      setIsSigningIn(false);
     }
   };
 
-  const onSubmit = async (data: SignInFormData) => {
+  // Handle Google OAuth sign in
+  const handleGoogleSignIn = async () => {
+    setIsSigningIn(true);
+    setError("");
+    setSuccess("");
+
     try {
-      setIsLoading(true);
-      setError("");
-      console.log("🔐 Starting sign in process...");
-
-      await signIn(data.email, data.password);
-      console.log("✅ Sign in completed, navigating to dashboard...");
-      navigate("/dashboard");
+      await signInWithGoogle();
+      setSuccess("Redirecting to Google...");
     } catch (err: any) {
-      console.error("❌ Sign in error:", err);
-
-      // Provide helpful error messages based on the error
-      if (err.message?.includes("Invalid login credentials")) {
-        setError(
-          "Invalid email or password. Please check your credentials or create an account if you don't have one yet.",
-        );
-      } else if (err.message?.includes("Email not confirmed")) {
-        setError(
-          "Please check your email and click the confirmation link before signing in.",
-        );
-      } else if (err.message?.includes("Too many requests")) {
-        setError(
-          "Too many sign-in attempts. Please wait a few minutes before trying again.",
-        );
-      } else if (err.message?.includes("Network")) {
-        setError(
-          "Network connection issue. Please check your internet connection and try again.",
-        );
-      } else if (err.message?.includes("fetch")) {
-        setError(
-          "Connection to authentication service failed. Please try again in a moment.",
-        );
-      } else if (err.message?.includes("Auth state update timeout")) {
-        setError(
-          "Account verification is taking longer than expected. Your account may need to be set up. Please contact support if this continues.",
-        );
-      } else if (err.message?.includes("timeout")) {
-        setError(
-          "Sign in is taking longer than expected. Please try again or check your connection.",
-        );
+      console.error("Google sign in error:", err);
+      
+      if (err.message?.includes("OAuth")) {
+        setError("Google sign-in is not available. Please use email/password or contact support.");
       } else {
-        setError(
-          `Unable to sign in: ${err.message || "Unknown error"}. Please try again.`,
-        );
+        setError("Failed to sign in with Google. Please try again.");
       }
-    } finally {
-      setIsLoading(false);
+      setIsSigningIn(false);
     }
+  };
+
+  // Handle social sign in (placeholder for other providers)
+  const handleSocialSignIn = (provider: string) => {
+    setError(`${provider} sign-in is coming soon! Please use email/password for now.`);
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900">
-      {/* Navigation */}
-      <nav className="bg-[#FFFD63] dark:bg-gray-900 relative z-50">
-        <div className="max-w-6xl mx-auto px-6">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+      {/* Navigation Header */}
+      <nav className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <Link to="/" className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-[#0A0B1E] dark:bg-[#FFFD63] rounded-lg flex items-center justify-center">
-                <span className="text-[#FFFD63] dark:text-[#0A0B1E] font-bold text-lg">
-                  S
-                </span>
+            {/* Logo */}
+            <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+              <div className="w-10 h-10 bg-gradient-to-br from-[#FFFD63] to-yellow-400 rounded-xl flex items-center justify-center shadow-lg">
+                <span className="text-[#0A0B1E] font-bold text-xl">S</span>
               </div>
-              <span className="text-xl font-bold text-[#0A0B1E] dark:text-white">
+              <span className="text-2xl font-bold text-gray-900 dark:text-white">
                 SummifyIO
               </span>
             </Link>
-            <div className="flex items-center gap-4">
+
+            {/* Navigation Links */}
+            <div className="flex items-center gap-6">
               <Link
                 to="/"
-                className="text-[#0A0B1E] dark:text-white hover:text-[#0A0B1E]/80 dark:hover:text-white/80 font-medium"
+                className="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white font-medium transition-colors"
               >
                 Home
               </Link>
               <Link
                 to="/pricing"
-                className="text-[#0A0B1E] dark:text-white hover:text-[#0A0B1E]/80 dark:hover:text-white/80 font-medium"
+                className="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white font-medium transition-colors"
               >
                 Pricing
               </Link>
               <Link
                 to="/contact"
-                className="text-[#0A0B1E] dark:text-white hover:text-[#0A0B1E]/80 dark:hover:text-white/80 font-medium"
+                className="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white font-medium transition-colors"
               >
                 Contact
               </Link>
-              <ThemeToggle />
               <Link
                 to="/signup"
-                className="bg-[#0A0B1E] hover:bg-[#0A0B1E]/90 text-[#FFFD63] px-4 py-2 rounded-lg font-medium transition-colors"
+                className="bg-[#FFFD63] hover:bg-yellow-300 text-[#0A0B1E] px-6 py-2 rounded-lg font-semibold transition-colors shadow-md"
               >
                 Sign Up
               </Link>
@@ -170,284 +147,228 @@ export default function SignIn() {
       </nav>
 
       {/* Main Content */}
-      <div className="flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-md">
+      <div className="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div className="w-full max-w-md">
+          {/* Header */}
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
+            <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
               Welcome back
-            </h2>
-            <p className="mt-2 text-gray-600 dark:text-gray-400">
-              Sign in to your SummifyIO account
+            </h1>
+            <p className="text-gray-600 dark:text-gray-400">
+              Sign in to your SummifyIO account to discover exact chapters from business books
             </p>
           </div>
-        </div>
 
-        <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-          <div className="bg-white dark:bg-gray-800 py-8 px-4 shadow-lg border border-gray-200 dark:border-gray-700 sm:rounded-2xl sm:px-10">
-            <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+          {/* Sign In Card */}
+          <Card className="shadow-xl border-0 bg-white dark:bg-gray-800">
+            <CardHeader className="space-y-1 pb-4">
+              <CardTitle className="text-2xl font-semibold text-center">Sign In</CardTitle>
+              <CardDescription className="text-center">
+                Enter your credentials to access your account
+              </CardDescription>
+            </CardHeader>
+            
+            <CardContent className="space-y-4">
+              {/* Error Alert */}
               {error && (
-                <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 px-4 py-3 rounded-lg">
-                  {error}
-                </div>
+                <Alert variant="destructive">
+                  <AlertDescription>{error}</AlertDescription>
+                </Alert>
               )}
 
-              {/* Helpful message for new users */}
-              <div className="bg-[#FFFD63]/10 border border-[#FFFD63]/30 text-[#0A0B1E] dark:text-gray-300 px-4 py-3 rounded-lg">
-                <p className="text-sm">
-                  <strong>New to SummifyIO?</strong> Create an account to start
-                  discovering exact chapters from business books. Don't have an
-                  account yet?{" "}
-                  <Link
-                    to="/signup"
-                    className="font-semibold text-[#0A0B1E] dark:text-[#FFFD63] hover:underline"
-                  >
-                    Sign up here
-                  </Link>
-                </p>
-              </div>
+              {/* Success Alert */}
+              {success && (
+                <Alert className="border-green-200 bg-green-50 text-green-800 dark:border-green-800 dark:bg-green-900/20 dark:text-green-200">
+                  <AlertDescription>{success}</AlertDescription>
+                </Alert>
+              )}
 
-              <div>
-                <label
-                  htmlFor="email"
-                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                >
-                  Email address
-                </label>
-                <div className="mt-1">
-                  <input
-                    id="email"
-                    type="email"
-                    autoComplete="email"
-                    {...register("email")}
-                    className={`appearance-none block w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:border-transparent transition-colors ${
-                      errors.email
-                        ? "border-red-500 focus:ring-red-500"
-                        : dirtyFields.email && !errors.email
-                          ? "border-green-500 focus:ring-green-500"
-                          : "border-gray-300 dark:border-gray-600 focus:ring-[#FFFD63]"
-                    }`}
-                    placeholder="Enter your email"
-                  />
-                  {errors.email && (
-                    <p className="mt-1 text-sm text-red-600 dark:text-red-400">
-                      {errors.email.message}
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              <div>
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                >
-                  Password
-                </label>
-                <div className="mt-1 relative">
-                  <input
-                    id="password"
-                    type={showPassword ? "text" : "password"}
-                    autoComplete="current-password"
-                    {...register("password")}
-                    className={`appearance-none block w-full px-3 py-2 pr-10 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:border-transparent transition-colors ${
-                      errors.password
-                        ? "border-red-500 focus:ring-red-500"
-                        : dirtyFields.password && !errors.password
-                          ? "border-green-500 focus:ring-green-500"
-                          : "border-gray-300 dark:border-gray-600 focus:ring-[#FFFD63]"
-                    }`}
-                    placeholder="Enter your password"
-                  />
-                  {errors.password && (
-                    <p className="mt-1 text-sm text-red-600 dark:text-red-400">
-                      {errors.password.message}
-                    </p>
-                  )}
-                  <button
-                    type="button"
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                    onClick={() => setShowPassword(!showPassword)}
-                  >
-                    {showPassword ? (
-                      <svg
-                        className="h-5 w-5 text-gray-400 dark:text-gray-500"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21"
-                        />
-                      </svg>
-                    ) : (
-                      <svg
-                        className="h-5 w-5 text-gray-400 dark:text-gray-500"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                        />
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                        />
-                      </svg>
-                    )}
-                  </button>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between">
-                <div className="flex items-center">
-                  <input
-                    id="rememberMe"
-                    type="checkbox"
-                    {...register("rememberMe")}
-                    className="h-4 w-4 text-[#FFFD63] focus:ring-[#FFFD63] border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700"
-                  />
-                  <label
-                    htmlFor="rememberMe"
-                    className="ml-2 block text-sm text-gray-900 dark:text-white"
-                  >
-                    Remember me
+              {/* Sign In Form */}
+              <form onSubmit={handleEmailSignIn} className="space-y-4">
+                {/* Email Field */}
+                <div className="space-y-2">
+                  <label htmlFor="email" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Email Address
                   </label>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                    <Input
+                      id="email"
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="Enter your email"
+                      className="pl-10 h-11"
+                      disabled={isSigningIn}
+                      required
+                    />
+                  </div>
                 </div>
 
-                <div className="text-sm">
-                  <a
-                    href="#"
-                    className="font-medium text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300"
+                {/* Password Field */}
+                <div className="space-y-2">
+                  <label htmlFor="password" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Password
+                  </label>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                    <Input
+                      id="password"
+                      type={showPassword ? "text" : "password"}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder="Enter your password"
+                      className="pl-10 pr-10 h-11"
+                      disabled={isSigningIn}
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                      disabled={isSigningIn}
+                    >
+                      {showPassword ? (
+                        <EyeOff className="h-4 w-4" />
+                      ) : (
+                        <Eye className="h-4 w-4" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Remember Me & Forgot Password */}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <input
+                      id="remember"
+                      type="checkbox"
+                      checked={rememberMe}
+                      onChange={(e) => setRememberMe(e.target.checked)}
+                      className="h-4 w-4 text-[#FFFD63] focus:ring-[#FFFD63] border-gray-300 rounded"
+                      disabled={isSigningIn}
+                    />
+                    <label htmlFor="remember" className="text-sm text-gray-600 dark:text-gray-400">
+                      Remember me
+                    </label>
+                  </div>
+                  <Link
+                    to="/forgot-password"
+                    className="text-sm text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300"
                   >
-                    Forgot your password?
-                  </a>
+                    Forgot password?
+                  </Link>
                 </div>
-              </div>
 
-              <div>
-                <button
+                {/* Sign In Button */}
+                <Button
                   type="submit"
-                  disabled={isLoading}
-                  className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-bold text-[#0A0B1E] bg-[#FFFD63] hover:bg-yellow-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#FFFD63] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  className="w-full h-11 bg-[#FFFD63] hover:bg-yellow-300 text-[#0A0B1E] font-semibold text-base shadow-lg"
+                  disabled={!isFormValid || isSigningIn}
                 >
-                  {isLoading ? (
-                    <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                        fill="none"
-                      />
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      />
-                    </svg>
+                  {isSigningIn ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Signing in...
+                    </>
                   ) : (
-                    "Sign in"
+                    "Sign In"
                   )}
-                </button>
-              </div>
-            </form>
+                </Button>
+              </form>
 
-            <div className="mt-6">
-              <div className="relative">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-gray-300 dark:border-gray-600" />
-                </div>
-                <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">
+              {/* Divider */}
+              <div className="relative my-6">
+                <Separator />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <span className="bg-white dark:bg-gray-800 px-3 text-sm text-gray-500 dark:text-gray-400">
                     Or continue with
                   </span>
                 </div>
               </div>
 
-              <div className="mt-6 space-y-3">
+              {/* Social Sign In Options */}
+              <div className="space-y-3">
                 {/* Google */}
-                <button
-                  onClick={() => handleSocialLogin("google")}
-                  disabled={isLoading}
-                  className="w-full inline-flex justify-center py-3 px-4 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-white dark:bg-gray-700 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full h-11"
+                  onClick={handleGoogleSignIn}
+                  disabled={isSigningIn}
                 >
-                  <svg className="w-5 h-5" viewBox="0 0 24 24">
-                    <path
-                      fill="#4285F4"
-                      d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                    />
-                    <path
-                      fill="#34A853"
-                      d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                    />
-                    <path
-                      fill="#FBBC05"
-                      d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                    />
-                    <path
-                      fill="#EA4335"
-                      d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                    />
-                  </svg>
-                  <span className="ml-2">Continue with Google</span>
-                </button>
+                  <Chrome className="w-4 h-4 mr-2" />
+                  Continue with Google
+                </Button>
 
                 {/* GitHub */}
-                <button
-                  onClick={() => handleSocialLogin("github")}
-                  disabled={isLoading}
-                  className="w-full inline-flex justify-center py-3 px-4 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-white dark:bg-gray-700 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full h-11"
+                  onClick={() => handleSocialSignIn("GitHub")}
+                  disabled={isSigningIn}
                 >
-                  <svg
-                    className="w-5 h-5"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
-                  </svg>
-                  <span className="ml-2">Continue with GitHub</span>
-                </button>
+                  <Github className="w-4 h-4 mr-2" />
+                  Continue with GitHub
+                </Button>
 
                 {/* Twitter */}
-                <button
-                  onClick={() => handleSocialLogin("twitter")}
-                  disabled={isLoading}
-                  className="w-full inline-flex justify-center py-3 px-4 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-white dark:bg-gray-700 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full h-11"
+                  onClick={() => handleSocialSignIn("Twitter")}
+                  disabled={isSigningIn}
                 >
-                  <svg className="w-5 h-5" fill="#1DA1F2" viewBox="0 0 24 24">
-                    <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" />
-                  </svg>
-                  <span className="ml-2">Continue with Twitter</span>
-                </button>
+                  <Twitter className="w-4 h-4 mr-2" />
+                  Continue with Twitter
+                </Button>
               </div>
-            </div>
 
-            <div className="mt-6 text-center">
+              {/* Sign Up Link */}
+              <div className="text-center pt-4">
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  Don't have an account?{" "}
+                  <Link
+                    to="/signup"
+                    className="font-semibold text-[#0A0B1E] dark:text-[#FFFD63] hover:underline"
+                  >
+                    Sign up for free
+                  </Link>
+                </p>
+              </div>
+
+              {/* Help Text */}
+              <div className="text-center pt-2">
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  By signing in, you agree to our{" "}
+                  <Link to="/terms" className="hover:underline">
+                    Terms of Service
+                  </Link>{" "}
+                  and{" "}
+                  <Link to="/privacy" className="hover:underline">
+                    Privacy Policy
+                  </Link>
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Additional Info */}
+          <div className="mt-8 text-center">
+            <div className="bg-gradient-to-r from-[#FFFD63]/10 to-yellow-200/10 dark:from-[#FFFD63]/5 dark:to-yellow-200/5 rounded-lg p-4 border border-[#FFFD63]/20">
+              <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
+                🎯 Discover Exact Chapters
+              </h3>
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                Don't have an account?{" "}
-                <Link
-                  to="/signup"
-                  className="font-medium text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300"
-                >
-                  Sign up for free
-                </Link>
+                Skip entire books and find exactly what you need from 15,000+ business books.
+                Save hours of reading time with AI-powered chapter discovery.
               </p>
             </div>
           </div>
         </div>
       </div>
-      <AuthStatus />
     </div>
   );
 }

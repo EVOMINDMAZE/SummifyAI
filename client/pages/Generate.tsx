@@ -775,13 +775,13 @@ export default function Generate() {
                   </div>
 
                   {/* OPTIMIZED CHAPTERS SECTION */}
-                  <div className="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-900/50 dark:to-gray-800/50 p-8">
+                  <div className="bg-gradient-to-r from-[#FFFD63]/5 to-[#FFFD63]/10 dark:from-gray-900/50 dark:to-gray-800/50 p-8">
                     <div className="mb-6">
-                      <h4 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center mb-3">
-                        <Sparkles className="w-6 h-6 mr-3 text-emerald-500" />
+                      <h4 className="text-2xl font-bold text-[#0A0B1E] dark:text-white flex items-center mb-3">
+                        <Sparkles className="w-6 h-6 mr-3 text-[#0A0B1E] dark:text-[#FFFD63]" />
                         Top Relevant Chapters
                       </h4>
-                      <p className="text-gray-600 dark:text-gray-400">
+                      <p className="text-[#0A0B1E]/70 dark:text-gray-400">
                         AI-selected chapters with detailed explanations of their
                         relevance to your search
                       </p>
@@ -797,11 +797,11 @@ export default function Generate() {
                             onClick={(e) =>
                               handleChapterClick(e, bookGroup, chapter)
                             }
-                            className="group bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer border border-gray-200 dark:border-gray-700 hover:border-indigo-300 dark:hover:border-indigo-600 transform hover:scale-105"
+                            className="group bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer border-2 border-gray-200 dark:border-gray-700 hover:border-[#FFFD63] dark:hover:border-[#FFFD63] transform hover:scale-105"
                           >
                             {/* Chapter Header */}
                             <div className="flex items-start justify-between mb-4">
-                              <div className="w-8 h-8 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
+                              <div className="w-8 h-8 bg-[#0A0B1E] rounded-full flex items-center justify-center text-[#FFFD63] text-sm font-bold flex-shrink-0">
                                 {index + 1}
                               </div>
                               <AIRelevanceScore
@@ -813,19 +813,19 @@ export default function Generate() {
                             </div>
 
                             {/* Chapter Title */}
-                            <h5 className="text-lg font-bold text-gray-900 dark:text-white mb-3 line-clamp-2 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                            <h5 className="text-lg font-bold text-[#0A0B1E] dark:text-white mb-3 line-clamp-2 group-hover:text-[#0A0B1E]/80 dark:group-hover:text-white/80 transition-colors">
                               {chapter.title}
                             </h5>
 
                             {/* AI-GENERATED WHY CHOSEN EXPLANATION */}
-                            <div className="mb-4 p-4 bg-gradient-to-r from-emerald-50 to-cyan-50 dark:from-emerald-900/20 dark:to-cyan-900/20 rounded-xl border border-emerald-200 dark:border-emerald-800">
+                            <div className="mb-4 p-4 bg-[#FFFD63]/10 dark:from-[#FFFD63]/5 rounded-xl border border-[#FFFD63]/30 dark:border-[#FFFD63]/20">
                               <div className="flex items-start space-x-2">
-                                <Lightbulb className="w-4 h-4 text-emerald-600 mt-0.5 flex-shrink-0" />
+                                <Lightbulb className="w-4 h-4 text-[#0A0B1E] dark:text-[#FFFD63] mt-0.5 flex-shrink-0" />
                                 <div>
-                                  <p className="text-sm font-semibold text-emerald-800 dark:text-emerald-200 mb-1">
+                                  <p className="text-sm font-semibold text-[#0A0B1E] dark:text-white mb-1">
                                     Why AI Selected This Chapter:
                                   </p>
-                                  <p className="text-sm text-emerald-700 dark:text-emerald-300 leading-relaxed">
+                                  <p className="text-sm text-[#0A0B1E]/80 dark:text-gray-300 leading-relaxed">
                                     {chapter.whyRelevant ||
                                       `This chapter directly addresses ${searchResults.query} with practical insights and proven methodologies that you can apply immediately.`}
                                   </p>
@@ -842,7 +842,7 @@ export default function Generate() {
                                     .map((topic, topicIndex) => (
                                       <span
                                         key={topicIndex}
-                                        className="text-xs bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 px-3 py-1 rounded-full font-medium"
+                                        className="text-xs bg-[#FFFD63]/20 dark:bg-[#FFFD63]/10 text-[#0A0B1E] dark:text-[#FFFD63] px-3 py-1 rounded-full font-medium"
                                       >
                                         {topic}
                                       </span>
@@ -855,7 +855,7 @@ export default function Generate() {
                               <span className="text-xs text-gray-500 dark:text-gray-400">
                                 Click to read details
                               </span>
-                              <ChevronRight className="w-4 h-4 text-indigo-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+                              <ChevronRight className="w-4 h-4 text-[#0A0B1E] dark:text-[#FFFD63] opacity-0 group-hover:opacity-100 transition-opacity" />
                             </div>
                           </div>
                         ))}

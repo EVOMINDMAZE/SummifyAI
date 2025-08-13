@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Performance Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body { font-family: monospace; padding: 20px; background: #f5f5f5; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        .test-section { background: white; padding: 20px; margin: 10px 0; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .success { background: #d4edda; border-left: 4px solid #28a745; }
+        .error { background: #f8d7da; border-left: 4px solid #dc3545; }
+        .warning { background: #fff3cd; border-left: 4px solid #ffc107; }
+        .info { background: #d1ecf1; border-left: 4px solid #17a2b8; }
+        button { padding: 10px 20px; margin: 5px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        input { padding: 8px; margin: 5px; border: 1px solid #ccc; border-radius: 4px; width: 300px; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 4px; overflow-x: auto; font-size: 12px; }
+        .timing { font-weight: bold; color: #28a745; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Search Performance Test</h1>
+        
+        <div class="test-section">
+            <h3>Test Search Queries</h3>
+            <input type="text" id="searchQuery" value="leadership" placeholder="Enter search term">
+            <button onclick="testSearch()">Test Search</button>
+            <button onclick="testMultipleQueries()">Test Multiple Queries</button>
+            <button onclick="clearResults()">Clear Results</button>
+        </div>
+
+        <div id="results"></div>
+    </div>
+
+    <script>
+        const supabaseUrl = 'https://voosuqmkazvjzheipbrl.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZvb3N1cW1rYXp2anpoZWlwYnJsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMwMjAxNzcsImV4cCI6MjA2ODU5NjE3N30.AU0ew4-Un_g4nLkdGXcwSfIj6R1mwY_JDbHcSXJFe0E';
+        
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+        
+        function addResult(content, type = 'info') {
+            const div = document.createElement('div');
+            div.className = `test-section ${type}`;
+            div.innerHTML = content;
+            document.getElementById('results').appendChild(div);
+        }
+
+        function clearResults() {
+            document.getElementById('results').innerHTML = '';
+        }
+
+        async function testFastSearch(query) {
+            const startTime = Date.now();
+            addResult(`<h4>🚀 Testing Fast Search: "${query}"</h4>`, 'info');
+            
+            try {
+                // Test chapter title search (should be fast)
+                const titlePromise = supabase
+                    .from("chapters")
+                    .select(`
+                        id,
+                        chapter_title,
+                        book_id,
+                        books!inner (
+                            id,
+                            title,
+                            author_name
+                        )
+                    `)
+                    .ilike("chapter_title", `%${query}%`)
+                    .limit(5);
+
+                // Test book title search (should be fast)
+                const bookPromise = supabase
+                    .from("chapters")
+                    .select(`
+                        id,
+                        chapter_title,
+                        book_id,
+                        books!inner (
+                            id,
+                            title,
+                            author_name
+                        )
+                    `)
+                    .ilike("books.title", `%${query}%`)
+                    .limit(5);
+
+                const [titleResults, bookResults] = await Promise.all([titlePromise, bookPromise]);
+
+                const endTime = Date.now();
+                const duration = endTime - startTime;
+
+                let resultHtml = `<div class="timing">⏱️ Fast search completed in ${duration}ms</div>`;
+                
+                if (titleResults.error || bookResults.error) {
+                    resultHtml += `<div style="color: red;">❌ Error: ${titleResults.error?.message || bookResults.error?.message}</div>`;
+                    addResult(resultHtml, 'error');
+                } else {
+                    const titleCount = titleResults.data?.length || 0;
+                    const bookCount = bookResults.data?.length || 0;
+                    
+                    resultHtml += `<div>📚 Title search: ${titleCount} results</div>`;
+                    resultHtml += `<div>📖 Book search: ${bookCount} results</div>`;
+                    resultHtml += `<div>✅ Total: ${titleCount + bookCount} results</div>`;
+                    
+                    if (titleCount > 0 || bookCount > 0) {
+                        resultHtml += `<pre>${JSON.stringify({
+                            titleSample: titleResults.data?.[0]?.chapter_title,
+                            bookSample: bookResults.data?.[0]?.books?.title
+                        }, null, 2)}</pre>`;
+                    }
+                    
+                    addResult(resultHtml, duration < 2000 ? 'success' : 'warning');
+                }
+            } catch (error) {
+                const endTime = Date.now();
+                const duration = endTime - startTime;
+                addResult(`<div class="timing">⏱️ Fast search failed after ${duration}ms</div><div>❌ ${error.message}</div>`, 'error');
+            }
+        }
+
+        async function testSlowSearch(query) {
+            const startTime = Date.now();
+            addResult(`<h4>🐌 Testing Content Search: "${query}"</h4>`, 'warning');
+            
+            try {
+                // Test content search with timeout (this can be slow)
+                const contentPromise = supabase
+                    .from("chapters")
+                    .select(`
+                        id,
+                        chapter_title,
+                        book_id,
+                        books!inner (
+                            id,
+                            title,
+                            author_name
+                        )
+                    `)
+                    .ilike("chapter_text", `%${query}%`)
+                    .limit(3);
+
+                // Add 5-second timeout
+                const timeoutPromise = new Promise((_, reject) =>
+                    setTimeout(() => reject(new Error('Content search timeout (5s)')), 5000)
+                );
+
+                const results = await Promise.race([contentPromise, timeoutPromise]);
+
+                const endTime = Date.now();
+                const duration = endTime - startTime;
+
+                let resultHtml = `<div class="timing">⏱️ Content search completed in ${duration}ms</div>`;
+                
+                if (results.error) {
+                    resultHtml += `<div style="color: red;">❌ Error: ${results.error.message}</div>`;
+                    addResult(resultHtml, 'error');
+                } else {
+                    const count = results.data?.length || 0;
+                    resultHtml += `<div>📄 Content search: ${count} results</div>`;
+                    
+                    if (count > 0) {
+                        resultHtml += `<pre>${JSON.stringify({
+                            sample: results.data[0]?.chapter_title
+                        }, null, 2)}</pre>`;
+                    }
+                    
+                    addResult(resultHtml, duration < 3000 ? 'success' : 'warning');
+                }
+            } catch (error) {
+                const endTime = Date.now();
+                const duration = endTime - startTime;
+                addResult(`<div class="timing">⏱️ Content search failed after ${duration}ms</div><div>❌ ${error.message}</div>`, 'error');
+            }
+        }
+
+        async function testSearch() {
+            const query = document.getElementById('searchQuery').value.trim();
+            if (!query) {
+                alert('Please enter a search term');
+                return;
+            }
+
+            clearResults();
+            addResult(`<h3>🔍 Testing Search Performance for: "${query}"</h3>`);
+            
+            // Test fast searches first
+            await testFastSearch(query);
+            
+            // Test slow search
+            await testSlowSearch(query);
+            
+            addResult(`<h4>✅ Search test completed</h4>`, 'success');
+        }
+
+        async function testMultipleQueries() {
+            const queries = ['leadership', 'strategy', 'innovation', 'management', 'communication'];
+            clearResults();
+            addResult(`<h3>🔍 Testing Multiple Queries</h3>`);
+            
+            for (const query of queries) {
+                await testFastSearch(query);
+                // Small delay between tests
+                await new Promise(resolve => setTimeout(resolve, 500));
+            }
+            
+            addResult(`<h4>✅ Multiple query test completed</h4>`, 'success');
+        }
+
+        // Auto-run a quick test
+        setTimeout(() => {
+            addResult(`<h3>🚀 Search Test Ready</h3><p>Click "Test Search" to check search performance.</p>`);
+        }, 500);
+    </script>
+</body>
+</html>

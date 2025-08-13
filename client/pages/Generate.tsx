@@ -176,13 +176,13 @@ export default function Generate() {
     }
   };
 
-  const performDatabaseSearch = async (searchQuery: string) => {
-    console.log(`🔍 Starting database search for: "${searchQuery}"`);
+  const performDatabaseSearch = async (searchQuery: string, retryCount = 0) => {
+    console.log(`🔍 Starting database search for: "${searchQuery}" (attempt ${retryCount + 1})`);
     setIsGenerating(true);
     setShowRefinements(false);
     setSearchResults(null);
     setGeneratedSummary(null);
-    setCurrentOperation("Searching knowledge base...");
+    setCurrentOperation(retryCount > 0 ? "Retrying search..." : "Searching knowledge base...");
 
     try {
       console.log(`🔄 Calling searchDatabase function...`);

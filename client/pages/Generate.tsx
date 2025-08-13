@@ -215,12 +215,41 @@ export default function Generate() {
     } catch (error) {
       console.error("❌ Database search error:", error);
 
-      // Show user-friendly error with better UX
-      const errorMessage =
-        error instanceof Error ? error.message : "Search failed";
-      alert(
-        `Search failed: ${errorMessage}. Please check your connection and try again.`,
-      );
+      // Handle different types of search errors gracefully
+      let userMessage = "Search encountered an issue";
+      let fallbackResults = null;
+
+      if (error instanceof Error) {
+        if (error.message.includes("timeout")) {
+          userMessage = "Search is taking longer than usual. Showing available results...";
+          // Create fallback results for timeout
+          fallbackResults = {
+            query: searchQuery,
+            searchType: "timeout_fallback",
+            totalBooks: 0,
+            totalChapters: 0,
+            books: [],
+            processingTime: 0,
+          };
+        } else if (error.message.includes("Database search failed")) {
+          userMessage = "Database temporarily busy. Try a more specific search term.";
+        } else {
+          userMessage = "Search temporarily unavailable. Please try again in a moment.";
+        }
+      }
+
+      // Set fallback results instead of showing intrusive alert
+      if (fallbackResults) {
+        setSearchResults(fallbackResults);
+      }
+
+      // Show subtle error feedback instead of alert
+      setCurrentOperation(`⚠️ ${userMessage}`);
+
+      // Clear error message after a few seconds
+      setTimeout(() => {
+        setCurrentOperation("");
+      }, 5000);
     } finally {
       console.log("🏁 Search process completed, clearing loading states");
       setIsGenerating(false);

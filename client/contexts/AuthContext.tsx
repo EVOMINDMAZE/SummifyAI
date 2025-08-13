@@ -206,19 +206,45 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const signIn = async (email: string, password: string) => {
     console.log("🔐 Starting sign in for:", email);
-    
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    console.log("🔗 Supabase client status:", !!supabase);
 
-    if (error) {
-      console.error("❌ Sign in failed:", error);
+    try {
+      // Add timeout to prevent hanging
+      const signInPromise = supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Sign in timeout after 15 seconds')), 15000)
+      );
+
+      const { data, error } = await Promise.race([signInPromise, timeoutPromise]);
+
+      if (error) {
+        console.error("❌ Sign in failed:", error);
+        console.error("Error details:", {
+          message: error.message,
+          status: error.status,
+          code: error.code || 'unknown'
+        });
+        throw error;
+      }
+
+      console.log("✅ Sign in API call successful");
+      console.log("User data:", {
+        id: data.user?.id,
+        email: data.user?.email,
+        email_confirmed_at: data.user?.email_confirmed_at,
+        last_sign_in_at: data.user?.last_sign_in_at
+      });
+
+      // User state will be updated by onAuthStateChange listener
+      console.log("⏳ Waiting for auth state change to complete...");
+    } catch (error) {
+      console.error("❌ Sign in process failed:", error);
       throw error;
     }
-
-    console.log("✅ Sign in successful");
-    // User state will be updated by onAuthStateChange listener
   };
 
   const signInWithGoogle = async () => {

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentication Debug - hanniz.riadus@outlook.com</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body { font-family: monospace; padding: 20px; background: #f5f5f5; }
+        .log { background: white; padding: 20px; border-radius: 8px; margin: 10px 0; }
+        .error { background: #fee; border-left: 4px solid #f00; }
+        .success { background: #efe; border-left: 4px solid #0f0; }
+        .info { background: #eef; border-left: 4px solid #00f; }
+        .warning { background: #ffe; border-left: 4px solid #fa0; }
+        button { padding: 10px 20px; margin: 10px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        input { padding: 8px; margin: 5px; border: 1px solid #ccc; border-radius: 4px; width: 300px; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 4px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Authentication Debug for hanniz.riadus@outlook.com</h1>
+    
+    <div class="log info">
+        <h3>Test Configuration</h3>
+        <div>Supabase URL: https://voosuqmkazvjzheipbrl.supabase.co</div>
+        <div>Target User: hanniz.riadus@outlook.com</div>
+    </div>
+
+    <div class="log">
+        <h3>Manual Authentication Test</h3>
+        <input type="email" id="email" value="hanniz.riadus@outlook.com" placeholder="Email">
+        <input type="password" id="password" placeholder="Password">
+        <br>
+        <button onclick="testAuthentication()">Test Sign In</button>
+        <button onclick="checkSession()">Check Session</button>
+        <button onclick="checkProfile()">Check Profile</button>
+        <button onclick="testConnection()">Test Connection</button>
+    </div>
+
+    <div id="results"></div>
+
+    <script>
+        const supabaseUrl = 'https://voosuqmkazvjzheipbrl.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZvb3N1cW1rYXp2anpoZWlwYnJsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMwMjAxNzcsImV4cCI6MjA2ODU5NjE3N30.AU0ew4-Un_g4nLkdGXcwSfIj6R1mwY_JDbHcSXJFe0E';
+        
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+        
+        function addLog(message, type = 'info', data = null) {
+            const timestamp = new Date().toLocaleTimeString();
+            const resultsDiv = document.getElementById('results');
+            
+            const logDiv = document.createElement('div');
+            logDiv.className = `log ${type}`;
+            
+            let content = `<strong>[${timestamp}]</strong> ${message}`;
+            if (data) {
+                content += `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+            }
+            
+            logDiv.innerHTML = content;
+            resultsDiv.appendChild(logDiv);
+            resultsDiv.scrollTop = resultsDiv.scrollHeight;
+            
+            console.log(`[${timestamp}] ${message}`, data);
+        }
+
+        async function testConnection() {
+            addLog('🔗 Testing Supabase connection...');
+            
+            try {
+                const { data, error } = await supabase.from('profiles').select('count').limit(1);
+                
+                if (error) {
+                    addLog('❌ Connection failed', 'error', error);
+                } else {
+                    addLog('✅ Connection successful', 'success');
+                }
+            } catch (err) {
+                addLog('❌ Connection error', 'error', err.message);
+            }
+        }
+
+        async function checkSession() {
+            addLog('👤 Checking current session...');
+            
+            try {
+                const { data: { session }, error } = await supabase.auth.getSession();
+                
+                if (error) {
+                    addLog('❌ Session check failed', 'error', error);
+                } else if (session) {
+                    addLog('✅ Active session found', 'success', {
+                        user_id: session.user.id,
+                        email: session.user.email,
+                        expires_at: new Date(session.expires_at * 1000).toLocaleString()
+                    });
+                } else {
+                    addLog('ℹ️ No active session', 'info');
+                }
+            } catch (err) {
+                addLog('❌ Session check error', 'error', err.message);
+            }
+        }
+
+        async function checkProfile() {
+            addLog('📋 Checking profile data...');
+            
+            try {
+                // First check if user is signed in
+                const { data: { session } } = await supabase.auth.getSession();
+                
+                if (!session) {
+                    addLog('⚠️ No session - cannot check profile', 'warning');
+                    return;
+                }
+
+                const { data: profile, error } = await supabase
+                    .from('profiles')
+                    .select('*')
+                    .eq('user_id', session.user.id)
+                    .single();
+
+                if (error) {
+                    addLog('❌ Profile fetch failed', 'error', error);
+                } else if (profile) {
+                    addLog('✅ Profile found', 'success', profile);
+                } else {
+                    addLog('⚠️ No profile found for user', 'warning');
+                }
+            } catch (err) {
+                addLog('❌ Profile check error', 'error', err.message);
+            }
+        }
+
+        async function testAuthentication() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            if (!email || !password) {
+                addLog('⚠️ Please enter both email and password', 'warning');
+                return;
+            }
+
+            addLog(`🔐 Testing authentication for: ${email}`);
+            
+            try {
+                // Clear any existing session first
+                await supabase.auth.signOut();
+                addLog('🔄 Cleared existing session');
+
+                // Attempt sign in
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email: email,
+                    password: password
+                });
+
+                if (error) {
+                    addLog('❌ Authentication failed', 'error', {
+                        message: error.message,
+                        status: error.status,
+                        code: error.__isAuthError ? 'AuthError' : 'Unknown'
+                    });
+                } else if (data.user) {
+                    addLog('✅ Authentication successful', 'success', {
+                        user_id: data.user.id,
+                        email: data.user.email,
+                        email_confirmed_at: data.user.email_confirmed_at,
+                        last_sign_in_at: data.user.last_sign_in_at
+                    });
+
+                    // Wait a moment for auth state to propagate
+                    setTimeout(() => {
+                        checkProfile();
+                    }, 1000);
+                } else {
+                    addLog('⚠️ Authentication returned no user data', 'warning', data);
+                }
+            } catch (err) {
+                addLog('❌ Authentication error', 'error', err.message);
+            }
+        }
+
+        // Listen for auth state changes
+        supabase.auth.onAuthStateChange((event, session) => {
+            addLog(`🔄 Auth state changed: ${event}`, 'info', session ? {
+                user_id: session.user.id,
+                email: session.user.email
+            } : null);
+        });
+
+        // Auto-run connection test
+        setTimeout(testConnection, 500);
+    </script>
+</body>
+</html>

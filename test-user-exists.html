@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test User Existence</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .result { margin: 10px 0; padding: 10px; border-radius: 4px; }
+        .success { background: #d4edda; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; border: 1px solid #f5c6cb; }
+        .info { background: #d1ecf1; border: 1px solid #bee5eb; }
+        button { padding: 10px 20px; margin: 10px 0; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Test User Existence: hanniz.riadus@outlook.com</h1>
+    
+    <p>This test will attempt to send a password reset email to verify if the user exists in the system.</p>
+    
+    <button onclick="testUserExists()">Test User Existence</button>
+    <button onclick="testDirectAuth()">Test Direct Auth</button>
+    
+    <div id="results"></div>
+
+    <script>
+        const supabaseUrl = 'https://voosuqmkazvjzheipbrl.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZvb3N1cW1rYXp2anpoZWlwYnJsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTMwMjAxNzcsImV4cCI6MjA2ODU5NjE3N30.AU0ew4-Un_g4nLkdGXcwSfIj6R1mwY_JDbHcSXJFe0E';
+        
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+        
+        function addResult(message, type) {
+            const div = document.createElement('div');
+            div.className = `result ${type}`;
+            div.innerHTML = `<strong>${new Date().toLocaleTimeString()}</strong>: ${message}`;
+            document.getElementById('results').appendChild(div);
+            console.log(message);
+        }
+
+        async function testUserExists() {
+            addResult('🔄 Testing if user exists by attempting password reset...', 'info');
+            
+            try {
+                const { data, error } = await supabase.auth.resetPasswordForEmail(
+                    'hanniz.riadus@outlook.com',
+                    {
+                        redirectTo: 'https://example.com/reset'
+                    }
+                );
+
+                if (error) {
+                    addResult(`❌ Password reset failed: ${error.message}`, 'error');
+                    console.error('Reset error details:', error);
+                } else {
+                    addResult('✅ Password reset email sent successfully - user exists!', 'success');
+                    console.log('Reset response:', data);
+                }
+            } catch (err) {
+                addResult(`❌ Exception: ${err.message}`, 'error');
+                console.error('Exception details:', err);
+            }
+        }
+
+        async function testDirectAuth() {
+            addResult('🔄 Testing direct authentication with dummy password...', 'info');
+            
+            try {
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email: 'hanniz.riadus@outlook.com',
+                    password: 'dummy_password_that_should_fail'
+                });
+
+                if (error) {
+                    if (error.message.includes('Invalid login credentials')) {
+                        addResult('✅ User exists but password is wrong (expected)', 'success');
+                    } else if (error.message.includes('Email not confirmed')) {
+                        addResult('⚠️ User exists but email not confirmed', 'info');
+                    } else if (error.message.includes('User not found')) {
+                        addResult('❌ User does not exist in the system', 'error');
+                    } else {
+                        addResult(`⚠️ Unknown auth error: ${error.message}`, 'info');
+                    }
+                    console.error('Auth error details:', error);
+                } else {
+                    addResult('😱 Unexpected success with dummy password!', 'error');
+                }
+            } catch (err) {
+                addResult(`❌ Exception: ${err.message}`, 'error');
+                console.error('Exception details:', err);
+            }
+        }
+
+        // Auto-run tests
+        addResult('🚀 Ready to test user existence', 'info');
+    </script>
+</body>
+</html>

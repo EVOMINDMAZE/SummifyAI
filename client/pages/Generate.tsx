@@ -676,16 +676,16 @@ export default function Generate() {
                   {/* Book Header with Large Cover */}
                   <div className="flex">
                     {/* LARGE PROMINENT BOOK COVER */}
-                    <div className="w-80 flex-shrink-0 bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-indigo-900/30 dark:via-purple-900/30 dark:to-pink-900/30 p-8 flex items-center justify-center relative">
+                    <div className="w-80 flex-shrink-0 bg-[#FFFD63]/10 dark:bg-gray-800/50 p-8 flex items-center justify-center relative">
                       <div className="relative">
-                        <div className="aspect-[2/3] w-full relative overflow-hidden rounded-3xl shadow-2xl group-hover:shadow-3xl transition-all duration-700 border-4 border-white/70 dark:border-gray-700/70">
+                        <div className="aspect-[2/3] w-full max-w-[200px] relative overflow-hidden rounded-3xl shadow-2xl group-hover:shadow-3xl transition-all duration-700 border-4 border-white/70 dark:border-gray-700/70">
                           <img
                             src={bookGroup.cover}
                             alt={bookGroup.title}
                             className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
                             onError={(e) => {
                               const target = e.currentTarget;
-                              target.src = `https://via.placeholder.com/400x600/667eea/FFFFFF?text=${encodeURIComponent(bookGroup.title.split(" ").slice(0, 3).join(" "))}`;
+                              target.src = `https://via.placeholder.com/400x600/FFFD63/0A0B1E?text=${encodeURIComponent(bookGroup.title.split(" ").slice(0, 3).join(" "))}`;
                             }}
                             loading="lazy"
                           />
@@ -693,12 +693,12 @@ export default function Generate() {
                         </div>
 
                         {/* Book Rank Badge */}
-                        <div className="absolute -top-4 -left-4 w-12 h-12 bg-gradient-to-r from-emerald-500 to-cyan-500 rounded-full flex items-center justify-center text-white text-lg font-bold shadow-xl border-4 border-white dark:border-gray-800">
+                        <div className="absolute -top-4 -left-4 w-12 h-12 bg-[#0A0B1E] rounded-full flex items-center justify-center text-[#FFFD63] text-lg font-bold shadow-xl border-4 border-white dark:border-gray-800">
                           {bookIndex + 1}
                         </div>
 
                         {/* Overall Score Badge */}
-                        <div className="absolute -bottom-4 -right-4 bg-white dark:bg-gray-800 rounded-2xl p-3 shadow-xl border border-gray-200 dark:border-gray-700">
+                        <div className="absolute -bottom-4 -right-4 bg-white dark:bg-gray-800 rounded-2xl p-3 shadow-xl border-2 border-[#FFFD63]/50 dark:border-gray-700">
                           <AIRelevanceScore
                             score={bookGroup.averageRelevance || 85}
                             size="md"
@@ -707,8 +707,8 @@ export default function Generate() {
                           />
                         </div>
 
-                        {/* Enhanced Glow effects */}
-                        <div className="absolute -inset-3 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-3xl blur-xl opacity-20 group-hover:opacity-40 transition-opacity duration-700 -z-10"></div>
+                        {/* Enhanced Glow effects - Dashboard theme */}
+                        <div className="absolute -inset-3 bg-[#FFFD63] rounded-3xl blur-xl opacity-20 group-hover:opacity-40 transition-opacity duration-700 -z-10"></div>
                       </div>
                     </div>
 

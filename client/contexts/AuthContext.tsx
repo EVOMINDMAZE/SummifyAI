@@ -187,18 +187,61 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
-      console.log(`🔄 Auth state changed: ${event}`);
+      console.log(`🔄 Auth state changed: ${event}`, session?.user?.email || 'no session');
 
-      if (event === "SIGNED_OUT" || !session) {
-        setUser(null);
-        console.log("🔓 User signed out");
-      } else if (event === "SIGNED_IN" && session) {
-        console.log("🔐 User signed in:", session.user.email);
-        const userData = await fetchUserProfile(session.user);
-        setUser(userData);
+      try {
+        if (event === "SIGNED_OUT" || !session) {
+          setUser(null);
+          console.log("🔓 User signed out");
+        } else if (event === "SIGNED_IN" && session) {
+          console.log("🔐 User signed in:", session.user.email);
+          console.log("Session details:", {
+            expires_at: new Date(session.expires_at * 1000).toLocaleString(),
+            access_token_length: session.access_token?.length || 0
+          });
+
+          // Add timeout for profile fetching
+          const profilePromise = fetchUserProfile(session.user);
+          const timeoutPromise = new Promise((resolve) =>
+            setTimeout(() => {
+              console.warn("⚠️ Profile fetch timeout, setting basic user");
+              return resolve(null);
+            }, 10000)
+          );
+
+          const userData = await Promise.race([profilePromise, timeoutPromise]);
+
+          if (userData) {
+            setUser(userData);
+            console.log("✅ User profile set successfully");
+          } else {
+            // Set basic user data even if profile fetch fails
+            const basicUser: User = {
+              id: session.user.id,
+              email: session.user.email || "",
+              firstName: "",
+              lastName: "",
+              searchCount: 0,
+              monthlySearchLimit: 3,
+              searchCountResetDate: new Date().toISOString().split("T")[0],
+              planType: "free",
+              notificationSearchResults: false,
+              notificationUsageAlerts: false,
+              notificationProductUpdates: false,
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString(),
+            };
+            setUser(basicUser);
+            console.log("⚠️ Set basic user data due to profile fetch issues");
+          }
+        }
+      } catch (error) {
+        console.error("❌ Error in auth state change handler:", error);
+        // Ensure loading state is cleared even on error
+      } finally {
+        setIsLoading(false);
+        console.log("🏁 Auth state change processing completed");
       }
-
-      setIsLoading(false);
     });
 
     return () => subscription.unsubscribe();

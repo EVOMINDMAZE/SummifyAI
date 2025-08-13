@@ -624,43 +624,47 @@ export default function Generate() {
           <div className="max-w-7xl mx-auto">
             {/* Results Header */}
             <div className="text-center mb-12">
-              <div className="bg-gradient-to-r from-emerald-50 to-cyan-50 dark:from-emerald-900/20 dark:to-cyan-900/20 rounded-3xl p-8 border-2 border-emerald-200 dark:border-emerald-800 shadow-xl">
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-emerald-500 to-cyan-500 rounded-full mb-6 shadow-lg">
-                  <BookOpen className="w-8 h-8 text-white" />
-                </div>
-                <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-                  AI Discovery Results
-                </h2>
-                <div className="text-2xl text-emerald-700 dark:text-emerald-300 font-bold mb-6">
-                  "{searchResults.query}"
-                </div>
-                <div className="flex flex-wrap justify-center gap-6 text-sm font-medium">
-                  <div className="bg-white/80 dark:bg-gray-800/80 rounded-full px-6 py-3 flex items-center shadow-md">
-                    <span className="w-3 h-3 bg-emerald-500 rounded-full mr-3"></span>
-                    <span className="font-bold text-emerald-600 dark:text-emerald-400 text-lg">
-                      {searchResults.totalChapters}
-                    </span>
-                    <span className="ml-1 text-gray-700 dark:text-gray-300">
-                      Relevant Chapters
-                    </span>
+              <div className="bg-[#FFFD63] dark:bg-gray-800 rounded-3xl p-8 border-2 border-[#FFFD63]/50 dark:border-gray-700 shadow-xl relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-32 translate-x-32"></div>
+                <div className="absolute bottom-0 left-0 w-48 h-48 bg-[#0A0B1E]/10 dark:bg-white/10 rounded-full translate-y-24 -translate-x-24"></div>
+                <div className="relative z-10">
+                  <div className="inline-flex items-center justify-center w-16 h-16 bg-[#0A0B1E] rounded-full mb-6 shadow-lg">
+                    <BookOpen className="w-8 h-8 text-[#FFFD63]" />
                   </div>
-                  <div className="bg-white/80 dark:bg-gray-800/80 rounded-full px-6 py-3 flex items-center shadow-md">
-                    <span className="w-3 h-3 bg-blue-500 rounded-full mr-3"></span>
-                    <span className="font-bold text-blue-600 dark:text-blue-400 text-lg">
-                      {searchResults.totalBooks}
-                    </span>
-                    <span className="ml-1 text-gray-700 dark:text-gray-300">
-                      Books Found
-                    </span>
+                  <h2 className="text-4xl font-bold text-[#0A0B1E] dark:text-white mb-4">
+                    AI Discovery Results
+                  </h2>
+                  <div className="text-2xl text-[#0A0B1E] dark:text-[#FFFD63] font-bold mb-6">
+                    "{searchResults.query}"
                   </div>
-                  <div className="bg-white/80 dark:bg-gray-800/80 rounded-full px-6 py-3 flex items-center shadow-md">
-                    <span className="w-3 h-3 bg-purple-500 rounded-full mr-3"></span>
-                    <span className="text-gray-700 dark:text-gray-300">
-                      {searchResults.searchType === "ai_vector_search"
-                        ? "AI Vector"
-                        : "Enhanced Text"}{" "}
-                      Search
-                    </span>
+                  <div className="flex flex-wrap justify-center gap-6 text-sm font-medium">
+                    <div className="bg-white/90 dark:bg-gray-800/90 rounded-full px-6 py-3 flex items-center shadow-md border border-[#0A0B1E]/20">
+                      <span className="w-3 h-3 bg-[#0A0B1E] rounded-full mr-3"></span>
+                      <span className="font-bold text-[#0A0B1E] dark:text-[#FFFD63] text-lg">
+                        {searchResults.totalChapters}
+                      </span>
+                      <span className="ml-1 text-[#0A0B1E]/70 dark:text-gray-300">
+                        Relevant Chapters
+                      </span>
+                    </div>
+                    <div className="bg-white/90 dark:bg-gray-800/90 rounded-full px-6 py-3 flex items-center shadow-md border border-[#0A0B1E]/20">
+                      <span className="w-3 h-3 bg-[#0A0B1E] rounded-full mr-3"></span>
+                      <span className="font-bold text-[#0A0B1E] dark:text-[#FFFD63] text-lg">
+                        {searchResults.totalBooks}
+                      </span>
+                      <span className="ml-1 text-[#0A0B1E]/70 dark:text-gray-300">
+                        Books Found
+                      </span>
+                    </div>
+                    <div className="bg-white/90 dark:bg-gray-800/90 rounded-full px-6 py-3 flex items-center shadow-md border border-[#0A0B1E]/20">
+                      <span className="w-3 h-3 bg-[#0A0B1E] rounded-full mr-3"></span>
+                      <span className="text-[#0A0B1E]/70 dark:text-gray-300">
+                        {searchResults.searchType === "ai_vector_search"
+                          ? "AI Vector"
+                          : "Enhanced Text"}{" "}
+                        Search
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>

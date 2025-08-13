@@ -93,7 +93,7 @@ export async function generateQueryEmbeddings(
   }
 }
 
-// Search the entire database using vector similarity or text search
+// Optimized search with timeout handling and progressive search strategy
 export async function searchDatabase(query: string): Promise<SearchResults> {
   const startTime = Date.now();
 
@@ -101,144 +101,182 @@ export async function searchDatabase(query: string): Promise<SearchResults> {
     throw new Error("Query parameter is required");
   }
 
-  console.log(`🧠 DATABASE SEARCH for: "${query}"`);
+  console.log(`🧠 OPTIMIZED DATABASE SEARCH for: "${query}"`);
 
   try {
-    // Step 1: Try to generate OpenAI embeddings (optional)
+    // Step 1: Generate embeddings (optional, fast)
     console.log("🔄 Step 1: Checking for AI capabilities...");
     const embeddings = await generateQueryEmbeddings(query);
     if (embeddings) {
       console.log("✅ AI embeddings generated successfully");
     } else {
-      console.log("⚠️ AI embeddings not available, using text search");
+      console.log("⚠️ AI embeddings not available, using optimized text search");
     }
 
-    // Step 2: Search using Supabase client (this always works)
-    console.log("🔄 Step 2: Searching database with Supabase...");
+    // Step 2: Progressive search strategy - fast queries first
+    console.log("🔄 Step 2: Starting progressive search...");
 
-    // Sanitize query to prevent SQL injection and parsing issues
+    // Sanitize query to prevent SQL injection
     const sanitizedQuery = query.trim().replace(/[%_]/g, "\\$&");
-    console.log(
-      `🔍 Executing search query: "${query}" (sanitized: "${sanitizedQuery}")`,
-    );
+    const queryWords = sanitizedQuery.toLowerCase().split(/\s+/).filter(w => w.length > 2);
+    console.log(`🔍 Search words: ${queryWords.join(', ')}`);
 
-    // Search in three separate queries and combine results
-    const searchPromises = [
-      // Search in chapter titles
-      supabase
-        .from("chapters")
-        .select(
-          `
-          id,
-          chapter_title,
-          chapter_text,
-          book_id,
-          books!inner (
+    let searchResults: any[] = [];
+
+    // Phase 1: Fast searches (chapter titles and book titles) with timeout
+    console.log("🚀 Phase 1: Fast title searches...");
+    
+    try {
+      const fastSearchPromises = [
+        // Search in chapter titles (fastest)
+        supabase
+          .from("chapters")
+          .select(`
             id,
-            title,
-            author_name,
-            cover_url,
-            isbn_13
-          )
-        `,
-        )
-        .ilike("chapter_title", `%${sanitizedQuery}%`)
-        .not("chapter_text", "is", null)
-        .limit(10),
+            chapter_title,
+            chapter_text,
+            book_id,
+            books!inner (
+              id,
+              title,
+              author_name,
+              cover_url,
+              isbn_13
+            )
+          `)
+          .ilike("chapter_title", `%${sanitizedQuery}%`)
+          .not("chapter_text", "is", null)
+          .limit(15),
 
-      // Search in chapter text
-      supabase
-        .from("chapters")
-        .select(
-          `
-          id,
-          chapter_title,
-          chapter_text,
-          book_id,
-          books!inner (
+        // Search in book titles (fast)
+        supabase
+          .from("chapters")
+          .select(`
             id,
-            title,
-            author_name,
-            cover_url,
-            isbn_13
-          )
-        `,
-        )
-        .ilike("chapter_text", `%${sanitizedQuery}%`)
-        .not("chapter_text", "is", null)
-        .limit(10),
+            chapter_title,
+            chapter_text,
+            book_id,
+            books!inner (
+              id,
+              title,
+              author_name,
+              cover_url,
+              isbn_13
+            )
+          `)
+          .ilike("books.title", `%${sanitizedQuery}%`)
+          .not("chapter_text", "is", null)
+          .limit(15),
+      ];
 
-      // Search in book titles
-      supabase
-        .from("chapters")
-        .select(
-          `
-          id,
-          chapter_title,
-          chapter_text,
-          book_id,
-          books!inner (
-            id,
-            title,
-            author_name,
-            cover_url,
-            isbn_13
-          )
-        `,
-        )
-        .ilike("books.title", `%${sanitizedQuery}%`)
-        .not("chapter_text", "is", null)
-        .limit(10),
-    ];
-
-    const [titleResults, textResults, bookResults] =
-      await Promise.all(searchPromises);
-
-    // Check for errors in any of the searches
-    if (titleResults.error || textResults.error || bookResults.error) {
-      const error =
-        titleResults.error || textResults.error || bookResults.error;
-      console.error("❌ Supabase search error:", error);
-      throw new Error(
-        `Database search failed: ${error.message || "Search query failed"}`,
+      // Add timeout for fast searches (5 seconds)
+      const fastTimeout = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Fast search timeout')), 5000)
       );
+
+      const [titleResults, bookResults] = await Promise.race([
+        Promise.all(fastSearchPromises),
+        fastTimeout
+      ]);
+
+      if (titleResults.error) {
+        console.warn("Chapter title search error:", titleResults.error);
+      } else {
+        searchResults.push(...(titleResults.data || []));
+      }
+
+      if (bookResults.error) {
+        console.warn("Book title search error:", bookResults.error);
+      } else {
+        searchResults.push(...(bookResults.data || []));
+      }
+
+      console.log(`✅ Phase 1 completed: ${searchResults.length} results from titles`);
+    } catch (error) {
+      console.warn("⚠️ Fast search failed:", error.message);
     }
 
-    // Combine and deduplicate results
-    const allResults = [
-      ...(titleResults.data || []),
-      ...(textResults.data || []),
-      ...(bookResults.data || []),
-    ];
+    // Phase 2: Content search only if we don't have enough results
+    if (searchResults.length < 10 && queryWords.length > 0) {
+      console.log("🔍 Phase 2: Content search (slower, limited)...");
+      
+      try {
+        // Use a more targeted content search with smaller text sample
+        const contentPromise = supabase
+          .from("chapters")
+          .select(`
+            id,
+            chapter_title,
+            chapter_text,
+            book_id,
+            books!inner (
+              id,
+              title,
+              author_name,
+              cover_url,
+              isbn_13
+            )
+          `)
+          .ilike("chapter_text", `%${queryWords[0]}%`) // Only search for first word to reduce load
+          .not("chapter_text", "is", null)
+          .limit(10);
 
-    // Remove duplicates based on chapter ID
-    const uniqueResults = allResults.filter(
+        // Very short timeout for content search (3 seconds)
+        const contentTimeout = new Promise((_, reject) =>
+          setTimeout(() => reject(new Error('Content search timeout')), 3000)
+        );
+
+        const textResults = await Promise.race([contentPromise, contentTimeout]);
+
+        if (textResults.error) {
+          console.warn("Content search error:", textResults.error);
+        } else {
+          searchResults.push(...(textResults.data || []));
+          console.log(`✅ Phase 2 completed: +${textResults.data?.length || 0} results from content`);
+        }
+      } catch (error) {
+        console.warn("⚠️ Content search failed or timed out:", error.message);
+      }
+    }
+
+    // Remove duplicates and limit results
+    const uniqueResults = searchResults.filter(
       (result, index, array) =>
         array.findIndex((r) => r.id === result.id) === index,
     );
 
-    const searchResults = uniqueResults.slice(0, 20); // Limit final results
-    console.log(
-      `📚 Combined search found ${searchResults.length} unique chapters`,
-    );
+    const finalResults = uniqueResults.slice(0, 20);
+    console.log(`📚 Total unique results: ${finalResults.length}`);
+
+    if (finalResults.length === 0) {
+      // Return empty but valid results
+      return {
+        query,
+        searchType: "no_results",
+        totalBooks: 0,
+        totalChapters: 0,
+        books: [],
+        processingTime: Date.now() - startTime,
+      };
+    }
 
     // Transform results to match expected format
-    const results = searchResults.map((row: any) => ({
+    const results = finalResults.map((row: any) => ({
       id: row.id,
       chapter_title: row.chapter_title,
-      chapter_text: row.chapter_text?.substring(0, 800) || "", // First 800 chars
+      chapter_text: row.chapter_text?.substring(0, 500) || "", // Limit text length
       book_id: row.book_id,
       book_title: row.books.title,
       author_name: row.books.author_name,
       cover_url: row.books.cover_url,
       isbn_13: row.books.isbn_13,
-      similarity_score: 0.75, // Default similarity score for text search
+      similarity_score: 0.75, // Default similarity score
     }));
 
     console.log(`📚 Found ${results.length} chapters from Supabase`);
 
-    // Step 3: Try to enrich with AI (fallback if not available)
-    console.log("��� Step 3: Attempting to enrich results with AI...");
+    // Step 3: Enrich with AI (with timeout)
+    console.log("🔄 Step 3: Attempting to enrich results with AI...");
     const enrichedResults = await enrichResultsWithAI(results, query);
 
     console.log(
@@ -247,16 +285,15 @@ export async function searchDatabase(query: string): Promise<SearchResults> {
 
     return {
       ...enrichedResults,
-      searchType: embeddings ? "ai_enhanced_search" : "database_search",
+      searchType: embeddings ? "ai_enhanced_search" : "optimized_search",
       processingTime: Date.now() - startTime,
     };
   } catch (error) {
     console.error("❌ Search failed:", error);
 
     // Always return some results rather than failing completely
-    // This prevents infinite loading states
     console.log("🔄 Returning fallback empty results to prevent infinite loading");
-
+    
     return {
       query,
       searchType: "search_failed",
@@ -322,17 +359,17 @@ async function enrichResultsWithAI(
       if (!aiAnalysisWorking) {
         try {
           const testChapter = bookData.chapters[0];
-
+          
           // Add timeout for AI analysis to prevent hanging
           const analysisPromise = netlifyFunctionService.analyzeChapterWithAI(
             testChapter,
             query,
           );
-
-          const timeoutPromise = new Promise((_, reject) =>
+          
+          const timeoutPromise = new Promise((_, reject) => 
             setTimeout(() => reject(new Error('AI analysis timeout')), 3000)
           );
-
+          
           const enrichment = await Promise.race([analysisPromise, timeoutPromise]);
           enrichedChapters.push(enrichment);
           aiAnalysisWorking = true;
@@ -433,8 +470,6 @@ async function enrichResultsWithAI(
   }
 }
 
-// Chapter analysis is now handled by Edge Functions
-
 // Fallback enrichment for when AI fails
 function createFallbackEnrichment(
   chapter: any,
@@ -460,7 +495,7 @@ function createFallbackEnrichment(
       `Implement these ${userQuery} strategies in your daily work`,
       "Apply systematic approaches to achieve better results",
     ],
-    aiExplanation: `Our AI identified this chapter as relevant to ${userQuery} due to its coverage of essential concepts and proven methodologies.`,
+    aiExplanation: `Our analysis identified this chapter as relevant to ${userQuery} due to its coverage of essential concepts and proven methodologies.`,
   };
 }
 

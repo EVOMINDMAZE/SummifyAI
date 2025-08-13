@@ -428,6 +428,30 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     });
   };
 
+  // Add debug functions to window in development
+  useEffect(() => {
+    if (process.env.NODE_ENV === 'development') {
+      (window as any).debugAuth = {
+        resetAuthState: () => {
+          console.log("🔧 Manually resetting auth state");
+          setIsLoading(false);
+          setUser(null);
+        },
+        getCurrentState: () => ({
+          user: user?.email || null,
+          isLoading,
+          hasSupabase: !!supabase
+        }),
+        forceSignOut: async () => {
+          console.log("🔧 Force sign out");
+          await supabase.auth.signOut();
+          setUser(null);
+          setIsLoading(false);
+        }
+      };
+    }
+  }, [user, isLoading]);
+
   const value = {
     user,
     isLoading,

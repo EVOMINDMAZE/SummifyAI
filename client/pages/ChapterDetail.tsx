@@ -341,7 +341,7 @@ export default function ChapterDetail() {
           {/* Chapter Content */}
           <div className="lg:col-span-2 space-y-8">
             {/* Chapter Header */}
-            <Card className="shadow-2xl border-0 bg-gradient-to-br from-white to-gray-50/50 dark:from-gray-800 dark:to-gray-900/50 backdrop-blur-md rounded-3xl overflow-hidden">
+            <Card className="shadow-2xl border-0 bg-white dark:bg-gray-800 rounded-3xl overflow-hidden">
               <CardContent className="p-8">
                 <div className="mb-6">
                   <div className="flex flex-wrap items-center gap-3 mb-4">
@@ -378,7 +378,7 @@ export default function ChapterDetail() {
                     <Target className="w-5 h-5 mr-2 text-blue-500" />
                     Why This Chapter Matters
                   </h3>
-                  <p className="text-gray-700 dark:text-gray-300 leading-relaxed bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl border border-blue-200 dark:border-blue-800">
+                  <p className="text-[#0A0B1E]/80 dark:text-gray-300 leading-relaxed bg-[#FFFD63]/10 dark:bg-[#FFFD63]/5 p-4 rounded-xl border border-[#FFFD63]/30 dark:border-[#FFFD63]/20">
                     {chapterDetail.whyRelevant}
                   </p>
                 </div>
@@ -408,7 +408,7 @@ export default function ChapterDetail() {
             </Card>
 
             {/* Chapter Content */}
-            <Card className="shadow-2xl border-0 bg-gradient-to-br from-white to-gray-50/50 dark:from-gray-800 dark:to-gray-900/50 backdrop-blur-md rounded-3xl overflow-hidden">
+            <Card className="shadow-2xl border-0 bg-white dark:bg-gray-800 rounded-3xl overflow-hidden">
               <CardContent className="p-8">
                 <h3 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
                   <BookOpen className="w-5 h-5 mr-2 text-green-500" />

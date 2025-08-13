@@ -716,24 +716,24 @@ export default function Generate() {
                     <div className="flex-1 p-8">
                       {/* Book Title and Author */}
                       <div className="mb-8">
-                        <h3 className="text-3xl font-bold text-gray-900 dark:text-white mb-3 line-clamp-2 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors leading-tight">
+                        <h3 className="text-3xl font-bold text-[#0A0B1E] dark:text-white mb-3 line-clamp-2 group-hover:text-[#0A0B1E]/80 dark:group-hover:text-white/80 transition-colors leading-tight">
                           {bookGroup.title}
                         </h3>
                         <div className="flex items-center space-x-6 text-gray-600 dark:text-gray-400">
                           <div className="flex items-center">
-                            <Users className="w-5 h-5 mr-2 text-indigo-500" />
+                            <Users className="w-5 h-5 mr-2 text-[#0A0B1E] dark:text-[#FFFD63]" />
                             <span className="font-medium text-lg">
                               {bookGroup.author}
                             </span>
                           </div>
                           <div className="flex items-center">
-                            <BookOpen className="w-5 h-5 mr-2 text-emerald-500" />
+                            <BookOpen className="w-5 h-5 mr-2 text-[#0A0B1E] dark:text-[#FFFD63]" />
                             <span className="font-medium text-lg">
                               {bookGroup.topChapters.length} Relevant Chapters
                             </span>
                           </div>
                           <div className="flex items-center">
-                            <Award className="w-5 h-5 mr-2 text-purple-500" />
+                            <Award className="w-5 h-5 mr-2 text-[#0A0B1E] dark:text-[#FFFD63]" />
                             <span className="font-medium text-lg">
                               {bookGroup.averageRelevance || 85}% Overall Match
                             </span>
@@ -742,14 +742,14 @@ export default function Generate() {
                       </div>
 
                       {/* AI-GENERATED BOOK SUMMARY */}
-                      <div className="mb-8 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-2xl border border-blue-200 dark:border-blue-800">
+                      <div className="mb-8 p-6 bg-[#FFFD63]/10 dark:bg-[#FFFD63]/5 rounded-2xl border-2 border-[#FFFD63]/30 dark:border-[#FFFD63]/20">
                         <div className="flex items-start space-x-3">
-                          <Brain className="w-6 h-6 text-blue-600 mt-1 flex-shrink-0" />
+                          <Brain className="w-6 h-6 text-[#0A0B1E] dark:text-[#FFFD63] mt-1 flex-shrink-0" />
                           <div>
-                            <h4 className="font-bold text-blue-900 dark:text-blue-200 mb-2">
+                            <h4 className="font-bold text-[#0A0B1E] dark:text-white mb-2">
                               AI Analysis: Why This Book Matters
                             </h4>
-                            <p className="text-blue-800 dark:text-blue-300 leading-relaxed">
+                            <p className="text-[#0A0B1E]/80 dark:text-gray-300 leading-relaxed">
                               This book provides exceptional insights for{" "}
                               <strong>"{searchResults.query}"</strong> through
                               its comprehensive coverage of practical frameworks
@@ -765,7 +765,7 @@ export default function Generate() {
                       <div className="text-center">
                         <Button
                           onClick={() => handleBookCardClick(bookGroup)}
-                          className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-8 py-4 rounded-2xl text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                          className="bg-[#0A0B1E] hover:bg-[#0A0B1E]/90 text-[#FFFD63] px-8 py-4 rounded-2xl text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
                         >
                           <Eye className="w-5 h-5 mr-2" />
                           Explore All Chapters

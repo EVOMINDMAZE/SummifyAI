@@ -867,7 +867,7 @@ export default function Generate() {
                         <Button
                           onClick={() => handleBookCardClick(bookGroup)}
                           variant="outline"
-                          className="border-2 border-indigo-300 text-indigo-700 dark:text-indigo-300 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 px-6 py-3 rounded-xl"
+                          className="border-2 border-[#FFFD63] text-[#0A0B1E] dark:text-[#FFFD63] hover:bg-[#FFFD63]/10 dark:hover:bg-[#FFFD63]/5 px-6 py-3 rounded-xl"
                         >
                           View {bookGroup.topChapters.length - 6} More Chapters
                           <ChevronRight className="w-4 h-4 ml-2" />
@@ -894,7 +894,7 @@ export default function Generate() {
                 </p>
                 <Button
                   onClick={() => setTopic("")}
-                  className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-xl"
+                  className="bg-[#0A0B1E] hover:bg-[#0A0B1E]/90 text-[#FFFD63] px-6 py-3 rounded-xl"
                 >
                   Try Another Search
                 </Button>

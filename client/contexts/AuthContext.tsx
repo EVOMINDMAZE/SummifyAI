@@ -64,12 +64,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const fetchUserProfile = async (supabaseUser: SupabaseUser): Promise<User | null> => {
     try {
       console.log("📋 Fetching profile for user:", supabaseUser.email);
+      const startTime = Date.now();
 
       const { data: profileData, error: profileError } = await supabase
         .from("profiles")
         .select("*")
         .eq("user_id", supabaseUser.id)
         .single();
+
+      console.log(`⏱️ Profile fetch completed in ${Date.now() - startTime}ms`);
 
       if (profileError) {
         console.log("Profile error:", profileError);

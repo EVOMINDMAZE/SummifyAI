@@ -203,7 +203,7 @@ export default function ChapterDetail() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      <div className="min-h-screen bg-white dark:bg-gray-900">
         <Navigation />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex items-center justify-center min-h-[400px]">
@@ -221,7 +221,7 @@ export default function ChapterDetail() {
 
   if (!chapterDetail || !bookDetail) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      <div className="min-h-screen bg-white dark:bg-gray-900">
         <Navigation />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center py-12">
@@ -233,7 +233,7 @@ export default function ChapterDetail() {
             </p>
             <Button
               onClick={() => navigate("/generate")}
-              className="bg-[#667eea] hover:bg-[#5a67d8]"
+              className="bg-[#0A0B1E] hover:bg-[#0A0B1E]/90 text-[#FFFD63]"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Search
@@ -245,7 +245,7 @@ export default function ChapterDetail() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+    <div className="min-h-screen bg-white dark:bg-gray-900">
       <Navigation />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -254,7 +254,7 @@ export default function ChapterDetail() {
           <Button
             onClick={handleBackToResults}
             variant="outline"
-            className="flex items-center space-x-2 border-2 border-[#667eea] text-[#667eea] hover:bg-[#667eea] hover:text-white transition-all duration-300"
+            className="flex items-center space-x-2 border-2 border-[#FFFD63] text-[#0A0B1E] dark:text-[#FFFD63] hover:bg-[#FFFD63] hover:text-[#0A0B1E] dark:hover:bg-[#FFFD63] dark:hover:text-[#0A0B1E] transition-all duration-300"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Back to Results</span>

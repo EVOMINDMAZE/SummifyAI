@@ -220,8 +220,16 @@ export default function Generate() {
       let fallbackResults = null;
 
       if (error instanceof Error) {
-        if (error.message.includes("timeout")) {
-          userMessage = "Search is taking longer than usual. Showing available results...";
+        if (error.message.includes("timeout") && retryCount < 2) {
+          // Retry with simpler search for timeout errors
+          console.log(`⏰ Search timeout, retrying with simplified search...`);
+          setCurrentOperation("Search timeout, retrying with faster search...");
+          setTimeout(() => {
+            performDatabaseSearch(searchQuery, retryCount + 1);
+          }, 1000);
+          return; // Don't execute finally block yet
+        } else if (error.message.includes("timeout")) {
+          userMessage = "Search is taking longer than usual due to high load. Try a more specific search term.";
           // Create fallback results for timeout
           fallbackResults = {
             query: searchQuery,

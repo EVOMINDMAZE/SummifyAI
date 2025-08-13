@@ -60,6 +60,18 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Recovery mechanism for stuck loading states
+  useEffect(() => {
+    const recoveryTimer = setTimeout(() => {
+      if (isLoading) {
+        console.warn("⚠️ Auth loading timeout, forcing completion");
+        setIsLoading(false);
+      }
+    }, 30000); // 30 second timeout
+
+    return () => clearTimeout(recoveryTimer);
+  }, [isLoading]);
+
   // Helper function to fetch and create user profile
   const fetchUserProfile = async (supabaseUser: SupabaseUser): Promise<User | null> => {
     try {

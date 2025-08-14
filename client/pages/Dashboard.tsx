@@ -503,6 +503,11 @@ export default function Dashboard() {
             </div>
           </div>
 
+          {/* Tier Access Demo */}
+          <div className="mb-8">
+            <TierAccessDemo />
+          </div>
+
           {/* Recent Activity & Tips */}
           <div className="space-y-8">
             {/* Feature Highlights */}

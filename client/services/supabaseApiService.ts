@@ -29,6 +29,7 @@ export async function searchDatabase(query: string): Promise<SearchResults> {
           userId: userId,
           skipAnalysis: false, // Let AI analyze the query
           deepSearch: false, // Start with fast summary search
+          summaryLength: user?.defaultSummaryLength || "medium",
         },
       });
 

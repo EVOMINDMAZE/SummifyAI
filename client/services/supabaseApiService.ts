@@ -196,13 +196,13 @@ function transformSearchResults(searchResponse: any, query: string, startTime: n
       id: bookResult.book_id?.toString() || Math.random().toString(),
       title: bookResult.book_title || "Unknown Title",
       author: bookResult.book_author || "Unknown Author",
-      cover: bookResult.book_cover_url || 
+      cover: bookResult.book_cover_url ||
             `https://via.placeholder.com/300x450/FFFD63/0A0B1E?text=${encodeURIComponent((bookResult.book_title || "Book").slice(0, 20))}`,
       isbn: bookResult.isbn_13 || "",
       averageRelevance,
       topChapters: transformedChapters,
     };
-  });
+  }).filter(Boolean); // Remove any null books
 
   const totalChapters = books.reduce((sum, book) => sum + book.topChapters.length, 0);
 

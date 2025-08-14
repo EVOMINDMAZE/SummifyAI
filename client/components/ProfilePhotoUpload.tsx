@@ -153,7 +153,13 @@ export default function ProfilePhotoUpload({ currentPhotoUrl, onPhotoUpdate }: P
       onPhotoUpdate('');
     } catch (error) {
       console.error('Error removing photo:', error);
-      alert('Failed to remove photo. Please try again.');
+
+      let errorMessage = 'Failed to remove photo. Please try again.';
+      if (error && typeof error === 'object' && error.message) {
+        errorMessage = `Remove failed: ${error.message}`;
+      }
+
+      alert(errorMessage);
     }
   };
 

@@ -28,15 +28,6 @@ export const handler: Handler = async (event) => {
       institutionAnnual:
         process.env.STRIPE_INSTITUTION_ANNUAL_PRICE_ID || "NOT_SET",
     },
-    fallbackIds: {
-      // These are the fallback IDs that will cause errors
-      scholarMonthly: "price_scholar_monthly",
-      scholarAnnual: "price_scholar_annual",
-      professionalMonthly: "price_professional_monthly",
-      professionalAnnual: "price_professional_annual",
-      institutionMonthly: "price_institution_monthly",
-      institutionAnnual: "price_institution_annual",
-    },
   };
 
   return {

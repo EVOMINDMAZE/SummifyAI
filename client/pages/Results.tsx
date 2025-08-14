@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { supabase } from "@/lib/supabase";
 import Navigation from "../components/Navigation";
+import BookCover from "../components/BookCover";
 import {
   shareResult,
   exportToPDF,
@@ -339,18 +340,11 @@ export default function Results() {
                     key={index}
                     className="bg-gray-50 dark:bg-gray-700 rounded-xl p-6"
                   >
-                    <img
-                      src={
-                        book.book_cover_url ||
-                        book.cover ||
-                        `https://via.placeholder.com/150x200/FFFD63/0A0B1E?text=${encodeURIComponent((book.book_title || book.title || "Book").slice(0, 10))}`
-                      }
-                      alt={book.book_title || book.title}
-                      className="w-full h-48 object-cover rounded-lg mb-4"
-                      onError={(e) => {
-                        const target = e.currentTarget;
-                        target.src = `https://via.placeholder.com/150x200/FFFD63/0A0B1E?text=${encodeURIComponent((book.book_title || book.title || "Book").slice(0, 10))}`;
-                      }}
+                    <BookCover
+                      src={book.book_cover_url || book.cover}
+                      title={book.book_title || book.title}
+                      author={book.book_author || book.author}
+                      className="mb-4"
                     />
                     <h3 className="font-semibold text-gray-900 dark:text-white mb-2">
                       {book.book_title || book.title}
@@ -747,18 +741,12 @@ export default function Results() {
                                 key={index}
                                 className="flex gap-3 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg"
                               >
-                                <img
-                                  src={
-                                    book.book_cover_url ||
-                                    book.cover ||
-                                    `https://via.placeholder.com/60x80/FFFD63/0A0B1E?text=${encodeURIComponent((book.book_title || book.title || "Book").slice(0, 5))}`
-                                  }
-                                  alt={book.book_title || book.title}
-                                  className="w-16 h-20 object-cover rounded"
-                                  onError={(e) => {
-                                    const target = e.currentTarget;
-                                    target.src = `https://via.placeholder.com/60x80/FFFD63/0A0B1E?text=${encodeURIComponent((book.book_title || book.title || "Book").slice(0, 5))}`;
-                                  }}
+                                <BookCover
+                                  src={book.book_cover_url || book.cover}
+                                  title={book.book_title || book.title}
+                                  author={book.book_author || book.author}
+                                  width="w-16"
+                                  height="h-20"
                                 />
                                 <div className="flex-1">
                                   <h4 className="font-medium text-[#0A0B1E] dark:text-white text-sm mb-1">

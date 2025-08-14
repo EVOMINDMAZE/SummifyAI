@@ -128,7 +128,21 @@ export async function searchDatabase(query: string): Promise<SearchResults> {
 
 // Transform Edge Function response to our frontend format
 function transformSearchResults(searchResponse: any, query: string, startTime: number): SearchResults {
+  // Validate searchResponse
+  if (!searchResponse) {
+    console.warn("⚠️ Empty search response");
+    return {
+      query,
+      searchType: "no_results",
+      totalBooks: 0,
+      totalChapters: 0,
+      books: [],
+      processingTime: Date.now() - startTime,
+    };
+  }
+
   if (!searchResponse.results || !Array.isArray(searchResponse.results)) {
+    console.warn("⚠️ Invalid or empty results array");
     return {
       query,
       searchType: "no_results",

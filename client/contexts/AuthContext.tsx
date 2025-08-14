@@ -16,7 +16,7 @@ export interface User {
   searchCount: number;
   monthlySearchLimit: number;
   searchCountResetDate: string;
-  planType: "free" | "pro" | "premium";
+  planType: "free" | "scholar" | "professional" | "institution";
   notificationSearchResults: boolean;
   notificationUsageAlerts: boolean;
   notificationProductUpdates: boolean;
@@ -30,6 +30,26 @@ export interface User {
   adFreeUntil?: string;
   defaultSummaryLength?: "short" | "medium" | "long";
   profilePhotoUrl?: string;
+  settings?: {
+    language?: string;
+    timezone?: string;
+    autoSave?: boolean;
+    notifications?: {
+      emailWeeklyReport?: boolean;
+      emailCreditUpdates?: boolean;
+      emailFeatureUpdates?: boolean;
+      emailMarketing?: boolean;
+      browserSummaryComplete?: boolean;
+    };
+    privacy?: {
+      allowAnalytics?: boolean;
+      saveSearchHistory?: boolean;
+    };
+    security?: {
+      twoFactorEnabled?: boolean;
+      loginAlerts?: boolean;
+    };
+  };
 }
 
 interface AuthContextType {

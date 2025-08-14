@@ -65,11 +65,9 @@ export default async (req: Request, context: Context) => {
     return new Response(
       JSON.stringify({
         success: true,
-        data: {
-          embedding: embedding,
-          dimensions: embedding.length,
-          model: "text-embedding-3-small",
-        },
+        embedding: embedding,
+        dimensions: embedding.length,
+        model: "text-embedding-3-small",
       }),
       {
         status: 200,

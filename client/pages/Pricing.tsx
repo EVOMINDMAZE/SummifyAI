@@ -10,95 +10,95 @@ export default function Pricing() {
 
   const plans = [
     {
-      id: 'free',
-      name: 'Free',
-      price: 'Free',
-      subtitle: 'Perfect for getting started',
-      description: 'Ideal for students and casual researchers',
-      icon: '🚀',
-      iconColor: 'bg-blue-500',
+      id: "free",
+      name: "Free",
+      price: "Free",
+      subtitle: "Perfect for getting started",
+      description: "Ideal for students and casual researchers",
+      icon: "🚀",
+      iconColor: "bg-blue-500",
       features: [
-        '10 AI-powered searches per month',
-        'Access to full chapter content',
-        'Basic AI insights and analysis',
-        'Search history tracking',
-        'Mobile-friendly interface'
+        "10 AI-powered searches per month",
+        "Access to full chapter content",
+        "Basic AI insights and analysis",
+        "Search history tracking",
+        "Mobile-friendly interface",
       ],
-      cta: 'Start Free Forever',
-      ctaAction: 'signup',
-      popular: false
-    },
-    {
-      id: 'scholar',
-      name: 'Scholar',
-      price: '$19.99',
-      priceId: 'price_scholar_monthly', // Replace with your actual Stripe price ID
-      subtitle: 'Most popular choice',
-      description: 'For professionals and serious researchers',
-      icon: '📚',
-      iconColor: 'bg-yellow-500',
-      features: [
-        '500 AI-powered searches per month',
-        'Advanced AI insights and analysis',
-        'Priority search processing',
-        'Export results to various formats',
-        'Advanced search filters',
-        'Email support',
-        'Search analytics dashboard'
-      ],
-      cta: 'Start 14-Day Free Trial',
-      ctaAction: 'trial',
-      popular: true,
-      trial: true
-    },
-    {
-      id: 'professional',
-      name: 'Professional',
-      price: '$49.99',
-      priceId: 'price_professional_monthly', // Replace with your actual Stripe price ID
-      subtitle: 'For power users',
-      description: 'Advanced features for professional researchers',
-      icon: '⚡',
-      iconColor: 'bg-green-500',
-      features: [
-        '2,000 AI-powered searches per month',
-        'Premium AI models access',
-        'Advanced search filters and analytics',
-        'API access for integrations',
-        'Priority customer support',
-        'Bulk export capabilities',
-        'Custom search models',
-        'Advanced reporting dashboard'
-      ],
-      cta: 'Upgrade to Professional',
-      ctaAction: 'upgrade',
-      popular: false
-    },
-    {
-      id: 'institution',
-      name: 'Institution',
-      price: '$99.99',
-      priceId: 'price_institution_monthly', // Replace with your actual Stripe price ID
-      subtitle: 'For teams and organizations',
-      description: 'Enterprise-grade research capabilities',
-      icon: '👑',
-      iconColor: 'bg-purple-500',
-      features: [
-        'Unlimited AI-powered searches',
-        'All premium AI models',
-        'Dedicated account manager',
-        'Custom integrations and APIs',
-        'Team collaboration features',
-        'Advanced analytics and reporting',
-        'White-label options',
-        'SLA guarantee',
-        'Custom training and onboarding'
-      ],
-      cta: 'Contact Sales',
-      ctaAction: 'contact',
+      cta: "Start Free Forever",
+      ctaAction: "signup",
       popular: false,
-      customPricing: true
-    }
+    },
+    {
+      id: "scholar",
+      name: "Scholar",
+      price: "$19.99",
+      priceId: "price_scholar_monthly", // Replace with your actual Stripe price ID
+      subtitle: "Most popular choice",
+      description: "For professionals and serious researchers",
+      icon: "📚",
+      iconColor: "bg-yellow-500",
+      features: [
+        "500 AI-powered searches per month",
+        "Advanced AI insights and analysis",
+        "Priority search processing",
+        "Export results to various formats",
+        "Advanced search filters",
+        "Email support",
+        "Search analytics dashboard",
+      ],
+      cta: "Start 14-Day Free Trial",
+      ctaAction: "trial",
+      popular: true,
+      trial: true,
+    },
+    {
+      id: "professional",
+      name: "Professional",
+      price: "$49.99",
+      priceId: "price_professional_monthly", // Replace with your actual Stripe price ID
+      subtitle: "For power users",
+      description: "Advanced features for professional researchers",
+      icon: "⚡",
+      iconColor: "bg-green-500",
+      features: [
+        "2,000 AI-powered searches per month",
+        "Premium AI models access",
+        "Advanced search filters and analytics",
+        "API access for integrations",
+        "Priority customer support",
+        "Bulk export capabilities",
+        "Custom search models",
+        "Advanced reporting dashboard",
+      ],
+      cta: "Upgrade to Professional",
+      ctaAction: "upgrade",
+      popular: false,
+    },
+    {
+      id: "institution",
+      name: "Institution",
+      price: "$99.99",
+      priceId: "price_institution_monthly", // Replace with your actual Stripe price ID
+      subtitle: "For teams and organizations",
+      description: "Enterprise-grade research capabilities",
+      icon: "👑",
+      iconColor: "bg-purple-500",
+      features: [
+        "Unlimited AI-powered searches",
+        "All premium AI models",
+        "Dedicated account manager",
+        "Custom integrations and APIs",
+        "Team collaboration features",
+        "Advanced analytics and reporting",
+        "White-label options",
+        "SLA guarantee",
+        "Custom training and onboarding",
+      ],
+      cta: "Contact Sales",
+      ctaAction: "contact",
+      popular: false,
+      customPricing: true,
+    },
   ];
 
   const handlePlanSelect = async (plan: any) => {
@@ -106,16 +106,16 @@ export default function Pricing() {
     setIsProcessing(true);
 
     try {
-      if (plan.ctaAction === 'signup') {
-        navigate('/signup');
-      } else if (plan.ctaAction === 'contact') {
-        navigate('/contact');
-      } else if (plan.ctaAction === 'trial' || plan.ctaAction === 'upgrade') {
+      if (plan.ctaAction === "signup") {
+        navigate("/signup");
+      } else if (plan.ctaAction === "contact") {
+        navigate("/contact");
+      } else if (plan.ctaAction === "trial" || plan.ctaAction === "upgrade") {
         if (!user) {
-          navigate('/signup');
+          navigate("/signup");
           return;
         }
-        
+
         // In a real implementation, you would integrate with Stripe here
         // Example:
         // const stripe = await loadStripe(process.env.STRIPE_PUBLISHABLE_KEY);
@@ -126,12 +126,12 @@ export default function Pricing() {
         // });
         // const session = await response.json();
         // await stripe.redirectToCheckout({ sessionId: session.id });
-        
+
         alert(`Redirecting to ${plan.name} subscription checkout...`);
       }
     } catch (error) {
-      console.error('Error selecting plan:', error);
-      alert('Something went wrong. Please try again.');
+      console.error("Error selecting plan:", error);
+      alert("Something went wrong. Please try again.");
     } finally {
       setIsProcessing(false);
     }
@@ -187,7 +187,8 @@ export default function Pricing() {
           Find the perfect plan for your research needs
         </h1>
         <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto mb-8">
-          Unlock the full potential of AI-powered chapter discovery with plans designed for every type of researcher
+          Unlock the full potential of AI-powered chapter discovery with plans
+          designed for every type of researcher
         </p>
       </div>
 
@@ -199,8 +200,8 @@ export default function Pricing() {
               key={plan.id}
               className={`relative bg-white dark:bg-gray-800 rounded-3xl shadow-lg border-2 transition-all duration-300 hover:scale-105 hover:shadow-2xl ${
                 plan.popular
-                  ? 'border-[#FFFD63] ring-4 ring-[#FFFD63]/20'
-                  : 'border-gray-200 dark:border-gray-700'
+                  ? "border-[#FFFD63] ring-4 ring-[#FFFD63]/20"
+                  : "border-gray-200 dark:border-gray-700"
               }`}
             >
               {plan.popular && (
@@ -213,7 +214,9 @@ export default function Pricing() {
 
               <div className="p-8">
                 {/* Icon */}
-                <div className={`w-16 h-16 ${plan.iconColor} rounded-2xl flex items-center justify-center mx-auto mb-6`}>
+                <div
+                  className={`w-16 h-16 ${plan.iconColor} rounded-2xl flex items-center justify-center mx-auto mb-6`}
+                >
                   <span className="text-3xl">{plan.icon}</span>
                 </div>
 
@@ -226,7 +229,7 @@ export default function Pricing() {
                     <span className="text-4xl font-black text-gray-900 dark:text-white">
                       {plan.price}
                     </span>
-                    {plan.price !== 'Free' && !plan.customPricing && (
+                    {plan.price !== "Free" && !plan.customPricing && (
                       <span className="text-gray-600 dark:text-gray-400 ml-1">
                         /month
                       </span>
@@ -268,13 +271,13 @@ export default function Pricing() {
                   disabled={isProcessing}
                   className={`w-full py-3 px-6 rounded-xl font-bold transition-all duration-300 ${
                     plan.popular
-                      ? 'bg-[#FFFD63] hover:bg-[#FFFD63]/90 text-[#0A0B1E] transform hover:scale-105'
-                      : plan.id === 'free'
-                      ? 'bg-gray-100 hover:bg-gray-200 text-gray-900 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white'
-                      : 'bg-[#0A0B1E] hover:bg-[#0A0B1E]/90 text-white'
+                      ? "bg-[#FFFD63] hover:bg-[#FFFD63]/90 text-[#0A0B1E] transform hover:scale-105"
+                      : plan.id === "free"
+                        ? "bg-gray-100 hover:bg-gray-200 text-gray-900 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white"
+                        : "bg-[#0A0B1E] hover:bg-[#0A0B1E]/90 text-white"
                   } disabled:opacity-50 disabled:cursor-not-allowed`}
                 >
-                  {isProcessing ? 'Processing...' : plan.cta}
+                  {isProcessing ? "Processing..." : plan.cta}
                 </button>
 
                 {plan.trial && (
@@ -289,7 +292,7 @@ export default function Pricing() {
                   </p>
                 )}
 
-                {plan.id === 'free' && (
+                {plan.id === "free" && (
                   <p className="text-xs text-gray-500 dark:text-gray-400 text-center mt-2">
                     No credit card required
                   </p>
@@ -306,7 +309,7 @@ export default function Pricing() {
           <h2 className="text-3xl font-bold text-center text-gray-900 dark:text-white mb-8">
             Compare all features
           </h2>
-          
+
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
@@ -330,56 +333,80 @@ export default function Pricing() {
               </thead>
               <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
                 <tr>
-                  <td className="py-4 font-medium text-gray-900 dark:text-white">Monthly searches</td>
-                  <td className="py-4 text-center text-gray-600 dark:text-gray-400">10</td>
-                  <td className="py-4 text-center text-gray-600 dark:text-gray-400">500</td>
-                  <td className="py-4 text-center text-gray-600 dark:text-gray-400">2,000</td>
-                  <td className="py-4 text-center text-gray-600 dark:text-gray-400">Unlimited</td>
+                  <td className="py-4 font-medium text-gray-900 dark:text-white">
+                    Monthly searches
+                  </td>
+                  <td className="py-4 text-center text-gray-600 dark:text-gray-400">
+                    10
+                  </td>
+                  <td className="py-4 text-center text-gray-600 dark:text-gray-400">
+                    500
+                  </td>
+                  <td className="py-4 text-center text-gray-600 dark:text-gray-400">
+                    2,000
+                  </td>
+                  <td className="py-4 text-center text-gray-600 dark:text-gray-400">
+                    Unlimited
+                  </td>
                 </tr>
                 <tr>
-                  <td className="py-4 font-medium text-gray-900 dark:text-white">AI-powered insights</td>
+                  <td className="py-4 font-medium text-gray-900 dark:text-white">
+                    AI-powered insights
+                  </td>
                   <td className="py-4 text-center">✅</td>
                   <td className="py-4 text-center">✅</td>
                   <td className="py-4 text-center">✅</td>
                   <td className="py-4 text-center">✅</td>
                 </tr>
                 <tr>
-                  <td className="py-4 font-medium text-gray-900 dark:text-white">Advanced AI models</td>
+                  <td className="py-4 font-medium text-gray-900 dark:text-white">
+                    Advanced AI models
+                  </td>
                   <td className="py-4 text-center">❌</td>
                   <td className="py-4 text-center">✅</td>
                   <td className="py-4 text-center">✅</td>
                   <td className="py-4 text-center">✅</td>
                 </tr>
                 <tr>
-                  <td className="py-4 font-medium text-gray-900 dark:text-white">Priority processing</td>
+                  <td className="py-4 font-medium text-gray-900 dark:text-white">
+                    Priority processing
+                  </td>
                   <td className="py-4 text-center">❌</td>
                   <td className="py-4 text-center">✅</td>
                   <td className="py-4 text-center">✅</td>
                   <td className="py-4 text-center">✅</td>
                 </tr>
                 <tr>
-                  <td className="py-4 font-medium text-gray-900 dark:text-white">Custom search models</td>
+                  <td className="py-4 font-medium text-gray-900 dark:text-white">
+                    Custom search models
+                  </td>
                   <td className="py-4 text-center">❌</td>
                   <td className="py-4 text-center">❌</td>
                   <td className="py-4 text-center">✅</td>
                   <td className="py-4 text-center">✅</td>
                 </tr>
                 <tr>
-                  <td className="py-4 font-medium text-gray-900 dark:text-white">Export capabilities</td>
+                  <td className="py-4 font-medium text-gray-900 dark:text-white">
+                    Export capabilities
+                  </td>
                   <td className="py-4 text-center">❌</td>
                   <td className="py-4 text-center">✅</td>
                   <td className="py-4 text-center">✅</td>
                   <td className="py-4 text-center">✅</td>
                 </tr>
                 <tr>
-                  <td className="py-4 font-medium text-gray-900 dark:text-white">Advanced filters</td>
+                  <td className="py-4 font-medium text-gray-900 dark:text-white">
+                    Advanced filters
+                  </td>
                   <td className="py-4 text-center">❌</td>
                   <td className="py-4 text-center">✅</td>
                   <td className="py-4 text-center">✅</td>
                   <td className="py-4 text-center">✅</td>
                 </tr>
                 <tr>
-                  <td className="py-4 font-medium text-gray-900 dark:text-white">Analytics dashboard</td>
+                  <td className="py-4 font-medium text-gray-900 dark:text-white">
+                    Analytics dashboard
+                  </td>
                   <td className="py-4 text-center">❌</td>
                   <td className="py-4 text-center">✅</td>
                   <td className="py-4 text-center">✅</td>
@@ -396,32 +423,38 @@ export default function Pricing() {
         <h2 className="text-3xl font-bold text-center text-gray-900 dark:text-white mb-12">
           Frequently Asked Questions
         </h2>
-        
+
         <div className="space-y-6">
           <div className="bg-white dark:bg-gray-800 rounded-xl p-6">
             <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-2">
               Can I change my plan anytime?
             </h3>
             <p className="text-gray-600 dark:text-gray-400">
-              Yes! You can upgrade or downgrade your plan at any time. Changes take effect immediately, and we'll prorate your billing accordingly.
+              Yes! You can upgrade or downgrade your plan at any time. Changes
+              take effect immediately, and we'll prorate your billing
+              accordingly.
             </p>
           </div>
-          
+
           <div className="bg-white dark:bg-gray-800 rounded-xl p-6">
             <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-2">
               What happens if I exceed my search limit?
             </h3>
             <p className="text-gray-600 dark:text-gray-400">
-              If you reach your monthly search limit, you can either upgrade your plan or wait until the next billing cycle. We'll send you notifications as you approach your limit.
+              If you reach your monthly search limit, you can either upgrade
+              your plan or wait until the next billing cycle. We'll send you
+              notifications as you approach your limit.
             </p>
           </div>
-          
+
           <div className="bg-white dark:bg-gray-800 rounded-xl p-6">
             <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-2">
               Do you offer discounts for students or nonprofits?
             </h3>
             <p className="text-gray-600 dark:text-gray-400">
-              Yes! We offer special pricing for students and nonprofit organizations. Contact our sales team for more information about available discounts.
+              Yes! We offer special pricing for students and nonprofit
+              organizations. Contact our sales team for more information about
+              available discounts.
             </p>
           </div>
         </div>

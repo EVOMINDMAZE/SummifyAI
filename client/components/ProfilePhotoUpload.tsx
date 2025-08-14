@@ -1,16 +1,21 @@
-import React, { useState, useRef } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
-import { supabase } from '@/lib/supabase';
+import React, { useState, useRef } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/lib/supabase";
 
 interface ProfilePhotoUploadProps {
   currentPhotoUrl?: string;
   onPhotoUpdate: (photoUrl: string) => void;
 }
 
-export default function ProfilePhotoUpload({ currentPhotoUrl, onPhotoUpdate }: ProfilePhotoUploadProps) {
+export default function ProfilePhotoUpload({
+  currentPhotoUrl,
+  onPhotoUpdate,
+}: ProfilePhotoUploadProps) {
   const { user } = useAuth();
   const [isUploading, setIsUploading] = useState(false);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(currentPhotoUrl || null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(
+    currentPhotoUrl || null,
+  );
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -22,18 +27,18 @@ export default function ProfilePhotoUpload({ currentPhotoUrl, onPhotoUpdate }: P
 
   const handleFileUpload = async (file: File) => {
     if (!user) {
-      alert('Please log in to upload a photo');
+      alert("Please log in to upload a photo");
       return;
     }
 
     // Validate file
-    if (!file.type.startsWith('image/')) {
-      alert('Please select an image file');
+    if (!file.type.startsWith("image/")) {
+      alert("Please select an image file");
       return;
     }
 
     if (file.size > 5 * 1024 * 1024) {
-      alert('File size must be less than 5MB');
+      alert("File size must be less than 5MB");
       return;
     }
 
@@ -42,35 +47,34 @@ export default function ProfilePhotoUpload({ currentPhotoUrl, onPhotoUpdate }: P
     try {
       // Convert to base64 for simple storage
       const reader = new FileReader();
-      
+
       reader.onload = async (e) => {
         try {
           const base64 = e.target?.result as string;
-          
-          console.log('Updating profile photo for user:', user.id);
-          
+
+          console.log("Updating profile photo for user:", user.id);
+
           // Update user profile with base64 photo
           const { error: updateError } = await supabase
-            .from('profiles')
+            .from("profiles")
             .update({ profile_photo_url: base64 })
-            .eq('user_id', user.id);
+            .eq("user_id", user.id);
 
           if (updateError) {
-            console.error('Profile update error:', updateError);
-            throw new Error(updateError.message || 'Failed to update profile');
+            console.error("Profile update error:", updateError);
+            throw new Error(updateError.message || "Failed to update profile");
           }
 
           // Update local state
           setPreviewUrl(base64);
           onPhotoUpdate(base64);
-          
-          console.log('Profile photo updated successfully');
-          
+
+          console.log("Profile photo updated successfully");
         } catch (updateError) {
-          console.error('Error during profile update:', updateError);
+          console.error("Error during profile update:", updateError);
           setPreviewUrl(currentPhotoUrl || null);
-          
-          let errorMessage = 'Failed to update profile photo';
+
+          let errorMessage = "Failed to update profile photo";
           if (updateError instanceof Error) {
             errorMessage = updateError.message;
           }
@@ -81,8 +85,8 @@ export default function ProfilePhotoUpload({ currentPhotoUrl, onPhotoUpdate }: P
       };
 
       reader.onerror = () => {
-        console.error('Failed to read file');
-        alert('Failed to read the selected image file');
+        console.error("Failed to read file");
+        alert("Failed to read the selected image file");
         setIsUploading(false);
       };
 
@@ -92,10 +96,9 @@ export default function ProfilePhotoUpload({ currentPhotoUrl, onPhotoUpdate }: P
 
       // Start file reading
       reader.readAsDataURL(file);
-      
     } catch (error) {
-      console.error('File upload error:', error);
-      alert('Failed to process the image file');
+      console.error("File upload error:", error);
+      alert("Failed to process the image file");
       setIsUploading(false);
     }
   };
@@ -106,27 +109,26 @@ export default function ProfilePhotoUpload({ currentPhotoUrl, onPhotoUpdate }: P
 
   const removePhoto = async () => {
     if (!user) return;
-    
+
     try {
-      console.log('Removing profile photo for user:', user.id);
-      
+      console.log("Removing profile photo for user:", user.id);
+
       // Update user profile to remove photo URL
       const { error } = await supabase
-        .from('profiles')
+        .from("profiles")
         .update({ profile_photo_url: null })
-        .eq('user_id', user.id);
+        .eq("user_id", user.id);
 
       if (error) {
-        throw new Error(error.message || 'Failed to remove photo');
+        throw new Error(error.message || "Failed to remove photo");
       }
 
       setPreviewUrl(null);
-      onPhotoUpdate('');
-      
+      onPhotoUpdate("");
     } catch (error) {
-      console.error('Error removing photo:', error);
-      
-      let errorMessage = 'Failed to remove photo';
+      console.error("Error removing photo:", error);
+
+      let errorMessage = "Failed to remove photo";
       if (error instanceof Error) {
         errorMessage = error.message;
       }
@@ -146,11 +148,11 @@ export default function ProfilePhotoUpload({ currentPhotoUrl, onPhotoUpdate }: P
             />
           ) : (
             <span className="text-[#0A0B1E] font-bold text-4xl">
-              {user?.firstName?.[0]?.toUpperCase() || 'U'}
+              {user?.firstName?.[0]?.toUpperCase() || "U"}
             </span>
           )}
         </div>
-        
+
         {isUploading && (
           <div className="absolute inset-0 bg-black/50 rounded-full flex items-center justify-center">
             <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
@@ -164,9 +166,9 @@ export default function ProfilePhotoUpload({ currentPhotoUrl, onPhotoUpdate }: P
           disabled={isUploading}
           className="bg-[#FFFD63] hover:bg-[#FFFD63]/90 text-[#0A0B1E] px-4 py-2 rounded-lg font-medium transition-colors disabled:opacity-50"
         >
-          {previewUrl ? 'Change Photo' : 'Upload Photo'}
+          {previewUrl ? "Change Photo" : "Upload Photo"}
         </button>
-        
+
         {previewUrl && (
           <button
             onClick={removePhoto}
@@ -185,7 +187,7 @@ export default function ProfilePhotoUpload({ currentPhotoUrl, onPhotoUpdate }: P
         onChange={handleFileSelect}
         className="hidden"
       />
-      
+
       <p className="text-xs text-gray-500 dark:text-gray-400 text-center max-w-xs">
         Upload a profile photo (max 5MB). Supported formats: JPG, PNG, GIF
       </p>

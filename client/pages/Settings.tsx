@@ -11,11 +11,7 @@ import ProfilePhotoUpload from "../components/ProfilePhotoUpload";
 export default function Settings() {
   const { user, updateUserSettings, updateUser } = useAuth();
   const [activeTab, setActiveTab] = useState<
-    | "general"
-    | "notifications"
-    | "privacy"
-    | "security"
-    | "subscription"
+    "general" | "notifications" | "privacy" | "security" | "subscription"
   >("general");
 
   const [realSessions, setRealSessions] = useState<UserSession[]>([]);
@@ -100,7 +96,6 @@ export default function Settings() {
     loadSessions();
   }, []);
 
-
   // Handle settings updates
   const handleSettingChange = async (path: string, value: any) => {
     const keys = path.split(".");
@@ -141,7 +136,6 @@ export default function Settings() {
       );
     }
   };
-
 
   // 2FA management functions
   const [totpSetup, setTotpSetup] = useState({
@@ -382,8 +376,10 @@ export default function Settings() {
                       </label>
                       <input
                         type="text"
-                        value={user?.firstName || ''}
-                        onChange={(e) => updateUser({ firstName: e.target.value })}
+                        value={user?.firstName || ""}
+                        onChange={(e) =>
+                          updateUser({ firstName: e.target.value })
+                        }
                         className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#FFFD63] focus:border-transparent"
                         placeholder="Enter your first name"
                       />
@@ -394,8 +390,10 @@ export default function Settings() {
                       </label>
                       <input
                         type="text"
-                        value={user?.lastName || ''}
-                        onChange={(e) => updateUser({ lastName: e.target.value })}
+                        value={user?.lastName || ""}
+                        onChange={(e) =>
+                          updateUser({ lastName: e.target.value })
+                        }
                         className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#FFFD63] focus:border-transparent"
                         placeholder="Enter your last name"
                       />
@@ -406,12 +404,13 @@ export default function Settings() {
                       </label>
                       <input
                         type="email"
-                        value={user?.email || ''}
+                        value={user?.email || ""}
                         disabled
                         className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-100 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed"
                       />
                       <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                        Email cannot be changed. Contact support if you need to update it.
+                        Email cannot be changed. Contact support if you need to
+                        update it.
                       </p>
                     </div>
                   </div>
@@ -1056,7 +1055,6 @@ export default function Settings() {
               </div>
             </div>
           )}
-
 
           {activeTab === "subscription" && (
             <div className="space-y-8">

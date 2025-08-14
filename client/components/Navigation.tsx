@@ -353,7 +353,7 @@ export default function Navigation({ variant = "app" }: NavigationProps) {
               }`}
               onClick={() => setIsMenuOpen(false)}
             >
-              Generate
+              Search
             </Link>
             <Link
               to="/results"

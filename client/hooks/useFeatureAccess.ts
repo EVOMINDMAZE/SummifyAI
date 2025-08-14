@@ -189,6 +189,30 @@ export function useFeatureAccess() {
     return "scholar";
   };
 
+  // Enforce feature access with user blocking
+  const enforceFeatureAccess = (feature: keyof FeatureLimits): boolean => {
+    const hasAccess = hasFeature(feature);
+    if (!hasAccess) {
+      const message = getUpgradeMessage(feature);
+      const requiredTier = getRequiredTier(feature);
+
+      console.warn(`🚫 Feature access denied: ${feature}`, {
+        userPlan: planType,
+        requiredTier,
+        message,
+      });
+
+      // In a real app, you might want to show a modal or redirect to upgrade page
+      // For now, we'll just return false to block the action
+    }
+    return hasAccess;
+  };
+
+  // Check if user needs to be redirected to upgrade page
+  const shouldShowUpgrade = (feature: keyof FeatureLimits): boolean => {
+    return !hasFeature(feature);
+  };
+
   return {
     planType,
     currentFeatures,
@@ -214,5 +238,9 @@ export function useFeatureAccess() {
     // Upgrade helpers
     getUpgradeMessage,
     getRequiredTier,
+
+    // Enforcement methods
+    enforceFeatureAccess,
+    shouldShowUpgrade,
   };
 }

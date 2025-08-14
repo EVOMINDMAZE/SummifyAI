@@ -39,7 +39,9 @@ export default function Results() {
   const [savedResults, setSavedResults] = useState<string[]>(
     JSON.parse(localStorage.getItem("savedResults") || "[]"),
   );
-  const [realSearchResults, setRealSearchResults] = useState<RealSearchResult[]>([]);
+  const [realSearchResults, setRealSearchResults] = useState<
+    RealSearchResult[]
+  >([]);
   const [isLoading, setIsLoading] = useState(true);
 
   // Load real search history from Supabase
@@ -58,10 +60,10 @@ export default function Results() {
 
       // Load search history from Supabase
       const { data: searchHistory, error } = await supabase
-        .from('user_searches')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false })
+        .from("user_searches")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false })
         .limit(50);
 
       if (error) {
@@ -69,15 +71,21 @@ export default function Results() {
         return;
       }
 
-      console.log("✅ Loaded search history:", searchHistory?.length || 0, "results");
+      console.log(
+        "✅ Loaded search history:",
+        searchHistory?.length || 0,
+        "results",
+      );
 
-      const transformedResults: RealSearchResult[] = (searchHistory || []).map(search => ({
-        id: search.id,
-        query: search.query,
-        search_date: search.created_at,
-        results_count: search.results_count || 0,
-        results_data: search.results_data
-      }));
+      const transformedResults: RealSearchResult[] = (searchHistory || []).map(
+        (search) => ({
+          id: search.id,
+          query: search.query,
+          search_date: search.created_at,
+          results_count: search.results_count || 0,
+          results_data: search.results_data,
+        }),
+      );
 
       setRealSearchResults(transformedResults);
     } catch (error) {
@@ -122,7 +130,7 @@ export default function Results() {
 
   // Transform real search results to display format
   const transformToDisplayFormat = (realResults: RealSearchResult[]) => {
-    return realResults.map(search => ({
+    return realResults.map((search) => ({
       id: search.id,
       topic: search.query,
       searchDate: search.search_date,
@@ -131,7 +139,7 @@ export default function Results() {
       keyInsights: [
         `Found ${search.results_count} chapters matching your search criteria`,
         "AI analysis provided relevance scores and explanations for each result",
-        "Results ranked by AI-calculated relevance to maximize value"
+        "Results ranked by AI-calculated relevance to maximize value",
       ],
       saved: savedResults.includes(search.id),
       shared: false,
@@ -149,8 +157,12 @@ export default function Results() {
           result.topic.toLowerCase().includes(searchQuery.toLowerCase()) ||
           result.books.some(
             (book: any) =>
-              book.book_title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-              book.book_author?.toLowerCase().includes(searchQuery.toLowerCase()),
+              book.book_title
+                ?.toLowerCase()
+                .includes(searchQuery.toLowerCase()) ||
+              book.book_author
+                ?.toLowerCase()
+                .includes(searchQuery.toLowerCase()),
           ) ||
           result.summary.toLowerCase().includes(searchQuery.toLowerCase()) ||
           result.keyInsights.some((insight) =>
@@ -162,7 +174,9 @@ export default function Results() {
     // Apply rating filter
     if (filterByRating > 0) {
       filtered = filtered.filter((result) =>
-        result.books.some((book: any) => (book.rating || 4.0) >= filterByRating),
+        result.books.some(
+          (book: any) => (book.rating || 4.0) >= filterByRating,
+        ),
       );
     }
 
@@ -170,7 +184,9 @@ export default function Results() {
     if (filterByAuthor) {
       filtered = filtered.filter((result) =>
         result.books.some((book: any) =>
-          book.book_author?.toLowerCase().includes(filterByAuthor.toLowerCase()),
+          book.book_author
+            ?.toLowerCase()
+            .includes(filterByAuthor.toLowerCase()),
         ),
       );
     }
@@ -226,7 +242,9 @@ export default function Results() {
   const getUniqueAuthors = () => {
     const transformedResults = transformToDisplayFormat(realSearchResults);
     const allAuthors = transformedResults.flatMap((result) =>
-      result.books.map((book: any) => book.book_author || book.author).filter(Boolean),
+      result.books
+        .map((book: any) => book.book_author || book.author)
+        .filter(Boolean),
     );
     const uniqueAuthors = Array.from(new Set(allAuthors));
     return uniqueAuthors.sort();
@@ -322,7 +340,11 @@ export default function Results() {
                     className="bg-gray-50 dark:bg-gray-700 rounded-xl p-6"
                   >
                     <img
-                      src={book.book_cover_url || book.cover || `https://via.placeholder.com/150x200/FFFD63/0A0B1E?text=${encodeURIComponent((book.book_title || book.title || "Book").slice(0, 10))}`}
+                      src={
+                        book.book_cover_url ||
+                        book.cover ||
+                        `https://via.placeholder.com/150x200/FFFD63/0A0B1E?text=${encodeURIComponent((book.book_title || book.title || "Book").slice(0, 10))}`
+                      }
                       alt={book.book_title || book.title}
                       className="w-full h-48 object-cover rounded-lg mb-4"
                       onError={(e) => {
@@ -646,187 +668,200 @@ export default function Results() {
           {isLoading ? (
             <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-12 text-center">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#FFFD63] mx-auto mb-4"></div>
-              <p className="text-gray-600 dark:text-gray-400">Loading your search history...</p>
+              <p className="text-gray-600 dark:text-gray-400">
+                Loading your search history...
+              </p>
             </div>
-          ) : activeTab === "recent" && (
-            <div className="space-y-8">
-              {filteredAndSortedResults().length > 0 ? (
-                filteredAndSortedResults().map((result) => (
-                  <div
-                    key={result.id}
-                    className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-8"
-                  >
-                    <div className="flex justify-between items-start mb-6">
-                      <div>
-                        <h2 className="text-2xl font-bold text-[#0A0B1E] dark:text-white mb-2">
-                          "{result.topic}"
-                        </h2>
-                        <p className="text-gray-600 dark:text-gray-300">
-                          Searched on{" "}
-                          {new Date(result.searchDate).toLocaleDateString()}
+          ) : (
+            activeTab === "recent" && (
+              <div className="space-y-8">
+                {filteredAndSortedResults().length > 0 ? (
+                  filteredAndSortedResults().map((result) => (
+                    <div
+                      key={result.id}
+                      className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-8"
+                    >
+                      <div className="flex justify-between items-start mb-6">
+                        <div>
+                          <h2 className="text-2xl font-bold text-[#0A0B1E] dark:text-white mb-2">
+                            "{result.topic}"
+                          </h2>
+                          <p className="text-gray-600 dark:text-gray-300">
+                            Searched on{" "}
+                            {new Date(result.searchDate).toLocaleDateString()}
+                          </p>
+                        </div>
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() =>
+                              handleSave({
+                                ...result,
+                                saved: savedResults.includes(result.id),
+                              })
+                            }
+                            className={`px-3 py-1 rounded-lg text-sm font-medium ${
+                              savedResults.includes(result.id)
+                                ? "bg-yellow-100 text-yellow-800"
+                                : "bg-gray-100 hover:bg-gray-200 text-gray-700"
+                            }`}
+                          >
+                            {savedResults.includes(result.id)
+                              ? "Saved ✓"
+                              : "Save"}
+                          </button>
+                          <button
+                            onClick={() =>
+                              handleShare({
+                                ...result,
+                                saved: savedResults.includes(result.id),
+                              })
+                            }
+                            className="bg-blue-100 hover:bg-blue-200 text-blue-700 px-3 py-1 rounded-lg text-sm font-medium"
+                          >
+                            Share
+                          </button>
+                          <button
+                            onClick={() =>
+                              handleExportPDF({
+                                ...result,
+                                saved: savedResults.includes(result.id),
+                              })
+                            }
+                            className="bg-green-100 hover:bg-green-200 text-green-700 px-3 py-1 rounded-lg text-sm font-medium"
+                          >
+                            Export PDF
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Books Found */}
+                      <div className="mb-6">
+                        <h3 className="text-lg font-semibold text-[#0A0B1E] dark:text-white mb-4">
+                          Books Found ({result.books.length})
+                        </h3>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                          {result.books
+                            .slice(0, 3)
+                            .map((book: any, index: number) => (
+                              <div
+                                key={index}
+                                className="flex gap-3 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg"
+                              >
+                                <img
+                                  src={
+                                    book.book_cover_url ||
+                                    book.cover ||
+                                    `https://via.placeholder.com/60x80/FFFD63/0A0B1E?text=${encodeURIComponent((book.book_title || book.title || "Book").slice(0, 5))}`
+                                  }
+                                  alt={book.book_title || book.title}
+                                  className="w-16 h-20 object-cover rounded"
+                                  onError={(e) => {
+                                    const target = e.currentTarget;
+                                    target.src = `https://via.placeholder.com/60x80/FFFD63/0A0B1E?text=${encodeURIComponent((book.book_title || book.title || "Book").slice(0, 5))}`;
+                                  }}
+                                />
+                                <div className="flex-1">
+                                  <h4 className="font-medium text-[#0A0B1E] dark:text-white text-sm mb-1">
+                                    {book.book_title || book.title}
+                                  </h4>
+                                  <p className="text-gray-600 dark:text-gray-400 text-sm mb-2">
+                                    {book.book_author || book.author}
+                                  </p>
+                                  <div className="flex items-center gap-2">
+                                    <div className="flex text-yellow-400 text-sm">
+                                      {"★".repeat(
+                                        Math.floor(book.rating || 4.0),
+                                      )}
+                                    </div>
+                                    <span className="text-gray-500 text-sm">
+                                      {book.rating || 4.0}
+                                    </span>
+                                  </div>
+                                  <a
+                                    href={`https://amazon.com/s?k=${encodeURIComponent(`${book.book_title || book.title} ${book.book_author || book.author}`)}&tag=summifyai-20`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-block mt-2 text-blue-600 hover:text-blue-700 text-sm font-medium"
+                                  >
+                                    View on Amazon →
+                                  </a>
+                                </div>
+                              </div>
+                            ))}
+                        </div>
+                        {result.books.length > 3 && (
+                          <p className="text-sm text-gray-500 mt-2">
+                            ... and {result.books.length - 3} more books
+                          </p>
+                        )}
+                      </div>
+
+                      {/* Summary */}
+                      <div className="mb-6">
+                        <h3 className="text-lg font-semibold text-[#0A0B1E] dark:text-white mb-3">
+                          Search Summary
+                        </h3>
+                        <p className="text-gray-700 dark:text-gray-200 leading-relaxed bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                          {result.summary}
                         </p>
                       </div>
-                      <div className="flex gap-2">
-                        <button
-                          onClick={() =>
-                            handleSave({
-                              ...result,
-                              saved: savedResults.includes(result.id),
-                            })
-                          }
-                          className={`px-3 py-1 rounded-lg text-sm font-medium ${
-                            savedResults.includes(result.id)
-                              ? "bg-yellow-100 text-yellow-800"
-                              : "bg-gray-100 hover:bg-gray-200 text-gray-700"
-                          }`}
-                        >
-                          {savedResults.includes(result.id)
-                            ? "Saved ✓"
-                            : "Save"}
-                        </button>
-                        <button
-                          onClick={() =>
-                            handleShare({
-                              ...result,
-                              saved: savedResults.includes(result.id),
-                            })
-                          }
-                          className="bg-blue-100 hover:bg-blue-200 text-blue-700 px-3 py-1 rounded-lg text-sm font-medium"
-                        >
-                          Share
-                        </button>
-                        <button
-                          onClick={() =>
-                            handleExportPDF({
-                              ...result,
-                              saved: savedResults.includes(result.id),
-                            })
-                          }
-                          className="bg-green-100 hover:bg-green-200 text-green-700 px-3 py-1 rounded-lg text-sm font-medium"
-                        >
-                          Export PDF
-                        </button>
-                      </div>
-                    </div>
 
-                    {/* Books Found */}
-                    <div className="mb-6">
-                      <h3 className="text-lg font-semibold text-[#0A0B1E] dark:text-white mb-4">
-                        Books Found ({result.books.length})
-                      </h3>
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        {result.books.slice(0, 3).map((book: any, index: number) => (
-                          <div
-                            key={index}
-                            className="flex gap-3 p-4 bg-gray-50 dark:bg-gray-700 rounded-lg"
-                          >
-                            <img
-                              src={book.book_cover_url || book.cover || `https://via.placeholder.com/60x80/FFFD63/0A0B1E?text=${encodeURIComponent((book.book_title || book.title || "Book").slice(0, 5))}`}
-                              alt={book.book_title || book.title}
-                              className="w-16 h-20 object-cover rounded"
-                              onError={(e) => {
-                                const target = e.currentTarget;
-                                target.src = `https://via.placeholder.com/60x80/FFFD63/0A0B1E?text=${encodeURIComponent((book.book_title || book.title || "Book").slice(0, 5))}`;
-                              }}
-                            />
-                            <div className="flex-1">
-                              <h4 className="font-medium text-[#0A0B1E] dark:text-white text-sm mb-1">
-                                {book.book_title || book.title}
-                              </h4>
-                              <p className="text-gray-600 dark:text-gray-400 text-sm mb-2">
-                                {book.book_author || book.author}
-                              </p>
-                              <div className="flex items-center gap-2">
-                                <div className="flex text-yellow-400 text-sm">
-                                  {"★".repeat(Math.floor(book.rating || 4.0))}
-                                </div>
-                                <span className="text-gray-500 text-sm">
-                                  {book.rating || 4.0}
+                      {/* Key Insights */}
+                      <div>
+                        <h3 className="text-lg font-semibold text-[#0A0B1E] dark:text-white mb-3">
+                          Search Results
+                        </h3>
+                        <ul className="space-y-2">
+                          {result.keyInsights.map((insight, index) => (
+                            <li key={index} className="flex items-start gap-3">
+                              <div className="w-5 h-5 bg-[#FFFD63] rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <span className="text-[#0A0B1E] text-sm font-bold">
+                                  {index + 1}
                                 </span>
                               </div>
-                              <a
-                                href={`https://amazon.com/s?k=${encodeURIComponent(`${book.book_title || book.title} ${book.book_author || book.author}`)}&tag=summifyai-20`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-block mt-2 text-blue-600 hover:text-blue-700 text-sm font-medium"
-                              >
-                                View on Amazon →
-                              </a>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                      {result.books.length > 3 && (
-                        <p className="text-sm text-gray-500 mt-2">
-                          ... and {result.books.length - 3} more books
-                        </p>
-                      )}
-                    </div>
-
-                    {/* Summary */}
-                    <div className="mb-6">
-                      <h3 className="text-lg font-semibold text-[#0A0B1E] dark:text-white mb-3">
-                        Search Summary
-                      </h3>
-                      <p className="text-gray-700 dark:text-gray-200 leading-relaxed bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
-                        {result.summary}
-                      </p>
-                    </div>
-
-                    {/* Key Insights */}
-                    <div>
-                      <h3 className="text-lg font-semibold text-[#0A0B1E] dark:text-white mb-3">
-                        Search Results
-                      </h3>
-                      <ul className="space-y-2">
-                        {result.keyInsights.map((insight, index) => (
-                          <li key={index} className="flex items-start gap-3">
-                            <div className="w-5 h-5 bg-[#FFFD63] rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                              <span className="text-[#0A0B1E] text-sm font-bold">
-                                {index + 1}
+                              <span className="text-gray-700 dark:text-gray-200">
+                                {insight}
                               </span>
-                            </div>
-                            <span className="text-gray-700 dark:text-gray-200">
-                              {insight}
-                            </span>
-                          </li>
-                        ))}
-                      </ul>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                     </div>
-                  </div>
-                ))
-              ) : (
-                <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-12 text-center">
-                  <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <svg
-                      className="w-8 h-8 text-gray-400"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
+                  ))
+                ) : (
+                  <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-12 text-center">
+                    <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <svg
+                        className="w-8 h-8 text-gray-400"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                        />
+                      </svg>
+                    </div>
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                      No searches yet
+                    </h3>
+                    <p className="text-gray-600 dark:text-gray-400 mb-6">
+                      You haven't performed any searches yet. Start discovering
+                      chapters from thousands of business books!
+                    </p>
+                    <Link
+                      to="/generate"
+                      className="inline-block bg-[#FFFD63] hover:bg-yellow-300 text-[#0A0B1E] px-6 py-3 rounded-lg font-medium transition-colors"
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                      />
-                    </svg>
+                      🔍 Start Your First Search
+                    </Link>
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                    No searches yet
-                  </h3>
-                  <p className="text-gray-600 dark:text-gray-400 mb-6">
-                    You haven't performed any searches yet. Start discovering chapters from thousands of business books!
-                  </p>
-                  <Link
-                    to="/generate"
-                    className="inline-block bg-[#FFFD63] hover:bg-yellow-300 text-[#0A0B1E] px-6 py-3 rounded-lg font-medium transition-colors"
-                  >
-                    🔍 Start Your First Search
-                  </Link>
-                </div>
-              )}
-            </div>
+                )}
+              </div>
+            )
           )}
 
           {activeTab === "saved" && (
@@ -859,7 +894,9 @@ export default function Results() {
                         Remove
                       </button>
                     </div>
-                    <p className="text-gray-700 dark:text-gray-300 mb-4">{result.summary}</p>
+                    <p className="text-gray-700 dark:text-gray-300 mb-4">
+                      {result.summary}
+                    </p>
                     <div className="flex gap-2">
                       <Link
                         to={`/results/${result.id}`}
@@ -938,7 +975,7 @@ export default function Results() {
                             Shared
                           </span>
                         )}
-                        <Link 
+                        <Link
                           to={`/results/${result.id}`}
                           className="text-gray-400 hover:text-gray-600"
                         >

@@ -9,23 +9,28 @@ export async function searchDatabase(query: string): Promise<SearchResults> {
     throw new Error("Query parameter is required");
   }
 
-  console.log(`🔍 REAL SEARCH using search-books Edge Function for: "${query}"`);
+  console.log(
+    `🔍 REAL SEARCH using search-books Edge Function for: "${query}"`,
+  );
 
   try {
     // Get current user for search tracking
-    const { data: { user } } = await supabase.auth.getUser();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
     const userId = user?.id;
 
     // Call the existing search-books Edge Function
     console.log("🚀 Calling search-books Edge Function...");
-    const { data: searchResponse, error: searchError } = await supabase.functions.invoke('search-books', {
-      body: {
-        query: query.trim(),
-        userId: userId,
-        skipAnalysis: false, // Let AI analyze the query
-        deepSearch: false   // Start with fast summary search
-      }
-    });
+    const { data: searchResponse, error: searchError } =
+      await supabase.functions.invoke("search-books", {
+        body: {
+          query: query.trim(),
+          userId: userId,
+          skipAnalysis: false, // Let AI analyze the query
+          deepSearch: false, // Start with fast summary search
+        },
+      });
 
     if (searchError) {
       console.error("❌ Search Edge Function error:", searchError);
@@ -45,20 +50,21 @@ export async function searchDatabase(query: string): Promise<SearchResults> {
     console.log("✅ Search Edge Function response:", searchResponse);
 
     // Handle query analysis step (if query needs refinement)
-    if (searchResponse.step === 'analysis' && searchResponse.result?.isVague) {
+    if (searchResponse.step === "analysis" && searchResponse.result?.isVague) {
       console.log("🤔 Query analysis suggests refinements");
       // For now, we'll skip refinements and search anyway
       // You could implement refinement UI here if needed
-      
+
       // Re-call with skipAnalysis to get results
-      const { data: directSearchResponse, error: directSearchError } = await supabase.functions.invoke('search-books', {
-        body: {
-          query: query.trim(),
-          userId: userId,
-          skipAnalysis: true, // Skip analysis, search directly
-          deepSearch: false
-        }
-      });
+      const { data: directSearchResponse, error: directSearchError } =
+        await supabase.functions.invoke("search-books", {
+          body: {
+            query: query.trim(),
+            userId: userId,
+            skipAnalysis: true, // Skip analysis, search directly
+            deepSearch: false,
+          },
+        });
 
       if (directSearchError) {
         throw new Error(`Search failed: ${directSearchError.message}`);
@@ -68,7 +74,7 @@ export async function searchDatabase(query: string): Promise<SearchResults> {
     }
 
     // Handle successful search results
-    if (searchResponse.step === 'complete') {
+    if (searchResponse.step === "complete") {
       return transformSearchResults(searchResponse, query, startTime);
     }
 
@@ -87,7 +93,6 @@ export async function searchDatabase(query: string): Promise<SearchResults> {
 
     // Fallback transformation
     return transformSearchResults(searchResponse, query, startTime);
-
   } catch (error) {
     console.error("❌ Search failed:", error);
 
@@ -96,25 +101,28 @@ export async function searchDatabase(query: string): Promise<SearchResults> {
       console.log("🔄 Retrying with deep search...");
       try {
         // Get user again for deep search
-        const { data: { user: deepSearchUser } } = await supabase.auth.getUser();
+        const {
+          data: { user: deepSearchUser },
+        } = await supabase.auth.getUser();
 
-        const { data: deepSearchResponse, error: deepSearchError } = await supabase.functions.invoke('search-books', {
-          body: {
-            query: query.trim(),
-            userId: deepSearchUser?.id,
-            skipAnalysis: true,
-            deepSearch: true // Use full text search
-          }
-        });
+        const { data: deepSearchResponse, error: deepSearchError } =
+          await supabase.functions.invoke("search-books", {
+            body: {
+              query: query.trim(),
+              userId: deepSearchUser?.id,
+              skipAnalysis: true,
+              deepSearch: true, // Use full text search
+            },
+          });
 
-        if (!deepSearchError && deepSearchResponse?.step === 'complete') {
+        if (!deepSearchError && deepSearchResponse?.step === "complete") {
           return transformSearchResults(deepSearchResponse, query, startTime);
         }
       } catch (deepSearchError) {
         console.error("❌ Deep search also failed:", deepSearchError);
       }
     }
-    
+
     return {
       query,
       searchType: "search_failed",
@@ -127,7 +135,11 @@ export async function searchDatabase(query: string): Promise<SearchResults> {
 }
 
 // Transform Edge Function response to our frontend format
-function transformSearchResults(searchResponse: any, query: string, startTime: number): SearchResults {
+function transformSearchResults(
+  searchResponse: any,
+  query: string,
+  startTime: number,
+): SearchResults {
   // Validate searchResponse
   if (!searchResponse) {
     console.warn("⚠️ Empty search response");
@@ -155,58 +167,89 @@ function transformSearchResults(searchResponse: any, query: string, startTime: n
 
   console.log(`📚 Transforming ${searchResponse.results.length} book results`);
 
-  const books: BookGroup[] = searchResponse.results.map((bookResult: any) => {
-    // Validate bookResult and chapters
-    if (!bookResult || !bookResult.chapters || !Array.isArray(bookResult.chapters)) {
-      console.warn("⚠️ Invalid book result:", bookResult);
-      return null;
-    }
-
-    // Transform chapters from Edge Function format to frontend format
-    const transformedChapters: EnrichedChapter[] = bookResult.chapters.map((chapter: any) => {
-      if (!chapter) {
-        console.warn("⚠️ Invalid chapter:", chapter);
+  const books: BookGroup[] = searchResponse.results
+    .map((bookResult: any) => {
+      // Validate bookResult and chapters
+      if (
+        !bookResult ||
+        !bookResult.chapters ||
+        !Array.isArray(bookResult.chapters)
+      ) {
+        console.warn("⚠️ Invalid book result:", bookResult);
         return null;
       }
 
-      const aiAnalysis = chapter.aiAnalysis || {};
+      // Transform chapters from Edge Function format to frontend format
+      const transformedChapters: EnrichedChapter[] = bookResult.chapters
+        .map((chapter: any) => {
+          if (!chapter) {
+            console.warn("⚠️ Invalid chapter:", chapter);
+            return null;
+          }
+
+          const aiAnalysis = chapter.aiAnalysis || {};
+
+          return {
+            id: chapter.id || chapter.chapter_id || Math.random().toString(),
+            title: chapter.chapter_title || "Untitled Chapter",
+            snippet:
+              aiAnalysis.chapterSummary ||
+              chapter.chapter_summary?.substring(0, 300) ||
+              "",
+            relevanceScore:
+              aiAnalysis.relevanceScore ||
+              Math.round((1 - (chapter.similarity || 0.5)) * 100),
+            whyRelevant:
+              aiAnalysis.relevanceDescription ||
+              `This chapter provides insights relevant to ${query}.`,
+            keyTopics: Array.isArray(aiAnalysis.keyTopics)
+              ? aiAnalysis.keyTopics
+              : [],
+            coreLeadershipPrinciples: Array.isArray(aiAnalysis.corePrinciples)
+              ? aiAnalysis.corePrinciples
+              : [],
+            practicalApplications: [
+              `Apply the concepts from this chapter to your work with ${query}`,
+              "Implement the strategies discussed for better results",
+            ],
+            aiExplanation: aiAnalysis.relevanceDescription || "",
+          };
+        })
+        .filter(Boolean); // Remove any null chapters
+
+      // Calculate average relevance score for the book
+      const averageRelevance =
+        transformedChapters.length > 0
+          ? Math.round(
+              transformedChapters.reduce(
+                (sum, ch) => sum + ch.relevanceScore,
+                0,
+              ) / transformedChapters.length,
+            )
+          : 0;
 
       return {
-        id: chapter.id || chapter.chapter_id || Math.random().toString(),
-        title: chapter.chapter_title || "Untitled Chapter",
-        snippet: aiAnalysis.chapterSummary || chapter.chapter_summary?.substring(0, 300) || "",
-        relevanceScore: aiAnalysis.relevanceScore || Math.round((1 - (chapter.similarity || 0.5)) * 100),
-        whyRelevant: aiAnalysis.relevanceDescription || `This chapter provides insights relevant to ${query}.`,
-        keyTopics: Array.isArray(aiAnalysis.keyTopics) ? aiAnalysis.keyTopics : [],
-        coreLeadershipPrinciples: Array.isArray(aiAnalysis.corePrinciples) ? aiAnalysis.corePrinciples : [],
-        practicalApplications: [
-          `Apply the concepts from this chapter to your work with ${query}`,
-          "Implement the strategies discussed for better results"
-        ],
-        aiExplanation: aiAnalysis.relevanceDescription || ""
+        id: bookResult.book_id?.toString() || Math.random().toString(),
+        title: bookResult.book_title || "Unknown Title",
+        author: bookResult.book_author || "Unknown Author",
+        cover:
+          bookResult.book_cover_url ||
+          `https://via.placeholder.com/300x450/FFFD63/0A0B1E?text=${encodeURIComponent((bookResult.book_title || "Book").slice(0, 20))}`,
+        isbn: bookResult.isbn_13 || "",
+        averageRelevance,
+        topChapters: transformedChapters,
       };
-    }).filter(Boolean); // Remove any null chapters
+    })
+    .filter(Boolean); // Remove any null books
 
-    // Calculate average relevance score for the book
-    const averageRelevance = transformedChapters.length > 0
-      ? Math.round(transformedChapters.reduce((sum, ch) => sum + ch.relevanceScore, 0) / transformedChapters.length)
-      : 0;
+  const totalChapters = books.reduce(
+    (sum, book) => sum + book.topChapters.length,
+    0,
+  );
 
-    return {
-      id: bookResult.book_id?.toString() || Math.random().toString(),
-      title: bookResult.book_title || "Unknown Title",
-      author: bookResult.book_author || "Unknown Author",
-      cover: bookResult.book_cover_url ||
-            `https://via.placeholder.com/300x450/FFFD63/0A0B1E?text=${encodeURIComponent((bookResult.book_title || "Book").slice(0, 20))}`,
-      isbn: bookResult.isbn_13 || "",
-      averageRelevance,
-      topChapters: transformedChapters,
-    };
-  }).filter(Boolean); // Remove any null books
-
-  const totalChapters = books.reduce((sum, book) => sum + book.topChapters.length, 0);
-
-  console.log(`✅ Transformed to ${books.length} books with ${totalChapters} total chapters`);
+  console.log(
+    `✅ Transformed to ${books.length} books with ${totalChapters} total chapters`,
+  );
 
   return {
     query: searchResponse.query || query,
@@ -228,12 +271,12 @@ export async function healthCheck(): Promise<{
 
   try {
     // Test the search function with a simple query
-    const { data, error } = await supabase.functions.invoke('search-books', {
+    const { data, error } = await supabase.functions.invoke("search-books", {
       body: {
-        query: 'leadership',
+        query: "leadership",
         skipAnalysis: true,
-        deepSearch: false
-      }
+        deepSearch: false,
+      },
     });
 
     if (error) {
@@ -267,28 +310,31 @@ export async function analyzeTopicWithAI(topic: string): Promise<any> {
 
   try {
     console.log(`🧠 Analyzing topic: "${topic}"`);
-    
+
     // Use the search function's built-in query analysis
-    const { data, error } = await supabase.functions.invoke('search-books', {
+    const { data, error } = await supabase.functions.invoke("search-books", {
       body: {
         query: topic.trim(),
         skipAnalysis: false, // Let it analyze the query
-        deepSearch: false
-      }
+        deepSearch: false,
+      },
     });
 
     if (error) throw error;
 
     // If the search function suggests the query is vague, return refinement suggestions
-    if (data.step === 'analysis' && data.result?.isVague) {
+    if (data.step === "analysis" && data.result?.isVague) {
       return {
         isBroad: true,
-        explanation: "Your search query could be more specific. Here are some focused alternatives:",
-        refinements: data.result.suggestions.map((suggestion: string, index: number) => ({
-          label: `Option ${index + 1}`,
-          value: suggestion,
-          description: `More specific search for better results`
-        }))
+        explanation:
+          "Your search query could be more specific. Here are some focused alternatives:",
+        refinements: data.result.suggestions.map(
+          (suggestion: string, index: number) => ({
+            label: `Option ${index + 1}`,
+            value: suggestion,
+            description: `More specific search for better results`,
+          }),
+        ),
       };
     }
 
@@ -296,7 +342,7 @@ export async function analyzeTopicWithAI(topic: string): Promise<any> {
     return {
       isBroad: false,
       explanation: `Your search for "${topic}" is specific enough to find relevant chapters.`,
-      refinements: []
+      refinements: [],
     };
   } catch (error) {
     console.warn("Topic analysis not available:", error);

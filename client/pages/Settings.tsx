@@ -17,54 +17,51 @@ export default function Settings() {
 
   const [realSessions, setRealSessions] = useState<UserSession[]>([]);
 
-  // Load settings from localStorage or use defaults
+  // Initialize settings from user data or defaults
   const [settings, setSettings] = useState(() => {
-    const savedSettings = localStorage.getItem("userSettings");
-    return savedSettings
-      ? JSON.parse(savedSettings)
-      : {
-          language: "en",
-          timezone: "UTC-8",
-          defaultSummaryLength: "medium",
-          autoSave: true,
-          notifications: {
-            emailWeeklyReport: true,
-            emailCreditUpdates: true,
-            emailFeatureUpdates: false,
-            emailMarketing: false,
-            browserSummaryComplete: true,
+    return {
+      language: "en",
+      timezone: "UTC-8",
+      defaultSummaryLength: "medium",
+      autoSave: true,
+      notifications: {
+        emailWeeklyReport: true,
+        emailCreditUpdates: true,
+        emailFeatureUpdates: false,
+        emailMarketing: false,
+        browserSummaryComplete: true,
+      },
+      privacy: {
+        allowAnalytics: true,
+        saveSearchHistory: true,
+      },
+      security: {
+        twoFactorEnabled: false,
+        backupCodes: [],
+        lastPasswordChange: "2024-01-15",
+        activeSessions: [
+          {
+            id: "1",
+            device: "Chrome on MacBook Pro",
+            location: "San Francisco, CA",
+            lastActive: "2024-01-20T10:30:00Z",
+            current: true,
           },
-          privacy: {
-            allowAnalytics: true,
-            saveSearchHistory: true,
+          {
+            id: "2",
+            device: "Safari on iPhone",
+            location: "San Francisco, CA",
+            lastActive: "2024-01-19T14:20:00Z",
+            current: false,
           },
-          security: {
-            twoFactorEnabled: false,
-            backupCodes: [],
-            lastPasswordChange: "2024-01-15",
-            activeSessions: [
-              {
-                id: "1",
-                device: "Chrome on MacBook Pro",
-                location: "San Francisco, CA",
-                lastActive: "2024-01-20T10:30:00Z",
-                current: true,
-              },
-              {
-                id: "2",
-                device: "Safari on iPhone",
-                location: "San Francisco, CA",
-                lastActive: "2024-01-19T14:20:00Z",
-                current: false,
-              },
-            ],
-            loginAlerts: true,
-          },
-          advanced: {
-            developerMode: false,
-            betaFeatures: false,
-          },
-        };
+        ],
+        loginAlerts: true,
+      },
+      advanced: {
+        developerMode: false,
+        betaFeatures: false,
+      },
+    };
   });
 
   // Load user settings on mount

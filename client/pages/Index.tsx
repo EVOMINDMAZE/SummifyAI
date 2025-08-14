@@ -717,7 +717,13 @@ export default function Index() {
         {/* Feature Showcase Sections */}
         <div className="max-w-6xl mx-auto px-6 space-y-16">
           {/* Smart Search */}
-          <div className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-2xl p-8 border border-blue-200 dark:border-blue-800">
+          <div className="relative bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-2xl p-8 border border-blue-200 dark:border-blue-800 overflow-hidden">
+            {/* Search Overlay */}
+            <div className="absolute top-4 right-4 transform rotate-12">
+              <h3 className="text-6xl font-black text-blue-200 dark:text-blue-700 opacity-30">
+                Search.
+              </h3>
+            </div>
             <div className="grid md:grid-cols-2 gap-8 items-center">
               <div>
                 <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mb-4">
@@ -790,7 +796,13 @@ export default function Index() {
           </div>
 
           {/* AI Analysis */}
-          <div className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-2xl p-8 border border-green-200 dark:border-green-800">
+          <div className="relative bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-2xl p-8 border border-green-200 dark:border-green-800 overflow-hidden">
+            {/* Analyze Overlay */}
+            <div className="absolute top-4 right-4 transform rotate-12">
+              <h3 className="text-6xl font-black text-green-200 dark:text-green-700 opacity-30">
+                Analyze.
+              </h3>
+            </div>
             <div className="grid md:grid-cols-2 gap-8 items-center">
               <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
                 <div className="text-sm text-gray-500 dark:text-gray-400 mb-3">
@@ -958,7 +970,13 @@ export default function Index() {
           </div>
 
           {/* Save & Share */}
-          <div className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 rounded-2xl p-8 border border-purple-200 dark:border-purple-800">
+          <div className="relative bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 rounded-2xl p-8 border border-purple-200 dark:border-purple-800 overflow-hidden">
+            {/* Share Overlay */}
+            <div className="absolute top-4 right-4 transform rotate-12">
+              <h3 className="text-6xl font-black text-purple-200 dark:text-purple-700 opacity-30">
+                Share.
+              </h3>
+            </div>
             <div className="grid md:grid-cols-2 gap-8 items-center">
               <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
                 <div className="text-sm text-gray-500 dark:text-gray-400 mb-3">

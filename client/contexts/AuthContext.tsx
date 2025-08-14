@@ -460,7 +460,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     if (error) {
       console.error("❌ User update failed:", error);
-      throw error;
+      const errorMessage = error.message || error.details || JSON.stringify(error);
+      throw new Error(`User update failed: ${errorMessage}`);
     }
 
     // Update local state

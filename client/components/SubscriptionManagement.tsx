@@ -50,12 +50,8 @@ export default function SubscriptionManagement() {
       ],
       color: "bg-amber-100 dark:bg-amber-900",
       textColor: "text-amber-900 dark:text-amber-100",
-      stripeMonthlyId:
-        import.meta.env.VITE_STRIPE_SCHOLAR_MONTHLY_PRICE_ID ||
-        "price_scholar_monthly",
-      stripeAnnualId:
-        import.meta.env.VITE_STRIPE_SCHOLAR_ANNUAL_PRICE_ID ||
-        "price_scholar_annual",
+      stripeMonthlyId: import.meta.env.VITE_STRIPE_SCHOLAR_MONTHLY_PRICE_ID,
+      stripeAnnualId: import.meta.env.VITE_STRIPE_SCHOLAR_ANNUAL_PRICE_ID,
     },
     {
       id: "professional",

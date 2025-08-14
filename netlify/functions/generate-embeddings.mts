@@ -9,10 +9,11 @@ export default async (req: Request, context: Context) => {
   }
 
   try {
-    const { query } = await req.json();
+    const { text, query } = await req.json();
+    const searchText = text || query;
 
-    if (!query || query.trim() === "") {
-      return new Response(JSON.stringify({ error: "Query text is required" }), {
+    if (!searchText || searchText.trim() === "") {
+      return new Response(JSON.stringify({ error: "Text is required" }), {
         status: 400,
         headers: { "Content-Type": "application/json" },
       });

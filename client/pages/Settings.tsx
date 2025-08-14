@@ -138,6 +138,24 @@ export default function Settings() {
     loadSessions();
   }, []);
 
+  // Load team data on mount
+  useEffect(() => {
+    const loadTeamData = async () => {
+      try {
+        const [members, invitations] = await Promise.all([
+          teamService.getTeamMembers(),
+          teamService.getPendingInvitations()
+        ]);
+        setTeamMembers(members);
+        setPendingInvitations(invitations);
+      } catch (error) {
+        console.error('Failed to load team data:', error);
+      }
+    };
+
+    loadTeamData();
+  }, []);
+
   // Handle settings updates
   const handleSettingChange = async (path: string, value: any) => {
     const keys = path.split(".");

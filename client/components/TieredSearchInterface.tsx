@@ -19,6 +19,7 @@ import {
   Crown,
   Lock,
 } from "lucide-react";
+import TieredSearchResults from "@/components/TieredSearchResults";
 
 interface TieredSearchInterfaceProps {
   onUpgrade?: () => void;

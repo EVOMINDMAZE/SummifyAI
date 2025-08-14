@@ -1120,7 +1120,7 @@ export default function Settings() {
                     </p>
                   </div>
                   <div className="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-4 py-2 rounded-lg">
-                    {settings.team.members.length} members
+                    {teamMembers.length} members
                   </div>
                 </div>
 

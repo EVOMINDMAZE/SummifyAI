@@ -404,6 +404,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         subscription_end_date: updates.subscriptionEndDate,
         ad_preferences: updates.adPreferences,
         ad_free_until: updates.adFreeUntil,
+        default_summary_length: updates.defaultSummaryLength,
         updated_at: new Date().toISOString(),
       })
       .eq("user_id", user.id);

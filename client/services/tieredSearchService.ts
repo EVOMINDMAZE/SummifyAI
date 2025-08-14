@@ -259,21 +259,42 @@ export class TieredSearchService {
 
   private async generateEmbedding(text: string): Promise<number[]> {
     try {
-      const response = await fetch("/.netlify/functions/generate-embeddings", {
+      // Try the new path first, then fall back to old path
+      let response = await fetch("/api/generate-embeddings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text }),
       });
 
+      // If that fails, try the old Netlify functions path
       if (!response.ok) {
-        throw new Error("Failed to generate embedding");
+        response = await fetch("/.netlify/functions/generate-embeddings", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ text }),
+        });
       }
 
-      const { embedding } = await response.json();
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Embedding API error:", errorText);
+        throw new Error(`Failed to generate embedding: ${response.status} ${response.statusText}`);
+      }
+
+      const result = await response.json();
+
+      // Handle both response formats
+      const embedding = result.embedding || result.data?.embedding;
+
+      if (!embedding) {
+        console.error("No embedding in response:", result);
+        throw new Error("No embedding data received");
+      }
+
       return embedding;
     } catch (error) {
       console.error("Embedding generation error:", error);
-      throw error;
+      throw new Error("Failed to generate embedding");
     }
   }
 

@@ -65,6 +65,7 @@ export default function ProfilePhotoUpload({ currentPhotoUrl, onPhotoUpdate }: P
           .getPublicUrl(fileName);
 
         // Update user profile with new photo URL
+        console.log('Updating profile for user:', user.id, 'with photo URL:', publicUrl);
         const { error: updateError } = await supabase
           .from('profiles')
           .update({ profile_photo_url: publicUrl })

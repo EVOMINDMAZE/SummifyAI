@@ -120,24 +120,24 @@ export default function Settings() {
 
     setSettings(newSettings);
 
-    // Save to localStorage immediately
-    localStorage.setItem("userSettings", JSON.stringify(newSettings));
-
-    // Save to backend
+    // Save to backend with comprehensive error handling
     try {
-      await updateUserSettings(newSettings);
-
-      // Special handling for defaultSummaryLength - save to user profile
+      // For defaultSummaryLength, save directly to user profile
       if (path === "defaultSummaryLength") {
         await updateUser({ defaultSummaryLength: value });
+      } else {
+        // Save all settings to the database
+        await updateUserSettings(newSettings);
       }
 
       showNotification("Settings saved successfully!", "success");
     } catch (error) {
       console.error("Failed to save settings:", error);
+      // Save to localStorage as fallback
+      localStorage.setItem("userSettings", JSON.stringify(newSettings));
       showNotification(
         "Settings saved locally. Will sync when connection is restored.",
-        "info",
+        "warning",
       );
     }
   };

@@ -205,12 +205,17 @@ export class TieredSearchService {
       try {
         queryEmbedding = await this.generateEmbedding(query);
       } catch (embeddingError) {
-        console.warn("Embedding generation failed, falling back to text search:", embeddingError);
+        console.warn(
+          "Embedding generation failed, falling back to text search:",
+          embeddingError,
+        );
       }
 
       // Only use vector search if embeddings are available
       if (queryEmbedding) {
-        if (searchTier.features.find((f) => f.id === "summary_search")?.enabled) {
+        if (
+          searchTier.features.find((f) => f.id === "summary_search")?.enabled
+        ) {
           // Stage 1: Fast summary search (all tiers)
           const summaryResults = await this.searchSummaryEmbeddings(
             query,
@@ -219,7 +224,9 @@ export class TieredSearchService {
           results = [...results, ...summaryResults];
         }
 
-        if (searchTier.features.find((f) => f.id === "chapter_search")?.enabled) {
+        if (
+          searchTier.features.find((f) => f.id === "chapter_search")?.enabled
+        ) {
           // Stage 2: Deep chapter search (Scholar+)
           const chapterResults = await this.searchChapterEmbeddings(
             query,
@@ -282,8 +289,15 @@ export class TieredSearchService {
 
       if (!response.ok) {
         const errorText = await response.text();
-        console.error("Embedding API error:", response.status, response.statusText, errorText);
-        throw new Error(`Embedding API failed: ${response.status} ${response.statusText}`);
+        console.error(
+          "Embedding API error:",
+          response.status,
+          response.statusText,
+          errorText,
+        );
+        throw new Error(
+          `Embedding API failed: ${response.status} ${response.statusText}`,
+        );
       }
 
       const result = await response.json();
@@ -467,15 +481,19 @@ export class TieredSearchService {
     try {
       // Fallback to basic Supabase text search
       const { data, error } = await supabase
-        .from('chapters')
-        .select(`
+        .from("chapters")
+        .select(
+          `
           id,
           chapter_title,
           chapter_text,
           chapter_summary,
           books!inner(title)
-        `)
-        .or(`chapter_title.ilike.%${query}%,chapter_text.ilike.%${query}%,chapter_summary.ilike.%${query}%`)
+        `,
+        )
+        .or(
+          `chapter_title.ilike.%${query}%,chapter_text.ilike.%${query}%,chapter_summary.ilike.%${query}%`,
+        )
         .limit(20);
 
       if (error) {
@@ -483,15 +501,19 @@ export class TieredSearchService {
         return [];
       }
 
-      return data?.map((row: any) => ({
-        id: row.id,
-        bookTitle: row.books.title,
-        chapterTitle: row.chapter_title,
-        relevanceScore: 0.5, // Basic relevance score
-        snippet: this.extractSnippet(row.chapter_text || row.chapter_summary, query),
-        searchType: 'fulltext' as const,
-      })) || [];
-
+      return (
+        data?.map((row: any) => ({
+          id: row.id,
+          bookTitle: row.books.title,
+          chapterTitle: row.chapter_title,
+          relevanceScore: 0.5, // Basic relevance score
+          snippet: this.extractSnippet(
+            row.chapter_text || row.chapter_summary,
+            query,
+          ),
+          searchType: "fulltext" as const,
+        })) || []
+      );
     } catch (error) {
       console.error("Basic text search error:", error);
       return [];

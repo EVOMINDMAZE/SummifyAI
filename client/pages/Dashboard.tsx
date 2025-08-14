@@ -119,7 +119,7 @@ export default function Dashboard() {
       ? `${user.firstName} ${user.lastName}`.toUpperCase()
       : user.firstName
         ? user.firstName.toUpperCase()
-        : user.email?.split('@')[0]?.toUpperCase() || "VALUED USER";
+        : user.email?.split("@")[0]?.toUpperCase() || "VALUED USER";
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-[#FFFD63]/10 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">

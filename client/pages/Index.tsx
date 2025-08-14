@@ -715,12 +715,12 @@ export default function Index() {
         </div>
 
         {/* Feature Showcase Sections */}
-        <div className="max-w-6xl mx-auto px-6 space-y-16">
+        <div className="max-w-6xl mx-auto px-6 space-y-20">
           {/* Smart Search */}
-          <div className="relative bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-2xl p-8 border border-blue-200 dark:border-blue-800 overflow-hidden">
+          <div className="relative bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-3xl p-10 border border-blue-200 dark:border-blue-800 overflow-hidden transition-all duration-300 hover:shadow-xl hover:scale-[1.02]">
             {/* Search Overlay */}
-            <div className="absolute top-4 right-4 transform rotate-12">
-              <h3 className="text-6xl font-black text-blue-200 dark:text-blue-700 opacity-30">
+            <div className="absolute top-6 right-6 transform rotate-12 pointer-events-none">
+              <h3 className="text-7xl font-black text-blue-200 dark:text-blue-700 opacity-20 select-none">
                 Search.
               </h3>
             </div>
@@ -796,10 +796,10 @@ export default function Index() {
           </div>
 
           {/* AI Analysis */}
-          <div className="relative bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-2xl p-8 border border-green-200 dark:border-green-800 overflow-hidden">
+          <div className="relative bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-3xl p-10 border border-green-200 dark:border-green-800 overflow-hidden transition-all duration-300 hover:shadow-xl hover:scale-[1.02]">
             {/* Analyze Overlay */}
-            <div className="absolute top-4 right-4 transform rotate-12">
-              <h3 className="text-6xl font-black text-green-200 dark:text-green-700 opacity-30">
+            <div className="absolute top-6 right-6 transform rotate-12 pointer-events-none">
+              <h3 className="text-7xl font-black text-green-200 dark:text-green-700 opacity-20 select-none">
                 Analyze.
               </h3>
             </div>
@@ -881,10 +881,10 @@ export default function Index() {
           </div>
 
           {/* Generate Section */}
-          <div className="relative bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 rounded-2xl p-8 border border-orange-200 dark:border-orange-800 overflow-hidden">
+          <div className="relative bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 rounded-3xl p-10 border border-orange-200 dark:border-orange-800 overflow-hidden transition-all duration-300 hover:shadow-xl hover:scale-[1.02]">
             {/* Generate Overlay */}
-            <div className="absolute top-4 right-4 transform rotate-12">
-              <h3 className="text-6xl font-black text-orange-200 dark:text-orange-700 opacity-30">
+            <div className="absolute top-6 right-6 transform rotate-12 pointer-events-none">
+              <h3 className="text-7xl font-black text-orange-200 dark:text-orange-700 opacity-20 select-none">
                 Generate.
               </h3>
             </div>
@@ -969,10 +969,10 @@ export default function Index() {
           </div>
 
           {/* Save & Share */}
-          <div className="relative bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 rounded-2xl p-8 border border-purple-200 dark:border-purple-800 overflow-hidden">
+          <div className="relative bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 rounded-3xl p-10 border border-purple-200 dark:border-purple-800 overflow-hidden transition-all duration-300 hover:shadow-xl hover:scale-[1.02]">
             {/* Share Overlay */}
-            <div className="absolute top-4 right-4 transform rotate-12">
-              <h3 className="text-6xl font-black text-purple-200 dark:text-purple-700 opacity-30">
+            <div className="absolute top-6 right-6 transform rotate-12 pointer-events-none">
+              <h3 className="text-7xl font-black text-purple-200 dark:text-purple-700 opacity-20 select-none">
                 Share.
               </h3>
             </div>

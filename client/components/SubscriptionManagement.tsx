@@ -479,7 +479,7 @@ export default function SubscriptionManagement() {
                 </ul>
 
                 <button
-                  onClick={() => handlePlanChange(plan.id)}
+                  onClick={() => handlePlanChange(plan.id, billingCycle)}
                   disabled={isCurrentPlan || isUpdating}
                   className={`w-full py-3 px-4 rounded-lg font-medium transition-colors ${
                     isCurrentPlan

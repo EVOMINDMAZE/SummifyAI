@@ -13,9 +13,16 @@ export default function ProfilePhotoUpload({
 }: ProfilePhotoUploadProps) {
   const { user } = useAuth();
   const [isUploading, setIsUploading] = useState(false);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(
-    currentPhotoUrl || null,
-  );
+  const [previewUrl, setPreviewUrl] = useState<string | null>(() => {
+    // Check localStorage first, then use currentPhotoUrl
+    if (user?.id) {
+      const storedPhoto = localStorage.getItem(`profile_photo_${user.id}`);
+      if (storedPhoto) {
+        return storedPhoto;
+      }
+    }
+    return currentPhotoUrl || null;
+  });
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {

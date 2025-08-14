@@ -73,49 +73,14 @@ export default function ProfilePhotoUpload({
 
           console.log("Updating profile photo for user:", user.id);
 
-          // Try to update user profile with base64 photo using different possible column names
-          let updateError = null;
-          let success = false;
-
-          // Try profile_photo_url first
-          const { error: error1 } = await supabase
+          // Update user profile with base64 photo
+          const { error } = await supabase
             .from("profiles")
             .update({ profile_photo_url: base64 })
             .eq("user_id", user.id);
 
-          if (!error1) {
-            success = true;
-          } else {
-            console.log("profile_photo_url column not found, trying avatar_url:", error1.message);
-
-            // Try avatar_url as fallback
-            const { error: error2 } = await supabase
-              .from("profiles")
-              .update({ avatar_url: base64 })
-              .eq("user_id", user.id);
-
-            if (!error2) {
-              success = true;
-            } else {
-              console.log("avatar_url column not found, trying photo_url:", error2.message);
-
-              // Try photo_url as another fallback
-              const { error: error3 } = await supabase
-                .from("profiles")
-                .update({ photo_url: base64 })
-                .eq("user_id", user.id);
-
-              if (!error3) {
-                success = true;
-              } else {
-                updateError = error3;
-                console.log("All photo column attempts failed:", error3.message);
-              }
-            }
-          }
-
-          if (!success && updateError) {
-            const errorMessage = updateError.message || updateError.details || JSON.stringify(updateError);
+          if (error) {
+            const errorMessage = error.message || error.details || JSON.stringify(error);
             console.warn("Database update failed, using localStorage fallback:", errorMessage);
 
             // Fallback: Store in localStorage
@@ -175,44 +140,14 @@ export default function ProfilePhotoUpload({
     try {
       console.log("Removing profile photo for user:", user.id);
 
-      // Try to remove photo URL using different possible column names
-      let success = false;
-      let lastError = null;
-
-      // Try profile_photo_url first
-      const { error: error1 } = await supabase
+      // Remove photo URL from database
+      const { error } = await supabase
         .from("profiles")
         .update({ profile_photo_url: null })
         .eq("user_id", user.id);
 
-      if (!error1) {
-        success = true;
-      } else {
-        // Try avatar_url as fallback
-        const { error: error2 } = await supabase
-          .from("profiles")
-          .update({ avatar_url: null })
-          .eq("user_id", user.id);
-
-        if (!error2) {
-          success = true;
-        } else {
-          // Try photo_url as another fallback
-          const { error: error3 } = await supabase
-            .from("profiles")
-            .update({ photo_url: null })
-            .eq("user_id", user.id);
-
-          if (!error3) {
-            success = true;
-          } else {
-            lastError = error3;
-          }
-        }
-      }
-
-      if (!success && lastError) {
-        const errorMessage = lastError.message || lastError.details || JSON.stringify(lastError);
+      if (error) {
+        const errorMessage = error.message || error.details || JSON.stringify(error);
         console.warn("Database removal failed, using localStorage fallback:", errorMessage);
 
         // Fallback: Remove from localStorage

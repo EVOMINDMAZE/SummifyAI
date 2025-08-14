@@ -13,30 +13,29 @@ This means you need to create Stripe products and set the correct price IDs.
 - Open [stripe.com/dashboard](https://dashboard.stripe.com)
 - Go to **Products** section
 
-### 2. **Create Products**
+### 2. **✅ Products Already Created!**
 
-Create these 3 products with monthly and annual prices:
+I can see you already have these products in Stripe:
 
-#### **Scholar Plan**
+#### **Scholar Plan** ✅
+- Product name: "Scholar" (already created)
+- Monthly price: $19.99 ✅
+- Annual price: $190.00 ✅
+- **Action needed**: Click on each price → copy the price ID (starts with `price_1ABC...`)
 
-- Product name: "SummifyAI Scholar"
-- Monthly price: $19.99
-- Annual price: $199.99 (17% discount)
-- Copy the price IDs (they'll look like: `price_1ABC123...`)
+#### **Professional Plan** ✅
+- Product name: "Professional" (already created)
+- Monthly price: $49.99 ✅
+- Annual price: $499.00 ✅
+- **Action needed**: Click on each price → copy the price ID
 
-#### **Professional Plan**
+#### **Enterprise Plan** ✅
+- Product name: "Enterprise" (already created)
+- Monthly price: $99.99 ✅
+- Annual price: $999.00 ✅
+- **Action needed**: Click on each price → copy the price ID
 
-- Product name: "SummifyAI Professional"
-- Monthly price: $49.99
-- Annual price: $499.99
-- Copy the price IDs
-
-#### **Institution Plan**
-
-- Product name: "SummifyAI Institution"
-- Monthly price: $99.99
-- Annual price: $999.99
-- Copy the price IDs
+**⚠️ Important**: You need the actual **price IDs** (not product names). Click on each price to see the ID like `price_1ABC123def456GHI`
 
 ### 3. **Set Environment Variables in Netlify**
 

@@ -415,10 +415,10 @@ export default function Dashboard() {
                   </div>
                   <div className="flex-1">
                     <h3 className="font-bold text-gray-900 dark:text-white text-lg mb-1">
-                      Account Settings
+                      ⚙️ Customize Your Experience
                     </h3>
                     <p className="text-gray-600 dark:text-gray-400">
-                      Manage your preferences and account details
+                      Personalize your research workflow and preferences
                     </p>
                   </div>
                   <svg

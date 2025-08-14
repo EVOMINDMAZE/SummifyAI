@@ -187,13 +187,31 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       }
 
       if (profileData) {
+        // Load user settings from database or localStorage fallback
+        let userSettings = null;
+        try {
+          if (profileData.user_settings) {
+            userSettings = typeof profileData.user_settings === 'string'
+              ? JSON.parse(profileData.user_settings)
+              : profileData.user_settings;
+          } else {
+            // Fallback to localStorage
+            const savedSettings = localStorage.getItem("userSettings");
+            if (savedSettings) {
+              userSettings = JSON.parse(savedSettings);
+            }
+          }
+        } catch (error) {
+          console.error("Error parsing user settings:", error);
+        }
+
         const userData: User = {
           id: profileData.user_id,
           email: supabaseUser.email || "",
           firstName: profileData.first_name || "",
           lastName: profileData.last_name || "",
           searchCount: profileData.search_count || 0,
-          monthlySearchLimit: profileData.monthly_search_limit || 3,
+          monthlySearchLimit: profileData.monthly_search_limit || 10,
           searchCountResetDate: profileData.search_count_reset_date || "",
           planType: profileData.plan_type || "free",
           notificationSearchResults:
@@ -212,6 +230,26 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           adFreeUntil: profileData.ad_free_until,
           defaultSummaryLength: profileData.default_summary_length || "medium",
           profilePhotoUrl: profileData.profile_photo_url,
+          settings: userSettings || {
+            language: "en",
+            timezone: "UTC-8",
+            autoSave: true,
+            notifications: {
+              emailWeeklyReport: true,
+              emailCreditUpdates: true,
+              emailFeatureUpdates: false,
+              emailMarketing: false,
+              browserSummaryComplete: true,
+            },
+            privacy: {
+              allowAnalytics: true,
+              saveSearchHistory: true,
+            },
+            security: {
+              twoFactorEnabled: false,
+              loginAlerts: true,
+            },
+          },
         };
 
         console.log("✅ User profile loaded:", userData.email);

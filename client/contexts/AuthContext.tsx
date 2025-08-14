@@ -578,6 +578,28 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     console.log("✅ User settings updated and saved");
   };
 
+  const refreshUser = async () => {
+    if (!user) {
+      throw new Error("No user logged in");
+    }
+
+    console.log("🔄 Refreshing user data...");
+
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) {
+        const userData = await fetchUserProfile(session.user);
+        if (userData) {
+          setUser(userData);
+          console.log("✅ User data refreshed");
+        }
+      }
+    } catch (error) {
+      console.error("❌ Failed to refresh user data:", error);
+      throw error;
+    }
+  };
+
   // Add debug functions to window in development
   useEffect(() => {
     if (process.env.NODE_ENV === "development") {

@@ -14,17 +14,10 @@ export default function Settings() {
     | "notifications"
     | "privacy"
     | "security"
-    | "team"
     | "subscription"
   >("general");
 
   const [realSessions, setRealSessions] = useState<UserSession[]>([]);
-  const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
-  const [pendingInvitations, setPendingInvitations] = useState<
-    TeamInvitation[]
-  >([]);
-  const [inviteEmail, setInviteEmail] = useState("");
-  const [inviteRole, setInviteRole] = useState<TeamMember["role"]>("Member");
 
   // Load settings from localStorage or use defaults
   const [settings, setSettings] = useState(() => {

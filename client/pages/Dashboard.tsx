@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import Navigation from "@/components/Navigation";
 import UserAvatar from "@/components/UserAvatar";
+import TierAccessDemo from "@/components/TierAccessDemo";
 import { supabase } from "@/lib/supabase";
 
 export default function Dashboard() {

@@ -189,7 +189,7 @@ export default function SubscriptionManagement() {
       const result = await response.json();
 
       alert(
-        `Subscription cancelled successfully. You'll retain access to premium features until ${new Date(result.periodEnd * 1000).toLocaleDateString()}.`
+        `Subscription cancelled successfully. You'll retain access to premium features until ${new Date(result.subscription.periodEnd * 1000).toLocaleDateString()}.`
       );
 
       // Refresh subscription data

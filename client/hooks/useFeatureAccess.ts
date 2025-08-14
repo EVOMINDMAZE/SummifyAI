@@ -66,8 +66,21 @@ const PLAN_FEATURES: PlanFeatures = {
 export function useFeatureAccess() {
   const { user } = useAuth();
 
+  // Ensure we have the latest user data and valid plan type
   const planType = user?.planType || "free";
   const currentFeatures = PLAN_FEATURES[planType] || PLAN_FEATURES.free;
+
+  // Debug logging in development
+  if (process.env.NODE_ENV === "development") {
+    console.log("🔐 Feature Access Check:", {
+      userId: user?.id,
+      email: user?.email,
+      planType,
+      searchCount: user?.searchCount,
+      monthlySearchLimit: user?.monthlySearchLimit,
+      features: currentFeatures,
+    });
+  }
 
   // Check if user has exceeded their monthly search limit
   const hasSearchesRemaining = () => {

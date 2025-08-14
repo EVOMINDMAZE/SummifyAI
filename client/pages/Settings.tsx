@@ -181,6 +181,12 @@ export default function Settings() {
     // Save to backend
     try {
       await updateUserSettings(newSettings);
+
+      // Special handling for defaultSummaryLength - save to user profile
+      if (path === "defaultSummaryLength") {
+        await updateUser({ defaultSummaryLength: value });
+      }
+
       showNotification("Settings saved successfully!", "success");
     } catch (error) {
       console.error("Failed to save settings:", error);

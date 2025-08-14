@@ -990,31 +990,24 @@ export default function Index() {
                     </Link>
                   </div>
                 </div>
-                <div className="flex justify-center">
-                  <AIChatDemo
-                    title="Chapter Insights"
-                    subtitle="See how precise chapter analysis and insights are generated instantly"
-                    demoType="generate"
-                    disableAutoScroll={true}
-                    initialMessages={[
-                      {
-                        id: "1",
-                        type: "ai",
-                        content:
-                          "I create beautiful, comprehensive summaries with quotes and purchase links. What would you like me to summarize?",
-                        timestamp: "12:30",
-                        status: "read",
-                      },
-                    ]}
-                    suggestedPrompts={[
-                      "Effective leadership",
-                      "Digital marketing",
-                      "Mindfulness",
-                      "Investment basics",
-                    ]}
-                    ctaText={user ? "Find Chapters" : "Start Free Trial"}
-                    ctaLink={user ? "/generate" : "/signup"}
-                  />
+                <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-500 dark:text-gray-400">Search Time:</span>
+                      <span className="text-sm font-semibold text-orange-600 dark:text-orange-400">2.3 seconds</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-500 dark:text-gray-400">Books Scanned:</span>
+                      <span className="text-sm font-semibold text-[#0A0B1E] dark:text-white">12,847</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-gray-500 dark:text-gray-400">Relevant Chapters:</span>
+                      <span className="text-sm font-semibold text-[#0A0B1E] dark:text-white">23 found</span>
+                    </div>
+                    <div className="pt-2 border-t border-gray-200 dark:border-gray-700">
+                      <div className="text-xs text-center text-gray-400 dark:text-gray-500">Ready to export, save, or purchase</div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

@@ -288,9 +288,9 @@ export default function Navigation({ variant = "app" }: NavigationProps) {
                 <span className="text-sm font-medium">{user.name}</span>
               </button>
               {isUserMenuOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1">
-                  <div className="px-4 py-2 text-sm text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">
-                    {user.email}
+                <div className="absolute right-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-50">
+                  <div className="px-4 py-2 text-sm text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700 break-words">
+                    {user.firstName} {user.lastName}
                   </div>
                   <Link
                     to="/settings"

@@ -115,7 +115,8 @@ export default function ProfilePhotoUpload({
           }
 
           if (!success && updateError) {
-            console.warn("Database update failed, using localStorage fallback:", updateError);
+            const errorMessage = updateError.message || updateError.details || JSON.stringify(updateError);
+            console.warn("Database update failed, using localStorage fallback:", errorMessage);
 
             // Fallback: Store in localStorage
             localStorage.setItem(`profile_photo_${user.id}`, base64);
@@ -134,6 +135,10 @@ export default function ProfilePhotoUpload({
           let errorMessage = "Failed to update profile photo";
           if (updateError instanceof Error) {
             errorMessage = updateError.message;
+          } else if (typeof updateError === 'object' && updateError !== null) {
+            errorMessage = updateError.message || updateError.details || JSON.stringify(updateError);
+          } else {
+            errorMessage = String(updateError);
           }
           alert(errorMessage);
         } finally {
@@ -207,7 +212,8 @@ export default function ProfilePhotoUpload({
       }
 
       if (!success && lastError) {
-        console.warn("Database removal failed, using localStorage fallback:", lastError);
+        const errorMessage = lastError.message || lastError.details || JSON.stringify(lastError);
+        console.warn("Database removal failed, using localStorage fallback:", errorMessage);
 
         // Fallback: Remove from localStorage
         localStorage.removeItem(`profile_photo_${user.id}`);
@@ -222,6 +228,10 @@ export default function ProfilePhotoUpload({
       let errorMessage = "Failed to remove photo";
       if (error instanceof Error) {
         errorMessage = error.message;
+      } else if (typeof error === 'object' && error !== null) {
+        errorMessage = error.message || error.details || JSON.stringify(error);
+      } else {
+        errorMessage = String(error);
       }
       alert(errorMessage);
     }

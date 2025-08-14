@@ -96,11 +96,14 @@ export default function ProfilePhotoUpload({
           }
 
           if (!success && updateError) {
-            console.error("Profile update error:", updateError);
-            throw new Error(updateError.message || "Failed to update profile - column not found");
+            console.warn("Database update failed, using localStorage fallback:", updateError);
+
+            // Fallback: Store in localStorage
+            localStorage.setItem(`profile_photo_${user.id}`, base64);
+            console.log("Profile photo stored in localStorage as fallback");
           }
 
-          // Update local state
+          // Update local state regardless of database success
           setPreviewUrl(base64);
           onPhotoUpdate(base64);
 

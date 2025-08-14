@@ -1002,7 +1002,7 @@ export default function Settings() {
                   location, you should terminate that session.
                 </p>
                 <div className="space-y-4">
-                  {settings.security.activeSessions.map((session) => (
+                  {realSessions.map((session) => (
                     <div
                       key={session.id}
                       className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-600 rounded-lg"

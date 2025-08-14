@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import ThemeToggle from "@/components/ThemeToggle";
-import AIChatDemo from "@/components/AIChatDemo";
 import Shepherd from "shepherd.js";
 import "../styles/shepherd-custom.css";
 

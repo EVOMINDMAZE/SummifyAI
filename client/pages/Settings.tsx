@@ -70,12 +70,19 @@ export default function Settings() {
       setSettings((prev) => ({
         ...prev,
         ...user.settings,
+        defaultSummaryLength: user.defaultSummaryLength || prev.defaultSummaryLength,
         notifications: {
           ...prev.notifications,
           ...user.settings.notifications,
         },
-        privacy: { ...prev.privacy, ...user.settings.privacy },
-        advanced: { ...prev.advanced, ...user.settings.advanced },
+        privacy: {
+          ...prev.privacy,
+          ...user.settings.privacy
+        },
+        security: {
+          ...prev.security,
+          ...user.settings.security,
+        },
       }));
     }
   }, [user]);

@@ -364,8 +364,14 @@ export default function Settings() {
                   <div>
                     <ProfilePhotoUpload
                       currentPhotoUrl={user?.profilePhotoUrl}
-                      onPhotoUpdate={(photoUrl) => {
-                        updateUser({ profilePhotoUrl: photoUrl });
+                      onPhotoUpdate={async (photoUrl) => {
+                        try {
+                          await updateUser({ profilePhotoUrl: photoUrl });
+                        } catch (error) {
+                          console.error("Failed to update profile photo:", error);
+                          const errorMessage = error instanceof Error ? error.message : "Failed to update profile photo";
+                          alert(errorMessage);
+                        }
                       }}
                     />
                   </div>
@@ -377,9 +383,15 @@ export default function Settings() {
                       <input
                         type="text"
                         value={user?.firstName || ""}
-                        onChange={(e) =>
-                          updateUser({ firstName: e.target.value })
-                        }
+                        onChange={async (e) => {
+                          try {
+                            await updateUser({ firstName: e.target.value });
+                          } catch (error) {
+                            console.error("Failed to update first name:", error);
+                            const errorMessage = error instanceof Error ? error.message : "Failed to update first name";
+                            alert(errorMessage);
+                          }
+                        }}
                         className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#FFFD63] focus:border-transparent"
                         placeholder="Enter your first name"
                       />
@@ -391,9 +403,15 @@ export default function Settings() {
                       <input
                         type="text"
                         value={user?.lastName || ""}
-                        onChange={(e) =>
-                          updateUser({ lastName: e.target.value })
-                        }
+                        onChange={async (e) => {
+                          try {
+                            await updateUser({ lastName: e.target.value });
+                          } catch (error) {
+                            console.error("Failed to update last name:", error);
+                            const errorMessage = error instanceof Error ? error.message : "Failed to update last name";
+                            alert(errorMessage);
+                          }
+                        }}
                         className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#FFFD63] focus:border-transparent"
                         placeholder="Enter your last name"
                       />

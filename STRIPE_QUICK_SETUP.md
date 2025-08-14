@@ -50,6 +50,9 @@ STRIPE_PROFESSIONAL_MONTHLY_PRICE_ID=price_1DEF456_your_actual_id
 STRIPE_PROFESSIONAL_ANNUAL_PRICE_ID=price_1UVW012_your_actual_id
 STRIPE_INSTITUTION_MONTHLY_PRICE_ID=price_1GHI789_your_actual_id
 STRIPE_INSTITUTION_ANNUAL_PRICE_ID=price_1RST345_your_actual_id
+
+# Note: Your products are named "Scholar", "Professional", "Enterprise"
+# but the environment variable names stay the same (INSTITUTION = Enterprise)
 ```
 
 ### 4. **Test Configuration**

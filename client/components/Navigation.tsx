@@ -233,16 +233,6 @@ export default function Navigation({ variant = "app" }: NavigationProps) {
               Dashboard
             </Link>
             <Link
-              to="/generate"
-              className={`font-medium transition-colors ${
-                isActive("/generate")
-                  ? "text-[#4361EE]"
-                  : "text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
-              }`}
-            >
-              Generate
-            </Link>
-            <Link
               to="/search"
               className={`font-medium transition-colors ${
                 isActive("/search")
@@ -250,7 +240,7 @@ export default function Navigation({ variant = "app" }: NavigationProps) {
                   : "text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
               }`}
             >
-              Smart Search
+              Search
             </Link>
             <Link
               to="/results"

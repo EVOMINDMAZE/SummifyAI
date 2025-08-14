@@ -469,6 +469,41 @@ export class TieredSearchService {
     return text.substring(0, 200) + "...";
   }
 
+  private async searchBasicText(query: string): Promise<SearchResult[]> {
+    try {
+      // Fallback to basic Supabase text search
+      const { data, error } = await supabase
+        .from('chapters')
+        .select(`
+          id,
+          chapter_title,
+          chapter_text,
+          chapter_summary,
+          books!inner(title)
+        `)
+        .or(`chapter_title.ilike.%${query}%,chapter_text.ilike.%${query}%,chapter_summary.ilike.%${query}%`)
+        .limit(20);
+
+      if (error) {
+        console.error("Basic search error:", error);
+        return [];
+      }
+
+      return data?.map((row: any) => ({
+        id: row.id,
+        bookTitle: row.books.title,
+        chapterTitle: row.chapter_title,
+        relevanceScore: 0.5, // Basic relevance score
+        snippet: this.extractSnippet(row.chapter_text || row.chapter_summary, query),
+        searchType: 'fulltext' as const,
+      })) || [];
+
+    } catch (error) {
+      console.error("Basic text search error:", error);
+      return [];
+    }
+  }
+
   private mergeResults(
     existing: SearchResult[],
     newResults: SearchResult[],

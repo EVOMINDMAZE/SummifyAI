@@ -9,7 +9,7 @@ import { sessionService, type UserSession } from "../services/sessionService";
 import { teamService, type TeamMember, type TeamInvitation } from "../services/teamService";
 
 export default function Settings() {
-  const { user, updateUserSettings } = useAuth();
+  const { user, updateUserSettings, updateUser } = useAuth();
   const [activeTab, setActiveTab] = useState<
     | "general"
     | "notifications"

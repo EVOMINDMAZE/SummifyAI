@@ -64,8 +64,8 @@ export default function SubscriptionManagement() {
       ],
       color: "bg-green-100 dark:bg-green-900",
       textColor: "text-green-900 dark:text-green-100",
-      stripeMonthlyId: "price_professional_monthly",
-      stripeAnnualId: "price_professional_annual",
+      stripeMonthlyId: import.meta.env.VITE_STRIPE_PROFESSIONAL_MONTHLY_PRICE_ID || "price_professional_monthly",
+      stripeAnnualId: import.meta.env.VITE_STRIPE_PROFESSIONAL_ANNUAL_PRICE_ID || "price_professional_annual",
     },
     {
       id: "institution",

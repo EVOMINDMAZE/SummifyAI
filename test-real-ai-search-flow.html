@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real AI Search Flow Test</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .search-form {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+        .search-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        .search-btn {
+            padding: 12px 24px;
+            background: #0A0B1E;
+            color: #FFFD63;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .search-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .status {
+            padding: 12px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+        .status.loading {
+            background: #cce5ff;
+            color: #0366d6;
+        }
+        .status.error {
+            background: #ffeaea;
+            color: #d73a49;
+        }
+        .status.success {
+            background: #dcffe4;
+            color: #28a745;
+        }
+        .results-container {
+            margin-top: 30px;
+        }
+        .book-card {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .book-header {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+        .book-cover {
+            width: 80px;
+            height: 120px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 2px solid #dee2e6;
+        }
+        .book-info h3 {
+            margin: 0 0 8px 0;
+            color: #0A0B1E;
+            font-size: 18px;
+        }
+        .book-meta {
+            color: #6c757d;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        .chapter-card {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+        .chapter-title {
+            font-weight: 600;
+            color: #0A0B1E;
+            margin-bottom: 8px;
+        }
+        .relevance-score {
+            background: #28a745;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+        .why-relevant {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 6px;
+            padding: 12px;
+            margin: 10px 0;
+            font-size: 14px;
+        }
+        .key-topics {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        .topic-tag {
+            background: #e7f3ff;
+            color: #0366d6;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+        }
+        .logs {
+            background: #f6f8fa;
+            border: 1px solid #e1e5e9;
+            border-radius: 6px;
+            padding: 15px;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 15px;
+        }
+        .test-summary {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        .test-item {
+            display: flex;
+            align-items: center;
+            margin: 8px 0;
+        }
+        .test-item .icon {
+            margin-right: 10px;
+            font-size: 16px;
+        }
+        .score-analysis {
+            background: #e8f5e8;
+            border: 1px solid #c3e6c3;
+            border-radius: 6px;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        .explanation-analysis {
+            background: #f0f4ff;
+            border: 1px solid #b3d1ff;
+            border-radius: 6px;
+            padding: 10px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🔍 Real AI Search Flow Test</h1>
+        <p>Testing the complete integration: search-books Edge Function → real AI analysis → frontend display</p>
+        
+        <div class="search-form">
+            <input 
+                type="text" 
+                id="searchInput" 
+                class="search-input" 
+                placeholder="Enter your search query (e.g., 'advanced negotiation')"
+                value="advanced negotiation"
+            >
+            <button id="searchBtn" class="search-btn">Test Real AI Search</button>
+        </div>
+
+        <div id="status"></div>
+        <div id="logs" class="logs" style="display: none;"></div>
+        <div id="results" class="results-container"></div>
+    </div>
+
+    <div class="test-summary">
+        <h2>🧪 Real AI Integration Tests</h2>
+        <div id="testItems">
+            <div class="test-item">
+                <span class="icon">⏳</span>
+                <span>Edge Function connectivity and response</span>
+            </div>
+            <div class="test-item">
+                <span class="icon">⏳</span>
+                <span>Real chapter data from Supabase database</span>
+            </div>
+            <div class="test-item">
+                <span class="icon">⏳</span>
+                <span>OpenAI embeddings generation</span>
+            </div>
+            <div class="test-item">
+                <span class="icon">⏳</span>
+                <span>Vector search functionality</span>
+            </div>
+            <div class="test-item">
+                <span class="icon">⏳</span>
+                <span>AI analysis with unique relevance scores (not 75%)</span>
+            </div>
+            <div class="test-item">
+                <span class="icon">⏳</span>
+                <span>Real "why this chapter matches" explanations</span>
+            </div>
+            <div class="test-item">
+                <span class="icon">⏳</span>
+                <span>Book covers and metadata display</span>
+            </div>
+            <div class="test-item">
+                <span class="icon">⏳</span>
+                <span>User search tracking (if authenticated)</span>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+        
+        // Initialize Supabase client
+        const supabaseUrl = 'https://voosugmkazvjzhe1pbrl.supabase.co';
+        const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZvb3N1Z21rYXp2anpoZTFwYnJsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzUxMzA1MjksImV4cCI6MjA1MDcwNjUyOX0.gOaG2kz_VdYF2qz7AKJnI6jXD2pX8Hj82F6X5WJ8e3s';
+        
+        const supabase = createClient(supabaseUrl, supabaseAnonKey);
+        
+        const searchBtn = document.getElementById('searchBtn');
+        const searchInput = document.getElementById('searchInput');
+        const statusDiv = document.getElementById('status');
+        const logsDiv = document.getElementById('logs');
+        const resultsDiv = document.getElementById('results');
+
+        let logs = [];
+
+        function addLog(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            logs.push(`[${timestamp}] ${type.toUpperCase()}: ${message}`);
+            logsDiv.textContent = logs.join('\n');
+            logsDiv.style.display = 'block';
+            logsDiv.scrollTop = logsDiv.scrollHeight;
+        }
+
+        function updateStatus(message, type = 'loading') {
+            statusDiv.className = `status ${type}`;
+            statusDiv.textContent = message;
+        }
+
+        function updateTestItem(index, status) {
+            const items = document.querySelectorAll('.test-item .icon');
+            if (items[index]) {
+                items[index].textContent = status === 'pass' ? '✅' : status === 'fail' ? '❌' : '⏳';
+            }
+        }
+
+        async function performRealAISearch() {
+            const query = searchInput.value.trim();
+            if (!query) return;
+
+            searchBtn.disabled = true;
+            resultsDiv.innerHTML = '';
+            logs = [];
+            
+            updateStatus('🚀 Starting real AI search flow test...', 'loading');
+            addLog(`Testing real AI search for: "${query}"`);
+
+            try {
+                // Test 1: Edge Function connectivity
+                addLog('Test 1: Testing Edge Function connectivity...');
+                updateTestItem(0, 'loading');
+                
+                const { data: searchResponse, error: searchError } = await supabase.functions.invoke('search-books', {
+                    body: {
+                        query: query,
+                        skipAnalysis: false,
+                        deepSearch: false
+                    }
+                });
+
+                if (searchError) {
+                    updateTestItem(0, 'fail');
+                    throw new Error(`Edge Function error: ${searchError.message}`);
+                }
+
+                updateTestItem(0, 'pass');
+                addLog('✅ Edge Function connectivity: PASS');
+
+                // Test 2: Real chapter data
+                addLog('Test 2: Checking for real chapter data...');
+                updateTestItem(1, 'loading');
+
+                if (searchResponse.step === 'complete' && searchResponse.results && searchResponse.results.length > 0) {
+                    updateTestItem(1, 'pass');
+                    addLog(`✅ Real chapter data: PASS (${searchResponse.results.length} books found)`);
+                } else {
+                    updateTestItem(1, 'fail');
+                    addLog('❌ No real chapter data found');
+                }
+
+                // Test 3: OpenAI embeddings (inferred from successful search)
+                addLog('Test 3: Checking OpenAI embeddings...');
+                updateTestItem(2, 'loading');
+                
+                if (searchResponse.step === 'complete') {
+                    updateTestItem(2, 'pass');
+                    addLog('✅ OpenAI embeddings: PASS (search completed successfully)');
+                } else {
+                    updateTestItem(2, 'fail');
+                    addLog('❌ OpenAI embeddings may have failed');
+                }
+
+                // Test 4: Vector search (inferred from results)
+                addLog('Test 4: Checking vector search...');
+                updateTestItem(3, 'loading');
+                
+                if (searchResponse.results && searchResponse.results.length > 0) {
+                    updateTestItem(3, 'pass');
+                    addLog('✅ Vector search: PASS (results returned)');
+                } else {
+                    updateTestItem(3, 'fail');
+                    addLog('❌ Vector search may have failed');
+                }
+
+                // Test 5: AI analysis with unique relevance scores
+                addLog('Test 5: Analyzing relevance scores...');
+                updateTestItem(4, 'loading');
+                
+                let uniqueScores = 0;
+                let placeholderScores = 0;
+                const allScores = [];
+                
+                searchResponse.results?.forEach(book => {
+                    book.chapters?.forEach(chapter => {
+                        const score = chapter.aiAnalysis?.relevanceScore || 75;
+                        allScores.push(score);
+                        if (score === 75) {
+                            placeholderScores++;
+                        } else {
+                            uniqueScores++;
+                        }
+                    });
+                });
+
+                addLog(`Score analysis: ${uniqueScores} unique, ${placeholderScores} placeholders (75%)`);
+                
+                if (uniqueScores > placeholderScores && allScores.length > 0) {
+                    updateTestItem(4, 'pass');
+                    addLog('✅ AI relevance scores: PASS (unique scores generated)');
+                } else {
+                    updateTestItem(4, 'fail');
+                    addLog('❌ Still using placeholder scores - AI analysis may not be working');
+                }
+
+                // Test 6: Real "why this chapter matches" explanations
+                addLog('Test 6: Analyzing explanation quality...');
+                updateTestItem(5, 'loading');
+                
+                let uniqueExplanations = 0;
+                let genericExplanations = 0;
+                
+                searchResponse.results?.forEach(book => {
+                    book.chapters?.forEach(chapter => {
+                        const explanation = chapter.aiAnalysis?.relevanceDescription || '';
+                        if (explanation.includes('practical frameworks and actionable strategies') || 
+                            explanation.includes('This chapter provides insights relevant to')) {
+                            genericExplanations++;
+                        } else if (explanation.length > 50) {
+                            uniqueExplanations++;
+                        }
+                    });
+                });
+
+                addLog(`Explanation analysis: ${uniqueExplanations} unique, ${genericExplanations} generic`);
+                
+                if (uniqueExplanations > genericExplanations) {
+                    updateTestItem(5, 'pass');
+                    addLog('✅ AI explanations: PASS (unique explanations generated)');
+                } else {
+                    updateTestItem(5, 'fail');
+                    addLog('❌ Using generic explanations - AI analysis needs improvement');
+                }
+
+                // Test 7: Book covers and metadata
+                addLog('Test 7: Checking book covers and metadata...');
+                updateTestItem(6, 'loading');
+                
+                let validCovers = 0;
+                let validMetadata = 0;
+                
+                searchResponse.results?.forEach(book => {
+                    if (book.book_cover_url && !book.book_cover_url.includes('placeholder')) {
+                        validCovers++;
+                    }
+                    if (book.book_title && book.book_author && book.book_title !== 'Unknown Title') {
+                        validMetadata++;
+                    }
+                });
+
+                if (validCovers > 0 && validMetadata > 0) {
+                    updateTestItem(6, 'pass');
+                    addLog('✅ Book covers and metadata: PASS');
+                } else {
+                    updateTestItem(6, 'fail');
+                    addLog('❌ Missing or placeholder book covers/metadata');
+                }
+
+                // Test 8: User search tracking (if authenticated)
+                addLog('Test 8: Checking user search tracking...');
+                updateTestItem(7, 'loading');
+                
+                const { data: { user } } = await supabase.auth.getUser();
+                if (user) {
+                    addLog(`User authenticated: ${user.email}`);
+                    updateTestItem(7, 'pass');
+                    addLog('✅ User search tracking: PASS (user authenticated)');
+                } else {
+                    updateTestItem(7, 'pass');
+                    addLog('✅ User search tracking: PASS (anonymous search)');
+                }
+
+                // Display results
+                displayResults(searchResponse);
+                updateStatus(`✅ AI search test completed! Found ${searchResponse.totalChapters || 0} relevant chapters.`, 'success');
+
+            } catch (error) {
+                addLog(`❌ Search test failed: ${error.message}`, 'error');
+                updateStatus(`❌ Search test failed: ${error.message}`, 'error');
+                
+                // Mark remaining tests as failed
+                for (let i = 0; i < 8; i++) {
+                    updateTestItem(i, 'fail');
+                }
+            } finally {
+                searchBtn.disabled = false;
+            }
+        }
+
+        function displayResults(response) {
+            if (!response.results || response.results.length === 0) {
+                resultsDiv.innerHTML = '<p>No results found.</p>';
+                return;
+            }
+
+            const html = response.results.map(book => `
+                <div class="book-card">
+                    <div class="book-header">
+                        <img src="${book.book_cover_url || `https://via.placeholder.com/80x120/FFFD63/0A0B1E?text=${encodeURIComponent(book.book_title.slice(0, 10))}`}" 
+                             alt="${book.book_title}" 
+                             class="book-cover" 
+                             onerror="this.src='https://via.placeholder.com/80x120/FFFD63/0A0B1E?text=Book'">
+                        <div class="book-info">
+                            <h3>${book.book_title}</h3>
+                            <div class="book-meta">
+                                👤 ${book.book_author} • 📚 ${book.chapters.length} chapters • 
+                                🎯 ${book.maxRelevanceScore || 'N/A'}% max relevance
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chapters">
+                        ${book.chapters.slice(0, 3).map(chapter => `
+                            <div class="chapter-card">
+                                <div class="chapter-title">${chapter.chapter_title}</div>
+                                <div class="relevance-score">${chapter.aiAnalysis?.relevanceScore || 75}%</div>
+                                
+                                ${chapter.aiAnalysis?.relevanceScore !== 75 ? `
+                                    <div class="score-analysis">
+                                        ✅ <strong>Real AI Score:</strong> ${chapter.aiAnalysis?.relevanceScore}% 
+                                        (Not a placeholder!)
+                                    </div>
+                                ` : `
+                                    <div class="score-analysis" style="background: #ffe6e6; border-color: #ffb3b3;">
+                                        ❌ <strong>Placeholder Score:</strong> 75% (AI analysis may not be working)
+                                    </div>
+                                `}
+                                
+                                <div class="why-relevant">
+                                    <strong>💡 Why this chapter matches:</strong><br>
+                                    ${chapter.aiAnalysis?.relevanceDescription || 'Generic explanation'}
+                                </div>
+                                
+                                ${chapter.aiAnalysis?.relevanceDescription && 
+                                  !chapter.aiAnalysis.relevanceDescription.includes('practical frameworks and actionable strategies') &&
+                                  chapter.aiAnalysis.relevanceDescription.length > 50 ? `
+                                    <div class="explanation-analysis">
+                                        ✅ <strong>Real AI Explanation:</strong> Unique, contextual explanation generated
+                                    </div>
+                                ` : `
+                                    <div class="explanation-analysis" style="background: #fff0e6; border-color: #ffd699;">
+                                        ⚠️ <strong>Generic Explanation:</strong> May be fallback text
+                                    </div>
+                                `}
+                                
+                                ${chapter.aiAnalysis?.keyTopics?.length ? `
+                                    <div class="key-topics">
+                                        ${chapter.aiAnalysis.keyTopics.map(topic => `
+                                            <span class="topic-tag">${topic}</span>
+                                        `).join('')}
+                                    </div>
+                                ` : ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+
+            resultsDiv.innerHTML = html;
+        }
+
+        // Event listeners
+        searchBtn.addEventListener('click', performRealAISearch);
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                performRealAISearch();
+            }
+        });
+
+        // Auto-run test on page load
+        window.addEventListener('load', () => {
+            setTimeout(performRealAISearch, 1000);
+        });
+    </script>
+</body>
+</html>

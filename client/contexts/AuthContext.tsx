@@ -62,6 +62,7 @@ interface AuthContextType {
   signOut: () => Promise<void>;
   updateUser: (updates: Partial<User>) => Promise<void>;
   updateUserSettings: (settings: any) => Promise<void>;
+  refreshUser: () => Promise<void>;
 }
 
 // Create a default context value to prevent undefined errors
@@ -464,7 +465,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     });
 
     if (error) {
-      console.error("��� Google OAuth sign up failed:", error);
+      console.error("❌ Google OAuth sign up failed:", error);
       throw error;
     }
 

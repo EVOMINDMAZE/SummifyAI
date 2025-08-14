@@ -103,10 +103,23 @@ export default function Dashboard() {
     );
   }
 
+  // Debug user data to understand inconsistencies
+  console.log("Dashboard user data:", {
+    id: user.id,
+    email: user.email,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    searchCount: user.searchCount,
+    planType: user.planType,
+    monthlySearchLimit: user.monthlySearchLimit,
+  });
+
   const userDisplayName =
     user.firstName && user.lastName
-      ? `${user.firstName} ${user.lastName}`
-      : user.firstName || "there";
+      ? `${user.firstName} ${user.lastName}`.toUpperCase()
+      : user.firstName
+        ? user.firstName.toUpperCase()
+        : user.email?.split('@')[0]?.toUpperCase() || "VALUED USER";
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-[#FFFD63]/10 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">

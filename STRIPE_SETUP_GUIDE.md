@@ -55,6 +55,8 @@ Navigate to **Products** in your Stripe dashboard and create:
 
 Add these to your `.env` file:
 
+**⚠️ Important Note:** Stripe publishable keys (`pk_test_...` or `pk_live_...`) are **meant to be public** and safe to include in client-side code. If Netlify's secrets scanner flags them, we've configured `netlify.toml` to ignore them.
+
 ```bash
 # Stripe Configuration
 VITE_STRIPE_PUBLISHABLE_KEY=pk_test_your_publishable_key_here

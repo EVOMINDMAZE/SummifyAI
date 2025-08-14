@@ -54,15 +54,50 @@ export default function ProfilePhotoUpload({
 
           console.log("Updating profile photo for user:", user.id);
 
-          // Update user profile with base64 photo
-          const { error: updateError } = await supabase
+          // Try to update user profile with base64 photo using different possible column names
+          let updateError = null;
+          let success = false;
+
+          // Try profile_photo_url first
+          const { error: error1 } = await supabase
             .from("profiles")
             .update({ profile_photo_url: base64 })
             .eq("user_id", user.id);
 
-          if (updateError) {
+          if (!error1) {
+            success = true;
+          } else {
+            console.log("profile_photo_url column not found, trying avatar_url:", error1.message);
+
+            // Try avatar_url as fallback
+            const { error: error2 } = await supabase
+              .from("profiles")
+              .update({ avatar_url: base64 })
+              .eq("user_id", user.id);
+
+            if (!error2) {
+              success = true;
+            } else {
+              console.log("avatar_url column not found, trying photo_url:", error2.message);
+
+              // Try photo_url as another fallback
+              const { error: error3 } = await supabase
+                .from("profiles")
+                .update({ photo_url: base64 })
+                .eq("user_id", user.id);
+
+              if (!error3) {
+                success = true;
+              } else {
+                updateError = error3;
+                console.log("All photo column attempts failed:", error3.message);
+              }
+            }
+          }
+
+          if (!success && updateError) {
             console.error("Profile update error:", updateError);
-            throw new Error(updateError.message || "Failed to update profile");
+            throw new Error(updateError.message || "Failed to update profile - column not found");
           }
 
           // Update local state

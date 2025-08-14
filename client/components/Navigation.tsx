@@ -279,10 +279,10 @@ export default function Navigation({ variant = "app" }: NavigationProps) {
         <div className="hidden md:flex items-center space-x-4">
           <ThemeToggle />
           <Link
-            to="/generate"
+            to="/search"
             className="bg-[#FFFD63] text-black px-4 py-2 rounded-lg font-medium hover:bg-[#FFFD63]/80 transition-colors"
           >
-            New Search
+            Smart Search
           </Link>
 
           {isAuthenticated && (

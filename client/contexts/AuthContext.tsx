@@ -28,6 +28,7 @@ export interface User {
   subscriptionEndDate?: string;
   adPreferences?: any;
   adFreeUntil?: string;
+  defaultSummaryLength?: "short" | "medium" | "long";
 }
 
 interface AuthContextType {

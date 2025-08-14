@@ -125,68 +125,140 @@ export default function SubscriptionManagement() {
     }
   };
 
-  const handlePlanChange = async (newPlan: string) => {
+  const handlePlanChange = async (newPlan: string, billingCycle: "monthly" | "annual" = "monthly") => {
     if (!user || isUpdating) return;
 
     setIsUpdating(true);
     try {
-      // In a real implementation, you would integrate with Stripe here
-      // For now, we'll simulate the upgrade/downgrade
-
       if (newPlan === "free") {
-        // Downgrade to free
-        await updateUser({
-          planType: "free",
-          monthlySearchLimit: 10,
-          subscriptionStatus: "cancelled",
-          stripeSubscriptionId: undefined,
-        });
-
-        setSubscription((prev) =>
-          prev ? { ...prev, tier: "free", status: "active" } : null,
-        );
-
-        alert(
-          "Successfully downgraded to Free plan. Your subscription has been cancelled.",
-        );
+        // Downgrade to free - cancel Stripe subscription
+        await handleDowngradeToFree();
       } else {
-        // Upgrade to paid plan
-        const selectedPlan = plans.find((p) => p.id === newPlan);
-        if (!selectedPlan) return;
-
-        // In production, this would redirect to Stripe Checkout
-        const confirmUpgrade = confirm(
-          `Upgrade to ${selectedPlan.name} plan for $${selectedPlan.price}/month?\n\nThis would redirect to Stripe Checkout in a real implementation.`,
-        );
-
-        if (confirmUpgrade) {
-          await updateUser({
-            planType: newPlan as
-              | "free"
-              | "scholar"
-              | "professional"
-              | "institution",
-            monthlySearchLimit:
-              selectedPlan.monthlySearches === -1
-                ? 999999
-                : selectedPlan.monthlySearches,
-            subscriptionStatus: "active",
-            stripeCustomerId: `cus_${Date.now()}`, // Simulated Stripe customer ID
-            stripeSubscriptionId: `sub_${Date.now()}`, // Simulated Stripe subscription ID
-          });
-
-          setSubscription((prev) =>
-            prev ? { ...prev, tier: newPlan, status: "active" } : null,
-          );
-
-          alert(`Successfully upgraded to ${selectedPlan.name} plan!`);
-        }
+        // Upgrade to paid plan - redirect to Stripe Checkout
+        await handleUpgradeToPaid(newPlan, billingCycle);
       }
     } catch (error) {
       console.error("Error updating subscription:", error);
       alert("Failed to update subscription. Please try again.");
     } finally {
       setIsUpdating(false);
+    }
+  };
+
+  const handleDowngradeToFree = async () => {
+    if (!user?.stripeSubscriptionId) {
+      // User doesn't have an active subscription, just update locally
+      await updateUser({
+        planType: "free",
+        monthlySearchLimit: 10,
+        subscriptionStatus: "cancelled",
+      });
+
+      setSubscription((prev) =>
+        prev ? { ...prev, tier: "free", status: "cancelled" } : null,
+      );
+
+      alert("Successfully downgraded to Free plan.");
+      return;
+    }
+
+    const confirmCancel = confirm(
+      "Are you sure you want to cancel your subscription?\n\nYou'll lose access to premium features at the end of your billing period."
+    );
+
+    if (!confirmCancel) return;
+
+    try {
+      // Cancel Stripe subscription
+      const response = await fetch("/.netlify/functions/cancel-subscription", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          subscriptionId: user.stripeSubscriptionId,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to cancel subscription");
+      }
+
+      const result = await response.json();
+
+      alert(
+        `Subscription cancelled successfully. You'll retain access to premium features until ${new Date(result.periodEnd * 1000).toLocaleDateString()}.`
+      );
+
+      // Refresh subscription data
+      await loadSubscriptionData();
+    } catch (error) {
+      console.error("Error cancelling subscription:", error);
+      alert("Failed to cancel subscription. Please contact support.");
+    }
+  };
+
+  const handleUpgradeToPaid = async (planId: string, billingCycle: "monthly" | "annual") => {
+    const selectedPlan = plans.find((p) => p.id === planId);
+    if (!selectedPlan) return;
+
+    // Check if Stripe is configured
+    const stripePublishableKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
+    if (!stripePublishableKey) {
+      alert(
+        "Stripe is not configured. Please contact support to enable premium features."
+      );
+      return;
+    }
+
+    try {
+      const priceId = billingCycle === "monthly"
+        ? selectedPlan.stripeMonthlyId
+        : selectedPlan.stripeAnnualId;
+
+      if (!priceId) {
+        alert("Pricing not configured for this plan. Please contact support.");
+        return;
+      }
+
+      // Create Stripe checkout session
+      const response = await fetch("/.netlify/functions/create-checkout-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          priceId,
+          customerId: user.stripeCustomerId,
+          customerEmail: user.email,
+          successUrl: `${window.location.origin}/settings?success=true&plan=${planId}`,
+          cancelUrl: `${window.location.origin}/settings?cancelled=true`,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to create checkout session");
+      }
+
+      const { sessionId } = await response.json();
+
+      // Redirect to Stripe Checkout
+      const { loadStripe } = await import("@stripe/stripe-js");
+      const stripe = await loadStripe(stripePublishableKey);
+
+      if (!stripe) {
+        throw new Error("Failed to load Stripe");
+      }
+
+      const { error } = await stripe.redirectToCheckout({ sessionId });
+
+      if (error) {
+        throw error;
+      }
+    } catch (error) {
+      console.error("Checkout error:", error);
+      alert(
+        error instanceof Error
+          ? error.message
+          : "Failed to start checkout. Please try again."
+      );
     }
   };
 

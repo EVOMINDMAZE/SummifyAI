@@ -18,6 +18,7 @@ export default function SubscriptionManagement() {
   );
   const [isLoading, setIsLoading] = useState(true);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [billingCycle, setBillingCycle] = useState<"monthly" | "annual">("monthly");
 
   // Plan configurations
   const plans = [

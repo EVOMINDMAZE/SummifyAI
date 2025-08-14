@@ -6,11 +6,6 @@ import ThemeToggle from "@/components/ThemeToggle";
 import Navigation from "../components/Navigation";
 import { showNotification } from "../utils/actions";
 import { sessionService, type UserSession } from "../services/sessionService";
-import {
-  teamService,
-  type TeamMember,
-  type TeamInvitation,
-} from "../services/teamService";
 
 export default function Settings() {
   const { user, updateUserSettings, updateUser } = useAuth();

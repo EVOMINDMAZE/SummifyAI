@@ -42,12 +42,14 @@ export const handler: Handler = async (event) => {
         message: "Stripe Configuration Debug Info",
         config,
         instructions: {
-        step1: "Check that all price IDs are set correctly",
-        step2: "Price IDs should start with 'price_1' followed by random characters",
-        step3: "If any show 'NOT_SET', add them to your Netlify environment variables",
-        example: "price_1ABC123def456GHI",
-        note: "All fallback placeholder IDs have been removed - only real Stripe price IDs will work now",
-      },
+          step1: "Check that all price IDs are set correctly",
+          step2:
+            "Price IDs should start with 'price_1' followed by random characters",
+          step3:
+            "If any show 'NOT_SET', add them to your Netlify environment variables",
+          example: "price_1ABC123def456GHI",
+          note: "All fallback placeholder IDs have been removed - only real Stripe price IDs will work now",
+        },
       },
       null,
       2,

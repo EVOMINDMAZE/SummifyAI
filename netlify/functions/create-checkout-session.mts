@@ -46,7 +46,6 @@ export const handler: Handler = async (event) => {
       };
     }
 
-
     // Create or retrieve customer
     let customer;
     if (customerId) {

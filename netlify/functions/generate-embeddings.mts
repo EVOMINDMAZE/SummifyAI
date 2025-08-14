@@ -32,7 +32,7 @@ export default async (req: Request, context: Context) => {
     }
 
     console.log(
-      `🧠 Netlify Function: Generating embeddings for query: "${query}"`,
+      `🧠 Netlify Function: Generating embeddings for text: "${searchText}"`,
     );
 
     const response = await fetch("https://api.openai.com/v1/embeddings", {
@@ -43,7 +43,7 @@ export default async (req: Request, context: Context) => {
       },
       body: JSON.stringify({
         model: "text-embedding-3-small",
-        input: query.trim(),
+        input: searchText.trim(),
         encoding_format: "float",
       }),
     });

@@ -366,10 +366,10 @@ export default function Dashboard() {
                   </div>
                   <div className="flex-1">
                     <h3 className="font-bold text-gray-900 dark:text-white text-lg mb-1">
-                      Browse History
+                      My Research Library
                     </h3>
                     <p className="text-gray-600 dark:text-gray-400">
-                      Review your previous searches and discovered insights
+                      Explore your discovered chapters and valuable insights
                     </p>
                   </div>
                   <svg

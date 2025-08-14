@@ -16,6 +16,11 @@ export default function UserAvatar({
 }: UserAvatarProps) {
   const [imageError, setImageError] = useState(false);
 
+  // Reset image error when user or photo URL changes
+  useEffect(() => {
+    setImageError(false);
+  }, [user?.profilePhotoUrl, user?.id]);
+
   // Get the user's initials
   const getInitials = () => {
     if (!user) return "U";

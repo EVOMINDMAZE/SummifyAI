@@ -114,6 +114,7 @@ export async function searchDatabase(query: string): Promise<SearchResults> {
               userId: deepSearchUser?.id,
               skipAnalysis: true,
               deepSearch: true, // Use full text search
+              summaryLength: user?.defaultSummaryLength || "medium",
             },
           });
 

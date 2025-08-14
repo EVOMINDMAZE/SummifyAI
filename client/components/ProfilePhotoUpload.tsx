@@ -25,6 +25,18 @@ export default function ProfilePhotoUpload({
   });
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Sync with currentPhotoUrl changes or localStorage
+  useEffect(() => {
+    if (user?.id) {
+      const storedPhoto = localStorage.getItem(`profile_photo_${user.id}`);
+      if (storedPhoto) {
+        setPreviewUrl(storedPhoto);
+      } else if (currentPhotoUrl && currentPhotoUrl !== previewUrl) {
+        setPreviewUrl(currentPhotoUrl);
+      }
+    }
+  }, [currentPhotoUrl, user?.id]);
+
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {

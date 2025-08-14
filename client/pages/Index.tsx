@@ -849,67 +849,44 @@ export default function Index() {
           </div>
         </div>
 
-        {/* Interactive Demo Sections */}
-        <div className="max-w-7xl mx-auto px-6 space-y-32">
-          {/* Search Section */}
-          <div className="relative">
-            <div className="absolute -top-12 left-0 transform -rotate-12 z-30">
-              <h3 className="text-8xl font-black text-[#0A0B1E] dark:text-white opacity-35">
-                Search.
-              </h3>
-            </div>
-            <div className="bg-blue-100 dark:bg-blue-900/30 rounded-3xl p-12 relative overflow-hidden">
-              <div className="grid lg:grid-cols-2 gap-12 items-center">
-                <div>
-                  <h4 className="text-3xl font-bold text-[#0A0B1E] dark:text-white mb-6">
-                    Discover exact chapters and pages instantly
-                  </h4>
-                  <p className="text-lg text-[#0A0B1E]/70 dark:text-gray-300 mb-8 leading-relaxed">
-                    Precision search leads to targeted learning. Enter any topic
-                    and our AI searches through thousands of books to find the
-                    exact chapters and page numbers that address your specific
-                    question.
-                  </p>
-                  <div className="space-y-4">
-                    <Link
-                      to={user ? "/generate" : "/signup"}
-                      className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-medium transition-colors inline-block mr-4"
-                    >
-                      {user ? "Try Search Now" : "Start Free Trial"}
-                    </Link>
-                    <Link
-                      to="/search-demo"
-                      className="bg-blue-200 dark:bg-blue-700 hover:bg-blue-300 dark:hover:bg-blue-600 text-[#0A0B1E] dark:text-white px-6 py-3 rounded-xl font-medium transition-colors border-2 border-[#0A0B1E] dark:border-white inline-block"
-                    >
-                      Try Live Demo
-                    </Link>
-                  </div>
+        {/* Feature Showcase Sections */}
+        <div className="max-w-6xl mx-auto px-6 space-y-16">
+          {/* Smart Search */}
+          <div className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-2xl p-8 border border-blue-200 dark:border-blue-800">
+            <div className="grid md:grid-cols-2 gap-8 items-center">
+              <div>
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mb-4">
+                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
                 </div>
-                <div className="flex justify-center">
-                  <AIChatDemo
-                    title="Chapter Discovery"
-                    subtitle="Try asking about any topic to see how our AI finds exact chapters and pages"
-                    demoType="search"
-                    disableAutoScroll={true}
-                    initialMessages={[
-                      {
-                        id: "1",
-                        type: "ai",
-                        content:
-                          "Hi! I'm your book discovery assistant. What topic would you like to explore today?",
-                        timestamp: "12:30",
-                        status: "read",
-                      },
-                    ]}
-                    suggestedPrompts={[
-                      "Leadership",
-                      "Productivity",
-                      "AI & Technology",
-                      "Personal Finance",
-                    ]}
-                    ctaText={user ? "Try Search Now" : "Start Free Trial"}
-                    ctaLink={user ? "/generate" : "/signup"}
-                  />
+                <h3 className="text-2xl font-bold text-[#0A0B1E] dark:text-white mb-4">
+                  🎯 Smart Topic Search
+                </h3>
+                <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
+                  Enter any topic and instantly discover exact chapters across thousands of books. Get precise page numbers and relevance explanations.
+                </p>
+                <Link
+                  to={user ? "/generate" : "/signup"}
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold transition-all transform hover:scale-105 inline-flex items-center gap-2"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                  {user ? "Start Searching" : "Try Free Search"}
+                </Link>
+              </div>
+              <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
+                <div className="text-sm text-gray-500 dark:text-gray-400 mb-2">Example Result:</div>
+                <div className="space-y-3">
+                  <div className="flex items-start gap-3">
+                    <div className="w-8 h-10 bg-blue-100 dark:bg-blue-900 rounded text-xs flex items-center justify-center font-semibold text-blue-600 dark:text-blue-400">📖</div>
+                    <div>
+                      <div className="font-semibold text-[#0A0B1E] dark:text-white text-sm">Atomic Habits</div>
+                      <div className="text-xs text-gray-500 dark:text-gray-400">Chapter 2: "The Man Who Didn't Look Right" (p. 15-31)</div>
+                      <div className="text-xs text-blue-600 dark:text-blue-400 mt-1">95% relevance to "building habits"</div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

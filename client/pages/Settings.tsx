@@ -480,6 +480,63 @@ export default function Settings() {
         <div className="pb-12">
           {activeTab === "general" && (
             <div className="space-y-8">
+              {/* Profile Information */}
+              <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-8">
+                <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
+                  Profile Information
+                </h2>
+                <div className="grid md:grid-cols-2 gap-8 items-start">
+                  <div>
+                    <ProfilePhotoUpload
+                      currentPhotoUrl={user?.profilePhotoUrl}
+                      onPhotoUpdate={(photoUrl) => {
+                        updateUser({ profilePhotoUrl: photoUrl });
+                      }}
+                    />
+                  </div>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        First Name
+                      </label>
+                      <input
+                        type="text"
+                        value={user?.firstName || ''}
+                        onChange={(e) => updateUser({ firstName: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#FFFD63] focus:border-transparent"
+                        placeholder="Enter your first name"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Last Name
+                      </label>
+                      <input
+                        type="text"
+                        value={user?.lastName || ''}
+                        onChange={(e) => updateUser({ lastName: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#FFFD63] focus:border-transparent"
+                        placeholder="Enter your last name"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Email Address
+                      </label>
+                      <input
+                        type="email"
+                        value={user?.email || ''}
+                        disabled
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-100 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed"
+                      />
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                        Email cannot be changed. Contact support if you need to update it.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               {/* Theme Settings */}
               <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-8">
                 <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">

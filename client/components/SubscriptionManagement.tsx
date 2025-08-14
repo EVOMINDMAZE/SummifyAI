@@ -407,6 +407,12 @@ export default function SubscriptionManagement() {
             const isCurrentPlan =
               plan.id === (subscription?.tier || user?.planType || "free");
 
+            // Calculate pricing based on billing cycle
+            const monthlyPrice = plan.price;
+            const annualPrice = plan.price === 0 ? 0 : Math.round(plan.price * 12 * 0.83); // 17% discount
+            const currentPrice = billingCycle === "monthly" ? monthlyPrice : annualPrice;
+            const isDiscounted = billingCycle === "annual" && plan.price > 0;
+
             return (
               <div
                 key={plan.id}

@@ -191,81 +191,15 @@ export default function TieredSearchInterface({
         </Alert>
       )}
 
-      {/* Search Results */}
+      {/* Rich Search Results */}
       {searchResponse && !searchResponse.upgradeRequired && (
-        <div className="space-y-6">
-          {/* Results Header */}
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-              Search Results ({searchResponse.results.length})
-            </h2>
-            <div className="text-sm text-gray-600 dark:text-gray-400">
-              Searched using {currentTier.name} tier capabilities
-            </div>
-          </div>
-
-          {/* Results Grid */}
-          <div className="grid gap-4">
-            {searchResponse.results.map((result) => (
-              <SearchResultCard
-                key={result.id}
-                result={result}
-                userPlan={userPlan}
-              />
-            ))}
-          </div>
-
-          {/* Marketing CTA for more results */}
-          {searchResponse.results.length > 0 && userPlan !== "institution" && (
-            <Card className="border-dashed border-2 border-gray-300 dark:border-gray-600">
-              <CardContent className="p-6 text-center">
-                <Zap className="w-12 h-12 text-[#FFFD63] mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                  Want More Powerful Search?
-                </h3>
-                <p className="text-gray-600 dark:text-gray-400 mb-4">
-                  {userPlan === "free"
-                    ? "Upgrade to Scholar for deep chapter search and 50x more queries!"
-                    : "Upgrade to Professional for word-by-word precision and unlimited access!"}
-                </p>
-                <Button
-                  onClick={onUpgrade}
-                  className="bg-[#FFFD63] hover:bg-[#FFFD63]/90 text-[#0A0B1E] font-semibold"
-                >
-                  <Crown className="w-4 h-4 mr-2" />
-                  See All Plans
-                </Button>
-              </CardContent>
-            </Card>
-          )}
-        </div>
+        <TieredSearchResults
+          searchResponse={searchResponse}
+          query={query}
+          userPlan={userPlan}
+          onUpgrade={onUpgrade}
+        />
       )}
-
-      {/* Empty State */}
-      {searchResponse?.results.length === 0 &&
-        !searchResponse.upgradeRequired && (
-          <Card>
-            <CardContent className="p-12 text-center">
-              <Search className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                No results found
-              </h3>
-              <p className="text-gray-600 dark:text-gray-400 mb-4">
-                Try different keywords or check your spelling
-              </p>
-              {userPlan === "free" && (
-                <Button
-                  onClick={onUpgrade}
-                  variant="outline"
-                  className="border-[#FFFD63] text-[#FFFD63] hover:bg-[#FFFD63] hover:text-[#0A0B1E]"
-                >
-                  <ArrowUpCircle className="w-4 h-4 mr-2" />
-                  Upgrade for Better Search
-                </Button>
-              )}
-            </CardContent>
-          </Card>
-        )}
     </div>
   );
 }

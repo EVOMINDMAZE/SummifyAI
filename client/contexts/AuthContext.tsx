@@ -138,7 +138,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       console.log("📋 Fetching profile for user:", supabaseUser.email);
       const startTime = Date.now();
 
-      const { data: profileData, error: profileError } = await supabase
+      let { data: profileData, error: profileError } = await supabase
         .from("profiles")
         .select("*")
         .eq("user_id", supabaseUser.id)

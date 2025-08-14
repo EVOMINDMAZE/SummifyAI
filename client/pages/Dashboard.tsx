@@ -26,37 +26,37 @@ export default function Dashboard() {
       try {
         // Get search history count
         const { data: searchData, error: searchError } = await supabase
-          .from('user_searches')
-          .select('*', { count: 'exact', head: true })
-          .eq('user_id', user.id);
+          .from("user_searches")
+          .select("*", { count: "exact", head: true })
+          .eq("user_id", user.id);
 
-        if (searchError && searchError.code !== 'PGRST116') {
-          console.error('Error fetching search stats:', searchError);
+        if (searchError && searchError.code !== "PGRST116") {
+          console.error("Error fetching search stats:", searchError);
         }
 
         // Get this month's searches
         const currentMonth = new Date().toISOString().substring(0, 7); // YYYY-MM format
         const { data: monthlyData, error: monthlyError } = await supabase
-          .from('user_searches')
-          .select('*', { count: 'exact', head: true })
-          .eq('user_id', user.id)
-          .gte('created_at', `${currentMonth}-01`);
+          .from("user_searches")
+          .select("*", { count: "exact", head: true })
+          .eq("user_id", user.id)
+          .gte("created_at", `${currentMonth}-01`);
 
-        if (monthlyError && monthlyError.code !== 'PGRST116') {
-          console.error('Error fetching monthly search stats:', monthlyError);
+        if (monthlyError && monthlyError.code !== "PGRST116") {
+          console.error("Error fetching monthly search stats:", monthlyError);
         }
 
         // Get last search
         const { data: lastSearchData, error: lastSearchError } = await supabase
-          .from('user_searches')
-          .select('created_at, query')
-          .eq('user_id', user.id)
-          .order('created_at', { ascending: false })
+          .from("user_searches")
+          .select("created_at, query")
+          .eq("user_id", user.id)
+          .order("created_at", { ascending: false })
           .limit(1)
           .single();
 
-        if (lastSearchError && lastSearchError.code !== 'PGRST116') {
-          console.error('Error fetching last search:', lastSearchError);
+        if (lastSearchError && lastSearchError.code !== "PGRST116") {
+          console.error("Error fetching last search:", lastSearchError);
         }
 
         setSearchStats({
@@ -66,7 +66,7 @@ export default function Dashboard() {
           favoriteTopics: ["Leadership", "Productivity", "Strategy"],
         });
       } catch (error) {
-        console.error('Error loading search statistics:', error);
+        console.error("Error loading search statistics:", error);
       } finally {
         setIsLoadingStats(false);
       }
@@ -202,7 +202,7 @@ export default function Dashboard() {
                 </p>
                 <div className="flex items-baseline gap-2">
                   <p className="text-3xl font-bold text-gray-900 dark:text-white">
-                    {isLoadingStats ? "..." : (user?.searchCount || 0)}
+                    {isLoadingStats ? "..." : user?.searchCount || 0}
                   </p>
                   <p className="text-sm text-gray-500 dark:text-gray-400">
                     / {user?.monthlySearchLimit ? user.monthlySearchLimit : "∞"}
@@ -237,7 +237,7 @@ export default function Dashboard() {
                   Plan Type
                 </p>
                 <p className="text-3xl font-bold text-gray-900 dark:text-white capitalize">
-                  {isLoadingStats ? "..." : (user?.planType || "Free")}
+                  {isLoadingStats ? "..." : user?.planType || "Free"}
                 </p>
                 <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
                   subscription
@@ -268,8 +268,9 @@ export default function Dashboard() {
                   Next Reset
                 </p>
                 <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                  {isLoadingStats ? "..." : (
-                    user?.searchCountResetDate
+                  {isLoadingStats
+                    ? "..."
+                    : user?.searchCountResetDate
                       ? new Date(user.searchCountResetDate).toLocaleDateString(
                           "en-US",
                           {
@@ -277,8 +278,7 @@ export default function Dashboard() {
                             day: "numeric",
                           },
                         )
-                      : "Aug 13"
-                  )}
+                      : "Aug 13"}
                 </p>
                 <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
                   search limit reset
@@ -309,14 +309,14 @@ export default function Dashboard() {
                   Member Since
                 </p>
                 <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                  {isLoadingStats ? "..." : (
-                    user?.createdAt
+                  {isLoadingStats
+                    ? "..."
+                    : user?.createdAt
                       ? new Date(user.createdAt).toLocaleDateString("en-US", {
                           month: "short",
                           year: "numeric",
                         })
-                      : "Aug 2025"
-                  )}
+                      : "Aug 2025"}
                 </p>
                 <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
                   join date
@@ -582,18 +582,20 @@ export default function Dashboard() {
                       Monthly Usage
                     </span>
                     <span className="text-gray-900 dark:text-white font-medium">
-                      {isLoadingStats ? "..." : `${user?.searchCount || 0} / ${user?.monthlySearchLimit || "∞"}`}
+                      {isLoadingStats
+                        ? "..."
+                        : `${user?.searchCount || 0} / ${user?.monthlySearchLimit || "∞"}`}
                     </span>
                   </div>
                   <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                     <div
                       className="bg-gradient-to-r from-[#FFFD63] to-[#FFFD63]/80 h-2 rounded-full transition-all duration-500"
                       style={{
-                        width: isLoadingStats ? "0%" : (
-                          user?.monthlySearchLimit
+                        width: isLoadingStats
+                          ? "0%"
+                          : user?.monthlySearchLimit
                             ? `${Math.min(((user?.searchCount || 0) / user.monthlySearchLimit) * 100, 100)}%`
-                            : "0%"
-                        ),
+                            : "0%",
                       }}
                     ></div>
                   </div>
@@ -617,7 +619,9 @@ export default function Dashboard() {
                         />
                       </svg>
                       <span className="text-gray-700 dark:text-gray-300">
-                        {isLoadingStats ? "Loading..." : `${user?.monthlySearchLimit || "Unlimited"} searches per month`}
+                        {isLoadingStats
+                          ? "Loading..."
+                          : `${user?.monthlySearchLimit || "Unlimited"} searches per month`}
                       </span>
                     </div>
                     <div className="flex items-center gap-2 text-sm">

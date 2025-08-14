@@ -368,8 +368,14 @@ export default function Settings() {
                         try {
                           await updateUser({ profilePhotoUrl: photoUrl });
                         } catch (error) {
-                          console.error("Failed to update profile photo:", error);
-                          const errorMessage = error instanceof Error ? error.message : "Failed to update profile photo";
+                          console.error(
+                            "Failed to update profile photo:",
+                            error,
+                          );
+                          const errorMessage =
+                            error instanceof Error
+                              ? error.message
+                              : "Failed to update profile photo";
                           alert(errorMessage);
                         }
                       }}
@@ -387,8 +393,14 @@ export default function Settings() {
                           try {
                             await updateUser({ firstName: e.target.value });
                           } catch (error) {
-                            console.error("Failed to update first name:", error);
-                            const errorMessage = error instanceof Error ? error.message : "Failed to update first name";
+                            console.error(
+                              "Failed to update first name:",
+                              error,
+                            );
+                            const errorMessage =
+                              error instanceof Error
+                                ? error.message
+                                : "Failed to update first name";
                             alert(errorMessage);
                           }
                         }}
@@ -408,7 +420,10 @@ export default function Settings() {
                             await updateUser({ lastName: e.target.value });
                           } catch (error) {
                             console.error("Failed to update last name:", error);
-                            const errorMessage = error instanceof Error ? error.message : "Failed to update last name";
+                            const errorMessage =
+                              error instanceof Error
+                                ? error.message
+                                : "Failed to update last name";
                             alert(errorMessage);
                           }
                         }}

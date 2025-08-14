@@ -7,7 +7,9 @@ export default function Pricing() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [isProcessing, setIsProcessing] = useState(false);
-  const [billingCycle, setBillingCycle] = useState<'monthly' | 'annual'>('monthly');
+  const [billingCycle, setBillingCycle] = useState<"monthly" | "annual">(
+    "monthly",
+  );
 
   const plans = [
     {
@@ -125,7 +127,8 @@ export default function Pricing() {
         }
 
         // In a real implementation, you would integrate with Stripe here
-        const priceId = billingCycle === 'monthly' ? plan.monthlyPriceId : plan.annualPriceId;
+        const priceId =
+          billingCycle === "monthly" ? plan.monthlyPriceId : plan.annualPriceId;
         // Example:
         // const stripe = await loadStripe(process.env.STRIPE_PUBLISHABLE_KEY);
         // const response = await fetch('/api/create-checkout-session', {
@@ -136,7 +139,9 @@ export default function Pricing() {
         // const session = await response.json();
         // await stripe.redirectToCheckout({ sessionId: session.id });
 
-        alert(`Redirecting to ${plan.name} (${billingCycle}) subscription checkout...`);
+        alert(
+          `Redirecting to ${plan.name} (${billingCycle}) subscription checkout...`,
+        );
       }
     } catch (error) {
       console.error("Error selecting plan:", error);
@@ -203,21 +208,21 @@ export default function Pricing() {
         {/* Billing Toggle */}
         <div className="inline-flex items-center bg-white dark:bg-gray-800 rounded-2xl p-1 shadow-lg border border-gray-200 dark:border-gray-700 mb-8">
           <button
-            onClick={() => setBillingCycle('monthly')}
+            onClick={() => setBillingCycle("monthly")}
             className={`px-6 py-3 rounded-xl font-medium transition-all ${
-              billingCycle === 'monthly'
-                ? 'bg-[#FFFD63] text-[#0A0B1E] shadow-md'
-                : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+              billingCycle === "monthly"
+                ? "bg-[#FFFD63] text-[#0A0B1E] shadow-md"
+                : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
             }`}
           >
             Monthly
           </button>
           <button
-            onClick={() => setBillingCycle('annual')}
+            onClick={() => setBillingCycle("annual")}
             className={`px-6 py-3 rounded-xl font-medium transition-all relative ${
-              billingCycle === 'annual'
-                ? 'bg-[#FFFD63] text-[#0A0B1E] shadow-md'
-                : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+              billingCycle === "annual"
+                ? "bg-[#FFFD63] text-[#0A0B1E] shadow-md"
+                : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
             }`}
           >
             Annual
@@ -232,7 +237,8 @@ export default function Pricing() {
       <div className="max-w-7xl mx-auto px-6 pb-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
           {plans.map((plan) => {
-            const currentPrice = billingCycle === 'monthly' ? plan.monthlyPrice : plan.annualPrice;
+            const currentPrice =
+              billingCycle === "monthly" ? plan.monthlyPrice : plan.annualPrice;
             const isPopular = plan.popular;
 
             return (
@@ -252,7 +258,7 @@ export default function Pricing() {
                   </div>
                 )}
 
-                <div className={`p-6 ${isPopular ? 'pt-12' : 'pt-8'}`}>
+                <div className={`p-6 ${isPopular ? "pt-12" : "pt-8"}`}>
                   {/* Icon */}
                   <div
                     className={`w-16 h-16 ${plan.iconColor} rounded-2xl flex items-center justify-center mx-auto mb-6`}
@@ -271,14 +277,16 @@ export default function Pricing() {
                       </span>
                       {currentPrice !== "Free" && !plan.customPricing && (
                         <span className="text-gray-600 dark:text-gray-400 ml-1">
-                          /{billingCycle === 'monthly' ? 'month' : 'year'}
+                          /{billingCycle === "monthly" ? "month" : "year"}
                         </span>
                       )}
-                      {billingCycle === 'annual' && currentPrice !== "Free" && !plan.customPricing && (
-                        <div className="text-sm text-green-600 dark:text-green-400 mt-1">
-                          Save 20% vs monthly
-                        </div>
-                      )}
+                      {billingCycle === "annual" &&
+                        currentPrice !== "Free" &&
+                        !plan.customPricing && (
+                          <div className="text-sm text-green-600 dark:text-green-400 mt-1">
+                            Save 20% vs monthly
+                          </div>
+                        )}
                     </div>
                     <p className="text-sm font-medium text-amber-600 dark:text-amber-400">
                       {plan.subtitle}

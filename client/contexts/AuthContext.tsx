@@ -538,12 +538,39 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       throw new Error("No user logged in");
     }
 
+    console.log("📝 Updating user settings...", settings);
+
+    // Merge new settings with existing ones
+    const currentSettings = user.settings || {};
+    const updatedSettings = {
+      ...currentSettings,
+      ...settings,
+      notifications: {
+        ...currentSettings.notifications,
+        ...settings.notifications,
+      },
+      privacy: {
+        ...currentSettings.privacy,
+        ...settings.privacy,
+      },
+      security: {
+        ...currentSettings.security,
+        ...settings.security,
+      },
+    };
+
+    // Update both the settings object and specific notification fields for backward compatibility
     await updateUser({
-      notificationSearchResults: settings.notificationSearchResults,
-      notificationUsageAlerts: settings.notificationUsageAlerts,
-      notificationProductUpdates: settings.notificationProductUpdates,
-      adPreferences: settings.adPreferences,
+      settings: updatedSettings,
+      notificationSearchResults: settings.notifications?.emailWeeklyReport ?? user.notificationSearchResults,
+      notificationUsageAlerts: settings.notifications?.emailCreditUpdates ?? user.notificationUsageAlerts,
+      notificationProductUpdates: settings.notifications?.emailFeatureUpdates ?? user.notificationProductUpdates,
+      defaultSummaryLength: settings.defaultSummaryLength ?? user.defaultSummaryLength,
     });
+
+    // Also save to localStorage as a backup
+    localStorage.setItem("userSettings", JSON.stringify(updatedSettings));
+    console.log("✅ User settings updated and saved");
   };
 
   // Add debug functions to window in development

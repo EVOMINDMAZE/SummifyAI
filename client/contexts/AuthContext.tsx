@@ -76,12 +76,11 @@ const AuthContext = createContext<AuthContextType>(defaultContextValue);
 export const useAuth = () => {
   const context = useContext(AuthContext);
 
-  // Since we now have a default value, we shouldn't get undefined
-  // But let's still check if it's the default (uninitialized) context
-  if (context === defaultContextValue) {
+  // Check if we're getting the default uninitialized context
+  // by checking if the signIn function throws the "not initialized" error
+  if (context.signIn === defaultContextValue.signIn) {
     console.warn("⚠️ useAuth called before AuthProvider is fully initialized");
-    // Return the default context instead of throwing an error
-    return context;
+    // Don't throw an error, just log a warning and return the context
   }
 
   return context;
@@ -387,7 +386,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     });
 
     if (error) {
-      console.error("❌ Sign up failed:", error);
+      console.error("��� Sign up failed:", error);
       throw error;
     }
 

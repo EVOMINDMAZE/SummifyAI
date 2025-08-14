@@ -130,7 +130,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     return () => clearTimeout(recoveryTimer);
   }, [isLoading]);
 
-
   // Helper function to fetch and create user profile
   const fetchUserProfile = async (
     supabaseUser: SupabaseUser,
@@ -196,9 +195,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         let userSettings = null;
         try {
           if (profileData.user_settings) {
-            userSettings = typeof profileData.user_settings === 'string'
-              ? JSON.parse(profileData.user_settings)
-              : profileData.user_settings;
+            userSettings =
+              typeof profileData.user_settings === "string"
+                ? JSON.parse(profileData.user_settings)
+                : profileData.user_settings;
           } else {
             // Fallback to localStorage
             const savedSettings = localStorage.getItem("userSettings");
@@ -498,24 +498,42 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     // Prepare update object with only defined values
     const updateData: any = {};
 
-    if (updates.firstName !== undefined) updateData.first_name = updates.firstName;
+    if (updates.firstName !== undefined)
+      updateData.first_name = updates.firstName;
     if (updates.lastName !== undefined) updateData.last_name = updates.lastName;
-    if (updates.searchCount !== undefined) updateData.search_count = updates.searchCount;
-    if (updates.monthlySearchLimit !== undefined) updateData.monthly_search_limit = updates.monthlySearchLimit;
-    if (updates.searchCountResetDate !== undefined) updateData.search_count_reset_date = updates.searchCountResetDate;
+    if (updates.searchCount !== undefined)
+      updateData.search_count = updates.searchCount;
+    if (updates.monthlySearchLimit !== undefined)
+      updateData.monthly_search_limit = updates.monthlySearchLimit;
+    if (updates.searchCountResetDate !== undefined)
+      updateData.search_count_reset_date = updates.searchCountResetDate;
     if (updates.planType !== undefined) updateData.plan_type = updates.planType;
-    if (updates.notificationSearchResults !== undefined) updateData.notification_search_results = updates.notificationSearchResults;
-    if (updates.notificationUsageAlerts !== undefined) updateData.notification_usage_alerts = updates.notificationUsageAlerts;
-    if (updates.notificationProductUpdates !== undefined) updateData.notification_product_updates = updates.notificationProductUpdates;
-    if (updates.stripeCustomerId !== undefined) updateData.stripe_customer_id = updates.stripeCustomerId;
-    if (updates.stripeSubscriptionId !== undefined) updateData.stripe_subscription_id = updates.stripeSubscriptionId;
-    if (updates.subscriptionStatus !== undefined) updateData.subscription_status = updates.subscriptionStatus;
-    if (updates.subscriptionEndDate !== undefined) updateData.subscription_end_date = updates.subscriptionEndDate;
-    if (updates.adPreferences !== undefined) updateData.ad_preferences = updates.adPreferences;
-    if (updates.adFreeUntil !== undefined) updateData.ad_free_until = updates.adFreeUntil;
-    if (updates.defaultSummaryLength !== undefined) updateData.default_summary_length = updates.defaultSummaryLength;
-    if (updates.profilePhotoUrl !== undefined) updateData.profile_photo_url = updates.profilePhotoUrl;
-    if (updates.settings !== undefined) updateData.user_settings = JSON.stringify(updates.settings);
+    if (updates.notificationSearchResults !== undefined)
+      updateData.notification_search_results =
+        updates.notificationSearchResults;
+    if (updates.notificationUsageAlerts !== undefined)
+      updateData.notification_usage_alerts = updates.notificationUsageAlerts;
+    if (updates.notificationProductUpdates !== undefined)
+      updateData.notification_product_updates =
+        updates.notificationProductUpdates;
+    if (updates.stripeCustomerId !== undefined)
+      updateData.stripe_customer_id = updates.stripeCustomerId;
+    if (updates.stripeSubscriptionId !== undefined)
+      updateData.stripe_subscription_id = updates.stripeSubscriptionId;
+    if (updates.subscriptionStatus !== undefined)
+      updateData.subscription_status = updates.subscriptionStatus;
+    if (updates.subscriptionEndDate !== undefined)
+      updateData.subscription_end_date = updates.subscriptionEndDate;
+    if (updates.adPreferences !== undefined)
+      updateData.ad_preferences = updates.adPreferences;
+    if (updates.adFreeUntil !== undefined)
+      updateData.ad_free_until = updates.adFreeUntil;
+    if (updates.defaultSummaryLength !== undefined)
+      updateData.default_summary_length = updates.defaultSummaryLength;
+    if (updates.profilePhotoUrl !== undefined)
+      updateData.profile_photo_url = updates.profilePhotoUrl;
+    if (updates.settings !== undefined)
+      updateData.user_settings = JSON.stringify(updates.settings);
 
     // Always update the timestamp
     updateData.updated_at = new Date().toISOString();
@@ -567,10 +585,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     // Update both the settings object and specific notification fields for backward compatibility
     await updateUser({
       settings: updatedSettings,
-      notificationSearchResults: settings.notifications?.emailWeeklyReport ?? user.notificationSearchResults,
-      notificationUsageAlerts: settings.notifications?.emailCreditUpdates ?? user.notificationUsageAlerts,
-      notificationProductUpdates: settings.notifications?.emailFeatureUpdates ?? user.notificationProductUpdates,
-      defaultSummaryLength: settings.defaultSummaryLength ?? user.defaultSummaryLength,
+      notificationSearchResults:
+        settings.notifications?.emailWeeklyReport ??
+        user.notificationSearchResults,
+      notificationUsageAlerts:
+        settings.notifications?.emailCreditUpdates ??
+        user.notificationUsageAlerts,
+      notificationProductUpdates:
+        settings.notifications?.emailFeatureUpdates ??
+        user.notificationProductUpdates,
+      defaultSummaryLength:
+        settings.defaultSummaryLength ?? user.defaultSummaryLength,
     });
 
     // Also save to localStorage as a backup
@@ -586,7 +611,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     console.log("🔄 Refreshing user data...");
 
     try {
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       if (session?.user) {
         const userData = await fetchUserProfile(session.user);
         if (userData) {

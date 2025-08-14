@@ -20,7 +20,7 @@ export default function TierAccessDemo() {
 
   const handleFeatureTest = (feature: string) => {
     console.log(`Testing feature: ${feature}`);
-    
+
     switch (feature) {
       case "exportToPDF":
         if (enforceFeatureAccess("exportToPDF")) {
@@ -67,12 +67,31 @@ export default function TierAccessDemo() {
             Current User Info
           </h3>
           <div className="space-y-1 text-sm">
-            <p><strong>Email:</strong> {user?.email}</p>
-            <p><strong>Plan Type:</strong> <span className="capitalize">{planType}</span></p>
-            <p><strong>Search Count:</strong> {user?.searchCount || 0}</p>
-            <p><strong>Monthly Limit:</strong> {user?.monthlySearchLimit === 999999 ? "Unlimited" : user?.monthlySearchLimit}</p>
-            <p><strong>Remaining:</strong> {getRemainingSearches() === "unlimited" ? "Unlimited" : getRemainingSearches()}</p>
-            <p><strong>Usage:</strong> {getUsagePercentage().toFixed(1)}%</p>
+            <p>
+              <strong>Email:</strong> {user?.email}
+            </p>
+            <p>
+              <strong>Plan Type:</strong>{" "}
+              <span className="capitalize">{planType}</span>
+            </p>
+            <p>
+              <strong>Search Count:</strong> {user?.searchCount || 0}
+            </p>
+            <p>
+              <strong>Monthly Limit:</strong>{" "}
+              {user?.monthlySearchLimit === 999999
+                ? "Unlimited"
+                : user?.monthlySearchLimit}
+            </p>
+            <p>
+              <strong>Remaining:</strong>{" "}
+              {getRemainingSearches() === "unlimited"
+                ? "Unlimited"
+                : getRemainingSearches()}
+            </p>
+            <p>
+              <strong>Usage:</strong> {getUsagePercentage().toFixed(1)}%
+            </p>
           </div>
         </div>
 
@@ -82,7 +101,9 @@ export default function TierAccessDemo() {
           </h3>
           <div className="space-y-1 text-sm">
             <p>📄 PDF Export: {canExportPDF() ? "✅" : "❌"}</p>
-            <p>⚡ Priority Processing: {hasPriorityProcessing() ? "✅" : "❌"}</p>
+            <p>
+              ⚡ Priority Processing: {hasPriorityProcessing() ? "✅" : "❌"}
+            </p>
             <p>📊 Advanced Analytics: {hasAdvancedAnalytics() ? "✅" : "❌"}</p>
             <p>🔌 API Access: {hasAPIAccess() ? "✅" : "❌"}</p>
             <p>🤖 Custom Models: {canUseCustomModels() ? "✅" : "❌"}</p>

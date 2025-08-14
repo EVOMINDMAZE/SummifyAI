@@ -149,7 +149,11 @@ export default function SubscriptionManagement() {
 
         if (confirmUpgrade) {
           await updateUser({
-            planType: newPlan as "free" | "scholar" | "professional" | "institution",
+            planType: newPlan as
+              | "free"
+              | "scholar"
+              | "professional"
+              | "institution",
             monthlySearchLimit:
               selectedPlan.monthlySearches === -1
                 ? 999999

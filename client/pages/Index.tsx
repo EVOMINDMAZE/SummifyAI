@@ -714,7 +714,6 @@ export default function Index() {
           </div>
         </div>
 
-
         {/* Feature Showcase Sections */}
         <div className="max-w-6xl mx-auto px-6 space-y-16">
           {/* Smart Search */}
@@ -722,35 +721,67 @@ export default function Index() {
             <div className="grid md:grid-cols-2 gap-8 items-center">
               <div>
                 <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mb-4">
-                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  <svg
+                    className="w-6 h-6 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                    />
                   </svg>
                 </div>
                 <h3 className="text-2xl font-bold text-[#0A0B1E] dark:text-white mb-4">
                   🎯 Smart Topic Search
                 </h3>
                 <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
-                  Enter any topic and instantly discover exact chapters across thousands of books. Get precise page numbers and relevance explanations.
+                  Enter any topic and instantly discover exact chapters across
+                  thousands of books. Get precise page numbers and relevance
+                  explanations.
                 </p>
                 <Link
                   to={user ? "/generate" : "/signup"}
                   className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-semibold transition-all transform hover:scale-105 inline-flex items-center gap-2"
                 >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M13 10V3L4 14h7v7l9-11h-7z"
+                    />
                   </svg>
                   {user ? "Start Searching" : "Try Free Search"}
                 </Link>
               </div>
               <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
-                <div className="text-sm text-gray-500 dark:text-gray-400 mb-2">Example Result:</div>
+                <div className="text-sm text-gray-500 dark:text-gray-400 mb-2">
+                  Example Result:
+                </div>
                 <div className="space-y-3">
                   <div className="flex items-start gap-3">
-                    <div className="w-8 h-10 bg-blue-100 dark:bg-blue-900 rounded text-xs flex items-center justify-center font-semibold text-blue-600 dark:text-blue-400">📖</div>
+                    <div className="w-8 h-10 bg-blue-100 dark:bg-blue-900 rounded text-xs flex items-center justify-center font-semibold text-blue-600 dark:text-blue-400">
+                      📖
+                    </div>
                     <div>
-                      <div className="font-semibold text-[#0A0B1E] dark:text-white text-sm">Atomic Habits</div>
-                      <div className="text-xs text-gray-500 dark:text-gray-400">Chapter 2: "The Man Who Didn't Look Right" (p. 15-31)</div>
-                      <div className="text-xs text-blue-600 dark:text-blue-400 mt-1">95% relevance to "building habits"</div>
+                      <div className="font-semibold text-[#0A0B1E] dark:text-white text-sm">
+                        Atomic Habits
+                      </div>
+                      <div className="text-xs text-gray-500 dark:text-gray-400">
+                        Chapter 2: "The Man Who Didn't Look Right" (p. 15-31)
+                      </div>
+                      <div className="text-xs text-blue-600 dark:text-blue-400 mt-1">
+                        95% relevance to "building habits"
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -762,38 +793,74 @@ export default function Index() {
           <div className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-2xl p-8 border border-green-200 dark:border-green-800">
             <div className="grid md:grid-cols-2 gap-8 items-center">
               <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
-                <div className="text-sm text-gray-500 dark:text-gray-400 mb-3">AI Relevance Analysis:</div>
+                <div className="text-sm text-gray-500 dark:text-gray-400 mb-3">
+                  AI Relevance Analysis:
+                </div>
                 <div className="space-y-4">
                   <div className="border-l-4 border-green-500 pl-4">
-                    <div className="font-semibold text-green-600 dark:text-green-400 text-sm">94% Match</div>
-                    <div className="text-sm text-[#0A0B1E] dark:text-white font-medium">Deep Work - Chapter 1</div>
-                    <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">Directly addresses concentration techniques with practical frameworks.</div>
+                    <div className="font-semibold text-green-600 dark:text-green-400 text-sm">
+                      94% Match
+                    </div>
+                    <div className="text-sm text-[#0A0B1E] dark:text-white font-medium">
+                      Deep Work - Chapter 1
+                    </div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                      Directly addresses concentration techniques with practical
+                      frameworks.
+                    </div>
                   </div>
                   <div className="border-l-4 border-yellow-500 pl-4">
-                    <div className="font-semibold text-yellow-600 dark:text-yellow-400 text-sm">89% Match</div>
-                    <div className="text-sm text-[#0A0B1E] dark:text-white font-medium">Atomic Habits - Chapter 3</div>
-                    <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">Covers environmental design for focus and productivity.</div>
+                    <div className="font-semibold text-yellow-600 dark:text-yellow-400 text-sm">
+                      89% Match
+                    </div>
+                    <div className="text-sm text-[#0A0B1E] dark:text-white font-medium">
+                      Atomic Habits - Chapter 3
+                    </div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                      Covers environmental design for focus and productivity.
+                    </div>
                   </div>
                 </div>
               </div>
               <div>
                 <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center mb-4">
-                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                  <svg
+                    className="w-6 h-6 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+                    />
                   </svg>
                 </div>
                 <h3 className="text-2xl font-bold text-[#0A0B1E] dark:text-white mb-4">
                   🧠 Smart Relevance Analysis
                 </h3>
                 <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
-                  Our AI doesn't just find chapters—it explains WHY each chapter matters to your specific query with detailed relevance scores.
+                  Our AI doesn't just find chapters—it explains WHY each chapter
+                  matters to your specific query with detailed relevance scores.
                 </p>
                 <Link
                   to={user ? "/generate" : "/signup"}
                   className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl font-semibold transition-all transform hover:scale-105 inline-flex items-center gap-2"
                 >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+                    />
                   </svg>
                   {user ? "Analyze Chapters" : "Try AI Analysis"}
                 </Link>
@@ -812,22 +879,43 @@ export default function Index() {
               <div className="grid lg:grid-cols-2 gap-12 items-center">
                 <div>
                   <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center mb-4">
-                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                    <svg
+                      className="w-6 h-6 text-white"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                      />
                     </svg>
                   </div>
                   <h3 className="text-2xl font-bold text-[#0A0B1E] dark:text-white mb-4">
                     ⚡ Instant Chapter Discovery
                   </h3>
                   <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
-                    Get complete chapter insights in seconds—exact page numbers, relevance explanations, and purchase links to dive deeper.
+                    Get complete chapter insights in seconds—exact page numbers,
+                    relevance explanations, and purchase links to dive deeper.
                   </p>
                   <Link
                     to={user ? "/generate" : "/signup"}
                     className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-xl font-semibold transition-all transform hover:scale-105 inline-flex items-center gap-2"
                   >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M13 10V3L4 14h7v7l9-11h-7z"
+                      />
                     </svg>
                     {user ? "Discover Now" : "Start Discovering"}
                   </Link>
@@ -835,19 +923,33 @@ export default function Index() {
                 <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-500 dark:text-gray-400">Search Time:</span>
-                      <span className="text-sm font-semibold text-orange-600 dark:text-orange-400">2.3 seconds</span>
+                      <span className="text-sm text-gray-500 dark:text-gray-400">
+                        Search Time:
+                      </span>
+                      <span className="text-sm font-semibold text-orange-600 dark:text-orange-400">
+                        2.3 seconds
+                      </span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-500 dark:text-gray-400">Books Scanned:</span>
-                      <span className="text-sm font-semibold text-[#0A0B1E] dark:text-white">12,847</span>
+                      <span className="text-sm text-gray-500 dark:text-gray-400">
+                        Books Scanned:
+                      </span>
+                      <span className="text-sm font-semibold text-[#0A0B1E] dark:text-white">
+                        12,847
+                      </span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-500 dark:text-gray-400">Relevant Chapters:</span>
-                      <span className="text-sm font-semibold text-[#0A0B1E] dark:text-white">23 found</span>
+                      <span className="text-sm text-gray-500 dark:text-gray-400">
+                        Relevant Chapters:
+                      </span>
+                      <span className="text-sm font-semibold text-[#0A0B1E] dark:text-white">
+                        23 found
+                      </span>
                     </div>
                     <div className="pt-2 border-t border-gray-200 dark:border-gray-700">
-                      <div className="text-xs text-center text-gray-400 dark:text-gray-500">Ready to export, save, or purchase</div>
+                      <div className="text-xs text-center text-gray-400 dark:text-gray-500">
+                        Ready to export, save, or purchase
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -859,61 +961,109 @@ export default function Index() {
           <div className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 rounded-2xl p-8 border border-purple-200 dark:border-purple-800">
             <div className="grid md:grid-cols-2 gap-8 items-center">
               <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
-                <div className="text-sm text-gray-500 dark:text-gray-400 mb-3">Your Discovery Library:</div>
+                <div className="text-sm text-gray-500 dark:text-gray-400 mb-3">
+                  Your Discovery Library:
+                </div>
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <div className="w-6 h-6 bg-purple-100 dark:bg-purple-900 rounded flex items-center justify-center">
-                        <svg className="w-3 h-3 text-purple-600 dark:text-purple-400" fill="currentColor" viewBox="0 0 20 20">
+                        <svg
+                          className="w-3 h-3 text-purple-600 dark:text-purple-400"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
                           <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z" />
                         </svg>
                       </div>
-                      <span className="text-sm text-[#0A0B1E] dark:text-white">Saved Searches</span>
+                      <span className="text-sm text-[#0A0B1E] dark:text-white">
+                        Saved Searches
+                      </span>
                     </div>
-                    <span className="text-sm font-semibold text-purple-600 dark:text-purple-400">47</span>
+                    <span className="text-sm font-semibold text-purple-600 dark:text-purple-400">
+                      47
+                    </span>
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <div className="w-6 h-6 bg-green-100 dark:bg-green-900 rounded flex items-center justify-center">
-                        <svg className="w-3 h-3 text-green-600 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                        <svg
+                          className="w-3 h-3 text-green-600 dark:text-green-400"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
                           <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" />
                         </svg>
                       </div>
-                      <span className="text-sm text-[#0A0B1E] dark:text-white">Shared Results</span>
+                      <span className="text-sm text-[#0A0B1E] dark:text-white">
+                        Shared Results
+                      </span>
                     </div>
-                    <span className="text-sm font-semibold text-green-600 dark:text-green-400">12</span>
+                    <span className="text-sm font-semibold text-green-600 dark:text-green-400">
+                      12
+                    </span>
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <div className="w-6 h-6 bg-yellow-100 dark:bg-yellow-900 rounded flex items-center justify-center">
-                        <svg className="w-3 h-3 text-yellow-600 dark:text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                        <svg
+                          className="w-3 h-3 text-yellow-600 dark:text-yellow-400"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
                           <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                       </div>
-                      <span className="text-sm text-[#0A0B1E] dark:text-white">Books Purchased</span>
+                      <span className="text-sm text-[#0A0B1E] dark:text-white">
+                        Books Purchased
+                      </span>
                     </div>
-                    <span className="text-sm font-semibold text-yellow-600 dark:text-yellow-400">8</span>
+                    <span className="text-sm font-semibold text-yellow-600 dark:text-yellow-400">
+                      8
+                    </span>
                   </div>
                 </div>
               </div>
               <div>
                 <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center mb-4">
-                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
+                  <svg
+                    className="w-6 h-6 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"
+                    />
                   </svg>
                 </div>
                 <h3 className="text-2xl font-bold text-[#0A0B1E] dark:text-white mb-4">
                   📚 Build Your Discovery Library
                 </h3>
                 <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
-                  Save every search, export to PDF, share with others, and track your learning journey. Turn discoveries into purchases with direct book links.
+                  Save every search, export to PDF, share with others, and track
+                  your learning journey. Turn discoveries into purchases with
+                  direct book links.
                 </p>
                 <Link
                   to={user ? "/dashboard" : "/signup"}
                   className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-xl font-semibold transition-all transform hover:scale-105 inline-flex items-center gap-2"
                 >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z" />
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z"
+                    />
                   </svg>
                   {user ? "View Your Library" : "Start Building"}
                 </Link>

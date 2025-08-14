@@ -1180,13 +1180,7 @@ export default function Settings() {
                             <h4 className="font-medium text-gray-900 dark:text-white">
                               {member.name}
                             </h4>
-                            <span
-                              className={`px-2 py-1 text-xs rounded-full ${
-                                member.status === "Active"
-                                  ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
-                                  : "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200"
-                              }`}
-                            >
+                            <span className={`px-2 py-1 text-xs rounded-full ${teamService.getStatusColor(member.status)}`}>
                               {member.status}
                             </span>
                           </div>

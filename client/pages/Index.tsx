@@ -440,7 +440,7 @@ export default function Index() {
                       to="/signup"
                       className="bg-white text-[#0A0B1E] px-8 py-4 rounded-2xl font-medium hover:bg-gray-50 transition-colors shadow-lg border border-gray-200"
                     >
-                      Get Started Now
+                      💡 See How It Works
                     </Link>
                     <p className="text-xs text-[#0A0B1E]/60 dark:text-gray-500 mt-2">
                       No credit card required • 5 free chapter discoveries •

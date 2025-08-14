@@ -373,7 +373,6 @@ export default function Settings() {
               { id: "notifications", name: "Notifications", icon: "🔔" },
               { id: "privacy", name: "Privacy", icon: "🔒" },
               { id: "security", name: "Security", icon: "🛡️" },
-              { id: "team", name: "Team", icon: "👥" },
             ].map((tab) => (
               <button
                 key={tab.id}

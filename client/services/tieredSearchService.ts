@@ -231,12 +231,20 @@ export class TieredSearchService {
         }
       }
 
+      // Use full-text search for Professional+ tier OR as fallback when no embeddings
       if (
-        searchTier.features.find((f) => f.id === "fulltext_search")?.enabled
+        searchTier.features.find((f) => f.id === "fulltext_search")?.enabled ||
+        !queryEmbedding
       ) {
-        // Stage 3: Full-text search (Professional+)
+        // Stage 3: Full-text search (Professional+ or fallback)
         const fulltextResults = await this.searchFullText(query);
         results = this.mergeResults(results, fulltextResults);
+      }
+
+      // If no results and no embeddings, try basic database search
+      if (results.length === 0 && !queryEmbedding) {
+        const basicResults = await this.searchBasicText(query);
+        results = basicResults;
       }
 
       // Apply AI analysis based on tier

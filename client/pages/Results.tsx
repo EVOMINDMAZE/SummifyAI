@@ -4,6 +4,8 @@ import { useAuth } from "../contexts/AuthContext";
 import { supabase } from "@/lib/supabase";
 import Navigation from "../components/Navigation";
 import BookCover from "../components/BookCover";
+import { UpgradeWrapper } from "../components/UpgradePrompt";
+import { useFeatureAccess } from "../hooks/useFeatureAccess";
 import {
   shareResult,
   exportToPDF,
@@ -27,6 +29,7 @@ export default function Results() {
   const { user } = useAuth();
   const { id } = useParams();
   const isAuthenticated = !!user;
+  const { canExportPDF, canSearch, getRemainingSearches } = useFeatureAccess();
   const [activeTab, setActiveTab] = useState<"recent" | "saved" | "history">(
     "recent",
   );
@@ -407,12 +410,15 @@ export default function Results() {
 
             {/* Actions */}
             <div className="flex flex-wrap gap-4">
-              <button
-                onClick={() => handleExportPDF(currentResult)}
-                className="bg-[#4361EE] hover:bg-[#4361EE]/90 text-white px-6 py-2 rounded-lg font-medium transition-colors"
-              >
-                Export PDF
-              </button>
+              <UpgradeWrapper feature="exportToPDF">
+                <button
+                  onClick={() => canExportPDF() && handleExportPDF(currentResult)}
+                  disabled={!canExportPDF()}
+                  className="bg-[#4361EE] hover:bg-[#4361EE]/90 text-white px-6 py-2 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Export PDF
+                </button>
+              </UpgradeWrapper>
               <button
                 onClick={() => handleShare(currentResult)}
                 className="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-lg font-medium transition-colors"
@@ -714,17 +720,20 @@ export default function Results() {
                           >
                             Share
                           </button>
-                          <button
-                            onClick={() =>
-                              handleExportPDF({
-                                ...result,
-                                saved: savedResults.includes(result.id),
-                              })
-                            }
-                            className="bg-green-100 hover:bg-green-200 text-green-700 px-3 py-1 rounded-lg text-sm font-medium"
-                          >
-                            Export PDF
-                          </button>
+                          <UpgradeWrapper feature="exportToPDF">
+                            <button
+                              onClick={() =>
+                                canExportPDF() && handleExportPDF({
+                                  ...result,
+                                  saved: savedResults.includes(result.id),
+                                })
+                              }
+                              disabled={!canExportPDF()}
+                              className="bg-green-100 hover:bg-green-200 text-green-700 px-3 py-1 rounded-lg text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                              Export PDF
+                            </button>
+                          </UpgradeWrapper>
                         </div>
                       </div>
 
@@ -892,17 +901,20 @@ export default function Results() {
                       >
                         View Full Results
                       </Link>
-                      <button
-                        onClick={() =>
-                          handleExportPDF({
-                            ...result,
-                            saved: savedResults.includes(result.id),
-                          })
-                        }
-                        className="bg-green-100 hover:bg-green-200 text-green-700 px-3 py-1 rounded-lg text-sm font-medium"
-                      >
-                        Export PDF
-                      </button>
+                      <UpgradeWrapper feature="exportToPDF">
+                        <button
+                          onClick={() =>
+                            canExportPDF() && handleExportPDF({
+                              ...result,
+                              saved: savedResults.includes(result.id),
+                            })
+                          }
+                          disabled={!canExportPDF()}
+                          className="bg-green-100 hover:bg-green-200 text-green-700 px-3 py-1 rounded-lg text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          Export PDF
+                        </button>
+                      </UpgradeWrapper>
                     </div>
                   </div>
                 ))

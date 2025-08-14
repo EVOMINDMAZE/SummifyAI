@@ -111,6 +111,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
               notification_search_results: true,
               notification_usage_alerts: true,
               notification_product_updates: false,
+              default_summary_length: "medium",
             });
 
           if (createError) {

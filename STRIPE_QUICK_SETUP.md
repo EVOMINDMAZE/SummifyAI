@@ -1,6 +1,7 @@
 # 🚀 Quick Stripe Setup Guide
 
-## ❌ **Current Error:** 
+## ❌ **Current Error:**
+
 `No such price: 'price_scholar_monthly'`
 
 This means you need to create Stripe products and set the correct price IDs.
@@ -8,31 +9,37 @@ This means you need to create Stripe products and set the correct price IDs.
 ## ✅ **Quick Fix (5 minutes):**
 
 ### 1. **Go to Stripe Dashboard**
+
 - Open [stripe.com/dashboard](https://dashboard.stripe.com)
 - Go to **Products** section
 
-### 2. **Create Products** 
+### 2. **Create Products**
+
 Create these 3 products with monthly and annual prices:
 
 #### **Scholar Plan**
+
 - Product name: "SummifyAI Scholar"
 - Monthly price: $19.99
 - Annual price: $199.99 (17% discount)
 - Copy the price IDs (they'll look like: `price_1ABC123...`)
 
-#### **Professional Plan**  
+#### **Professional Plan**
+
 - Product name: "SummifyAI Professional"
 - Monthly price: $49.99
 - Annual price: $499.99
 - Copy the price IDs
 
 #### **Institution Plan**
-- Product name: "SummifyAI Institution" 
+
+- Product name: "SummifyAI Institution"
 - Monthly price: $99.99
 - Annual price: $999.99
 - Copy the price IDs
 
 ### 3. **Set Environment Variables in Netlify**
+
 Go to your Netlify dashboard → Site Settings → Environment Variables
 
 Add these 6 variables with your actual price IDs from Stripe:
@@ -47,6 +54,7 @@ STRIPE_INSTITUTION_ANNUAL_PRICE_ID=price_1RST345_your_actual_id
 ```
 
 ### 4. **Test Configuration**
+
 Visit: `https://your-site.netlify.app/.netlify/functions/debug-stripe-config`
 
 This will show you what price IDs are currently configured.

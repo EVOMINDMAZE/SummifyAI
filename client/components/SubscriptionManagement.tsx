@@ -220,11 +220,11 @@ export default function SubscriptionManagement() {
     if (!priceId || priceId.startsWith("price_")) {
       alert(
         `❌ Stripe pricing not configured for ${selectedPlan.name} plan.\n\n` +
-        `The price ID "${priceId}" doesn't exist in your Stripe account.\n\n` +
-        `Please:\n` +
-        `1. Create products in your Stripe dashboard\n` +
-        `2. Set the correct price IDs in your environment variables\n` +
-        `3. Or contact support for help with setup`
+          `The price ID "${priceId}" doesn't exist in your Stripe account.\n\n` +
+          `Please:\n` +
+          `1. Create products in your Stripe dashboard\n` +
+          `2. Set the correct price IDs in your environment variables\n` +
+          `3. Or contact support for help with setup`,
       );
       return;
     }
@@ -289,11 +289,11 @@ export default function SubscriptionManagement() {
       if (!priceId || priceId.startsWith("price_")) {
         alert(
           `❌ Stripe pricing not configured for ${selectedPlan.name} plan.\n\n` +
-          `The price ID "${priceId}" doesn't exist in your Stripe account.\n\n` +
-          `Please:\n` +
-          `1. Create products in your Stripe dashboard\n` +
-          `2. Set the correct price IDs in your environment variables\n` +
-          `3. Or contact support for help with setup`
+            `The price ID "${priceId}" doesn't exist in your Stripe account.\n\n` +
+            `Please:\n` +
+            `1. Create products in your Stripe dashboard\n` +
+            `2. Set the correct price IDs in your environment variables\n` +
+            `3. Or contact support for help with setup`,
         );
         return;
       }

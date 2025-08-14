@@ -46,25 +46,6 @@ export const handler: Handler = async (event) => {
       };
     }
 
-    // Check if this is a fallback price ID that won't work
-    if (
-      priceId.startsWith("price_") &&
-      !priceId.match(/^price_[A-Za-z0-9]{24,}$/)
-    ) {
-      return {
-        statusCode: 400,
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Headers": "Content-Type",
-        },
-        body: JSON.stringify({
-          error: "Invalid price ID configuration",
-          details: `The price ID "${priceId}" appears to be a placeholder. Please configure real Stripe price IDs in your environment variables.`,
-          instructions:
-            "Create products in your Stripe dashboard and set the correct STRIPE_*_PRICE_ID environment variables.",
-        }),
-      };
-    }
 
     // Create or retrieve customer
     let customer;

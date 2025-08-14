@@ -966,29 +966,26 @@ export default function Index() {
             <div className="bg-orange-100 dark:bg-orange-900/30 rounded-3xl p-12">
               <div className="grid lg:grid-cols-2 gap-12 items-center">
                 <div>
-                  <h4 className="text-3xl font-bold text-[#0A0B1E] dark:text-white mb-6">
-                    Get precise chapter insights
-                  </h4>
-                  <p className="text-lg text-[#0A0B1E]/70 dark:text-gray-300 mb-8 leading-relaxed">
-                    Access targeted insights from each relevant chapter in
-                    seconds. Get AI analysis of why each chapter matters, page
-                    number references, affiliate purchase links, and actionable
-                    next steps—all organized in a beautiful interface.
-                  </p>
-                  <div className="space-y-4">
-                    <Link
-                      to={user ? "/generate" : "/signup"}
-                      className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-xl font-medium transition-colors inline-block mr-4"
-                    >
-                      {user ? "Find Chapters" : "Start Free Trial"}
-                    </Link>
-                    <Link
-                      to="/summary-showcase"
-                      className="bg-orange-200 dark:bg-orange-700 hover:bg-orange-300 dark:hover:bg-orange-600 text-[#0A0B1E] dark:text-white px-6 py-3 rounded-xl font-medium transition-colors border-2 border-[#0A0B1E] dark:border-white inline-block"
-                    >
-                      See Examples
-                    </Link>
+                  <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center mb-4">
+                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                    </svg>
                   </div>
+                  <h3 className="text-2xl font-bold text-[#0A0B1E] dark:text-white mb-4">
+                    ⚡ Instant Chapter Discovery
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
+                    Get complete chapter insights in seconds—exact page numbers, relevance explanations, and purchase links to dive deeper.
+                  </p>
+                  <Link
+                    to={user ? "/generate" : "/signup"}
+                    className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-xl font-semibold transition-all transform hover:scale-105 inline-flex items-center gap-2"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                    {user ? "Discover Now" : "Start Discovering"}
+                  </Link>
                 </div>
                 <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
                   <div className="space-y-4">

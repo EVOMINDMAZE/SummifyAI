@@ -6,6 +6,7 @@ import ThemeToggle from "@/components/ThemeToggle";
 import Navigation from "../components/Navigation";
 import { showNotification } from "../utils/actions";
 import { sessionService, type UserSession } from "../services/sessionService";
+import ProfilePhotoUpload from "../components/ProfilePhotoUpload";
 
 export default function Settings() {
   const { user, updateUserSettings, updateUser } = useAuth();

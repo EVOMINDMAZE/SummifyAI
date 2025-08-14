@@ -1134,25 +1134,15 @@ export default function Settings() {
                       <input
                         type="email"
                         placeholder="Enter email address"
-                        value={settings.team.inviteEmail}
-                        onChange={(e) =>
-                          setSettings((prev) => ({
-                            ...prev,
-                            team: { ...prev.team, inviteEmail: e.target.value },
-                          }))
-                        }
+                        value={inviteEmail}
+                      onChange={(e) => setInviteEmail(e.target.value)}
                         className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       />
                     </div>
                     <div>
                       <select
-                        value={settings.team.inviteRole}
-                        onChange={(e) =>
-                          setSettings((prev) => ({
-                            ...prev,
-                            team: { ...prev.team, inviteRole: e.target.value },
-                          }))
-                        }
+                        value={inviteRole}
+                        onChange={(e) => setInviteRole(e.target.value as TeamMember['role'])}
                         className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       >
                         <option value="Member">Member</option>
@@ -1163,7 +1153,7 @@ export default function Settings() {
                     <div>
                       <button
                         onClick={handleInviteMember}
-                        disabled={!settings.team.inviteEmail}
+                        disabled={!inviteEmail.trim()}
                         className="w-full px-4 py-2 bg-blue-500 hover:bg-blue-600 disabled:bg-gray-400 text-white rounded-lg font-medium transition-colors"
                       >
                         Send Invite
@@ -1174,7 +1164,7 @@ export default function Settings() {
 
                 {/* Members List */}
                 <div className="space-y-4">
-                  {settings.team.members.map((member) => (
+                  {teamMembers.map((member) => (
                     <div
                       key={member.id}
                       className="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"

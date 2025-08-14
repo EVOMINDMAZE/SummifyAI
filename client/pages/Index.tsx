@@ -888,81 +888,79 @@ export default function Index() {
                 Generate.
               </h3>
             </div>
-            <div className="bg-orange-100 dark:bg-orange-900/30 rounded-3xl p-12">
-              <div className="grid lg:grid-cols-2 gap-12 items-center">
-                <div>
-                  <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center mb-4">
-                    <svg
-                      className="w-6 h-6 text-white"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
-                      />
-                    </svg>
-                  </div>
-                  <h3 className="text-2xl font-bold text-[#0A0B1E] dark:text-white mb-4">
-                    ⚡ Instant Chapter Discovery
-                  </h3>
-                  <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
-                    Get complete chapter insights in seconds—exact page numbers,
-                    relevance explanations, and purchase links to dive deeper.
-                  </p>
-                  <Link
-                    to={user ? "/generate" : "/signup"}
-                    className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-xl font-semibold transition-all transform hover:scale-105 inline-flex items-center gap-2"
+            <div className="grid md:grid-cols-2 gap-8 items-center">
+              <div>
+                <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center mb-4">
+                  <svg
+                    className="w-6 h-6 text-white"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
                   >
-                    <svg
-                      className="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M13 10V3L4 14h7v7l9-11h-7z"
-                      />
-                    </svg>
-                    {user ? "Discover Now" : "Start Discovering"}
-                  </Link>
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                    />
+                  </svg>
                 </div>
-                <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-500 dark:text-gray-400">
-                        Search Time:
-                      </span>
-                      <span className="text-sm font-semibold text-orange-600 dark:text-orange-400">
-                        2.3 seconds
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-500 dark:text-gray-400">
-                        Books Scanned:
-                      </span>
-                      <span className="text-sm font-semibold text-[#0A0B1E] dark:text-white">
-                        12,847
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-500 dark:text-gray-400">
-                        Relevant Chapters:
-                      </span>
-                      <span className="text-sm font-semibold text-[#0A0B1E] dark:text-white">
-                        23 found
-                      </span>
-                    </div>
-                    <div className="pt-2 border-t border-gray-200 dark:border-gray-700">
-                      <div className="text-xs text-center text-gray-400 dark:text-gray-500">
-                        Ready to export, save, or purchase
-                      </div>
+                <h3 className="text-2xl font-bold text-[#0A0B1E] dark:text-white mb-4">
+                  ⚡ Instant Chapter Discovery
+                </h3>
+                <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
+                  Get complete chapter insights in seconds—exact page numbers,
+                  relevance explanations, and purchase links to dive deeper.
+                </p>
+                <Link
+                  to={user ? "/generate" : "/signup"}
+                  className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-xl font-semibold transition-all transform hover:scale-105 inline-flex items-center gap-2"
+                >
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M13 10V3L4 14h7v7l9-11h-7z"
+                    />
+                  </svg>
+                  {user ? "Discover Now" : "Start Discovering"}
+                </Link>
+              </div>
+              <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-gray-500 dark:text-gray-400">
+                      Search Time:
+                    </span>
+                    <span className="text-sm font-semibold text-orange-600 dark:text-orange-400">
+                      2.3 seconds
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-gray-500 dark:text-gray-400">
+                      Books Scanned:
+                    </span>
+                    <span className="text-sm font-semibold text-[#0A0B1E] dark:text-white">
+                      12,847
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-gray-500 dark:text-gray-400">
+                      Relevant Chapters:
+                    </span>
+                    <span className="text-sm font-semibold text-[#0A0B1E] dark:text-white">
+                      23 found
+                    </span>
+                  </div>
+                  <div className="pt-2 border-t border-gray-200 dark:border-gray-700">
+                    <div className="text-xs text-center text-gray-400 dark:text-gray-500">
+                      Ready to export, save, or purchase
                     </div>
                   </div>
                 </div>

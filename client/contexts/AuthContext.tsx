@@ -452,6 +452,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         ad_free_until: updates.adFreeUntil,
         default_summary_length: updates.defaultSummaryLength,
         profile_photo_url: updates.profilePhotoUrl,
+        avatar_url: updates.profilePhotoUrl,
+        photo_url: updates.profilePhotoUrl,
         updated_at: new Date().toISOString(),
       })
       .eq("user_id", user.id);

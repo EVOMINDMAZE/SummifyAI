@@ -18,6 +18,8 @@ export default function Settings() {
     | "subscription"
   >("general");
 
+  const [realSessions, setRealSessions] = useState<UserSession[]>([]);
+
   // Load settings from localStorage or use defaults
   const [settings, setSettings] = useState(() => {
     const savedSettings = localStorage.getItem("userSettings");
@@ -793,7 +795,7 @@ export default function Settings() {
                 <div className="flex items-center justify-between mb-6">
                   <div>
                     <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-                      🛡️ Two-Factor Authentication
+                      ����️ Two-Factor Authentication
                     </h2>
                     <p className="text-gray-600 dark:text-gray-400 mt-1">
                       Add an extra layer of security to your account

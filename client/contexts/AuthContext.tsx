@@ -126,64 +126,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     return () => clearTimeout(recoveryTimer);
   }, [isLoading]);
 
-  // Validate and migrate user data for backward compatibility
-  const validateAndMigrateUserData = async (userData: User) => {
-    let needsUpdate = false;
-    const updates: Partial<User> = {};
-
-    // Migrate old plan types to new ones
-    if (userData.planType === "pro" || userData.planType === "premium") {
-      updates.planType = userData.planType === "pro" ? "professional" : "institution";
-      needsUpdate = true;
-    }
-
-    // Set default monthly limits based on plan if not set
-    if (!userData.monthlySearchLimit || userData.monthlySearchLimit === 3) {
-      const planLimits = {
-        free: 10,
-        scholar: 500,
-        professional: 2000,
-        institution: -1, // unlimited
-      };
-      updates.monthlySearchLimit = planLimits[userData.planType as keyof typeof planLimits] || 10;
-      needsUpdate = true;
-    }
-
-    // Ensure settings exist
-    if (!userData.settings) {
-      updates.settings = {
-        language: "en",
-        timezone: "UTC-8",
-        autoSave: true,
-        notifications: {
-          emailWeeklyReport: true,
-          emailCreditUpdates: true,
-          emailFeatureUpdates: false,
-          emailMarketing: false,
-          browserSummaryComplete: true,
-        },
-        privacy: {
-          allowAnalytics: true,
-          saveSearchHistory: true,
-        },
-        security: {
-          twoFactorEnabled: false,
-          loginAlerts: true,
-        },
-      };
-      needsUpdate = true;
-    }
-
-    if (needsUpdate) {
-      console.log("🔄 Migrating user data:", updates);
-      try {
-        await updateUser(updates);
-        console.log("✅ User data migration completed");
-      } catch (error) {
-        console.error("❌ User data migration failed:", error);
-      }
-    }
-  };
 
   // Helper function to fetch and create user profile
   const fetchUserProfile = async (

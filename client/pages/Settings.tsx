@@ -7,6 +7,7 @@ import Navigation from "../components/Navigation";
 import { showNotification } from "../utils/actions";
 import { sessionService, type UserSession } from "../services/sessionService";
 import ProfilePhotoUpload from "../components/ProfilePhotoUpload";
+import SubscriptionManagement from "../components/SubscriptionManagement";
 
 export default function Settings() {
   const { user, updateUserSettings, updateUser } = useAuth();

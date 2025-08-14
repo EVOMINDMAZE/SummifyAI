@@ -1,21 +1,36 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
-import { tieredSearchService, SEARCH_TIERS, type TieredSearchResponse, type SearchResult } from "@/services/tieredSearchService";
+import {
+  tieredSearchService,
+  SEARCH_TIERS,
+  type TieredSearchResponse,
+  type SearchResult,
+} from "@/services/tieredSearchService";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Progress } from "@/components/ui/progress";
-import { ArrowUpCircle, Zap, Search, Sparkles, Crown, Lock } from "lucide-react";
+import {
+  ArrowUpCircle,
+  Zap,
+  Search,
+  Sparkles,
+  Crown,
+  Lock,
+} from "lucide-react";
 
 interface TieredSearchInterfaceProps {
   onUpgrade?: () => void;
 }
 
-export default function TieredSearchInterface({ onUpgrade }: TieredSearchInterfaceProps) {
+export default function TieredSearchInterface({
+  onUpgrade,
+}: TieredSearchInterfaceProps) {
   const { user } = useAuth();
   const [query, setQuery] = useState("");
-  const [searchResponse, setSearchResponse] = useState<TieredSearchResponse | null>(null);
+  const [searchResponse, setSearchResponse] =
+    useState<TieredSearchResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showUpgradeBanner, setShowUpgradeBanner] = useState(false);
 
@@ -29,9 +44,13 @@ export default function TieredSearchInterface({ onUpgrade }: TieredSearchInterfa
 
     setIsLoading(true);
     try {
-      const response = await tieredSearchService.performSearch(query, userPlan, userSearchCount);
+      const response = await tieredSearchService.performSearch(
+        query,
+        userPlan,
+        userSearchCount,
+      );
       setSearchResponse(response);
-      
+
       if (response.upgradeRequired) {
         setShowUpgradeBanner(true);
       }
@@ -45,20 +64,29 @@ export default function TieredSearchInterface({ onUpgrade }: TieredSearchInterfa
 
   const getSearchIcon = (searchType: string) => {
     switch (searchType) {
-      case 'summary': return <Search className="w-4 h-4 text-blue-500" />;
-      case 'chapter': return <Sparkles className="w-4 h-4 text-purple-500" />;
-      case 'fulltext': return <Crown className="w-4 h-4 text-gold-500" />;
-      default: return <Search className="w-4 h-4" />;
+      case "summary":
+        return <Search className="w-4 h-4 text-blue-500" />;
+      case "chapter":
+        return <Sparkles className="w-4 h-4 text-purple-500" />;
+      case "fulltext":
+        return <Crown className="w-4 h-4 text-gold-500" />;
+      default:
+        return <Search className="w-4 h-4" />;
     }
   };
 
   const getPlanBadgeColor = (plan: string) => {
     switch (plan) {
-      case 'free': return 'bg-gray-100 text-gray-800';
-      case 'scholar': return 'bg-amber-100 text-amber-800';
-      case 'professional': return 'bg-green-100 text-green-800';
-      case 'institution': return 'bg-purple-100 text-purple-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case "free":
+        return "bg-gray-100 text-gray-800";
+      case "scholar":
+        return "bg-amber-100 text-amber-800";
+      case "professional":
+        return "bg-green-100 text-green-800";
+      case "institution":
+        return "bg-purple-100 text-purple-800";
+      default:
+        return "bg-gray-100 text-gray-800";
     }
   };
 
@@ -80,21 +108,20 @@ export default function TieredSearchInterface({ onUpgrade }: TieredSearchInterfa
               Search through 120,000+ book chapters with advanced AI
             </p>
           </div>
-          
+
           <div className="flex items-center gap-3 mt-4 sm:mt-0">
             <Badge className={`${getPlanBadgeColor(userPlan)} font-semibold`}>
               {currentTier.name} Plan
             </Badge>
-            
+
             {currentTier.maxQueries !== -1 && (
               <div className="text-right">
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  {searchResponse?.queriesRemaining || (currentTier.maxQueries - userSearchCount)} searches left
+                  {searchResponse?.queriesRemaining ||
+                    currentTier.maxQueries - userSearchCount}{" "}
+                  searches left
                 </p>
-                <Progress 
-                  value={getUsageProgress()} 
-                  className="w-24 h-2"
-                />
+                <Progress value={getUsageProgress()} className="w-24 h-2" />
               </div>
             )}
           </div>
@@ -113,8 +140,8 @@ export default function TieredSearchInterface({ onUpgrade }: TieredSearchInterfa
                        focus:ring-2 focus:ring-[#FFFD63] focus:border-transparent"
               disabled={isLoading}
             />
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               disabled={isLoading || !query.trim()}
               className="bg-[#FFFD63] hover:bg-[#FFFD63]/90 text-[#0A0B1E] font-semibold px-6"
             >
@@ -125,15 +152,11 @@ export default function TieredSearchInterface({ onUpgrade }: TieredSearchInterfa
               )}
             </Button>
           </div>
-          
+
           {/* Feature Indicators */}
           <div className="flex flex-wrap gap-2">
             {currentTier.features.map((feature) => (
-              <Badge 
-                key={feature.id} 
-                variant="outline" 
-                className="text-xs"
-              >
+              <Badge key={feature.id} variant="outline" className="text-xs">
                 {feature.enabled ? (
                   <span className="text-green-600">✓ {feature.name}</span>
                 ) : (
@@ -155,7 +178,7 @@ export default function TieredSearchInterface({ onUpgrade }: TieredSearchInterfa
           <AlertDescription className="text-amber-800 dark:text-amber-200">
             <div className="flex items-center justify-between">
               <span>{searchResponse.upgradeMessage}</span>
-              <Button 
+              <Button
                 onClick={onUpgrade}
                 size="sm"
                 className="bg-amber-600 hover:bg-amber-700 text-white ml-4"
@@ -183,7 +206,11 @@ export default function TieredSearchInterface({ onUpgrade }: TieredSearchInterfa
           {/* Results Grid */}
           <div className="grid gap-4">
             {searchResponse.results.map((result) => (
-              <SearchResultCard key={result.id} result={result} userPlan={userPlan} />
+              <SearchResultCard
+                key={result.id}
+                result={result}
+                userPlan={userPlan}
+              />
             ))}
           </div>
 
@@ -196,12 +223,11 @@ export default function TieredSearchInterface({ onUpgrade }: TieredSearchInterfa
                   Want More Powerful Search?
                 </h3>
                 <p className="text-gray-600 dark:text-gray-400 mb-4">
-                  {userPlan === "free" 
+                  {userPlan === "free"
                     ? "Upgrade to Scholar for deep chapter search and 50x more queries!"
-                    : "Upgrade to Professional for word-by-word precision and unlimited access!"
-                  }
+                    : "Upgrade to Professional for word-by-word precision and unlimited access!"}
                 </p>
-                <Button 
+                <Button
                   onClick={onUpgrade}
                   className="bg-[#FFFD63] hover:bg-[#FFFD63]/90 text-[#0A0B1E] font-semibold"
                 >
@@ -215,34 +241,41 @@ export default function TieredSearchInterface({ onUpgrade }: TieredSearchInterfa
       )}
 
       {/* Empty State */}
-      {searchResponse?.results.length === 0 && !searchResponse.upgradeRequired && (
-        <Card>
-          <CardContent className="p-12 text-center">
-            <Search className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-              No results found
-            </h3>
-            <p className="text-gray-600 dark:text-gray-400 mb-4">
-              Try different keywords or check your spelling
-            </p>
-            {userPlan === "free" && (
-              <Button 
-                onClick={onUpgrade}
-                variant="outline"
-                className="border-[#FFFD63] text-[#FFFD63] hover:bg-[#FFFD63] hover:text-[#0A0B1E]"
-              >
-                <ArrowUpCircle className="w-4 h-4 mr-2" />
-                Upgrade for Better Search
-              </Button>
-            )}
-          </CardContent>
-        </Card>
-      )}
+      {searchResponse?.results.length === 0 &&
+        !searchResponse.upgradeRequired && (
+          <Card>
+            <CardContent className="p-12 text-center">
+              <Search className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                No results found
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400 mb-4">
+                Try different keywords or check your spelling
+              </p>
+              {userPlan === "free" && (
+                <Button
+                  onClick={onUpgrade}
+                  variant="outline"
+                  className="border-[#FFFD63] text-[#FFFD63] hover:bg-[#FFFD63] hover:text-[#0A0B1E]"
+                >
+                  <ArrowUpCircle className="w-4 h-4 mr-2" />
+                  Upgrade for Better Search
+                </Button>
+              )}
+            </CardContent>
+          </Card>
+        )}
     </div>
   );
 }
 
-function SearchResultCard({ result, userPlan }: { result: SearchResult; userPlan: string }) {
+function SearchResultCard({
+  result,
+  userPlan,
+}: {
+  result: SearchResult;
+  userPlan: string;
+}) {
   const [showFullAnalysis, setShowFullAnalysis] = useState(false);
 
   return (
@@ -259,9 +292,11 @@ function SearchResultCard({ result, userPlan }: { result: SearchResult; userPlan
             <div className="flex items-center gap-2">
               {getSearchIcon(result.searchType)}
               <Badge variant="outline" className="text-xs">
-                {result.searchType === 'summary' ? 'Summary Match' :
-                 result.searchType === 'chapter' ? 'Chapter Match' :
-                 'Full-Text Match'}
+                {result.searchType === "summary"
+                  ? "Summary Match"
+                  : result.searchType === "chapter"
+                    ? "Chapter Match"
+                    : "Full-Text Match"}
               </Badge>
               <Badge variant="outline" className="text-xs">
                 {Math.round(result.relevanceScore * 100)}% relevant
@@ -270,13 +305,13 @@ function SearchResultCard({ result, userPlan }: { result: SearchResult; userPlan
           </div>
         </div>
       </CardHeader>
-      
+
       <CardContent>
         <div className="space-y-3">
           <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
             {result.snippet}
           </p>
-          
+
           {result.aiAnalysis && (
             <div className="border-t border-gray-200 dark:border-gray-700 pt-3">
               <div className="flex items-center justify-between mb-2">
@@ -291,17 +326,19 @@ function SearchResultCard({ result, userPlan }: { result: SearchResult; userPlan
                     onClick={() => setShowFullAnalysis(!showFullAnalysis)}
                     className="text-xs"
                   >
-                    {showFullAnalysis ? 'Show Less' : 'Show More'}
+                    {showFullAnalysis ? "Show Less" : "Show More"}
                   </Button>
                 )}
               </div>
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                {showFullAnalysis ? result.aiAnalysis : result.aiAnalysis.substring(0, 200)}
+                {showFullAnalysis
+                  ? result.aiAnalysis
+                  : result.aiAnalysis.substring(0, 200)}
                 {!showFullAnalysis && result.aiAnalysis.length > 200 && "..."}
               </p>
             </div>
           )}
-          
+
           {!result.aiAnalysis && userPlan === "free" && (
             <div className="border-t border-gray-200 dark:border-gray-700 pt-3">
               <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-3">
@@ -319,10 +356,14 @@ function SearchResultCard({ result, userPlan }: { result: SearchResult; userPlan
 
   function getSearchIcon(searchType: string) {
     switch (searchType) {
-      case 'summary': return <Search className="w-4 h-4 text-blue-500" />;
-      case 'chapter': return <Sparkles className="w-4 h-4 text-purple-500" />;
-      case 'fulltext': return <Crown className="w-4 h-4 text-yellow-500" />;
-      default: return <Search className="w-4 h-4" />;
+      case "summary":
+        return <Search className="w-4 h-4 text-blue-500" />;
+      case "chapter":
+        return <Sparkles className="w-4 h-4 text-purple-500" />;
+      case "fulltext":
+        return <Crown className="w-4 h-4 text-yellow-500" />;
+      default:
+        return <Search className="w-4 h-4" />;
     }
   }
 }

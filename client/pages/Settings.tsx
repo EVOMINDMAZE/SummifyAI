@@ -193,33 +193,18 @@ export default function Settings() {
 
   // Team management functions
   const handleInviteMember = async () => {
-    if (!settings.team.inviteEmail) return;
+    if (!inviteEmail.trim()) return;
 
     try {
-      // In a real app, this would send an actual invitation
-      const newMember = {
-        id: Date.now().toString(),
-        email: settings.team.inviteEmail,
-        name: settings.team.inviteEmail.split("@")[0],
-        role: settings.team.inviteRole,
-        status: "Pending",
-        joinedAt: new Date().toISOString().split("T")[0],
-        lastActive: null,
-      };
+      const invitation = await teamService.inviteTeamMember(inviteEmail, inviteRole);
+      const updatedInvitations = await teamService.getPendingInvitations();
+      setPendingInvitations(updatedInvitations);
+      setInviteEmail('');
 
-      setSettings((prev) => ({
-        ...prev,
-        team: {
-          ...prev.team,
-          members: [...prev.team.members, newMember],
-          inviteEmail: "",
-        },
-      }));
-
-      alert(`Invitation sent to ${settings.team.inviteEmail}!`);
+      showNotification(`Invitation sent to ${inviteEmail}!`, 'success');
     } catch (error) {
       console.error("Failed to invite member:", error);
-      alert("Failed to send invitation. Please try again.");
+      showNotification("Failed to send invitation. Please try again.", 'error');
     }
   };
 

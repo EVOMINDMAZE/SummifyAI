@@ -205,14 +205,12 @@ export default function SubscriptionManagement() {
         ? selectedPlan.stripeMonthlyId
         : selectedPlan.stripeAnnualId;
 
-    if (!priceId || priceId.startsWith("price_")) {
+    if (!priceId) {
       alert(
         `❌ Stripe pricing not configured for ${selectedPlan.name} plan.\n\n` +
-          `The price ID "${priceId}" doesn't exist in your Stripe account.\n\n` +
-          `Please:\n` +
-          `1. Create products in your Stripe dashboard\n` +
-          `2. Set the correct price IDs in your environment variables\n` +
-          `3. Or contact support for help with setup`,
+          `Environment variable missing for ${billingCycle} billing.\n\n` +
+          `Please set the correct price ID in your Netlify environment variables:\n` +
+          `VITE_STRIPE_${selectedPlan.id.toUpperCase()}_${billingCycle.toUpperCase()}_PRICE_ID`,
       );
       return;
     }

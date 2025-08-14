@@ -881,9 +881,10 @@ export default function Index() {
           </div>
 
           {/* Generate Section */}
-          <div className="relative">
-            <div className="absolute -top-12 left-0 transform -rotate-12">
-              <h3 className="text-8xl font-black text-[#0A0B1E] dark:text-white opacity-20">
+          <div className="relative bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 rounded-2xl p-8 border border-orange-200 dark:border-orange-800 overflow-hidden">
+            {/* Generate Overlay */}
+            <div className="absolute top-4 right-4 transform rotate-12">
+              <h3 className="text-6xl font-black text-orange-200 dark:text-orange-700 opacity-30">
                 Generate.
               </h3>
             </div>

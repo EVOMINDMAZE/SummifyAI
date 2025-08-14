@@ -150,7 +150,15 @@ export default function SearchFilters({
 
       {/* Filters Panel */}
       {isVisible && (
-        <Card className="absolute top-12 right-0 z-[9999] w-80 sm:w-96 max-w-[calc(100vw-2rem)] shadow-xl border-0 bg-white dark:bg-gray-800 backdrop-blur-sm rounded-2xl transform translate-x-0 sm:translate-x-0 md:-translate-x-0 overflow-visible">
+        <Card className="fixed top-20 right-4 z-[99999] w-80 sm:w-96 max-w-[calc(100vw-2rem)] shadow-2xl border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 rounded-2xl overflow-visible"
+              style={{
+                position: 'fixed',
+                zIndex: 99999,
+                top: '5rem',
+                right: '1rem',
+                maxHeight: 'calc(100vh - 6rem)',
+                overflowY: 'auto'
+              }}>
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white">

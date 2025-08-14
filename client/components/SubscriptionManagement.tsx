@@ -134,8 +134,11 @@ export default function SubscriptionManagement() {
       if (newPlan === "free") {
         // Downgrade to free - cancel Stripe subscription
         await handleDowngradeToFree();
+      } else if (user.stripeSubscriptionId && user.planType !== "free") {
+        // User has an existing subscription, modify it
+        await handleModifySubscription(newPlan, billingCycle);
       } else {
-        // Upgrade to paid plan - redirect to Stripe Checkout
+        // New paid subscription - redirect to Stripe Checkout
         await handleUpgradeToPaid(newPlan, billingCycle);
       }
     } catch (error) {

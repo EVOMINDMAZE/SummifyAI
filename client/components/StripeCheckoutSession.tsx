@@ -26,13 +26,14 @@ const StripeCheckoutSession: React.FC<StripeCheckoutSessionProps> = ({
   const [error, setError] = useState<string | null>(null);
 
   const stripePublishableKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
-  
+
   if (!stripePublishableKey) {
     return (
       <div className="text-center p-8">
         <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
           <p className="text-yellow-800 dark:text-yellow-200">
-            ⚠️ Stripe is not configured. Please add your Stripe publishable key to environment variables.
+            ⚠️ Stripe is not configured. Please add your Stripe publishable key
+            to environment variables.
           </p>
           <p className="text-sm text-yellow-600 dark:text-yellow-400 mt-2">
             See STRIPE_SETUP_GUIDE.md for setup instructions.
@@ -52,22 +53,26 @@ const StripeCheckoutSession: React.FC<StripeCheckoutSessionProps> = ({
     setError(null);
 
     try {
-      const priceId = billingCycle === "monthly" ? plan.stripeMonthlyId : plan.stripeAnnualId;
-      
+      const priceId =
+        billingCycle === "monthly" ? plan.stripeMonthlyId : plan.stripeAnnualId;
+
       // Create checkout session
-      const response = await fetch("/.netlify/functions/create-checkout-session", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        "/.netlify/functions/create-checkout-session",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            priceId,
+            customerId: user.stripeCustomerId,
+            customerEmail: user.email,
+            successUrl: `${window.location.origin}/settings?success=true&plan=${plan.id}`,
+            cancelUrl: `${window.location.origin}/settings?cancelled=true`,
+          }),
         },
-        body: JSON.stringify({
-          priceId,
-          customerId: user.stripeCustomerId,
-          customerEmail: user.email,
-          successUrl: `${window.location.origin}/settings?success=true&plan=${plan.id}`,
-          cancelUrl: `${window.location.origin}/settings?cancelled=true`,
-        }),
-      });
+      );
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -78,7 +83,7 @@ const StripeCheckoutSession: React.FC<StripeCheckoutSessionProps> = ({
 
       // Redirect to Stripe Checkout
       const stripe = await loadStripe(stripePublishableKey);
-      
+
       if (!stripe) {
         throw new Error("Failed to load Stripe");
       }
@@ -100,7 +105,7 @@ const StripeCheckoutSession: React.FC<StripeCheckoutSessionProps> = ({
 
   const annualPrice = Math.round(plan.price * 12 * 0.83); // 17% discount
   const currentPrice = billingCycle === "monthly" ? plan.price : annualPrice;
-  const savings = billingCycle === "annual" ? (plan.price * 12 - annualPrice) : 0;
+  const savings = billingCycle === "annual" ? plan.price * 12 - annualPrice : 0;
 
   return (
     <div className="max-w-md mx-auto bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-2xl border border-gray-200 dark:border-gray-700">
@@ -131,19 +136,27 @@ const StripeCheckoutSession: React.FC<StripeCheckoutSessionProps> = ({
             <>
               <div className="flex items-center gap-2 text-sm">
                 <span className="text-green-500">✓</span>
-                <span className="text-gray-700 dark:text-gray-300">500 searches per month</span>
+                <span className="text-gray-700 dark:text-gray-300">
+                  500 searches per month
+                </span>
               </div>
               <div className="flex items-center gap-2 text-sm">
                 <span className="text-green-500">✓</span>
-                <span className="text-gray-700 dark:text-gray-300">Advanced AI insights</span>
+                <span className="text-gray-700 dark:text-gray-300">
+                  Advanced AI insights
+                </span>
               </div>
               <div className="flex items-center gap-2 text-sm">
                 <span className="text-green-500">✓</span>
-                <span className="text-gray-700 dark:text-gray-300">Priority processing</span>
+                <span className="text-gray-700 dark:text-gray-300">
+                  Priority processing
+                </span>
               </div>
               <div className="flex items-center gap-2 text-sm">
                 <span className="text-green-500">✓</span>
-                <span className="text-gray-700 dark:text-gray-300">Export results to PDF</span>
+                <span className="text-gray-700 dark:text-gray-300">
+                  Export results to PDF
+                </span>
               </div>
             </>
           )}
@@ -151,19 +164,27 @@ const StripeCheckoutSession: React.FC<StripeCheckoutSessionProps> = ({
             <>
               <div className="flex items-center gap-2 text-sm">
                 <span className="text-green-500">✓</span>
-                <span className="text-gray-700 dark:text-gray-300">2,000 searches per month</span>
+                <span className="text-gray-700 dark:text-gray-300">
+                  2,000 searches per month
+                </span>
               </div>
               <div className="flex items-center gap-2 text-sm">
                 <span className="text-green-500">✓</span>
-                <span className="text-gray-700 dark:text-gray-300">Premium AI models</span>
+                <span className="text-gray-700 dark:text-gray-300">
+                  Premium AI models
+                </span>
               </div>
               <div className="flex items-center gap-2 text-sm">
                 <span className="text-green-500">✓</span>
-                <span className="text-gray-700 dark:text-gray-300">API access</span>
+                <span className="text-gray-700 dark:text-gray-300">
+                  API access
+                </span>
               </div>
               <div className="flex items-center gap-2 text-sm">
                 <span className="text-green-500">✓</span>
-                <span className="text-gray-700 dark:text-gray-300">Priority support</span>
+                <span className="text-gray-700 dark:text-gray-300">
+                  Priority support
+                </span>
               </div>
             </>
           )}
@@ -171,19 +192,27 @@ const StripeCheckoutSession: React.FC<StripeCheckoutSessionProps> = ({
             <>
               <div className="flex items-center gap-2 text-sm">
                 <span className="text-green-500">✓</span>
-                <span className="text-gray-700 dark:text-gray-300">Unlimited searches</span>
+                <span className="text-gray-700 dark:text-gray-300">
+                  Unlimited searches
+                </span>
               </div>
               <div className="flex items-center gap-2 text-sm">
                 <span className="text-green-500">✓</span>
-                <span className="text-gray-700 dark:text-gray-300">Team collaboration</span>
+                <span className="text-gray-700 dark:text-gray-300">
+                  Team collaboration
+                </span>
               </div>
               <div className="flex items-center gap-2 text-sm">
                 <span className="text-green-500">✓</span>
-                <span className="text-gray-700 dark:text-gray-300">White-label options</span>
+                <span className="text-gray-700 dark:text-gray-300">
+                  White-label options
+                </span>
               </div>
               <div className="flex items-center gap-2 text-sm">
                 <span className="text-green-500">✓</span>
-                <span className="text-gray-700 dark:text-gray-300">Dedicated support</span>
+                <span className="text-gray-700 dark:text-gray-300">
+                  Dedicated support
+                </span>
               </div>
             </>
           )}
@@ -242,7 +271,9 @@ const StripeCheckoutSession: React.FC<StripeCheckoutSessionProps> = ({
               Processing...
             </>
           ) : (
-            <>🔒 Subscribe to {plan.name} - ${currentPrice}</>
+            <>
+              🔒 Subscribe to {plan.name} - ${currentPrice}
+            </>
           )}
         </button>
 

@@ -1,8 +1,8 @@
-import type { Handler } from '@netlify/functions';
-import Stripe from 'stripe';
+import type { Handler } from "@netlify/functions";
+import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2023-10-16',
+  apiVersion: "2023-10-16",
 });
 
 interface CheckoutSessionRequest {
@@ -14,14 +14,14 @@ interface CheckoutSessionRequest {
 }
 
 export const handler: Handler = async (event) => {
-  if (event.httpMethod !== 'POST') {
+  if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
       headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Content-Type',
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "Content-Type",
       },
-      body: JSON.stringify({ error: 'Method Not Allowed' }),
+      body: JSON.stringify({ error: "Method Not Allowed" }),
     };
   }
 
@@ -39,10 +39,10 @@ export const handler: Handler = async (event) => {
       return {
         statusCode: 400,
         headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Headers': 'Content-Type',
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Headers": "Content-Type",
         },
-        body: JSON.stringify({ error: 'Missing required fields' }),
+        body: JSON.stringify({ error: "Missing required fields" }),
       };
     }
 
@@ -61,14 +61,14 @@ export const handler: Handler = async (event) => {
       customer = await stripe.customers.create({
         email: customerEmail,
         metadata: {
-          source: 'summifyai_website',
+          source: "summifyai_website",
         },
       });
     }
 
     // Create checkout session
     const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
+      payment_method_types: ["card"],
       customer: customer.id,
       line_items: [
         {
@@ -76,7 +76,7 @@ export const handler: Handler = async (event) => {
           quantity: 1,
         },
       ],
-      mode: 'subscription',
+      mode: "subscription",
       allow_promotion_codes: true,
       success_url: `${successUrl}?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: cancelUrl,
@@ -93,8 +93,8 @@ export const handler: Handler = async (event) => {
     return {
       statusCode: 200,
       headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Content-Type',
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "Content-Type",
       },
       body: JSON.stringify({
         sessionId: session.id,
@@ -102,17 +102,17 @@ export const handler: Handler = async (event) => {
       }),
     };
   } catch (error) {
-    console.error('Error creating checkout session:', error);
-    
+    console.error("Error creating checkout session:", error);
+
     return {
       statusCode: 500,
       headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Content-Type',
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "Content-Type",
       },
       body: JSON.stringify({
-        error: 'Failed to create checkout session',
-        details: error instanceof Error ? error.message : 'Unknown error',
+        error: "Failed to create checkout session",
+        details: error instanceof Error ? error.message : "Unknown error",
       }),
     };
   }

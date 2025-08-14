@@ -18,18 +18,21 @@ This means you need to create Stripe products and set the correct price IDs.
 I can see you already have these products in Stripe:
 
 #### **Scholar Plan** ✅
+
 - Product name: "Scholar" (already created)
 - Monthly price: $19.99 ✅
 - Annual price: $190.00 ✅
 - **Action needed**: Click on each price → copy the price ID (starts with `price_1ABC...`)
 
 #### **Professional Plan** ✅
+
 - Product name: "Professional" (already created)
 - Monthly price: $49.99 ✅
 - Annual price: $499.00 ✅
 - **Action needed**: Click on each price → copy the price ID
 
 #### **Enterprise Plan** ✅
+
 - Product name: "Enterprise" (already created)
 - Monthly price: $99.99 ✅
 - Annual price: $999.00 ✅

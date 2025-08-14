@@ -1,7 +1,7 @@
 import { supabase } from "@/lib/supabase";
 import type { BookGroup, EnrichedChapter, SearchResults } from "@/lib/supabase";
 
-// Real AI-powered search using Supabase embeddings and Edge Functions
+// Real AI-powered search using existing search-books Edge Function
 export async function searchDatabase(query: string): Promise<SearchResults> {
   const startTime = Date.now();
 
@@ -9,132 +9,62 @@ export async function searchDatabase(query: string): Promise<SearchResults> {
     throw new Error("Query parameter is required");
   }
 
-  console.log(`🔍 REAL DATABASE SEARCH for: "${query}"`);
+  console.log(`🔍 REAL SEARCH using search-books Edge Function for: "${query}"`);
 
   try {
-    // Step 1: Vector similarity search using embeddings
-    console.log("🧠 Step 1: Performing vector similarity search...");
-    
-    let searchResults: any[] = [];
-    
-    try {
-      // First try vector search with embeddings
-      const { data: vectorResults, error: vectorError } = await supabase.rpc(
-        'search_chapters_by_embedding',
-        {
-          query_text: query,
-          match_threshold: 0.5,
-          match_count: 30
-        }
-      );
+    // Get current user for search tracking
+    const { data: { user } } = await supabase.auth.getUser();
+    const userId = user?.id;
 
-      if (vectorError) {
-        console.warn("Vector search failed, falling back to text search:", vectorError);
-      } else if (vectorResults && vectorResults.length > 0) {
-        searchResults = vectorResults;
-        console.log(`✅ Vector search found ${vectorResults.length} chapters`);
+    // Call the existing search-books Edge Function
+    console.log("🚀 Calling search-books Edge Function...");
+    const { data: searchResponse, error: searchError } = await supabase.functions.invoke('search-books', {
+      body: {
+        query: query.trim(),
+        userId: userId,
+        skipAnalysis: false, // Let AI analyze the query
+        deepSearch: false   // Start with fast summary search
       }
-    } catch (vectorError) {
-      console.warn("Vector search not available, using text search:", vectorError);
+    });
+
+    if (searchError) {
+      console.error("❌ Search Edge Function error:", searchError);
+      throw new Error(`Search failed: ${searchError.message}`);
     }
 
-    // Step 2: Fallback to text search if vector search fails or returns few results
-    if (searchResults.length < 10) {
-      console.log("🔍 Step 2: Supplementing with text search...");
-      
-      const sanitizedQuery = query.trim().replace(/[%_]/g, "\\$&");
-      const queryWords = sanitizedQuery.toLowerCase().split(/\s+/).filter(w => w.length > 2);
-      
-      const textSearchPromises = [
-        // Search in chapter titles
-        supabase
-          .from("chapters")
-          .select(`
-            id,
-            chapter_title,
-            chapter_summary,
-            book_id,
-            books!inner (
-              id,
-              title,
-              author_name,
-              cover_url,
-              isbn_13,
-              description
-            )
-          `)
-          .ilike("chapter_title", `%${sanitizedQuery}%`)
-          .not("chapter_summary", "is", null)
-          .limit(15),
+    console.log("✅ Search Edge Function response:", searchResponse);
 
-        // Search in chapter summaries
-        supabase
-          .from("chapters")
-          .select(`
-            id,
-            chapter_title,
-            chapter_summary,
-            book_id,
-            books!inner (
-              id,
-              title,
-              author_name,
-              cover_url,
-              isbn_13,
-              description
-            )
-          `)
-          .textSearch("chapter_summary", queryWords.join(" | "), {
-            type: "websearch",
-            config: "english"
-          })
-          .not("chapter_summary", "is", null)
-          .limit(15),
-
-        // Search in book titles
-        supabase
-          .from("chapters")
-          .select(`
-            id,
-            chapter_title,
-            chapter_summary,
-            book_id,
-            books!inner (
-              id,
-              title,
-              author_name,
-              cover_url,
-              isbn_13,
-              description
-            )
-          `)
-          .ilike("books.title", `%${sanitizedQuery}%`)
-          .not("chapter_summary", "is", null)
-          .limit(10)
-      ];
-
-      const textSearchResults = await Promise.allSettled(textSearchPromises);
+    // Handle query analysis step (if query needs refinement)
+    if (searchResponse.step === 'analysis' && searchResponse.result?.isVague) {
+      console.log("🤔 Query analysis suggests refinements");
+      // For now, we'll skip refinements and search anyway
+      // You could implement refinement UI here if needed
       
-      textSearchResults.forEach((result, index) => {
-        if (result.status === 'fulfilled' && result.value.data) {
-          searchResults.push(...result.value.data);
-          console.log(`✅ Text search ${index + 1} found ${result.value.data.length} chapters`);
-        } else {
-          console.warn(`Text search ${index + 1} failed:`, result);
+      // Re-call with skipAnalysis to get results
+      const { data: directSearchResponse, error: directSearchError } = await supabase.functions.invoke('search-books', {
+        body: {
+          query: query.trim(),
+          userId: userId,
+          skipAnalysis: true, // Skip analysis, search directly
+          deepSearch: false
         }
       });
+
+      if (directSearchError) {
+        throw new Error(`Search failed: ${directSearchError.message}`);
+      }
+
+      return transformSearchResults(directSearchResponse, query, startTime);
     }
 
-    // Remove duplicates
-    const uniqueResults = searchResults.filter(
-      (result, index, array) =>
-        array.findIndex((r) => r.id === result.id) === index,
-    );
+    // Handle successful search results
+    if (searchResponse.step === 'complete') {
+      return transformSearchResults(searchResponse, query, startTime);
+    }
 
-    const finalResults = uniqueResults.slice(0, 20);
-    console.log(`📚 Total unique chapters found: ${finalResults.length}`);
-
-    if (finalResults.length === 0) {
+    // Handle no results
+    if (searchResponse.results && searchResponse.results.length === 0) {
+      console.log("📭 No results found");
       return {
         query,
         searchType: "no_results",
@@ -145,22 +75,32 @@ export async function searchDatabase(query: string): Promise<SearchResults> {
       };
     }
 
-    // Step 3: AI Analysis of chapters
-    console.log("🤖 Step 3: Analyzing chapters with AI...");
-    const enrichedResults = await analyzeChaptersWithAI(finalResults, query);
-
-    console.log(
-      `🎯 Returning ${enrichedResults.totalBooks} books with ${enrichedResults.totalChapters} chapters`,
-    );
-
-    return {
-      ...enrichedResults,
-      searchType: searchResults.length > 0 ? "ai_vector_search" : "enhanced_text_search",
-      processingTime: Date.now() - startTime,
-    };
+    // Fallback transformation
+    return transformSearchResults(searchResponse, query, startTime);
 
   } catch (error) {
     console.error("❌ Search failed:", error);
+    
+    // Try deep search as fallback
+    if (!error.message.includes("deep search")) {
+      console.log("🔄 Retrying with deep search...");
+      try {
+        const { data: deepSearchResponse, error: deepSearchError } = await supabase.functions.invoke('search-books', {
+          body: {
+            query: query.trim(),
+            userId: user?.id,
+            skipAnalysis: true,
+            deepSearch: true // Use full text search
+          }
+        });
+
+        if (!deepSearchError && deepSearchResponse.step === 'complete') {
+          return transformSearchResults(deepSearchResponse, query, startTime);
+        }
+      } catch (deepSearchError) {
+        console.error("❌ Deep search also failed:", deepSearchError);
+      }
+    }
     
     return {
       query,
@@ -173,239 +113,71 @@ export async function searchDatabase(query: string): Promise<SearchResults> {
   }
 }
 
-// Analyze chapters with real AI using Supabase Edge Functions
-async function analyzeChaptersWithAI(
-  chapters: any[],
-  query: string,
-): Promise<SearchResults> {
-  if (chapters.length === 0) {
+// Transform Edge Function response to our frontend format
+function transformSearchResults(searchResponse: any, query: string, startTime: number): SearchResults {
+  if (!searchResponse.results || !Array.isArray(searchResponse.results)) {
     return {
       query,
-      searchType: "no_chapters",
+      searchType: "no_results",
       totalBooks: 0,
       totalChapters: 0,
       books: [],
+      processingTime: Date.now() - startTime,
     };
   }
 
-  console.log(`🤖 Analyzing ${chapters.length} chapters with AI...`);
+  console.log(`📚 Transforming ${searchResponse.results.length} book results`);
 
-  try {
-    // Check for cached analyses first
-    const chapterIds = chapters.map(ch => ch.id);
-    const { data: cachedAnalyses } = await supabase
-      .from('chapter_analyses')
-      .select('*')
-      .in('chapter_id', chapterIds)
-      .eq('user_query', query)
-      .gte('analyzed_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()); // Last 24 hours
-
-    const cachedMap = new Map();
-    if (cachedAnalyses) {
-      cachedAnalyses.forEach(analysis => {
-        cachedMap.set(analysis.chapter_id, analysis);
-      });
-      console.log(`📊 Found ${cachedAnalyses.length} cached analyses`);
-    }
-
-    // Identify chapters that need analysis
-    const chaptersNeedingAnalysis = chapters.filter(ch => !cachedMap.has(ch.id));
-    
-    let newAnalyses: any[] = [];
-    if (chaptersNeedingAnalysis.length > 0) {
-      console.log(`🔄 Analyzing ${chaptersNeedingAnalysis.length} new chapters...`);
+  const books: BookGroup[] = searchResponse.results.map((bookResult: any) => {
+    // Transform chapters from Edge Function format to frontend format
+    const transformedChapters: EnrichedChapter[] = bookResult.chapters.map((chapter: any) => {
+      const aiAnalysis = chapter.aiAnalysis || {};
       
-      // Prepare chapters for batch analysis
-      const chaptersForAnalysis = chaptersNeedingAnalysis.map(ch => ({
-        id: ch.id,
-        title: ch.chapter_title,
-        summary: ch.chapter_summary || ch.chapter_text?.substring(0, 500) || '',
-        book_title: ch.books?.title || '',
-        book_author: ch.books?.author_name || ''
-      }));
-
-      try {
-        // Call Supabase Edge Function for batch analysis
-        const { data: analysisData, error: analysisError } = await supabase.functions.invoke(
-          'batch-analyze-chapters',
-          {
-            body: {
-              chapters: chaptersForAnalysis,
-              userQuery: query
-            }
-          }
-        );
-
-        if (analysisError) {
-          console.error("AI analysis failed:", analysisError);
-          throw analysisError;
-        }
-
-        newAnalyses = analysisData?.analyses || [];
-        console.log(`✅ AI analysis completed for ${newAnalyses.length} chapters`);
-        
-      } catch (aiError) {
-        console.error("AI analysis error:", aiError);
-        // Create fallback analyses
-        newAnalyses = chaptersNeedingAnalysis.map(ch => ({
-          chapterId: ch.id,
-          relevanceScore: Math.random() * 40 + 30, // 30-70% range
-          whyRelevant: `This chapter from "${ch.books?.title}" discusses concepts relevant to your search for ${query}.`,
-          keyTopics: [query.split(' ')[0] || 'business'],
-          confidence: 40
-        }));
-      }
-    }
-
-    // Combine cached and new analyses
-    const allAnalyses = new Map();
-    
-    // Add cached analyses
-    cachedAnalyses?.forEach(analysis => {
-      allAnalyses.set(analysis.chapter_id, {
-        chapterId: analysis.chapter_id,
-        relevanceScore: analysis.relevance_score,
-        whyRelevant: analysis.why_relevant,
-        keyTopics: analysis.key_topics || [],
-        confidence: analysis.confidence || 50
-      });
-    });
-    
-    // Add new analyses
-    newAnalyses.forEach(analysis => {
-      allAnalyses.set(analysis.chapterId, analysis);
-    });
-
-    // Group chapters by book and enrich with analysis
-    const bookGroups = new Map();
-    
-    chapters.forEach(chapter => {
-      const analysis = allAnalyses.get(chapter.id);
-      if (!analysis || analysis.relevanceScore < 25) {
-        return; // Skip chapters with very low relevance
-      }
-
-      if (!bookGroups.has(chapter.book_id)) {
-        bookGroups.set(chapter.book_id, {
-          id: chapter.book_id.toString(),
-          title: chapter.books?.title || "Unknown Title",
-          author: chapter.books?.author_name || "Unknown Author",
-          cover: chapter.books?.cover_url || 
-                `https://via.placeholder.com/300x450/FFFD63/0A0B1E?text=${encodeURIComponent((chapter.books?.title || "Book").slice(0, 20))}`,
-          isbn: chapter.books?.isbn_13 || "",
-          description: chapter.books?.description || "",
-          chapters: [],
-        });
-      }
-
-      const enrichedChapter: EnrichedChapter = {
-        id: chapter.id,
+      return {
+        id: chapter.id || chapter.chapter_id,
         title: chapter.chapter_title,
-        snippet: chapter.chapter_summary || chapter.chapter_text?.substring(0, 300) || "",
-        relevanceScore: Math.round(analysis.relevanceScore),
-        whyRelevant: analysis.whyRelevant,
-        keyTopics: analysis.keyTopics || [],
-        coreLeadershipPrinciples: [],
-        practicalApplications: [],
-        aiExplanation: analysis.whyRelevant
+        snippet: aiAnalysis.chapterSummary || chapter.chapter_summary?.substring(0, 300) || "",
+        relevanceScore: aiAnalysis.relevanceScore || Math.round((1 - (chapter.similarity || 0.5)) * 100),
+        whyRelevant: aiAnalysis.relevanceDescription || `This chapter provides insights relevant to ${query}.`,
+        keyTopics: aiAnalysis.keyTopics || [],
+        coreLeadershipPrinciples: aiAnalysis.corePrinciples || [],
+        practicalApplications: [
+          `Apply the concepts from this chapter to your work with ${query}`,
+          "Implement the strategies discussed for better results"
+        ],
+        aiExplanation: aiAnalysis.relevanceDescription || ""
       };
-
-      bookGroups.get(chapter.book_id).chapters.push(enrichedChapter);
     });
 
-    // Convert to final format
-    const enrichedBooks: BookGroup[] = [];
-    
-    for (const [bookId, bookData] of bookGroups) {
-      if (bookData.chapters.length === 0) continue;
-      
-      // Sort chapters by relevance score
-      bookData.chapters.sort((a: EnrichedChapter, b: EnrichedChapter) => 
-        b.relevanceScore - a.relevanceScore
-      );
-
-      const averageRelevance = Math.round(
-        bookData.chapters.reduce((sum: number, ch: EnrichedChapter) => sum + ch.relevanceScore, 0) /
-        bookData.chapters.length,
-      );
-
-      enrichedBooks.push({
-        ...bookData,
-        averageRelevance,
-        topChapters: bookData.chapters.slice(0, 6), // Top 6 chapters per book
-      });
-    }
-
-    // Sort books by average relevance
-    enrichedBooks.sort((a, b) => b.averageRelevance - a.averageRelevance);
-
-    const totalChapters = enrichedBooks.reduce(
-      (sum, book) => sum + book.topChapters.length,
-      0,
-    );
-
-    console.log(`✅ Analysis complete: ${enrichedBooks.length} books, ${totalChapters} chapters`);
+    // Calculate average relevance score for the book
+    const averageRelevance = transformedChapters.length > 0
+      ? Math.round(transformedChapters.reduce((sum, ch) => sum + ch.relevanceScore, 0) / transformedChapters.length)
+      : 0;
 
     return {
-      query,
-      searchType: newAnalyses.length > 0 ? "ai_analyzed" : "cached_analysis",
-      totalBooks: enrichedBooks.length,
-      totalChapters,
-      books: enrichedBooks.slice(0, 8), // Top 8 books
+      id: bookResult.book_id?.toString() || Math.random().toString(),
+      title: bookResult.book_title || "Unknown Title",
+      author: bookResult.book_author || "Unknown Author",
+      cover: bookResult.book_cover_url || 
+            `https://via.placeholder.com/300x450/FFFD63/0A0B1E?text=${encodeURIComponent((bookResult.book_title || "Book").slice(0, 20))}`,
+      isbn: bookResult.isbn_13 || "",
+      averageRelevance,
+      topChapters: transformedChapters,
     };
-
-  } catch (error) {
-    console.error("❌ Chapter analysis failed:", error);
-    
-    // Return basic results without AI analysis
-    const basicBooks = groupChaptersBasic(chapters, query);
-    
-    return {
-      query,
-      searchType: "basic_search",
-      totalBooks: basicBooks.length,
-      totalChapters: basicBooks.reduce((sum, book) => sum + book.topChapters.length, 0),
-      books: basicBooks.slice(0, 8),
-    };
-  }
-}
-
-// Fallback function to group chapters without AI analysis
-function groupChaptersBasic(chapters: any[], query: string): BookGroup[] {
-  const bookGroups = new Map();
-  
-  chapters.forEach(chapter => {
-    if (!bookGroups.has(chapter.book_id)) {
-      bookGroups.set(chapter.book_id, {
-        id: chapter.book_id.toString(),
-        title: chapter.books?.title || "Unknown Title",
-        author: chapter.books?.author_name || "Unknown Author",
-        cover: chapter.books?.cover_url || 
-              `https://via.placeholder.com/300x450/FFFD63/0A0B1E?text=${encodeURIComponent((chapter.books?.title || "Book").slice(0, 20))}`,
-        isbn: chapter.books?.isbn_13 || "",
-        chapters: [],
-      });
-    }
-
-    const basicChapter: EnrichedChapter = {
-      id: chapter.id,
-      title: chapter.chapter_title,
-      snippet: chapter.chapter_summary || "",
-      relevanceScore: 60, // Default score
-      whyRelevant: `This chapter discusses concepts related to ${query}.`,
-      keyTopics: [query.split(' ')[0] || 'business'],
-      coreLeadershipPrinciples: [],
-      practicalApplications: [],
-    };
-
-    bookGroups.get(chapter.book_id).chapters.push(basicChapter);
   });
 
-  return Array.from(bookGroups.values()).map(bookData => ({
-    ...bookData,
-    averageRelevance: 60,
-    topChapters: bookData.chapters.slice(0, 4),
-  }));
+  const totalChapters = books.reduce((sum, book) => sum + book.topChapters.length, 0);
+
+  console.log(`✅ Transformed to ${books.length} books with ${totalChapters} total chapters`);
+
+  return {
+    query: searchResponse.query || query,
+    searchType: "ai_vector_search", // The Edge Function uses AI + vector search
+    totalBooks: books.length,
+    totalChapters,
+    books,
+    processingTime: Date.now() - startTime,
+  };
 }
 
 // Health check function
@@ -414,47 +186,32 @@ export async function healthCheck(): Promise<{
   hasDatabase: boolean;
   hasAI: boolean;
 }> {
-  console.log("🏥 Health Check: Starting comprehensive system health check");
+  console.log("🏥 Health Check: Testing search-books Edge Function");
 
   try {
-    // Test database connection
-    console.log("🔗 Testing Supabase connection...");
-    const { data, error } = await supabase.from("books").select("id").limit(1);
+    // Test the search function with a simple query
+    const { data, error } = await supabase.functions.invoke('search-books', {
+      body: {
+        query: 'leadership',
+        skipAnalysis: true,
+        deepSearch: false
+      }
+    });
 
     if (error) {
-      console.error("❌ Supabase connection error:", error);
-      throw error;
+      console.error("❌ Health check failed:", error);
+      return {
+        status: "error",
+        hasDatabase: false,
+        hasAI: false,
+      };
     }
 
-    console.log("✅ Supabase connection successful");
-
-    // Test AI functions
-    console.log("🤖 Testing AI analysis functions...");
-    let hasAI = false;
-    
-    try {
-      const { error: aiError } = await supabase.functions.invoke('analyze-chapter', {
-        body: {
-          chapterId: 'test',
-          chapterTitle: 'Test Chapter',
-          chapterSummary: 'Test summary',
-          bookTitle: 'Test Book',
-          bookAuthor: 'Test Author',
-          userQuery: 'test query'
-        }
-      });
-
-      // If we get a response (even an error due to test data), the function exists
-      hasAI = true;
-      console.log("✅ AI analysis functions available");
-    } catch (error) {
-      console.warn("⚠️ AI analysis functions not available:", error);
-    }
-
+    console.log("✅ Health check successful");
     return {
       status: "ok",
       hasDatabase: true,
-      hasAI,
+      hasAI: true, // The Edge Function includes AI analysis
     };
   } catch (error) {
     console.error("❌ Health check failed:", error);
@@ -466,19 +223,48 @@ export async function healthCheck(): Promise<{
   }
 }
 
-// Topic analysis using AI
+// Topic analysis - use the existing search function's built-in analysis
 export async function analyzeTopicWithAI(topic: string): Promise<any> {
   if (!topic.trim()) return null;
 
   try {
-    const { data, error } = await supabase.functions.invoke('analyze-topic', {
-      body: { topic: topic.trim() }
+    console.log(`🧠 Analyzing topic: "${topic}"`);
+    
+    // Use the search function's built-in query analysis
+    const { data, error } = await supabase.functions.invoke('search-books', {
+      body: {
+        query: topic.trim(),
+        skipAnalysis: false, // Let it analyze the query
+        deepSearch: false
+      }
     });
 
     if (error) throw error;
-    return data;
+
+    // If the search function suggests the query is vague, return refinement suggestions
+    if (data.step === 'analysis' && data.result?.isVague) {
+      return {
+        isBroad: true,
+        explanation: "Your search query could be more specific. Here are some focused alternatives:",
+        refinements: data.result.suggestions.map((suggestion: string, index: number) => ({
+          label: `Option ${index + 1}`,
+          value: suggestion,
+          description: `More specific search for better results`
+        }))
+      };
+    }
+
+    // Query is specific enough
+    return {
+      isBroad: false,
+      explanation: `Your search for "${topic}" is specific enough to find relevant chapters.`,
+      refinements: []
+    };
   } catch (error) {
     console.warn("Topic analysis not available:", error);
     return null;
   }
 }
+
+// Export for backwards compatibility
+export { searchDatabase as searchChapters };

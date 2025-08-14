@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import ThemeToggle from "./ThemeToggle";
+import UserAvatar from "./UserAvatar";
 
 interface NavigationProps {
   variant?: "marketing" | "app";
@@ -74,19 +75,7 @@ export default function Navigation({ variant = "app" }: NavigationProps) {
                   onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
                   className="flex items-center space-x-2 text-gray-700 hover:text-gray-900"
                 >
-                  <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center overflow-hidden">
-                    {user.profilePhotoUrl ? (
-                      <img
-                        src={user.profilePhotoUrl}
-                        alt={`${user.firstName} ${user.lastName}`}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <span className="text-white font-medium">
-                        {user.firstName?.[0]?.toUpperCase() || "U"}
-                      </span>
-                    )}
-                  </div>
+                  <UserAvatar user={user} size="medium" />
                 </button>
                 {isUserMenuOpen && (
                   <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1">
@@ -292,27 +281,15 @@ export default function Navigation({ variant = "app" }: NavigationProps) {
                 onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
                 className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
               >
-                <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center overflow-hidden">
-                  {user.profilePhotoUrl ? (
-                    <img
-                      src={user.profilePhotoUrl}
-                      alt={`${user.firstName} ${user.lastName}`}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <span className="text-white font-medium">
-                      {user.firstName?.[0]?.toUpperCase() || "U"}
-                    </span>
-                  )}
-                </div>
-                <span className="text-sm font-medium">
-                  {user.firstName} {user.lastName}
-                </span>
+                <UserAvatar user={user} size="medium" showName={true} />
               </button>
               {isUserMenuOpen && (
                 <div className="absolute right-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-50">
                   <div className="px-4 py-2 text-sm text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700 break-words">
-                    {user.firstName} {user.lastName}
+                    <UserAvatar user={user} size="small" showName={true} />
+                    <div className="text-xs text-gray-400 mt-1 truncate">
+                      {user.email}
+                    </div>
                   </div>
                   <Link
                     to="/settings"

@@ -60,11 +60,15 @@ const AuthContext = createContext<AuthContextType>(defaultContextValue);
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (context === undefined) {
-    console.error("❌ useAuth called outside of AuthProvider context");
-    console.error("Current component stack:", new Error().stack);
-    throw new Error("useAuth must be used within an AuthProvider");
+
+  // Since we now have a default value, we shouldn't get undefined
+  // But let's still check if it's the default (uninitialized) context
+  if (context === defaultContextValue) {
+    console.warn("⚠️ useAuth called before AuthProvider is fully initialized");
+    // Return the default context instead of throwing an error
+    return context;
   }
+
   return context;
 };
 

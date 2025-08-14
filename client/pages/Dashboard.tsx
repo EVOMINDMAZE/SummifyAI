@@ -4,8 +4,32 @@ import { useAuth } from "@/contexts/AuthContext";
 import Navigation from "@/components/Navigation";
 
 export default function Dashboard() {
-  const { user, signOut } = useAuth();
+  let user, signOut;
   const navigate = useNavigate();
+
+  try {
+    ({ user, signOut } = useAuth());
+  } catch (error) {
+    console.error("❌ Error accessing auth context in Dashboard:", error);
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-[#FFFD63] via-[#FFFD63]/90 to-[#FFFD63]/80 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center">
+        <div className="text-center bg-white dark:bg-gray-800 rounded-3xl p-12 shadow-2xl border border-gray-200 dark:border-gray-700 max-w-md mx-4">
+          <h1 className="text-3xl font-bold text-red-600 mb-4">
+            Auth Error
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400 mb-8">
+            Authentication system is not available. Please refresh the page.
+          </p>
+          <button
+            onClick={() => window.location.reload()}
+            className="bg-[#0A0B1E] hover:bg-[#0A0B1E]/90 text-[#FFFD63] px-8 py-4 rounded-2xl font-bold transition-all"
+          >
+            Refresh Page
+          </button>
+        </div>
+      </div>
+    );
+  }
   const [searchStats, setSearchStats] = useState({
     totalSearches: 0,
     thisMonth: 0,

@@ -191,7 +191,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           adPreferences: profileData.ad_preferences,
           adFreeUntil: profileData.ad_free_until,
           defaultSummaryLength: profileData.default_summary_length || "medium",
-          profilePhotoUrl: profileData.profile_photo_url || profileData.avatar_url || profileData.photo_url,
+          profilePhotoUrl: profileData.profile_photo_url,
         };
 
         console.log("✅ User profile loaded:", userData.email);

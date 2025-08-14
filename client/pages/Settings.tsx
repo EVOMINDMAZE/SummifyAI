@@ -214,18 +214,14 @@ export default function Settings() {
     }
 
     try {
-      setSettings((prev) => ({
-        ...prev,
-        team: {
-          ...prev.team,
-          members: prev.team.members.filter((member) => member.id !== memberId),
-        },
-      }));
+      await teamService.removeTeamMember(memberId);
+      const updatedMembers = await teamService.getTeamMembers();
+      setTeamMembers(updatedMembers);
 
-      alert("Team member removed successfully.");
+      showNotification("Team member removed successfully.", 'success');
     } catch (error) {
       console.error("Failed to remove member:", error);
-      alert("Failed to remove team member. Please try again.");
+      showNotification("Failed to remove team member. Please try again.", 'error');
     }
   };
 

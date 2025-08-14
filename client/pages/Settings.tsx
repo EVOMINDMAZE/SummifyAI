@@ -225,22 +225,16 @@ export default function Settings() {
     }
   };
 
-  const handleUpdateMemberRole = async (memberId: string, newRole: string) => {
+  const handleUpdateMemberRole = async (memberId: string, newRole: TeamMember['role']) => {
     try {
-      setSettings((prev) => ({
-        ...prev,
-        team: {
-          ...prev.team,
-          members: prev.team.members.map((member) =>
-            member.id === memberId ? { ...member, role: newRole } : member,
-          ),
-        },
-      }));
+      await teamService.updateTeamMemberRole(memberId, newRole);
+      const updatedMembers = await teamService.getTeamMembers();
+      setTeamMembers(updatedMembers);
 
-      alert("Member role updated successfully.");
+      showNotification("Member role updated successfully.", 'success');
     } catch (error) {
       console.error("Failed to update member role:", error);
-      alert("Failed to update member role. Please try again.");
+      showNotification("Failed to update member role. Please try again.", 'error');
     }
   };
 

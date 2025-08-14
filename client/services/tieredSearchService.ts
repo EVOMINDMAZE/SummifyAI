@@ -201,8 +201,13 @@ export class TieredSearchService {
     try {
       let results: SearchResult[] = [];
 
-      // Generate query embedding for vector search
-      const queryEmbedding = await this.generateEmbedding(query);
+      // Try to generate query embedding for vector search
+      let queryEmbedding: number[] | null = null;
+      try {
+        queryEmbedding = await this.generateEmbedding(query);
+      } catch (embeddingError) {
+        console.warn("Embedding generation failed, falling back to text search:", embeddingError);
+      }
 
       if (searchTier.features.find((f) => f.id === "summary_search")?.enabled) {
         // Stage 1: Fast summary search (all tiers)

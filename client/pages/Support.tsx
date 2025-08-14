@@ -85,15 +85,19 @@ export default function Support() {
       questions: [
         {
           q: "How do I search for specific chapters?",
-          a: "Simply enter your topic or question in the search box on the Generate page. Our AI will analyze millions of books to find the exact chapters and page numbers that address your query.",
+          a: "Enter your topic or research question in the search box on the Generate page. Our AI analyzes over 12,000 indexed books to find exact chapters with page numbers (e.g., 'Chapter 2: \"The Man Who Didn't Look Right\" pages 15-31'). Results typically appear in 2-3 seconds with relevance scores up to 95%.",
+        },
+        {
+          q: "What types of books can I search through?",
+          a: "Our database includes academic textbooks, business guides, self-help books, technical manuals, and popular non-fiction across topics like psychology, technology, leadership, productivity, and more. We continuously expand our collection with the latest publications.",
         },
         {
           q: "How accurate are the chapter recommendations?",
-          a: "Our AI has a 99.9% accuracy rate for chapter relevance. Each recommendation includes page numbers and explains why the chapter is relevant to your specific question.",
+          a: "Our AI provides relevance scores for each chapter match (typically 85-95% for top results). Each recommendation includes exact page numbers, chapter titles, and detailed explanations of why the content is relevant to your specific query.",
         },
         {
-          q: "Can I save my discoveries?",
-          a: "Yes! All your chapter discoveries are automatically saved to your personal library where you can organize them by categories and share them with others.",
+          q: "Can I save and organize my discoveries?",
+          a: "Yes! All discoveries are automatically saved to your personal library. You can organize them by topics, create custom collections, export to PDF, and track your reading progress. Your search history is also maintained for easy reference.",
         },
       ],
     },
@@ -101,33 +105,62 @@ export default function Support() {
       category: "Account & Billing",
       questions: [
         {
-          q: "How do I upgrade to Premium?",
-          a: "Visit the Pricing page and click 'Start Premium'. You'll get a 7-day free trial with all Premium features before any charges.",
+          q: "What are the different plan tiers?",
+          a: "Free (3 searches/month), Scholar ($9.99/month, 50 searches), Professional ($19.99/month, 200 searches + team features), and Institution ($49.99/month, unlimited searches + advanced analytics). All paid plans include priority processing and ad-free experience.",
         },
         {
-          q: "Can I cancel my subscription anytime?",
-          a: "Yes, you can cancel anytime from your account settings. You'll retain access to Premium features until the end of your billing period.",
+          q: "How does the monthly search limit work?",
+          a: "Each search query counts as one search, regardless of how many chapter results are returned. Your limit resets on the same date each month. You can track your usage in Account Settings where you'll see remaining searches and usage percentage.",
         },
         {
-          q: "What's included in the free plan?",
-          a: "The free plan includes 3 chapter discoveries per month, basic AI analysis, and access to your personal library.",
+          q: "Can I upgrade or downgrade my plan anytime?",
+          a: "Yes! Changes take effect immediately. When upgrading, you're charged prorated amounts. When downgrading, you retain current features until your next billing cycle. Cancel anytime from Account Settings.",
+        },
+        {
+          q: "Do you offer refunds?",
+          a: "We offer a 7-day satisfaction guarantee for all new subscriptions. Educational institutions and non-profits may qualify for special pricing - contact our support team for details.",
         },
       ],
     },
     {
-      category: "Features & Usage",
+      category: "Features & AI Technology",
       questions: [
         {
-          q: "What makes SummifyIO different from other book services?",
-          a: "Instead of generic book summaries, we find exact chapters and page numbers that answer your specific questions. This saves you hours of reading time.",
-        },
-        {
-          q: "Can I share my discoveries with team members?",
-          a: "Yes! Premium users can share chapter discoveries with up to 5 team members and track engagement analytics.",
-        },
-        {
           q: "How does the AI chapter analysis work?",
-          a: "Our AI analyzes book content structure and matches your query to specific chapters, providing page numbers and explaining why each chapter is relevant to your needs.",
+          a: "Our AI uses advanced natural language processing to understand your query context, then matches it against book content embeddings. It analyzes chapter summaries, content themes, and relevance indicators to provide precise page numbers and explanations for why each chapter addresses your needs.",
+        },
+        {
+          q: "What makes SummifyAI different from book summaries or Google search?",
+          a: "Instead of generic summaries, we pinpoint exact chapters and pages that answer your specific questions. For example, searching 'building habits' returns 'Atomic Habits Chapter 2, pages 15-31' with 95% relevance. This precision saves hours compared to reading entire books or generic summaries.",
+        },
+        {
+          q: "Can I collaborate with team members?",
+          a: "Professional and Institution plans include team features: share chapter discoveries, create team libraries, track member engagement, and collaborate on research projects. Team admins can manage member access and view usage analytics.",
+        },
+        {
+          q: "How do I export or share my findings?",
+          a: "Export individual searches or entire collections to PDF with formatted citations. Share discoveries via direct links with colleagues. Professional users can create public libraries and track engagement metrics to see how others interact with shared content.",
+        },
+      ],
+    },
+    {
+      category: "Technical & Support",
+      questions: [
+        {
+          q: "Is my data secure and private?",
+          a: "Yes! All searches and personal data are encrypted. We don't share your search history or personal information with third parties. You can delete your account and all associated data anytime from Account Settings.",
+        },
+        {
+          q: "What if I can't find what I'm looking for?",
+          a: "Try rephrasing your query with different keywords or more specific terms. Our AI works best with clear, focused questions. If you still need help, contact support - we can suggest alternative search strategies or add specific books to our database.",
+        },
+        {
+          q: "Do you have an API for developers?",
+          a: "We're developing an API for Institution plan users. Contact our enterprise team if you're interested in integrating SummifyAI into your organization's research tools or learning management system.",
+        },
+        {
+          q: "How often is the book database updated?",
+          a: "We add new books weekly and update our AI models monthly to improve accuracy. Follow our blog or social media for announcements about new collections and feature updates.",
         },
       ],
     },

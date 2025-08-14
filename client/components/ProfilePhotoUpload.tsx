@@ -41,35 +41,75 @@ export default function ProfilePhotoUpload({ currentPhotoUrl, onPhotoUpdate }: P
       const objectUrl = URL.createObjectURL(file);
       setPreviewUrl(objectUrl);
 
-      // Create a unique filename
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${user.id}-${Date.now()}.${fileExt}`;
+      // Try Supabase Storage first
+      try {
+        // Create a unique filename
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${user.id}-${Date.now()}.${fileExt}`;
 
-      // Upload to Supabase Storage
-      const { data, error } = await supabase.storage
-        .from('profile-photos')
-        .upload(fileName, file, {
-          cacheControl: '3600',
-          upsert: false
-        });
+        // Upload to Supabase Storage
+        const { data, error } = await supabase.storage
+          .from('profile-photos')
+          .upload(fileName, file, {
+            cacheControl: '3600',
+            upsert: false
+          });
 
-      if (error) {
-        throw error;
+        if (error) {
+          throw new Error(`Storage upload failed: ${error.message}`);
+        }
+
+        // Get public URL
+        const { data: { publicUrl } } = supabase.storage
+          .from('profile-photos')
+          .getPublicUrl(fileName);
+
+        // Update user profile with new photo URL
+        const { error: updateError } = await supabase
+          .from('profiles')
+          .update({ profile_photo_url: publicUrl })
+          .eq('user_id', user.id);
+
+        if (updateError) {
+          throw new Error(`Profile update failed: ${updateError.message}`);
+        }
+
+        onPhotoUpdate(publicUrl);
+
+      } catch (storageError) {
+        console.warn('Supabase storage failed, using base64 fallback:', storageError);
+
+        // Fallback to base64 encoding for demo purposes
+        const reader = new FileReader();
+        reader.onload = async (e) => {
+          const base64 = e.target?.result as string;
+
+          try {
+            // Update user profile with base64 photo
+            const { error: updateError } = await supabase
+              .from('profiles')
+              .update({ profile_photo_url: base64 })
+              .eq('user_id', user.id);
+
+            if (updateError) {
+              throw new Error(`Profile update failed: ${updateError.message}`);
+            }
+
+            onPhotoUpdate(base64);
+            setPreviewUrl(base64);
+          } catch (updateError) {
+            throw new Error(`Failed to save photo to profile: ${updateError.message}`);
+          }
+        };
+
+        reader.onerror = () => {
+          throw new Error('Failed to read image file');
+        };
+
+        reader.readAsDataURL(file);
+        return; // Exit early for async file reading
       }
 
-      // Get public URL
-      const { data: { publicUrl } } = supabase.storage
-        .from('profile-photos')
-        .getPublicUrl(fileName);
-
-      // Update user profile with new photo URL
-      await supabase
-        .from('profiles')
-        .update({ profile_photo_url: publicUrl })
-        .eq('user_id', user.id);
-
-      onPhotoUpdate(publicUrl);
-      
       // Clean up object URL
       URL.revokeObjectURL(objectUrl);
       

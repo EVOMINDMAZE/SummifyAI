@@ -32,6 +32,11 @@ export async function searchDatabase(query: string): Promise<SearchResults> {
       throw new Error(`Search failed: ${searchError.message}`);
     }
 
+    // Check if response is valid
+    if (!searchResponse) {
+      throw new Error("Edge Function returned empty response");
+    }
+
     console.log("✅ Search Edge Function response:", searchResponse);
 
     // Handle query analysis step (if query needs refinement)

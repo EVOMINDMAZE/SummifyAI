@@ -436,18 +436,23 @@ export default function SubscriptionManagement() {
                   </h3>
                   <div className="mb-3">
                     <span className="text-3xl font-black text-gray-900 dark:text-white">
-                      {plan.price === 0 ? "Free" : `$${plan.price}`}
+                      {plan.price === 0 ? "Free" : `$${currentPrice}`}
                     </span>
                     {plan.price > 0 && (
                       <span className="text-gray-600 dark:text-gray-400 ml-1">
-                        /month
+                        /{billingCycle === "monthly" ? "month" : "year"}
                       </span>
                     )}
                   </div>
+                  {isDiscounted && (
+                    <p className="text-sm text-green-600 dark:text-green-400 font-medium mb-2">
+                      Save ${(monthlyPrice * 12) - annualPrice}/year
+                    </p>
+                  )}
                   <p className="text-sm text-gray-600 dark:text-gray-400">
                     {plan.monthlySearches === -1
                       ? "Unlimited"
-                      : plan.monthlySearches}{" "}
+                      : plan.monthlySearches.toLocaleString()}{" "}
                     searches per month
                   </p>
                 </div>

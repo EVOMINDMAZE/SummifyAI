@@ -188,7 +188,11 @@ export default function ProfilePhotoUpload({
       }
 
       if (!success && lastError) {
-        throw new Error(lastError.message || "Failed to remove photo");
+        console.warn("Database removal failed, using localStorage fallback:", lastError);
+
+        // Fallback: Remove from localStorage
+        localStorage.removeItem(`profile_photo_${user.id}`);
+        console.log("Profile photo removed from localStorage as fallback");
       }
 
       setPreviewUrl(null);

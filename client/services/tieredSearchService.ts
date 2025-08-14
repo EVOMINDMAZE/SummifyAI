@@ -1,5 +1,4 @@
 import { supabase } from "@/lib/supabase";
-import { useAuth } from "@/contexts/AuthContext";
 
 export interface SearchTier {
   name: string;

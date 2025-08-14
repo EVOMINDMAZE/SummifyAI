@@ -43,7 +43,20 @@ interface AuthContextType {
   updateUserSettings: (settings: any) => Promise<void>;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+// Create a default context value to prevent undefined errors
+const defaultContextValue: AuthContextType = {
+  user: null,
+  isLoading: true,
+  signIn: async () => { throw new Error("AuthProvider not initialized"); },
+  signInWithGoogle: async () => { throw new Error("AuthProvider not initialized"); },
+  signUp: async () => { throw new Error("AuthProvider not initialized"); },
+  signUpWithGoogle: async () => { throw new Error("AuthProvider not initialized"); },
+  signOut: async () => { throw new Error("AuthProvider not initialized"); },
+  updateUser: async () => { throw new Error("AuthProvider not initialized"); },
+  updateUserSettings: async () => { throw new Error("AuthProvider not initialized"); },
+};
+
+const AuthContext = createContext<AuthContextType>(defaultContextValue);
 
 export const useAuth = () => {
   const context = useContext(AuthContext);

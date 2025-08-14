@@ -285,7 +285,7 @@ export default function Navigation({ variant = "app" }: NavigationProps) {
                 <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
                   {user.name?.[0]?.toUpperCase() || "U"}
                 </div>
-                <span className="text-sm font-medium">{user.name}</span>
+                <span className="text-sm font-medium">{user.firstName} {user.lastName}</span>
               </button>
               {isUserMenuOpen && (
                 <div className="absolute right-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-50">

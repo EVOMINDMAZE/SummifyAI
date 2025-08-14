@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import Navigation from "@/components/Navigation";
+import UserAvatar from "@/components/UserAvatar";
 import { supabase } from "@/lib/supabase";
 
 export default function Dashboard() {
@@ -120,11 +121,7 @@ export default function Dashboard() {
 
             <div className="relative z-10">
               <div className="flex items-center gap-4 mb-6">
-                <div className="w-16 h-16 bg-[#0A0B1E] dark:bg-[#FFFD63] rounded-2xl flex items-center justify-center">
-                  <span className="text-[#FFFD63] dark:text-[#0A0B1E] font-bold text-2xl">
-                    {user.firstName?.[0]?.toUpperCase() || "U"}
-                  </span>
-                </div>
+                <UserAvatar user={user} size="large" className="w-16 h-16" />
                 <div>
                   <h1 className="text-4xl md:text-5xl font-black mb-2">
                     Welcome back, {userDisplayName}! 👋

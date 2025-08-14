@@ -373,15 +373,9 @@ export default function Settings() {
     }
 
     try {
-      setSettings((prev) => ({
-        ...prev,
-        security: {
-          ...prev.security,
-          activeSessions: prev.security.activeSessions.filter(
-            (session) => session.id !== sessionId,
-          ),
-        },
-      }));
+      await sessionService.terminateSession(sessionId);
+      const updatedSessions = await sessionService.getAllSessions();
+      setRealSessions(updatedSessions);
 
       alert("Session terminated successfully.");
     } catch (error) {

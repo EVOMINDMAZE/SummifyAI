@@ -200,6 +200,54 @@ export default function SubscriptionManagement() {
     }
   };
 
+  const handleModifySubscription = async (planId: string, billingCycle: "monthly" | "annual") => {
+    const selectedPlan = plans.find((p) => p.id === planId);
+    if (!selectedPlan || !user.stripeSubscriptionId) return;
+
+    const priceId = billingCycle === "monthly"
+      ? selectedPlan.stripeMonthlyId
+      : selectedPlan.stripeAnnualId;
+
+    if (!priceId) {
+      alert("Pricing not configured for this plan. Please contact support.");
+      return;
+    }
+
+    const confirmChange = confirm(
+      `Change your subscription to ${selectedPlan.name} (${billingCycle})?\n\nYou'll be charged a prorated amount immediately.`
+    );
+
+    if (!confirmChange) return;
+
+    try {
+      const response = await fetch("/.netlify/functions/modify-subscription", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          subscriptionId: user.stripeSubscriptionId,
+          newPriceId: priceId,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to modify subscription");
+      }
+
+      alert(`Successfully changed to ${selectedPlan.name} plan!`);
+
+      // Refresh subscription data
+      await loadSubscriptionData();
+    } catch (error) {
+      console.error("Error modifying subscription:", error);
+      alert(
+        error instanceof Error
+          ? error.message
+          : "Failed to modify subscription. Please try again."
+      );
+    }
+  };
+
   const handleUpgradeToPaid = async (planId: string, billingCycle: "monthly" | "annual") => {
     const selectedPlan = plans.find((p) => p.id === planId);
     if (!selectedPlan) return;

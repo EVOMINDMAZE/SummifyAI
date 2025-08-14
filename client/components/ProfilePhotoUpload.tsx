@@ -75,7 +75,20 @@ export default function ProfilePhotoUpload({ currentPhotoUrl, onPhotoUpdate }: P
       
     } catch (error) {
       console.error('Error uploading photo:', error);
-      alert('Failed to upload photo. Please try again.');
+
+      let errorMessage = 'Failed to upload photo. Please try again.';
+
+      if (error && typeof error === 'object') {
+        if (error.message) {
+          errorMessage = `Upload failed: ${error.message}`;
+        } else if (error.error) {
+          errorMessage = `Upload failed: ${error.error}`;
+        } else {
+          errorMessage = `Upload failed: ${JSON.stringify(error)}`;
+        }
+      }
+
+      alert(errorMessage);
       setPreviewUrl(currentPhotoUrl || null);
     } finally {
       setIsUploading(false);

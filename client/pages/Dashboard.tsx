@@ -148,7 +148,7 @@ export default function Dashboard() {
 
               <div className="flex flex-col sm:flex-row gap-4 mt-8">
                 <Link
-                  to="/generate"
+                  to="/search"
                   className="group bg-[#0A0B1E] hover:bg-[#0A0B1E]/90 text-[#FFFD63] dark:bg-[#FFFD63] dark:hover:bg-[#FFFD63]/90 dark:text-[#0A0B1E] px-8 py-4 rounded-2xl font-bold transition-all shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center gap-3"
                 >
                   <svg

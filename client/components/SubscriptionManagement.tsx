@@ -149,12 +149,14 @@ export default function SubscriptionManagement() {
 
         if (confirmUpgrade) {
           await updateUser({
-            planType: newPlan as any,
+            planType: newPlan as "free" | "scholar" | "professional" | "institution",
             monthlySearchLimit:
               selectedPlan.monthlySearches === -1
                 ? 999999
                 : selectedPlan.monthlySearches,
             subscriptionStatus: "active",
+            stripeCustomerId: `cus_${Date.now()}`, // Simulated Stripe customer ID
+            stripeSubscriptionId: `sub_${Date.now()}`, // Simulated Stripe subscription ID
           });
 
           setSubscription((prev) =>

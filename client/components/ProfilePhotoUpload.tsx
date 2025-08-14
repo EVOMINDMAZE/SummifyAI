@@ -148,14 +148,44 @@ export default function ProfilePhotoUpload({
     try {
       console.log("Removing profile photo for user:", user.id);
 
-      // Update user profile to remove photo URL
-      const { error } = await supabase
+      // Try to remove photo URL using different possible column names
+      let success = false;
+      let lastError = null;
+
+      // Try profile_photo_url first
+      const { error: error1 } = await supabase
         .from("profiles")
         .update({ profile_photo_url: null })
         .eq("user_id", user.id);
 
-      if (error) {
-        throw new Error(error.message || "Failed to remove photo");
+      if (!error1) {
+        success = true;
+      } else {
+        // Try avatar_url as fallback
+        const { error: error2 } = await supabase
+          .from("profiles")
+          .update({ avatar_url: null })
+          .eq("user_id", user.id);
+
+        if (!error2) {
+          success = true;
+        } else {
+          // Try photo_url as another fallback
+          const { error: error3 } = await supabase
+            .from("profiles")
+            .update({ photo_url: null })
+            .eq("user_id", user.id);
+
+          if (!error3) {
+            success = true;
+          } else {
+            lastError = error3;
+          }
+        }
+      }
+
+      if (!success && lastError) {
+        throw new Error(lastError.message || "Failed to remove photo");
       }
 
       setPreviewUrl(null);

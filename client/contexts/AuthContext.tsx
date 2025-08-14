@@ -252,6 +252,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           },
         };
 
+        // Validate and migrate user data if necessary
+        await validateAndMigrateUserData(userData);
+
         console.log("✅ User profile loaded:", userData.email);
         return userData;
       }

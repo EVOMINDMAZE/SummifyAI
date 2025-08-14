@@ -84,12 +84,8 @@ export default function SubscriptionManagement() {
       ],
       color: "bg-purple-100 dark:bg-purple-900",
       textColor: "text-purple-900 dark:text-purple-100",
-      stripeMonthlyId:
-        import.meta.env.VITE_STRIPE_INSTITUTION_MONTHLY_PRICE_ID ||
-        "price_institution_monthly",
-      stripeAnnualId:
-        import.meta.env.VITE_STRIPE_INSTITUTION_ANNUAL_PRICE_ID ||
-        "price_institution_annual",
+      stripeMonthlyId: import.meta.env.VITE_STRIPE_INSTITUTION_MONTHLY_PRICE_ID,
+      stripeAnnualId: import.meta.env.VITE_STRIPE_INSTITUTION_ANNUAL_PRICE_ID,
     },
   ];
 

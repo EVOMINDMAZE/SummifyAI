@@ -412,7 +412,9 @@ export default function Results() {
             <div className="flex flex-wrap gap-4">
               <UpgradeWrapper feature="exportToPDF">
                 <button
-                  onClick={() => canExportPDF() && handleExportPDF(currentResult)}
+                  onClick={() =>
+                    canExportPDF() && handleExportPDF(currentResult)
+                  }
                   disabled={!canExportPDF()}
                   className="bg-[#4361EE] hover:bg-[#4361EE]/90 text-white px-6 py-2 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
@@ -723,7 +725,8 @@ export default function Results() {
                           <UpgradeWrapper feature="exportToPDF">
                             <button
                               onClick={() =>
-                                canExportPDF() && handleExportPDF({
+                                canExportPDF() &&
+                                handleExportPDF({
                                   ...result,
                                   saved: savedResults.includes(result.id),
                                 })
@@ -904,7 +907,8 @@ export default function Results() {
                       <UpgradeWrapper feature="exportToPDF">
                         <button
                           onClick={() =>
-                            canExportPDF() && handleExportPDF({
+                            canExportPDF() &&
+                            handleExportPDF({
                               ...result,
                               saved: savedResults.includes(result.id),
                             })

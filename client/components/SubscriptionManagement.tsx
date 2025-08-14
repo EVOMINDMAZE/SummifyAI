@@ -13,7 +13,9 @@ interface SubscriptionData {
 
 export default function SubscriptionManagement() {
   const { user, updateUser } = useAuth();
-  const [subscription, setSubscription] = useState<SubscriptionData | null>(null);
+  const [subscription, setSubscription] = useState<SubscriptionData | null>(
+    null,
+  );
   const [isLoading, setIsLoading] = useState(true);
   const [isUpdating, setIsUpdating] = useState(false);
 
@@ -24,7 +26,11 @@ export default function SubscriptionManagement() {
       name: "Free",
       price: 0,
       monthlySearches: 10,
-      features: ["10 searches per month", "Basic AI insights", "Search history"],
+      features: [
+        "10 searches per month",
+        "Basic AI insights",
+        "Search history",
+      ],
       color: "bg-gray-100 dark:bg-gray-800",
       textColor: "text-gray-900 dark:text-white",
     },
@@ -33,7 +39,12 @@ export default function SubscriptionManagement() {
       name: "Scholar",
       price: 19.99,
       monthlySearches: 500,
-      features: ["500 searches per month", "Advanced AI insights", "Priority processing", "Export results"],
+      features: [
+        "500 searches per month",
+        "Advanced AI insights",
+        "Priority processing",
+        "Export results",
+      ],
       color: "bg-amber-100 dark:bg-amber-900",
       textColor: "text-amber-900 dark:text-amber-100",
       stripeMonthlyId: "price_scholar_monthly",
@@ -44,7 +55,13 @@ export default function SubscriptionManagement() {
       name: "Professional",
       price: 49.99,
       monthlySearches: 2000,
-      features: ["2,000 searches per month", "Premium AI models", "API access", "Custom models", "Priority support"],
+      features: [
+        "2,000 searches per month",
+        "Premium AI models",
+        "API access",
+        "Custom models",
+        "Priority support",
+      ],
       color: "bg-green-100 dark:bg-green-900",
       textColor: "text-green-900 dark:text-green-100",
       stripeMonthlyId: "price_professional_monthly",
@@ -55,7 +72,13 @@ export default function SubscriptionManagement() {
       name: "Institution",
       price: 99.99,
       monthlySearches: -1,
-      features: ["Unlimited searches", "All AI models", "Team collaboration", "White-label options", "Dedicated support"],
+      features: [
+        "Unlimited searches",
+        "All AI models",
+        "Team collaboration",
+        "White-label options",
+        "Dedicated support",
+      ],
       color: "bg-purple-100 dark:bg-purple-900",
       textColor: "text-purple-900 dark:text-purple-100",
       stripeMonthlyId: "price_institution_monthly",
@@ -72,7 +95,7 @@ export default function SubscriptionManagement() {
 
     try {
       setIsLoading(true);
-      
+
       // Get subscription data from user profile
       const subscriptionData: SubscriptionData = {
         tier: user.planType || "free",
@@ -97,7 +120,7 @@ export default function SubscriptionManagement() {
     try {
       // In a real implementation, you would integrate with Stripe here
       // For now, we'll simulate the upgrade/downgrade
-      
+
       if (newPlan === "free") {
         // Downgrade to free
         await updateUser({
@@ -106,29 +129,38 @@ export default function SubscriptionManagement() {
           subscriptionStatus: "active",
           stripeSubscriptionId: undefined,
         });
-        
-        setSubscription(prev => prev ? { ...prev, tier: "free", status: "active" } : null);
-        
-        alert("Successfully downgraded to Free plan. Your subscription has been cancelled.");
+
+        setSubscription((prev) =>
+          prev ? { ...prev, tier: "free", status: "active" } : null,
+        );
+
+        alert(
+          "Successfully downgraded to Free plan. Your subscription has been cancelled.",
+        );
       } else {
         // Upgrade to paid plan
-        const selectedPlan = plans.find(p => p.id === newPlan);
+        const selectedPlan = plans.find((p) => p.id === newPlan);
         if (!selectedPlan) return;
 
         // In production, this would redirect to Stripe Checkout
         const confirmUpgrade = confirm(
-          `Upgrade to ${selectedPlan.name} plan for $${selectedPlan.price}/month?\n\nThis would redirect to Stripe Checkout in a real implementation.`
+          `Upgrade to ${selectedPlan.name} plan for $${selectedPlan.price}/month?\n\nThis would redirect to Stripe Checkout in a real implementation.`,
         );
 
         if (confirmUpgrade) {
           await updateUser({
             planType: newPlan as any,
-            monthlySearchLimit: selectedPlan.monthlySearches === -1 ? 999999 : selectedPlan.monthlySearches,
+            monthlySearchLimit:
+              selectedPlan.monthlySearches === -1
+                ? 999999
+                : selectedPlan.monthlySearches,
             subscriptionStatus: "active",
           });
 
-          setSubscription(prev => prev ? { ...prev, tier: newPlan, status: "active" } : null);
-          
+          setSubscription((prev) =>
+            prev ? { ...prev, tier: newPlan, status: "active" } : null,
+          );
+
           alert(`Successfully upgraded to ${selectedPlan.name} plan!`);
         }
       }
@@ -141,7 +173,9 @@ export default function SubscriptionManagement() {
   };
 
   const getCurrentPlan = () => {
-    return plans.find(p => p.id === (subscription?.tier || user?.planType || "free"));
+    return plans.find(
+      (p) => p.id === (subscription?.tier || user?.planType || "free"),
+    );
   };
 
   const currentPlan = getCurrentPlan();
@@ -153,8 +187,11 @@ export default function SubscriptionManagement() {
           <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-1/3 mb-4"></div>
           <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2 mb-6"></div>
           <div className="space-y-4">
-            {[1, 2, 3].map(i => (
-              <div key={i} className="h-24 bg-gray-200 dark:bg-gray-700 rounded"></div>
+            {[1, 2, 3].map((i) => (
+              <div
+                key={i}
+                className="h-24 bg-gray-200 dark:bg-gray-700 rounded"
+              ></div>
             ))}
           </div>
         </div>
@@ -169,7 +206,7 @@ export default function SubscriptionManagement() {
         <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
           Current Subscription
         </h2>
-        
+
         {currentPlan && (
           <div className={`${currentPlan.color} rounded-xl p-6 mb-6`}>
             <div className="flex items-center justify-between mb-4">
@@ -178,34 +215,59 @@ export default function SubscriptionManagement() {
                   {currentPlan.name} Plan
                 </h3>
                 <p className={`${currentPlan.textColor} opacity-80`}>
-                  {currentPlan.price === 0 ? "Free forever" : `$${currentPlan.price}/month`}
+                  {currentPlan.price === 0
+                    ? "Free forever"
+                    : `$${currentPlan.price}/month`}
                 </p>
               </div>
-              <div className={`px-3 py-1 rounded-full text-sm font-medium ${
-                subscription?.status === "active" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
-              }`}>
+              <div
+                className={`px-3 py-1 rounded-full text-sm font-medium ${
+                  subscription?.status === "active"
+                    ? "bg-green-100 text-green-800"
+                    : "bg-red-100 text-red-800"
+                }`}
+              >
                 {subscription?.status === "active" ? "Active" : "Inactive"}
               </div>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <p className={`text-sm ${currentPlan.textColor} opacity-80 mb-1`}>Monthly Searches</p>
+                <p
+                  className={`text-sm ${currentPlan.textColor} opacity-80 mb-1`}
+                >
+                  Monthly Searches
+                </p>
                 <p className={`font-semibold ${currentPlan.textColor}`}>
-                  {currentPlan.monthlySearches === -1 ? "Unlimited" : currentPlan.monthlySearches.toLocaleString()}
+                  {currentPlan.monthlySearches === -1
+                    ? "Unlimited"
+                    : currentPlan.monthlySearches.toLocaleString()}
                 </p>
               </div>
               <div>
-                <p className={`text-sm ${currentPlan.textColor} opacity-80 mb-1`}>Used This Month</p>
+                <p
+                  className={`text-sm ${currentPlan.textColor} opacity-80 mb-1`}
+                >
+                  Used This Month
+                </p>
                 <p className={`font-semibold ${currentPlan.textColor}`}>
-                  {user?.searchCount || 0} / {currentPlan.monthlySearches === -1 ? "∞" : currentPlan.monthlySearches}
+                  {user?.searchCount || 0} /{" "}
+                  {currentPlan.monthlySearches === -1
+                    ? "∞"
+                    : currentPlan.monthlySearches}
                 </p>
               </div>
               {subscription?.nextBillingDate && (
                 <div className="md:col-span-2">
-                  <p className={`text-sm ${currentPlan.textColor} opacity-80 mb-1`}>Next Billing Date</p>
+                  <p
+                    className={`text-sm ${currentPlan.textColor} opacity-80 mb-1`}
+                  >
+                    Next Billing Date
+                  </p>
                   <p className={`font-semibold ${currentPlan.textColor}`}>
-                    {new Date(subscription.nextBillingDate).toLocaleDateString()}
+                    {new Date(
+                      subscription.nextBillingDate,
+                    ).toLocaleDateString()}
                   </p>
                 </div>
               )}
@@ -219,11 +281,12 @@ export default function SubscriptionManagement() {
         <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
           Available Plans
         </h2>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {plans.map((plan) => {
-            const isCurrentPlan = plan.id === (subscription?.tier || user?.planType || "free");
-            
+            const isCurrentPlan =
+              plan.id === (subscription?.tier || user?.planType || "free");
+
             return (
               <div
                 key={plan.id}
@@ -240,7 +303,7 @@ export default function SubscriptionManagement() {
                     </span>
                   </div>
                 )}
-                
+
                 <div className="text-center mb-4">
                   <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">
                     {plan.name}
@@ -250,25 +313,40 @@ export default function SubscriptionManagement() {
                       {plan.price === 0 ? "Free" : `$${plan.price}`}
                     </span>
                     {plan.price > 0 && (
-                      <span className="text-gray-600 dark:text-gray-400 ml-1">/month</span>
+                      <span className="text-gray-600 dark:text-gray-400 ml-1">
+                        /month
+                      </span>
                     )}
                   </div>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                    {plan.monthlySearches === -1 ? "Unlimited" : plan.monthlySearches} searches per month
+                    {plan.monthlySearches === -1
+                      ? "Unlimited"
+                      : plan.monthlySearches}{" "}
+                    searches per month
                   </p>
                 </div>
-                
+
                 <ul className="space-y-2 mb-6">
                   {plan.features.map((feature, index) => (
                     <li key={index} className="flex items-start gap-2 text-sm">
-                      <svg className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      <svg
+                        className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
                       </svg>
-                      <span className="text-gray-700 dark:text-gray-300">{feature}</span>
+                      <span className="text-gray-700 dark:text-gray-300">
+                        {feature}
+                      </span>
                     </li>
                   ))}
                 </ul>
-                
+
                 <button
                   onClick={() => handlePlanChange(plan.id)}
                   disabled={isCurrentPlan || isUpdating}
@@ -286,8 +364,7 @@ export default function SubscriptionManagement() {
                       ? "Current Plan"
                       : plan.id === "free"
                         ? "Downgrade to Free"
-                        : `Upgrade to ${plan.name}`
-                  }
+                        : `Upgrade to ${plan.name}`}
                 </button>
               </div>
             );
@@ -300,16 +377,27 @@ export default function SubscriptionManagement() {
         <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
           Billing History
         </h2>
-        
+
         <div className="text-center py-8">
-          <svg className="w-12 h-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          <svg
+            className="w-12 h-12 text-gray-400 mx-auto mb-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+            />
           </svg>
           <p className="text-gray-600 dark:text-gray-400">
             No billing history available yet
           </p>
           <p className="text-sm text-gray-500 dark:text-gray-500 mt-2">
-            Your billing history will appear here once you subscribe to a paid plan
+            Your billing history will appear here once you subscribe to a paid
+            plan
           </p>
         </div>
       </div>

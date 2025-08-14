@@ -18,7 +18,9 @@ export default function SubscriptionManagement() {
   );
   const [isLoading, setIsLoading] = useState(true);
   const [isUpdating, setIsUpdating] = useState(false);
-  const [billingCycle, setBillingCycle] = useState<"monthly" | "annual">("monthly");
+  const [billingCycle, setBillingCycle] = useState<"monthly" | "annual">(
+    "monthly",
+  );
 
   // Plan configurations
   const plans = [
@@ -126,7 +128,10 @@ export default function SubscriptionManagement() {
     }
   };
 
-  const handlePlanChange = async (newPlan: string, billingCycle: "monthly" | "annual" = "monthly") => {
+  const handlePlanChange = async (
+    newPlan: string,
+    billingCycle: "monthly" | "annual" = "monthly",
+  ) => {
     if (!user || isUpdating) return;
 
     setIsUpdating(true);
@@ -167,7 +172,7 @@ export default function SubscriptionManagement() {
     }
 
     const confirmCancel = confirm(
-      "Are you sure you want to cancel your subscription?\n\nYou'll lose access to premium features at the end of your billing period."
+      "Are you sure you want to cancel your subscription?\n\nYou'll lose access to premium features at the end of your billing period.",
     );
 
     if (!confirmCancel) return;
@@ -189,7 +194,7 @@ export default function SubscriptionManagement() {
       const result = await response.json();
 
       alert(
-        `Subscription cancelled successfully. You'll retain access to premium features until ${new Date(result.subscription.periodEnd * 1000).toLocaleDateString()}.`
+        `Subscription cancelled successfully. You'll retain access to premium features until ${new Date(result.subscription.periodEnd * 1000).toLocaleDateString()}.`,
       );
 
       // Refresh subscription data
@@ -200,13 +205,17 @@ export default function SubscriptionManagement() {
     }
   };
 
-  const handleModifySubscription = async (planId: string, billingCycle: "monthly" | "annual") => {
+  const handleModifySubscription = async (
+    planId: string,
+    billingCycle: "monthly" | "annual",
+  ) => {
     const selectedPlan = plans.find((p) => p.id === planId);
     if (!selectedPlan || !user.stripeSubscriptionId) return;
 
-    const priceId = billingCycle === "monthly"
-      ? selectedPlan.stripeMonthlyId
-      : selectedPlan.stripeAnnualId;
+    const priceId =
+      billingCycle === "monthly"
+        ? selectedPlan.stripeMonthlyId
+        : selectedPlan.stripeAnnualId;
 
     if (!priceId) {
       alert("Pricing not configured for this plan. Please contact support.");
@@ -214,7 +223,7 @@ export default function SubscriptionManagement() {
     }
 
     const confirmChange = confirm(
-      `Change your subscription to ${selectedPlan.name} (${billingCycle})?\n\nYou'll be charged a prorated amount immediately.`
+      `Change your subscription to ${selectedPlan.name} (${billingCycle})?\n\nYou'll be charged a prorated amount immediately.`,
     );
 
     if (!confirmChange) return;
@@ -243,12 +252,15 @@ export default function SubscriptionManagement() {
       alert(
         error instanceof Error
           ? error.message
-          : "Failed to modify subscription. Please try again."
+          : "Failed to modify subscription. Please try again.",
       );
     }
   };
 
-  const handleUpgradeToPaid = async (planId: string, billingCycle: "monthly" | "annual") => {
+  const handleUpgradeToPaid = async (
+    planId: string,
+    billingCycle: "monthly" | "annual",
+  ) => {
     const selectedPlan = plans.find((p) => p.id === planId);
     if (!selectedPlan) return;
 
@@ -256,15 +268,16 @@ export default function SubscriptionManagement() {
     const stripePublishableKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
     if (!stripePublishableKey) {
       alert(
-        "Stripe is not configured. Please contact support to enable premium features."
+        "Stripe is not configured. Please contact support to enable premium features.",
       );
       return;
     }
 
     try {
-      const priceId = billingCycle === "monthly"
-        ? selectedPlan.stripeMonthlyId
-        : selectedPlan.stripeAnnualId;
+      const priceId =
+        billingCycle === "monthly"
+          ? selectedPlan.stripeMonthlyId
+          : selectedPlan.stripeAnnualId;
 
       if (!priceId) {
         alert("Pricing not configured for this plan. Please contact support.");
@@ -272,17 +285,20 @@ export default function SubscriptionManagement() {
       }
 
       // Create Stripe checkout session
-      const response = await fetch("/.netlify/functions/create-checkout-session", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          priceId,
-          customerId: user.stripeCustomerId,
-          customerEmail: user.email,
-          successUrl: `${window.location.origin}/settings?success=true&plan=${planId}`,
-          cancelUrl: `${window.location.origin}/settings?cancelled=true`,
-        }),
-      });
+      const response = await fetch(
+        "/.netlify/functions/create-checkout-session",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            priceId,
+            customerId: user.stripeCustomerId,
+            customerEmail: user.email,
+            successUrl: `${window.location.origin}/settings?success=true&plan=${planId}`,
+            cancelUrl: `${window.location.origin}/settings?cancelled=true`,
+          }),
+        },
+      );
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -309,7 +325,7 @@ export default function SubscriptionManagement() {
       alert(
         error instanceof Error
           ? error.message
-          : "Failed to start checkout. Please try again."
+          : "Failed to start checkout. Please try again.",
       );
     }
   };
@@ -460,8 +476,10 @@ export default function SubscriptionManagement() {
 
             // Calculate pricing based on billing cycle
             const monthlyPrice = plan.price;
-            const annualPrice = plan.price === 0 ? 0 : Math.round(plan.price * 12 * 0.83); // 17% discount
-            const currentPrice = billingCycle === "monthly" ? monthlyPrice : annualPrice;
+            const annualPrice =
+              plan.price === 0 ? 0 : Math.round(plan.price * 12 * 0.83); // 17% discount
+            const currentPrice =
+              billingCycle === "monthly" ? monthlyPrice : annualPrice;
             const isDiscounted = billingCycle === "annual" && plan.price > 0;
 
             return (
@@ -497,7 +515,7 @@ export default function SubscriptionManagement() {
                   </div>
                   {isDiscounted && (
                     <p className="text-sm text-green-600 dark:text-green-400 font-medium mb-2">
-                      Save ${(monthlyPrice * 12) - annualPrice}/year
+                      Save ${monthlyPrice * 12 - annualPrice}/year
                     </p>
                   )}
                   <p className="text-sm text-gray-600 dark:text-gray-400">

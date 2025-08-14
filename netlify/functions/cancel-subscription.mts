@@ -1,8 +1,8 @@
-import type { Handler } from '@netlify/functions';
-import Stripe from 'stripe';
+import type { Handler } from "@netlify/functions";
+import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2023-10-16',
+  apiVersion: "2023-10-16",
 });
 
 interface CancelSubscriptionRequest {
@@ -10,41 +10,46 @@ interface CancelSubscriptionRequest {
 }
 
 export const handler: Handler = async (event) => {
-  if (event.httpMethod !== 'POST') {
+  if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
       headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Content-Type',
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "Content-Type",
       },
-      body: JSON.stringify({ error: 'Method Not Allowed' }),
+      body: JSON.stringify({ error: "Method Not Allowed" }),
     };
   }
 
   try {
-    const { subscriptionId }: CancelSubscriptionRequest = JSON.parse(event.body!);
+    const { subscriptionId }: CancelSubscriptionRequest = JSON.parse(
+      event.body!,
+    );
 
     if (!subscriptionId) {
       return {
         statusCode: 400,
         headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Headers': 'Content-Type',
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Headers": "Content-Type",
         },
-        body: JSON.stringify({ error: 'Missing subscription ID' }),
+        body: JSON.stringify({ error: "Missing subscription ID" }),
       };
     }
 
     // Cancel the subscription at the end of the current period
-    const cancelledSubscription = await stripe.subscriptions.update(subscriptionId, {
-      cancel_at_period_end: true,
-    });
+    const cancelledSubscription = await stripe.subscriptions.update(
+      subscriptionId,
+      {
+        cancel_at_period_end: true,
+      },
+    );
 
     return {
       statusCode: 200,
       headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Content-Type',
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "Content-Type",
       },
       body: JSON.stringify({
         success: true,
@@ -57,17 +62,17 @@ export const handler: Handler = async (event) => {
       }),
     };
   } catch (error) {
-    console.error('Error cancelling subscription:', error);
-    
+    console.error("Error cancelling subscription:", error);
+
     return {
       statusCode: 500,
       headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Content-Type',
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "Content-Type",
       },
       body: JSON.stringify({
-        error: 'Failed to cancel subscription',
-        details: error instanceof Error ? error.message : 'Unknown error',
+        error: "Failed to cancel subscription",
+        details: error instanceof Error ? error.message : "Unknown error",
       }),
     };
   }

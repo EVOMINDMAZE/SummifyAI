@@ -891,66 +891,45 @@ export default function Index() {
             </div>
           </div>
 
-          {/* Analyze Section */}
-          <div className="relative">
-            <div className="absolute -top-12 right-0 transform rotate-12">
-              <h3 className="text-8xl font-black text-[#0A0B1E] dark:text-white opacity-20">
-                Analyze.
-              </h3>
-            </div>
-            <div className="bg-green-100 dark:bg-green-900/30 rounded-3xl p-12">
-              <div className="grid lg:grid-cols-2 gap-12 items-center">
-                <div className="order-2 lg:order-1 flex justify-center">
-                  <AIChatDemo
-                    title="Chapter Analysis"
-                    subtitle="See how our AI explains why each chapter is relevant to your query"
-                    demoType="analyze"
-                    disableAutoScroll={true}
-                    initialMessages={[
-                      {
-                        id: "1",
-                        type: "ai",
-                        content:
-                          "Ready to dive deep? I can analyze multiple books on any topic and show you different perspectives. What interests you?",
-                        timestamp: "12:30",
-                        status: "read",
-                      },
-                    ]}
-                    suggestedPrompts={[
-                      "Innovation strategies",
-                      "Building habits",
-                      "Team management",
-                      "Entrepreneurship",
-                    ]}
-                    ctaText={user ? "Analyze Now" : "Start Free Trial"}
-                    ctaLink={user ? "/generate" : "/signup"}
-                  />
-                </div>
-                <div className="order-1 lg:order-2">
-                  <h4 className="text-3xl font-bold text-[#0A0B1E] dark:text-white mb-6">
-                    Analyze why each chapter matters
-                  </h4>
-                  <p className="text-lg text-[#0A0B1E]/70 dark:text-gray-300 mb-8 leading-relaxed">
-                    Go beyond just finding chapters. Our AI explains why each
-                    chapter is relevant to your query, what unique insights it
-                    provides, and how it addresses your specific needs without
-                    revealing copyrighted content.
-                  </p>
-                  <div className="space-y-4">
-                    <Link
-                      to={user ? "/generate" : "/signup"}
-                      className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl font-medium transition-colors inline-block mr-4"
-                    >
-                      {user ? "Try Analysis Now" : "Start Free Trial"}
-                    </Link>
-                    <Link
-                      to="/analysis-demo"
-                      className="bg-green-200 dark:bg-green-700 hover:bg-green-300 dark:hover:bg-green-600 text-[#0A0B1E] dark:text-white px-6 py-3 rounded-xl font-medium transition-colors border-2 border-[#0A0B1E] dark:border-white inline-block"
-                    >
-                      Try Live Demo
-                    </Link>
+          {/* AI Analysis */}
+          <div className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-2xl p-8 border border-green-200 dark:border-green-800">
+            <div className="grid md:grid-cols-2 gap-8 items-center">
+              <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
+                <div className="text-sm text-gray-500 dark:text-gray-400 mb-3">AI Relevance Analysis:</div>
+                <div className="space-y-4">
+                  <div className="border-l-4 border-green-500 pl-4">
+                    <div className="font-semibold text-green-600 dark:text-green-400 text-sm">94% Match</div>
+                    <div className="text-sm text-[#0A0B1E] dark:text-white font-medium">Deep Work - Chapter 1</div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">Directly addresses concentration techniques with practical frameworks.</div>
+                  </div>
+                  <div className="border-l-4 border-yellow-500 pl-4">
+                    <div className="font-semibold text-yellow-600 dark:text-yellow-400 text-sm">89% Match</div>
+                    <div className="text-sm text-[#0A0B1E] dark:text-white font-medium">Atomic Habits - Chapter 3</div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">Covers environmental design for focus and productivity.</div>
                   </div>
                 </div>
+              </div>
+              <div>
+                <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center mb-4">
+                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                  </svg>
+                </div>
+                <h3 className="text-2xl font-bold text-[#0A0B1E] dark:text-white mb-4">
+                  🧠 Smart Relevance Analysis
+                </h3>
+                <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
+                  Our AI doesn't just find chapters—it explains WHY each chapter matters to your specific query with detailed relevance scores.
+                </p>
+                <Link
+                  to={user ? "/generate" : "/signup"}
+                  className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl font-semibold transition-all transform hover:scale-105 inline-flex items-center gap-2"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                  </svg>
+                  {user ? "Analyze Chapters" : "Try AI Analysis"}
+                </Link>
               </div>
             </div>
           </div>

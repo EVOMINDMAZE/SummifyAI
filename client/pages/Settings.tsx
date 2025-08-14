@@ -6,7 +6,11 @@ import ThemeToggle from "@/components/ThemeToggle";
 import Navigation from "../components/Navigation";
 import { showNotification } from "../utils/actions";
 import { sessionService, type UserSession } from "../services/sessionService";
-import { teamService, type TeamMember, type TeamInvitation } from "../services/teamService";
+import {
+  teamService,
+  type TeamMember,
+  type TeamInvitation,
+} from "../services/teamService";
 
 export default function Settings() {
   const { user, updateUserSettings, updateUser } = useAuth();
@@ -21,9 +25,11 @@ export default function Settings() {
 
   const [realSessions, setRealSessions] = useState<UserSession[]>([]);
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
-  const [pendingInvitations, setPendingInvitations] = useState<TeamInvitation[]>([]);
-  const [inviteEmail, setInviteEmail] = useState('');
-  const [inviteRole, setInviteRole] = useState<TeamMember['role']>('Member');
+  const [pendingInvitations, setPendingInvitations] = useState<
+    TeamInvitation[]
+  >([]);
+  const [inviteEmail, setInviteEmail] = useState("");
+  const [inviteRole, setInviteRole] = useState<TeamMember["role"]>("Member");
 
   // Load settings from localStorage or use defaults
   const [settings, setSettings] = useState(() => {
@@ -131,7 +137,7 @@ export default function Settings() {
         const sessions = await sessionService.getAllSessions();
         setRealSessions(sessions);
       } catch (error) {
-        console.error('Failed to load sessions:', error);
+        console.error("Failed to load sessions:", error);
       }
     };
 
@@ -144,12 +150,12 @@ export default function Settings() {
       try {
         const [members, invitations] = await Promise.all([
           teamService.getTeamMembers(),
-          teamService.getPendingInvitations()
+          teamService.getPendingInvitations(),
         ]);
         setTeamMembers(members);
         setPendingInvitations(invitations);
       } catch (error) {
-        console.error('Failed to load team data:', error);
+        console.error("Failed to load team data:", error);
       }
     };
 
@@ -202,15 +208,18 @@ export default function Settings() {
     if (!inviteEmail.trim()) return;
 
     try {
-      const invitation = await teamService.inviteTeamMember(inviteEmail, inviteRole);
+      const invitation = await teamService.inviteTeamMember(
+        inviteEmail,
+        inviteRole,
+      );
       const updatedInvitations = await teamService.getPendingInvitations();
       setPendingInvitations(updatedInvitations);
-      setInviteEmail('');
+      setInviteEmail("");
 
-      showNotification(`Invitation sent to ${inviteEmail}!`, 'success');
+      showNotification(`Invitation sent to ${inviteEmail}!`, "success");
     } catch (error) {
       console.error("Failed to invite member:", error);
-      showNotification("Failed to send invitation. Please try again.", 'error');
+      showNotification("Failed to send invitation. Please try again.", "error");
     }
   };
 
@@ -224,23 +233,32 @@ export default function Settings() {
       const updatedMembers = await teamService.getTeamMembers();
       setTeamMembers(updatedMembers);
 
-      showNotification("Team member removed successfully.", 'success');
+      showNotification("Team member removed successfully.", "success");
     } catch (error) {
       console.error("Failed to remove member:", error);
-      showNotification("Failed to remove team member. Please try again.", 'error');
+      showNotification(
+        "Failed to remove team member. Please try again.",
+        "error",
+      );
     }
   };
 
-  const handleUpdateMemberRole = async (memberId: string, newRole: TeamMember['role']) => {
+  const handleUpdateMemberRole = async (
+    memberId: string,
+    newRole: TeamMember["role"],
+  ) => {
     try {
       await teamService.updateTeamMemberRole(memberId, newRole);
       const updatedMembers = await teamService.getTeamMembers();
       setTeamMembers(updatedMembers);
 
-      showNotification("Member role updated successfully.", 'success');
+      showNotification("Member role updated successfully.", "success");
     } catch (error) {
       console.error("Failed to update member role:", error);
-      showNotification("Failed to update member role. Please try again.", 'error');
+      showNotification(
+        "Failed to update member role. Please try again.",
+        "error",
+      );
     }
   };
 
@@ -1141,14 +1159,16 @@ export default function Settings() {
                         type="email"
                         placeholder="Enter email address"
                         value={inviteEmail}
-                      onChange={(e) => setInviteEmail(e.target.value)}
+                        onChange={(e) => setInviteEmail(e.target.value)}
                         className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       />
                     </div>
                     <div>
                       <select
                         value={inviteRole}
-                        onChange={(e) => setInviteRole(e.target.value as TeamMember['role'])}
+                        onChange={(e) =>
+                          setInviteRole(e.target.value as TeamMember["role"])
+                        }
                         className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       >
                         <option value="Member">Member</option>
@@ -1186,7 +1206,9 @@ export default function Settings() {
                             <h4 className="font-medium text-gray-900 dark:text-white">
                               {member.name}
                             </h4>
-                            <span className={`px-2 py-1 text-xs rounded-full ${teamService.getStatusColor(member.status)}`}>
+                            <span
+                              className={`px-2 py-1 text-xs rounded-full ${teamService.getStatusColor(member.status)}`}
+                            >
                               {member.status}
                             </span>
                           </div>

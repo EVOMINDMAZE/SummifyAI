@@ -74,7 +74,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, [isLoading]);
 
   // Helper function to fetch and create user profile
-  const fetchUserProfile = async (supabaseUser: SupabaseUser): Promise<User | null> => {
+  const fetchUserProfile = async (
+    supabaseUser: SupabaseUser,
+  ): Promise<User | null> => {
     try {
       console.log("📋 Fetching profile for user:", supabaseUser.email);
       const startTime = Date.now();
@@ -89,12 +91,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
       if (profileError) {
         console.log("Profile error:", profileError);
-        
+
         // If profile doesn't exist, create one
-        if (profileError.code === 'PGRST116') {
+        if (profileError.code === "PGRST116") {
           console.log("📝 Creating new profile for user...");
-          
-          const fullName = supabaseUser.user_metadata?.full_name || supabaseUser.email || "";
+
+          const fullName =
+            supabaseUser.user_metadata?.full_name || supabaseUser.email || "";
           const [firstName, ...lastNameParts] = fullName.split(" ");
           const lastName = lastNameParts.join(" ");
 
@@ -173,7 +176,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const initializeAuth = async () => {
       try {
         console.log("🔍 Initializing authentication...");
-        
+
         const {
           data: { session },
           error,
@@ -205,7 +208,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
-      console.log(`🔄 Auth state changed: ${event}`, session?.user?.email || 'no session');
+      console.log(
+        `🔄 Auth state changed: ${event}`,
+        session?.user?.email || "no session",
+      );
 
       try {
         if (event === "SIGNED_OUT" || !session) {
@@ -215,7 +221,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           console.log("🔐 User signed in:", session.user.email);
           console.log("Session details:", {
             expires_at: new Date(session.expires_at * 1000).toLocaleString(),
-            access_token_length: session.access_token?.length || 0
+            access_token_length: session.access_token?.length || 0,
           });
 
           // Add timeout for profile fetching
@@ -224,7 +230,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             setTimeout(() => {
               console.warn("⚠️ Profile fetch timeout, setting basic user");
               return resolve(null);
-            }, 10000)
+            }, 10000),
           );
 
           const userData = await Promise.race([profilePromise, timeoutPromise]);
@@ -277,17 +283,23 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       });
 
       const timeoutPromise = new Promise((_, reject) =>
-        setTimeout(() => reject(new Error('Sign in timeout after 15 seconds')), 15000)
+        setTimeout(
+          () => reject(new Error("Sign in timeout after 15 seconds")),
+          15000,
+        ),
       );
 
-      const { data, error } = await Promise.race([signInPromise, timeoutPromise]);
+      const { data, error } = await Promise.race([
+        signInPromise,
+        timeoutPromise,
+      ]);
 
       if (error) {
         console.error("❌ Sign in failed:", error);
         console.error("Error details:", {
           message: error.message,
           status: error.status,
-          code: error.code || 'unknown'
+          code: error.code || "unknown",
         });
         throw error;
       }
@@ -297,7 +309,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         id: data.user?.id,
         email: data.user?.email,
         email_confirmed_at: data.user?.email_confirmed_at,
-        last_sign_in_at: data.user?.last_sign_in_at
+        last_sign_in_at: data.user?.last_sign_in_at,
       });
 
       // User state will be updated by onAuthStateChange listener
@@ -310,7 +322,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const signInWithGoogle = async () => {
     console.log("🔐 Starting Google OAuth sign in...");
-    
+
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
@@ -328,7 +340,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const signUp = async (email: string, password: string, name: string) => {
     console.log("📝 Starting sign up for:", email);
-    
+
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -350,7 +362,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const signUpWithGoogle = async () => {
     console.log("📝 Starting Google OAuth sign up...");
-    
+
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
@@ -368,7 +380,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const signOut = async () => {
     console.log("🔓 Signing out...");
-    
+
     const { error } = await supabase.auth.signOut();
     if (error) {
       console.error("❌ Sign out failed:", error);
@@ -385,7 +397,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
 
     console.log("📝 Updating user profile...");
-    
+
     const { error } = await supabase
       .from("profiles")
       .update({
@@ -434,7 +446,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   // Add debug functions to window in development
   useEffect(() => {
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === "development") {
       (window as any).debugAuth = {
         resetAuthState: () => {
           console.log("🔧 Manually resetting auth state");
@@ -444,14 +456,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         getCurrentState: () => ({
           user: user?.email || null,
           isLoading,
-          hasSupabase: !!supabase
+          hasSupabase: !!supabase,
         }),
         forceSignOut: async () => {
           console.log("🔧 Force sign out");
           await supabase.auth.signOut();
           setUser(null);
           setIsLoading(false);
-        }
+        },
       };
     }
   }, [user, isLoading]);

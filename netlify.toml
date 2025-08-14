@@ -2,10 +2,6 @@
   publish = "dist"
   command = "npm install && npm run build"
 
-# Configure secrets scanning to ignore Stripe publishable keys (they're meant to be public)
-[build.environment]
-  SECRETS_SCAN_OMIT_KEYS = "VITE_STRIPE_PUBLISHABLE_KEY"
-
 [functions]
   directory = "netlify/functions"
 
@@ -14,8 +10,10 @@
   to = "/.netlify/functions/:splat"
   status = 200
 
+# Configure secrets scanning to ignore Stripe publishable keys (they're meant to be public)
 [build.environment]
   NODE_VERSION = "18"
+  SECRETS_SCAN_OMIT_KEYS = "VITE_STRIPE_PUBLISHABLE_KEY"
   # OPENAI_API_KEY should be set in Netlify UI under Site Settings > Environment Variables
 
 # Development settings

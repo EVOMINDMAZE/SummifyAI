@@ -7,12 +7,14 @@ export default function Pricing() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [isProcessing, setIsProcessing] = useState(false);
+  const [billingCycle, setBillingCycle] = useState<'monthly' | 'annual'>('monthly');
 
   const plans = [
     {
       id: "free",
       name: "Free",
-      price: "Free",
+      monthlyPrice: "Free",
+      annualPrice: "Free",
       subtitle: "Perfect for getting started",
       description: "Ideal for students and casual researchers",
       icon: "🚀",
@@ -31,12 +33,14 @@ export default function Pricing() {
     {
       id: "scholar",
       name: "Scholar",
-      price: "$19.99",
-      priceId: "price_scholar_monthly", // Replace with your actual Stripe price ID
+      monthlyPrice: "$19.99",
+      annualPrice: "$199.99",
+      monthlyPriceId: "price_scholar_monthly",
+      annualPriceId: "price_scholar_annual",
       subtitle: "Most popular choice",
       description: "For professionals and serious researchers",
       icon: "📚",
-      iconColor: "bg-yellow-500",
+      iconColor: "bg-amber-500",
       features: [
         "500 AI-powered searches per month",
         "Advanced AI insights and analysis",
@@ -54,8 +58,10 @@ export default function Pricing() {
     {
       id: "professional",
       name: "Professional",
-      price: "$49.99",
-      priceId: "price_professional_monthly", // Replace with your actual Stripe price ID
+      monthlyPrice: "$49.99",
+      annualPrice: "$499.99",
+      monthlyPriceId: "price_professional_monthly",
+      annualPriceId: "price_professional_annual",
       subtitle: "For power users",
       description: "Advanced features for professional researchers",
       icon: "⚡",
@@ -77,8 +83,10 @@ export default function Pricing() {
     {
       id: "institution",
       name: "Institution",
-      price: "$99.99",
-      priceId: "price_institution_monthly", // Replace with your actual Stripe price ID
+      monthlyPrice: "$99.99",
+      annualPrice: "$999.99",
+      monthlyPriceId: "price_institution_monthly",
+      annualPriceId: "price_institution_annual",
       subtitle: "For teams and organizations",
       description: "Enterprise-grade research capabilities",
       icon: "👑",
@@ -117,17 +125,18 @@ export default function Pricing() {
         }
 
         // In a real implementation, you would integrate with Stripe here
+        const priceId = billingCycle === 'monthly' ? plan.monthlyPriceId : plan.annualPriceId;
         // Example:
         // const stripe = await loadStripe(process.env.STRIPE_PUBLISHABLE_KEY);
         // const response = await fetch('/api/create-checkout-session', {
         //   method: 'POST',
         //   headers: { 'Content-Type': 'application/json' },
-        //   body: JSON.stringify({ priceId: plan.priceId, userId: user.id })
+        //   body: JSON.stringify({ priceId, userId: user.id })
         // });
         // const session = await response.json();
         // await stripe.redirectToCheckout({ sessionId: session.id });
 
-        alert(`Redirecting to ${plan.name} subscription checkout...`);
+        alert(`Redirecting to ${plan.name} (${billingCycle}) subscription checkout...`);
       }
     } catch (error) {
       console.error("Error selecting plan:", error);
@@ -190,116 +199,153 @@ export default function Pricing() {
           Unlock the full potential of AI-powered chapter discovery with plans
           designed for every type of researcher
         </p>
+
+        {/* Billing Toggle */}
+        <div className="inline-flex items-center bg-white dark:bg-gray-800 rounded-2xl p-1 shadow-lg border border-gray-200 dark:border-gray-700 mb-8">
+          <button
+            onClick={() => setBillingCycle('monthly')}
+            className={`px-6 py-3 rounded-xl font-medium transition-all ${
+              billingCycle === 'monthly'
+                ? 'bg-[#FFFD63] text-[#0A0B1E] shadow-md'
+                : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+            }`}
+          >
+            Monthly
+          </button>
+          <button
+            onClick={() => setBillingCycle('annual')}
+            className={`px-6 py-3 rounded-xl font-medium transition-all relative ${
+              billingCycle === 'annual'
+                ? 'bg-[#FFFD63] text-[#0A0B1E] shadow-md'
+                : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+            }`}
+          >
+            Annual
+            <span className="absolute -top-2 -right-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full">
+              Save 20%
+            </span>
+          </button>
+        </div>
       </div>
 
       {/* Pricing Cards */}
       <div className="max-w-7xl mx-auto px-6 pb-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {plans.map((plan) => (
-            <div
-              key={plan.id}
-              className={`relative bg-white dark:bg-gray-800 rounded-3xl shadow-lg border-2 transition-all duration-300 hover:scale-105 hover:shadow-2xl ${
-                plan.popular
-                  ? "border-[#FFFD63] ring-4 ring-[#FFFD63]/20"
-                  : "border-gray-200 dark:border-gray-700"
-              }`}
-            >
-              {plan.popular && (
-                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                  <span className="bg-[#FFFD63] text-[#0A0B1E] px-4 py-1 rounded-full text-sm font-bold">
-                    Most Popular
-                  </span>
-                </div>
-              )}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+          {plans.map((plan) => {
+            const currentPrice = billingCycle === 'monthly' ? plan.monthlyPrice : plan.annualPrice;
+            const isPopular = plan.popular;
 
-              <div className="p-8">
-                {/* Icon */}
-                <div
-                  className={`w-16 h-16 ${plan.iconColor} rounded-2xl flex items-center justify-center mx-auto mb-6`}
-                >
-                  <span className="text-3xl">{plan.icon}</span>
-                </div>
-
-                {/* Plan Name & Price */}
-                <div className="text-center mb-6">
-                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-                    {plan.name}
-                  </h3>
-                  <div className="mb-2">
-                    <span className="text-4xl font-black text-gray-900 dark:text-white">
-                      {plan.price}
-                    </span>
-                    {plan.price !== "Free" && !plan.customPricing && (
-                      <span className="text-gray-600 dark:text-gray-400 ml-1">
-                        /month
-                      </span>
-                    )}
-                  </div>
-                  <p className="text-sm font-medium text-[#FFFD63]">
-                    {plan.subtitle}
-                  </p>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
-                    {plan.description}
-                  </p>
-                </div>
-
-                {/* Features */}
-                <div className="space-y-3 mb-8">
-                  {plan.features.map((feature, index) => (
-                    <div key={index} className="flex items-start gap-3">
-                      <svg
-                        className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      <span className="text-sm text-gray-700 dark:text-gray-300">
-                        {feature}
-                      </span>
+            return (
+              <div
+                key={plan.id}
+                className={`relative bg-white dark:bg-gray-800 rounded-3xl shadow-lg border-2 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl overflow-hidden ${
+                  isPopular
+                    ? "border-[#FFFD63] ring-4 ring-[#FFFD63]/20 transform scale-105"
+                    : "border-gray-200 dark:border-gray-700"
+                }`}
+              >
+                {isPopular && (
+                  <div className="absolute -top-0 left-0 right-0">
+                    <div className="bg-gradient-to-r from-[#FFFD63] to-amber-400 text-[#0A0B1E] text-center py-3 font-bold text-sm tracking-wide">
+                      ⭐ MOST POPULAR
                     </div>
-                  ))}
+                  </div>
+                )}
+
+                <div className={`p-6 ${isPopular ? 'pt-12' : 'pt-8'}`}>
+                  {/* Icon */}
+                  <div
+                    className={`w-16 h-16 ${plan.iconColor} rounded-2xl flex items-center justify-center mx-auto mb-6`}
+                  >
+                    <span className="text-3xl">{plan.icon}</span>
+                  </div>
+
+                  {/* Plan Name & Price */}
+                  <div className="text-center mb-6">
+                    <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+                      {plan.name}
+                    </h3>
+                    <div className="mb-2">
+                      <span className="text-4xl font-black text-gray-900 dark:text-white">
+                        {currentPrice}
+                      </span>
+                      {currentPrice !== "Free" && !plan.customPricing && (
+                        <span className="text-gray-600 dark:text-gray-400 ml-1">
+                          /{billingCycle === 'monthly' ? 'month' : 'year'}
+                        </span>
+                      )}
+                      {billingCycle === 'annual' && currentPrice !== "Free" && !plan.customPricing && (
+                        <div className="text-sm text-green-600 dark:text-green-400 mt-1">
+                          Save 20% vs monthly
+                        </div>
+                      )}
+                    </div>
+                    <p className="text-sm font-medium text-amber-600 dark:text-amber-400">
+                      {plan.subtitle}
+                    </p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
+                      {plan.description}
+                    </p>
+                  </div>
+
+                  {/* Features */}
+                  <div className="space-y-3 mb-8">
+                    {plan.features.map((feature, index) => (
+                      <div key={index} className="flex items-start gap-3">
+                        <svg
+                          className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                        <span className="text-sm text-gray-700 dark:text-gray-300">
+                          {feature}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* CTA Button */}
+                  <button
+                    onClick={() => handlePlanSelect(plan)}
+                    disabled={isProcessing}
+                    className={`w-full py-4 px-6 rounded-xl font-bold transition-all duration-300 ${
+                      isPopular
+                        ? "bg-[#FFFD63] hover:bg-[#FFFD63]/90 text-[#0A0B1E] shadow-lg hover:shadow-xl"
+                        : plan.id === "free"
+                          ? "bg-gray-100 hover:bg-gray-200 text-gray-900 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white"
+                          : "bg-[#0A0B1E] hover:bg-[#0A0B1E]/90 text-white shadow-lg hover:shadow-xl"
+                    } disabled:opacity-50 disabled:cursor-not-allowed`}
+                  >
+                    {isProcessing ? "Processing..." : plan.cta}
+                  </button>
+
+                  {plan.trial && (
+                    <p className="text-xs text-gray-500 dark:text-gray-400 text-center mt-3">
+                      14-day free trial included
+                    </p>
+                  )}
+
+                  {plan.customPricing && (
+                    <p className="text-xs text-gray-500 dark:text-gray-400 text-center mt-3">
+                      Custom pricing available
+                    </p>
+                  )}
+
+                  {plan.id === "free" && (
+                    <p className="text-xs text-gray-500 dark:text-gray-400 text-center mt-3">
+                      No credit card required
+                    </p>
+                  )}
                 </div>
-
-                {/* CTA Button */}
-                <button
-                  onClick={() => handlePlanSelect(plan)}
-                  disabled={isProcessing}
-                  className={`w-full py-3 px-6 rounded-xl font-bold transition-all duration-300 ${
-                    plan.popular
-                      ? "bg-[#FFFD63] hover:bg-[#FFFD63]/90 text-[#0A0B1E] transform hover:scale-105"
-                      : plan.id === "free"
-                        ? "bg-gray-100 hover:bg-gray-200 text-gray-900 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white"
-                        : "bg-[#0A0B1E] hover:bg-[#0A0B1E]/90 text-white"
-                  } disabled:opacity-50 disabled:cursor-not-allowed`}
-                >
-                  {isProcessing ? "Processing..." : plan.cta}
-                </button>
-
-                {plan.trial && (
-                  <p className="text-xs text-gray-500 dark:text-gray-400 text-center mt-2">
-                    14-day free trial included
-                  </p>
-                )}
-
-                {plan.customPricing && (
-                  <p className="text-xs text-gray-500 dark:text-gray-400 text-center mt-2">
-                    Custom pricing available
-                  </p>
-                )}
-
-                {plan.id === "free" && (
-                  <p className="text-xs text-gray-500 dark:text-gray-400 text-center mt-2">
-                    No credit card required
-                  </p>
-                )}
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 

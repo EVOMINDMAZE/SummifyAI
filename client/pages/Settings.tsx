@@ -119,6 +119,20 @@ export default function Settings() {
     }
   }, [user]);
 
+  // Load real sessions on mount
+  useEffect(() => {
+    const loadSessions = async () => {
+      try {
+        const sessions = await sessionService.getAllSessions();
+        setRealSessions(sessions);
+      } catch (error) {
+        console.error('Failed to load sessions:', error);
+      }
+    };
+
+    loadSessions();
+  }, []);
+
   // Handle settings updates
   const handleSettingChange = async (path: string, value: any) => {
     const keys = path.split(".");

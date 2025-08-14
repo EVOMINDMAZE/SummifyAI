@@ -443,8 +443,8 @@ export default function Index() {
                       💡 See How It Works
                     </Link>
                     <p className="text-xs text-[#0A0B1E]/60 dark:text-gray-500 mt-2">
-                      No credit card required • 5 free chapter discoveries •
-                      Instant access
+                      No credit card required • 10 free searches monthly •
+                      Find exact chapters in seconds
                     </p>
                   </div>
                 </>

@@ -87,6 +87,7 @@ export default function ProfilePhotoUpload({ currentPhotoUrl, onPhotoUpdate }: P
 
           try {
             // Update user profile with base64 photo
+            console.log('Updating profile with base64 for user:', user.id);
             const { error: updateError } = await supabase
               .from('profiles')
               .update({ profile_photo_url: base64 })

@@ -229,7 +229,7 @@ export default function Index() {
                     Dashboard
                   </Link>
                   <Link
-                    to="/generate"
+                    to="/search"
                     className="text-[#0A0B1E] dark:text-white hover:text-[#0A0B1E]/80 dark:hover:text-white/80 font-medium"
                   >
                     Generate
@@ -248,7 +248,7 @@ export default function Index() {
                   </Link>
                   <ThemeToggle />
                   <Link
-                    to="/generate"
+                    to="/search"
                     className="bg-[#0A0B1E] hover:bg-[#0A0B1E]/90 text-[#FFFD63] px-4 py-2 rounded-lg font-medium transition-colors"
                   >
                     New Search
@@ -388,7 +388,7 @@ export default function Index() {
               {user ? (
                 <>
                   <Link
-                    to="/generate"
+                    to="/search"
                     className="flex items-center gap-3 bg-[#0A0B1E] text-white px-8 py-4 rounded-2xl font-medium hover:bg-[#0A0B1E]/90 transition-colors shadow-lg"
                   >
                     <svg
@@ -410,7 +410,7 @@ export default function Index() {
                     to="/dashboard"
                     className="bg-white text-[#0A0B1E] px-8 py-4 rounded-2xl font-medium hover:bg-gray-50 transition-colors shadow-lg border border-gray-200"
                   >
-                    ��� View My Research Hub
+                    📊 View My Research Hub
                   </Link>
                 </>
               ) : (

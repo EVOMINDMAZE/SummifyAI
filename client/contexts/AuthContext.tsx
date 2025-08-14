@@ -90,6 +90,9 @@ const defaultContextValue: AuthContextType = {
   updateUserSettings: async () => {
     throw new Error("AuthProvider not initialized");
   },
+  refreshUser: async () => {
+    throw new Error("AuthProvider not initialized");
+  },
 };
 
 const AuthContext = createContext<AuthContextType>(defaultContextValue);

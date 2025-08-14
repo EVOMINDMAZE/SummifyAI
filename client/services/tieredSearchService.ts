@@ -274,42 +274,37 @@ export class TieredSearchService {
 
   private async generateEmbedding(text: string): Promise<number[]> {
     try {
-      // Try the new path first, then fall back to old path
-      let response = await fetch("/api/generate-embeddings", {
+      const response = await fetch("/.netlify/functions/generate-embeddings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text }),
       });
 
-      // If that fails, try the old Netlify functions path
-      if (!response.ok) {
-        response = await fetch("/.netlify/functions/generate-embeddings", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ text }),
-        });
-      }
-
       if (!response.ok) {
         const errorText = await response.text();
-        console.error("Embedding API error:", errorText);
-        throw new Error(`Failed to generate embedding: ${response.status} ${response.statusText}`);
+        console.error("Embedding API error:", response.status, response.statusText, errorText);
+        throw new Error(`Embedding API failed: ${response.status} ${response.statusText}`);
       }
 
       const result = await response.json();
+      console.log("Embedding API response:", result);
 
-      // Handle both response formats
-      const embedding = result.embedding || result.data?.embedding;
+      // Handle the response format from our Netlify function
+      if (!result.success) {
+        throw new Error(result.error || "Embedding generation failed");
+      }
 
-      if (!embedding) {
-        console.error("No embedding in response:", result);
-        throw new Error("No embedding data received");
+      const embedding = result.embedding;
+
+      if (!embedding || !Array.isArray(embedding)) {
+        console.error("Invalid embedding in response:", result);
+        throw new Error("Invalid embedding data received");
       }
 
       return embedding;
     } catch (error) {
       console.error("Embedding generation error:", error);
-      throw new Error("Failed to generate embedding");
+      throw error; // Re-throw the original error for better debugging
     }
   }
 

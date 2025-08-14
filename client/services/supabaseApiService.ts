@@ -85,21 +85,24 @@ export async function searchDatabase(query: string): Promise<SearchResults> {
 
   } catch (error) {
     console.error("❌ Search failed:", error);
-    
+
     // Try deep search as fallback
     if (!error.message.includes("deep search")) {
       console.log("🔄 Retrying with deep search...");
       try {
+        // Get user again for deep search
+        const { data: { user: deepSearchUser } } = await supabase.auth.getUser();
+
         const { data: deepSearchResponse, error: deepSearchError } = await supabase.functions.invoke('search-books', {
           body: {
             query: query.trim(),
-            userId: user?.id,
+            userId: deepSearchUser?.id,
             skipAnalysis: true,
             deepSearch: true // Use full text search
           }
         });
 
-        if (!deepSearchError && deepSearchResponse.step === 'complete') {
+        if (!deepSearchError && deepSearchResponse?.step === 'complete') {
           return transformSearchResults(deepSearchResponse, query, startTime);
         }
       } catch (deepSearchError) {

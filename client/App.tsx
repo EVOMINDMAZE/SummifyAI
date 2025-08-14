@@ -17,6 +17,7 @@ import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import Dashboard from "./pages/Dashboard";
 import Generate from "./pages/Generate";
+import TieredSearch from "./pages/TieredSearch";
 import Pricing from "./pages/Pricing";
 import Admin from "./pages/Admin";
 import HowItWorks from "./pages/HowItWorks";

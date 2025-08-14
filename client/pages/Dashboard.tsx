@@ -321,11 +321,10 @@ export default function Dashboard() {
                   </div>
                   <div className="flex-1">
                     <h3 className="font-bold text-gray-900 dark:text-white text-lg mb-1">
-                      Search Chapters
+                      🎯 Discover Perfect Chapters
                     </h3>
                     <p className="text-gray-600 dark:text-gray-400">
-                      Find exact chapters from any topic across thousands of
-                      books
+                      Find exactly what you need in seconds from 10,000+ books
                     </p>
                   </div>
                   <svg

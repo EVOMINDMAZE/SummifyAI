@@ -61,6 +61,9 @@ VITE_STRIPE_PUBLISHABLE_KEY=pk_test_your_publishable_key_here
 STRIPE_SECRET_KEY=sk_test_your_secret_key_here
 STRIPE_WEBHOOK_SECRET=whsec_your_webhook_secret_here
 
+# Supabase (required for webhook functions)
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key_here
+
 # Stripe Price IDs (replace with your actual IDs)
 STRIPE_SCHOLAR_MONTHLY_PRICE_ID=price_xxxx_scholar_monthly
 STRIPE_SCHOLAR_ANNUAL_PRICE_ID=price_xxxx_scholar_annual

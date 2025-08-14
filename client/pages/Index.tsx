@@ -433,7 +433,7 @@ export default function Index() {
                         d="M13 10V3L4 14h7v7l9-11h-7z"
                       />
                     </svg>
-                    Start Free — Unlock Premium Features
+                    🎯 Start Finding Exact Chapters — Free Forever
                   </Link>
                   <div className="text-center">
                     <Link

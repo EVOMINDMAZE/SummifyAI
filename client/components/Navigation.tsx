@@ -345,7 +345,7 @@ export default function Navigation({ variant = "app" }: NavigationProps) {
               Dashboard
             </Link>
             <Link
-              to="/generate"
+              to="/search"
               className={`block font-medium transition-colors ${
                 isActive("/generate")
                   ? "text-[#4361EE]"

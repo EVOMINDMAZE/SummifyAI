@@ -124,9 +124,9 @@ export default function SubscriptionManagement() {
       if (newPlan === "free") {
         // Downgrade to free
         await updateUser({
-          planType: "free" as any,
+          planType: "free",
           monthlySearchLimit: 10,
-          subscriptionStatus: "active",
+          subscriptionStatus: "cancelled",
           stripeSubscriptionId: undefined,
         });
 

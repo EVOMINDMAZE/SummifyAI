@@ -21,7 +21,10 @@ export default function ProfilePhotoUpload({ currentPhotoUrl, onPhotoUpdate }: P
   };
 
   const handleFileUpload = async (file: File) => {
-    if (!user) return;
+    if (!user) {
+      alert('Please log in to upload a photo');
+      return;
+    }
 
     // Validate file
     if (!file.type.startsWith('image/')) {
@@ -37,102 +40,62 @@ export default function ProfilePhotoUpload({ currentPhotoUrl, onPhotoUpdate }: P
     setIsUploading(true);
 
     try {
-      // Create a preview URL
+      // Convert to base64 for simple storage
+      const reader = new FileReader();
+      
+      reader.onload = async (e) => {
+        try {
+          const base64 = e.target?.result as string;
+          
+          console.log('Updating profile photo for user:', user.id);
+          
+          // Update user profile with base64 photo
+          const { error: updateError } = await supabase
+            .from('profiles')
+            .update({ profile_photo_url: base64 })
+            .eq('user_id', user.id);
+
+          if (updateError) {
+            console.error('Profile update error:', updateError);
+            throw new Error(updateError.message || 'Failed to update profile');
+          }
+
+          // Update local state
+          setPreviewUrl(base64);
+          onPhotoUpdate(base64);
+          
+          console.log('Profile photo updated successfully');
+          
+        } catch (updateError) {
+          console.error('Error during profile update:', updateError);
+          setPreviewUrl(currentPhotoUrl || null);
+          
+          let errorMessage = 'Failed to update profile photo';
+          if (updateError instanceof Error) {
+            errorMessage = updateError.message;
+          }
+          alert(errorMessage);
+        } finally {
+          setIsUploading(false);
+        }
+      };
+
+      reader.onerror = () => {
+        console.error('Failed to read file');
+        alert('Failed to read the selected image file');
+        setIsUploading(false);
+      };
+
+      // Create preview immediately
       const objectUrl = URL.createObjectURL(file);
       setPreviewUrl(objectUrl);
 
-      // Try Supabase Storage first
-      try {
-        // Create a unique filename
-        const fileExt = file.name.split('.').pop();
-        const fileName = `${user.id}-${Date.now()}.${fileExt}`;
-
-        // Upload to Supabase Storage
-        const { data, error } = await supabase.storage
-          .from('profile-photos')
-          .upload(fileName, file, {
-            cacheControl: '3600',
-            upsert: false
-          });
-
-        if (error) {
-          throw new Error(`Storage upload failed: ${error.message}`);
-        }
-
-        // Get public URL
-        const { data: { publicUrl } } = supabase.storage
-          .from('profile-photos')
-          .getPublicUrl(fileName);
-
-        // Update user profile with new photo URL
-        console.log('Updating profile for user:', user.id, 'with photo URL:', publicUrl);
-        const { error: updateError } = await supabase
-          .from('profiles')
-          .update({ profile_photo_url: publicUrl })
-          .eq('user_id', user.id);
-
-        if (updateError) {
-          throw new Error(`Profile update failed: ${updateError.message}`);
-        }
-
-        onPhotoUpdate(publicUrl);
-
-      } catch (storageError) {
-        console.warn('Supabase storage failed, using base64 fallback:', storageError);
-
-        // Fallback to base64 encoding for demo purposes
-        const reader = new FileReader();
-        reader.onload = async (e) => {
-          const base64 = e.target?.result as string;
-
-          try {
-            // Update user profile with base64 photo
-            console.log('Updating profile with base64 for user:', user.id);
-            const { error: updateError } = await supabase
-              .from('profiles')
-              .update({ profile_photo_url: base64 })
-              .eq('user_id', user.id);
-
-            if (updateError) {
-              throw new Error(`Profile update failed: ${updateError.message}`);
-            }
-
-            onPhotoUpdate(base64);
-            setPreviewUrl(base64);
-          } catch (updateError) {
-            throw new Error(`Failed to save photo to profile: ${updateError.message}`);
-          }
-        };
-
-        reader.onerror = () => {
-          throw new Error('Failed to read image file');
-        };
-
-        reader.readAsDataURL(file);
-        return; // Exit early for async file reading
-      }
-
-      // Clean up object URL
-      URL.revokeObjectURL(objectUrl);
+      // Start file reading
+      reader.readAsDataURL(file);
       
     } catch (error) {
-      console.error('Error uploading photo:', error);
-
-      let errorMessage = 'Failed to upload photo. Please try again.';
-
-      if (error && typeof error === 'object') {
-        if (error.message) {
-          errorMessage = `Upload failed: ${error.message}`;
-        } else if (error.error) {
-          errorMessage = `Upload failed: ${error.error}`;
-        } else {
-          errorMessage = `Upload failed: ${JSON.stringify(error)}`;
-        }
-      }
-
-      alert(errorMessage);
-      setPreviewUrl(currentPhotoUrl || null);
-    } finally {
+      console.error('File upload error:', error);
+      alert('Failed to process the image file');
       setIsUploading(false);
     }
   };
@@ -145,22 +108,28 @@ export default function ProfilePhotoUpload({ currentPhotoUrl, onPhotoUpdate }: P
     if (!user) return;
     
     try {
+      console.log('Removing profile photo for user:', user.id);
+      
       // Update user profile to remove photo URL
-      await supabase
+      const { error } = await supabase
         .from('profiles')
         .update({ profile_photo_url: null })
         .eq('user_id', user.id);
 
-      setPreviewUrl(null);
-      onPhotoUpdate('');
-    } catch (error) {
-      console.error('Error removing photo:', error);
-
-      let errorMessage = 'Failed to remove photo. Please try again.';
-      if (error && typeof error === 'object' && error.message) {
-        errorMessage = `Remove failed: ${error.message}`;
+      if (error) {
+        throw new Error(error.message || 'Failed to remove photo');
       }
 
+      setPreviewUrl(null);
+      onPhotoUpdate('');
+      
+    } catch (error) {
+      console.error('Error removing photo:', error);
+      
+      let errorMessage = 'Failed to remove photo';
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      }
       alert(errorMessage);
     }
   };

@@ -390,13 +390,6 @@ export default function Navigation({ variant = "app" }: NavigationProps) {
                 >
                   Settings
                 </Link>
-                <Link
-                  to="/admin"
-                  className="block text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white font-medium"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Admin
-                </Link>
                 <button
                   onClick={handleSignOut}
                   className="block text-left text-red-600 dark:text-red-400 font-medium"

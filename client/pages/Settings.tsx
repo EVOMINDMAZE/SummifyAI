@@ -5,6 +5,7 @@ import { ThemeSelector } from "../components/ThemeToggle";
 import ThemeToggle from "@/components/ThemeToggle";
 import Navigation from "../components/Navigation";
 import { showNotification } from "../utils/actions";
+import { sessionService, type UserSession } from "../services/sessionService";
 
 export default function Settings() {
   const { user, updateUserSettings } = useAuth();

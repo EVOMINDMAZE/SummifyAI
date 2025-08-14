@@ -64,6 +64,7 @@ export async function searchDatabase(query: string): Promise<SearchResults> {
             userId: userId,
             skipAnalysis: true, // Skip analysis, search directly
             deepSearch: false,
+            summaryLength: user?.defaultSummaryLength || "medium",
           },
         });
 

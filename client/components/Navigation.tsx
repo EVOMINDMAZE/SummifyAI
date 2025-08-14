@@ -75,7 +75,7 @@ export default function Navigation({ variant = "app" }: NavigationProps) {
                   className="flex items-center space-x-2 text-gray-700 hover:text-gray-900"
                 >
                   <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
-                    {user.name?.[0]?.toUpperCase() || "U"}
+                    {user.firstName?.[0]?.toUpperCase() || "U"}
                   </div>
                 </button>
                 {isUserMenuOpen && (

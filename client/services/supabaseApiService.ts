@@ -156,25 +156,36 @@ function transformSearchResults(searchResponse: any, query: string, startTime: n
   console.log(`📚 Transforming ${searchResponse.results.length} book results`);
 
   const books: BookGroup[] = searchResponse.results.map((bookResult: any) => {
+    // Validate bookResult and chapters
+    if (!bookResult || !bookResult.chapters || !Array.isArray(bookResult.chapters)) {
+      console.warn("⚠️ Invalid book result:", bookResult);
+      return null;
+    }
+
     // Transform chapters from Edge Function format to frontend format
     const transformedChapters: EnrichedChapter[] = bookResult.chapters.map((chapter: any) => {
+      if (!chapter) {
+        console.warn("⚠️ Invalid chapter:", chapter);
+        return null;
+      }
+
       const aiAnalysis = chapter.aiAnalysis || {};
-      
+
       return {
-        id: chapter.id || chapter.chapter_id,
-        title: chapter.chapter_title,
+        id: chapter.id || chapter.chapter_id || Math.random().toString(),
+        title: chapter.chapter_title || "Untitled Chapter",
         snippet: aiAnalysis.chapterSummary || chapter.chapter_summary?.substring(0, 300) || "",
         relevanceScore: aiAnalysis.relevanceScore || Math.round((1 - (chapter.similarity || 0.5)) * 100),
         whyRelevant: aiAnalysis.relevanceDescription || `This chapter provides insights relevant to ${query}.`,
-        keyTopics: aiAnalysis.keyTopics || [],
-        coreLeadershipPrinciples: aiAnalysis.corePrinciples || [],
+        keyTopics: Array.isArray(aiAnalysis.keyTopics) ? aiAnalysis.keyTopics : [],
+        coreLeadershipPrinciples: Array.isArray(aiAnalysis.corePrinciples) ? aiAnalysis.corePrinciples : [],
         practicalApplications: [
           `Apply the concepts from this chapter to your work with ${query}`,
           "Implement the strategies discussed for better results"
         ],
         aiExplanation: aiAnalysis.relevanceDescription || ""
       };
-    });
+    }).filter(Boolean); // Remove any null chapters
 
     // Calculate average relevance score for the book
     const averageRelevance = transformedChapters.length > 0

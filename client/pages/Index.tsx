@@ -1013,66 +1013,68 @@ export default function Index() {
             </div>
           </div>
 
-          {/* Share Section */}
-          <div className="relative">
-            <div className="absolute -top-12 right-0 transform rotate-12">
-              <h3 className="text-8xl font-black text-[#0A0B1E] dark:text-white opacity-20">
-                Share.
-              </h3>
-            </div>
-            <div className="bg-pink-100 dark:bg-pink-900/30 rounded-3xl p-12">
-              <div className="grid lg:grid-cols-2 gap-12 items-center">
-                <div className="order-2 lg:order-1 flex justify-center">
-                  <AIChatDemo
-                    title="Share & Earn"
-                    subtitle="Discover how to share insights and earn affiliate commissions"
-                    demoType="share"
-                    disableAutoScroll={true}
-                    initialMessages={[
-                      {
-                        id: "1",
-                        type: "ai",
-                        content:
-                          "Turn your insights into income! Share summaries and earn when friends buy books. What would you like to share first?",
-                        timestamp: "12:30",
-                        status: "read",
-                      },
-                    ]}
-                    suggestedPrompts={[
-                      "Leadership insights",
-                      "Business strategy",
-                      "Self-improvement",
-                      "Career growth",
-                    ]}
-                    ctaText={user ? "Start Sharing" : "Join & Start Earning"}
-                    ctaLink={user ? "/dashboard" : "/signup"}
-                  />
-                </div>
-                <div className="order-1 lg:order-2">
-                  <h4 className="text-3xl font-bold text-[#0A0B1E] dark:text-white mb-6">
-                    Your personal chapter discovery library
-                  </h4>
-                  <p className="text-lg text-[#0A0B1E]/70 dark:text-gray-300 mb-8 leading-relaxed">
-                    Your SummifyIO account gives you one place to save chapter
-                    discoveries, share targeted insights, and track your
-                    learning journey. Build your personal library of chapter
-                    locations and help friends discover exactly what they need.
-                  </p>
-                  <div className="space-y-4">
-                    <Link
-                      to={user ? "/dashboard" : "/signup"}
-                      className="bg-pink-600 hover:bg-pink-700 text-white px-6 py-3 rounded-xl font-medium transition-colors inline-block mr-4"
-                    >
-                      {user ? "View Library" : "Start Free"}
-                    </Link>
-                    <Link
-                      to="/library-showcase"
-                      className="bg-pink-200 dark:bg-pink-700 hover:bg-pink-300 dark:hover:bg-pink-600 text-[#0A0B1E] dark:text-white px-6 py-3 rounded-xl font-medium transition-colors border-2 border-[#0A0B1E] dark:border-white inline-block"
-                    >
-                      See Library Demo
-                    </Link>
+          {/* Save & Share */}
+          <div className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 rounded-2xl p-8 border border-purple-200 dark:border-purple-800">
+            <div className="grid md:grid-cols-2 gap-8 items-center">
+              <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
+                <div className="text-sm text-gray-500 dark:text-gray-400 mb-3">Your Discovery Library:</div>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="w-6 h-6 bg-purple-100 dark:bg-purple-900 rounded flex items-center justify-center">
+                        <svg className="w-3 h-3 text-purple-600 dark:text-purple-400" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z" />
+                        </svg>
+                      </div>
+                      <span className="text-sm text-[#0A0B1E] dark:text-white">Saved Searches</span>
+                    </div>
+                    <span className="text-sm font-semibold text-purple-600 dark:text-purple-400">47</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="w-6 h-6 bg-green-100 dark:bg-green-900 rounded flex items-center justify-center">
+                        <svg className="w-3 h-3 text-green-600 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" />
+                        </svg>
+                      </div>
+                      <span className="text-sm text-[#0A0B1E] dark:text-white">Shared Results</span>
+                    </div>
+                    <span className="text-sm font-semibold text-green-600 dark:text-green-400">12</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="w-6 h-6 bg-yellow-100 dark:bg-yellow-900 rounded flex items-center justify-center">
+                        <svg className="w-3 h-3 text-yellow-600 dark:text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      </div>
+                      <span className="text-sm text-[#0A0B1E] dark:text-white">Books Purchased</span>
+                    </div>
+                    <span className="text-sm font-semibold text-yellow-600 dark:text-yellow-400">8</span>
                   </div>
                 </div>
+              </div>
+              <div>
+                <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center mb-4">
+                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
+                  </svg>
+                </div>
+                <h3 className="text-2xl font-bold text-[#0A0B1E] dark:text-white mb-4">
+                  📚 Build Your Discovery Library
+                </h3>
+                <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
+                  Save every search, export to PDF, share with others, and track your learning journey. Turn discoveries into purchases with direct book links.
+                </p>
+                <Link
+                  to={user ? "/dashboard" : "/signup"}
+                  className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-xl font-semibold transition-all transform hover:scale-105 inline-flex items-center gap-2"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z" />
+                  </svg>
+                  {user ? "View Your Library" : "Start Building"}
+                </Link>
               </div>
             </div>
           </div>

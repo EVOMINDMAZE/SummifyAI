@@ -369,9 +369,38 @@ export default function SubscriptionManagement() {
 
       {/* Available Plans */}
       <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-8">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
-          Available Plans
-        </h2>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4 sm:mb-0">
+            Available Plans
+          </h2>
+
+          {/* Billing Cycle Selector */}
+          <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-1 flex">
+            <button
+              onClick={() => setBillingCycle("monthly")}
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                billingCycle === "monthly"
+                  ? "bg-white dark:bg-gray-800 text-gray-900 dark:text-white shadow-sm"
+                  : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+              }`}
+            >
+              Monthly
+            </button>
+            <button
+              onClick={() => setBillingCycle("annual")}
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                billingCycle === "annual"
+                  ? "bg-white dark:bg-gray-800 text-gray-900 dark:text-white shadow-sm"
+                  : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+              }`}
+            >
+              Annual
+              <span className="ml-1 text-xs bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-400 px-1.5 py-0.5 rounded">
+                Save 17%
+              </span>
+            </button>
+          </div>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {plans.map((plan) => {

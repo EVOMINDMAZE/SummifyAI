@@ -410,7 +410,7 @@ export default function Index() {
                     to="/dashboard"
                     className="bg-white text-[#0A0B1E] px-8 py-4 rounded-2xl font-medium hover:bg-gray-50 transition-colors shadow-lg border border-gray-200"
                   >
-                    📊 View My Research Hub
+                    ��� View My Research Hub
                   </Link>
                 </>
               ) : (
@@ -720,7 +720,7 @@ export default function Index() {
           <div className="relative bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-3xl p-10 border border-blue-200 dark:border-blue-800 overflow-hidden transition-all duration-300 hover:shadow-xl hover:scale-[1.02]">
             {/* Search Overlay */}
             <div className="absolute top-6 right-6 transform rotate-12 pointer-events-none">
-              <h3 className="text-7xl font-black text-blue-200 dark:text-blue-700 opacity-20 select-none">
+              <h3 className="text-7xl font-black text-blue-300 dark:text-blue-600 opacity-40 select-none drop-shadow-sm">
                 Search.
               </h3>
             </div>
@@ -799,7 +799,7 @@ export default function Index() {
           <div className="relative bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-3xl p-10 border border-green-200 dark:border-green-800 overflow-hidden transition-all duration-300 hover:shadow-xl hover:scale-[1.02]">
             {/* Analyze Overlay */}
             <div className="absolute top-6 right-6 transform rotate-12 pointer-events-none">
-              <h3 className="text-7xl font-black text-green-200 dark:text-green-700 opacity-20 select-none">
+              <h3 className="text-7xl font-black text-green-300 dark:text-green-600 opacity-40 select-none drop-shadow-sm">
                 Analyze.
               </h3>
             </div>
@@ -884,7 +884,7 @@ export default function Index() {
           <div className="relative bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20 rounded-3xl p-10 border border-orange-200 dark:border-orange-800 overflow-hidden transition-all duration-300 hover:shadow-xl hover:scale-[1.02]">
             {/* Generate Overlay */}
             <div className="absolute top-6 right-6 transform rotate-12 pointer-events-none">
-              <h3 className="text-7xl font-black text-orange-200 dark:text-orange-700 opacity-20 select-none">
+              <h3 className="text-7xl font-black text-orange-300 dark:text-orange-600 opacity-40 select-none drop-shadow-sm">
                 Generate.
               </h3>
             </div>
@@ -972,7 +972,7 @@ export default function Index() {
           <div className="relative bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 rounded-3xl p-10 border border-purple-200 dark:border-purple-800 overflow-hidden transition-all duration-300 hover:shadow-xl hover:scale-[1.02]">
             {/* Share Overlay */}
             <div className="absolute top-6 right-6 transform rotate-12 pointer-events-none">
-              <h3 className="text-7xl font-black text-purple-200 dark:text-purple-700 opacity-20 select-none">
+              <h3 className="text-7xl font-black text-purple-300 dark:text-purple-600 opacity-40 select-none drop-shadow-sm">
                 Share.
               </h3>
             </div>

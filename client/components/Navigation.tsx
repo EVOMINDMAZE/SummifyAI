@@ -272,7 +272,7 @@ export default function Navigation({ variant = "app" }: NavigationProps) {
             to="/search"
             className="bg-[#FFFD63] text-black px-4 py-2 rounded-lg font-medium hover:bg-[#FFFD63]/80 transition-colors"
           >
-            Smart Search
+            New Search
           </Link>
 
           {isAuthenticated && (

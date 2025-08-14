@@ -490,28 +490,34 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     console.log("📝 Updating user profile...");
 
+    // Prepare update object with only defined values
+    const updateData: any = {};
+
+    if (updates.firstName !== undefined) updateData.first_name = updates.firstName;
+    if (updates.lastName !== undefined) updateData.last_name = updates.lastName;
+    if (updates.searchCount !== undefined) updateData.search_count = updates.searchCount;
+    if (updates.monthlySearchLimit !== undefined) updateData.monthly_search_limit = updates.monthlySearchLimit;
+    if (updates.searchCountResetDate !== undefined) updateData.search_count_reset_date = updates.searchCountResetDate;
+    if (updates.planType !== undefined) updateData.plan_type = updates.planType;
+    if (updates.notificationSearchResults !== undefined) updateData.notification_search_results = updates.notificationSearchResults;
+    if (updates.notificationUsageAlerts !== undefined) updateData.notification_usage_alerts = updates.notificationUsageAlerts;
+    if (updates.notificationProductUpdates !== undefined) updateData.notification_product_updates = updates.notificationProductUpdates;
+    if (updates.stripeCustomerId !== undefined) updateData.stripe_customer_id = updates.stripeCustomerId;
+    if (updates.stripeSubscriptionId !== undefined) updateData.stripe_subscription_id = updates.stripeSubscriptionId;
+    if (updates.subscriptionStatus !== undefined) updateData.subscription_status = updates.subscriptionStatus;
+    if (updates.subscriptionEndDate !== undefined) updateData.subscription_end_date = updates.subscriptionEndDate;
+    if (updates.adPreferences !== undefined) updateData.ad_preferences = updates.adPreferences;
+    if (updates.adFreeUntil !== undefined) updateData.ad_free_until = updates.adFreeUntil;
+    if (updates.defaultSummaryLength !== undefined) updateData.default_summary_length = updates.defaultSummaryLength;
+    if (updates.profilePhotoUrl !== undefined) updateData.profile_photo_url = updates.profilePhotoUrl;
+    if (updates.settings !== undefined) updateData.user_settings = JSON.stringify(updates.settings);
+
+    // Always update the timestamp
+    updateData.updated_at = new Date().toISOString();
+
     const { error } = await supabase
       .from("profiles")
-      .update({
-        first_name: updates.firstName,
-        last_name: updates.lastName,
-        search_count: updates.searchCount,
-        monthly_search_limit: updates.monthlySearchLimit,
-        search_count_reset_date: updates.searchCountResetDate,
-        plan_type: updates.planType,
-        notification_search_results: updates.notificationSearchResults,
-        notification_usage_alerts: updates.notificationUsageAlerts,
-        notification_product_updates: updates.notificationProductUpdates,
-        stripe_customer_id: updates.stripeCustomerId,
-        stripe_subscription_id: updates.stripeSubscriptionId,
-        subscription_status: updates.subscriptionStatus,
-        subscription_end_date: updates.subscriptionEndDate,
-        ad_preferences: updates.adPreferences,
-        ad_free_until: updates.adFreeUntil,
-        default_summary_length: updates.defaultSummaryLength,
-        profile_photo_url: updates.profilePhotoUrl,
-        updated_at: new Date().toISOString(),
-      })
+      .update(updateData)
       .eq("user_id", user.id);
 
     if (error) {
@@ -522,7 +528,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
 
     // Update local state
-    setUser({ ...user, ...updates });
+    const updatedUser = { ...user, ...updates };
+    setUser(updatedUser);
     console.log("✅ User profile updated");
   };
 

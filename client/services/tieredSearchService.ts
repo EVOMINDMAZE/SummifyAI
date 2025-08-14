@@ -209,23 +209,26 @@ export class TieredSearchService {
         console.warn("Embedding generation failed, falling back to text search:", embeddingError);
       }
 
-      if (searchTier.features.find((f) => f.id === "summary_search")?.enabled) {
-        // Stage 1: Fast summary search (all tiers)
-        const summaryResults = await this.searchSummaryEmbeddings(
-          query,
-          queryEmbedding,
-        );
-        results = [...results, ...summaryResults];
-      }
+      // Only use vector search if embeddings are available
+      if (queryEmbedding) {
+        if (searchTier.features.find((f) => f.id === "summary_search")?.enabled) {
+          // Stage 1: Fast summary search (all tiers)
+          const summaryResults = await this.searchSummaryEmbeddings(
+            query,
+            queryEmbedding,
+          );
+          results = [...results, ...summaryResults];
+        }
 
-      if (searchTier.features.find((f) => f.id === "chapter_search")?.enabled) {
-        // Stage 2: Deep chapter search (Scholar+)
-        const chapterResults = await this.searchChapterEmbeddings(
-          query,
-          queryEmbedding,
-          results.slice(0, 50),
-        );
-        results = this.mergeResults(results, chapterResults);
+        if (searchTier.features.find((f) => f.id === "chapter_search")?.enabled) {
+          // Stage 2: Deep chapter search (Scholar+)
+          const chapterResults = await this.searchChapterEmbeddings(
+            query,
+            queryEmbedding,
+            results.slice(0, 50),
+          );
+          results = this.mergeResults(results, chapterResults);
+        }
       }
 
       if (

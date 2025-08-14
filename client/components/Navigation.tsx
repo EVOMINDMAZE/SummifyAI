@@ -292,8 +292,18 @@ export default function Navigation({ variant = "app" }: NavigationProps) {
                 onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
                 className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
               >
-                <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
-                  {user.firstName?.[0]?.toUpperCase() || "U"}
+                <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center overflow-hidden">
+                  {user.profilePhotoUrl ? (
+                    <img
+                      src={user.profilePhotoUrl}
+                      alt={`${user.firstName} ${user.lastName}`}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <span className="text-white font-medium">
+                      {user.firstName?.[0]?.toUpperCase() || "U"}
+                    </span>
+                  )}
                 </div>
                 <span className="text-sm font-medium">
                   {user.firstName} {user.lastName}

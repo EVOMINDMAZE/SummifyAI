@@ -29,6 +29,7 @@ export interface User {
   adPreferences?: any;
   adFreeUntil?: string;
   defaultSummaryLength?: "short" | "medium" | "long";
+  profilePhotoUrl?: string;
 }
 
 interface AuthContextType {

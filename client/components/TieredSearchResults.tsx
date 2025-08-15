@@ -194,9 +194,9 @@ export default function TieredSearchResults({
           const firstChapter = chapters[0];
           const isExpanded = expandedBooks.has(bookTitle);
 
-          // For free users, show only first real chapter + mock chapters
-          const displayChapters = isFree ? [chapters[0]] : chapters;
-          const mockChaptersToShow = isFree ? MOCK_CHAPTERS : [];
+          // For normal books, show all chapters (no restrictions for first 3 books)
+          const displayChapters = chapters;
+          const mockChaptersToShow: any[] = []; // No mock chapters for normal books anymore
 
           return (
             <Card

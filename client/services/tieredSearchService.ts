@@ -520,6 +520,8 @@ export class TieredSearchService {
             query,
           ),
           searchType: "fulltext" as const,
+          whyRelevant: `This chapter contains text that matches your search terms.`,
+          keyTopics: this.extractTopicsFromText(row.chapter_text || row.chapter_summary || ''),
         })) || []
       );
     } catch (error) {

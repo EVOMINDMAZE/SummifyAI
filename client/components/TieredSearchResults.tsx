@@ -432,12 +432,14 @@ function ChapterCard({
                 ? chapter.chapterTitle
                 : chapter.chapterTitle}
             </h4>
-            <AIRelevanceScore
-              score={Math.round(chapter.relevanceScore * 100)}
-              size="sm"
-              showBar={true}
-              query={query}
-            />
+            <div className={`${!isAccessible ? 'opacity-50' : ''}`}>
+              <AIRelevanceScore
+                score={Math.round(chapter.relevanceScore * 100)}
+                size="sm"
+                showBar={true}
+                query={query}
+              />
+            </div>
           </div>
 
           {/* Why Relevant */}

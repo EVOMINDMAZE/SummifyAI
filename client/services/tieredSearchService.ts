@@ -530,6 +530,23 @@ export class TieredSearchService {
     }
   }
 
+  private extractTopicsFromText(text: string): string[] {
+    if (!text) return [];
+
+    // Simple keyword extraction for topic generation
+    const words = text.toLowerCase()
+      .replace(/[^\w\s]/g, ' ')
+      .split(/\s+/)
+      .filter(word => word.length > 4)
+      .filter(word => !['this', 'that', 'with', 'from', 'they', 'were', 'been', 'have', 'will', 'chapter', 'book', 'text', 'information', 'content'].includes(word));
+
+    // Get unique words and return top 3-5
+    const uniqueWords = [...new Set(words)];
+    return uniqueWords.slice(0, 4).map(word =>
+      word.charAt(0).toUpperCase() + word.slice(1)
+    );
+  }
+
   private mergeResults(
     existing: SearchResult[],
     newResults: SearchResult[],

@@ -327,11 +327,11 @@ function ChapterCard({ chapter, index, query, onClick, isAccessible, isMock }: C
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-4 mb-2">
             <h4 className={`font-semibold text-sm line-clamp-2 ${
-              isAccessible 
+              isAccessible
                 ? "text-[#0A0B1E] dark:text-white group-hover:text-[#0A0B1E]/80 dark:group-hover:text-white/80"
                 : "text-gray-500 dark:text-gray-400"
             }`}>
-              {chapter.title}
+              {isSearchResult(chapter) ? chapter.chapterTitle : chapter.chapterTitle}
             </h4>
             <AIRelevanceScore
               score={Math.round(chapter.relevanceScore * 100)}

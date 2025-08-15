@@ -354,7 +354,7 @@ export default function TieredSearchResults({
             </h3>
             <p className="text-gray-600 dark:text-gray-400 mb-4">
               {userPlan === "free"
-                ? "See all search results, get AI-powered insights, and access 500 searches per month!"
+                ? "Unlock all books and chapters, get AI-powered insights, and access 500 searches per month!"
                 : userPlan === "scholar"
                   ? "Upgrade to Professional for word-by-word precision search and 4x more queries!"
                   : "Upgrade to Institution for unlimited searches and team collaboration!"}

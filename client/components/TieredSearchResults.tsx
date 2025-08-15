@@ -295,17 +295,17 @@ export default function TieredSearchResults({
           );
         })}
 
-        {/* Mock Books for Free Users */}
-        {isFree &&
-          mockBooksToShow.map((mockBook, mockIndex) => (
-            <MockBookCard
-              key={`mock-book-${mockIndex}`}
-              book={mockBook}
-              bookIndex={displayBooks.length + mockIndex}
-              query={query}
-              onUpgrade={onUpgrade}
-            />
-          ))}
+        {/* Grayed Out Real Books for Free Users (Books 4+) */}
+        {grayedOutBooks.map(([bookTitle, chapters], grayIndex) => (
+          <GrayedOutBookCard
+            key={`grayed-${bookTitle}`}
+            bookTitle={bookTitle}
+            chapters={chapters}
+            bookIndex={normalBooks.length + grayIndex}
+            query={query}
+            onUpgrade={onUpgrade}
+          />
+        ))}
       </div>
 
       {/* Marketing CTA for more results */}

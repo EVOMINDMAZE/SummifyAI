@@ -347,6 +347,8 @@ export class TieredSearchService {
           snippet: row.chapter_summary?.substring(0, 200) + "...",
           summarySnippet: row.chapter_summary,
           searchType: "summary" as const,
+          whyRelevant: `This chapter summary contains relevant information about your search topic.`,
+          keyTopics: this.extractTopicsFromText(row.chapter_summary || ''),
         })) || []
       );
     } catch (error) {

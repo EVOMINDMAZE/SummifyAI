@@ -507,6 +507,130 @@ function generateBookCover(title: string): string {
   return `https://via.placeholder.com/200x300/${colors[colorIndex]}/FFFFFF?text=${encodedTitle}`;
 }
 
+function GrayedOutBookCard({
+  bookTitle,
+  chapters,
+  bookIndex,
+  query,
+  onUpgrade
+}: {
+  bookTitle: string;
+  chapters: SearchResult[];
+  bookIndex: number;
+  query: string;
+  onUpgrade: () => void;
+}) {
+  // Generate mock details for grayed out books
+  const mockChapters = [
+    {
+      id: `gray-${bookIndex}-1`,
+      chapterTitle: "Key Concepts and Fundamentals",
+      relevanceScore: 0.85,
+      whyRelevant: `Essential foundational concepts related to ${query}`,
+      keyTopics: ["Fundamentals", "Concepts", "Basics"],
+    },
+    {
+      id: `gray-${bookIndex}-2`,
+      chapterTitle: "Advanced Applications",
+      relevanceScore: 0.82,
+      whyRelevant: `Advanced techniques and applications for ${query}`,
+      keyTopics: ["Advanced", "Applications", "Techniques"],
+    }
+  ];
+
+  return (
+    <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm opacity-70 relative overflow-hidden">
+      {/* Subtle overlay to indicate locked content */}
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gray-100/30 to-transparent dark:via-gray-700/30 z-10"></div>
+
+      <CardContent className="p-6">
+        <div className="flex gap-6">
+          {/* Book Cover */}
+          <div className="flex-shrink-0">
+            <div className="relative">
+              <div className="w-24 h-36 relative overflow-hidden rounded-xl shadow-lg opacity-70">
+                <img
+                  src={generateBookCover(bookTitle)}
+                  alt={bookTitle}
+                  className="absolute inset-0 w-full h-full object-cover filter grayscale"
+                  onError={(e) => {
+                    const target = e.currentTarget;
+                    target.src = `https://via.placeholder.com/200x300/999999/FFFFFF?text=${encodeURIComponent(bookTitle.split(" ").slice(0, 2).join(" "))}`;
+                  }}
+                />
+              </div>
+              {/* Rank Badge - grayed out */}
+              <div className="absolute -top-2 -left-2 w-6 h-6 bg-gray-400 text-white rounded-full flex items-center justify-center text-xs font-bold">
+                {bookIndex + 1}
+              </div>
+              {/* Lock icon */}
+              <div className="absolute top-1 right-1 w-5 h-5 bg-gray-500 rounded-full flex items-center justify-center">
+                <Lock className="w-3 h-3 text-white" />
+              </div>
+            </div>
+          </div>
+
+          {/* Book Info & Chapters */}
+          <div className="flex-1 min-w-0">
+            <div className="flex items-start justify-between mb-4">
+              <div className="flex-1 min-w-0">
+                <h3 className="text-lg font-bold text-gray-500 dark:text-gray-400 mb-1 line-clamp-2">
+                  {bookTitle}
+                </h3>
+                <div className="flex items-center gap-4 text-sm text-gray-400 mb-2">
+                  <span className="flex items-center gap-1">
+                    <Users className="w-4 h-4" />
+                    Author Name
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <BookOpen className="w-4 h-4" />
+                    {chapters.length} chapters
+                  </span>
+                </div>
+              </div>
+              <div className="flex-shrink-0 ml-4 opacity-50">
+                <AIRelevanceScore
+                  score={Math.round(chapters[0]?.relevanceScore * 100) || 75}
+                  size="lg"
+                  showBar={true}
+                  query={query}
+                />
+              </div>
+            </div>
+
+            {/* Mock Chapters (grayed out) */}
+            <div className="grid gap-3">
+              {mockChapters.map((chapter, index) => (
+                <ChapterCard
+                  key={chapter.id}
+                  chapter={chapter}
+                  index={index}
+                  query={query}
+                  onClick={onUpgrade}
+                  isAccessible={false}
+                  isMock={true}
+                />
+              ))}
+            </div>
+
+            {/* Upgrade CTA */}
+            <div className="mt-4 text-center">
+              <Button
+                onClick={onUpgrade}
+                size="sm"
+                className="bg-[#FFFD63] hover:bg-[#FFFD63]/90 text-[#0A0B1E] font-semibold"
+              >
+                <Crown className="w-4 h-4 mr-2" />
+                Unlock This Book
+              </Button>
+            </div>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
 function MockBookCard({
   book,
   bookIndex,

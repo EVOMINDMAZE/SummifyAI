@@ -329,6 +329,17 @@ export default function TieredSearchResults({
             );
           },
         )}
+
+        {/* Mock Books for Free Users */}
+        {isFree && mockBooksToShow.map((mockBook, mockIndex) => (
+          <MockBookCard
+            key={`mock-book-${mockIndex}`}
+            book={mockBook}
+            bookIndex={displayBooks.length + mockIndex}
+            query={query}
+            onUpgrade={onUpgrade}
+          />
+        ))}
       </div>
 
       {/* Marketing CTA for more results */}

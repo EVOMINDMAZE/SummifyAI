@@ -64,17 +64,23 @@ const MOCK_BOOKS = [
         id: "mock-book-1-1",
         chapterTitle: "Transforming Traditional Leadership",
         relevanceScore: 0.91,
-        whyRelevant: "Explores how digital transformation requires new leadership approaches.",
-        keyTopics: ["Digital Leadership", "Transformation", "Change Management"],
+        whyRelevant:
+          "Explores how digital transformation requires new leadership approaches.",
+        keyTopics: [
+          "Digital Leadership",
+          "Transformation",
+          "Change Management",
+        ],
       },
       {
         id: "mock-book-1-2",
         chapterTitle: "Building Remote Teams",
         relevanceScore: 0.88,
-        whyRelevant: "Provides frameworks for leading distributed teams effectively.",
+        whyRelevant:
+          "Provides frameworks for leading distributed teams effectively.",
         keyTopics: ["Remote Work", "Team Building", "Communication"],
-      }
-    ]
+      },
+    ],
   },
   {
     title: "Strategic Thinking for Entrepreneurs",
@@ -84,11 +90,12 @@ const MOCK_BOOKS = [
         id: "mock-book-2-1",
         chapterTitle: "Vision to Execution Framework",
         relevanceScore: 0.85,
-        whyRelevant: "Demonstrates how to translate strategic vision into actionable plans.",
+        whyRelevant:
+          "Demonstrates how to translate strategic vision into actionable plans.",
         keyTopics: ["Strategy", "Execution", "Planning"],
-      }
-    ]
-  }
+      },
+    ],
+  },
 ];
 
 export default function TieredSearchResults({
@@ -167,7 +174,9 @@ export default function TieredSearchResults({
           </h2>
           <div className="flex gap-3 text-sm">
             <Badge variant="outline">
-              {Object.keys(groupedResults).length + (isFree ? mockBooksToShow.length : 0)} books
+              {Object.keys(groupedResults).length +
+                (isFree ? mockBooksToShow.length : 0)}{" "}
+              books
             </Badge>
             <Badge variant="outline">
               {searchResponse.results.length} chapters
@@ -184,162 +193,161 @@ export default function TieredSearchResults({
       <div className="grid gap-4">
         {/* Real Books */}
         {displayBooks.map(([bookTitle, chapters], bookIndex) => {
-            const firstChapter = chapters[0];
-            const isExpanded = expandedBooks.has(bookTitle);
+          const firstChapter = chapters[0];
+          const isExpanded = expandedBooks.has(bookTitle);
 
-            // For free users, show only first real chapter + mock chapters
-            const displayChapters = isFree ? [chapters[0]] : chapters;
-            const mockChaptersToShow = isFree ? MOCK_CHAPTERS : [];
+          // For free users, show only first real chapter + mock chapters
+          const displayChapters = isFree ? [chapters[0]] : chapters;
+          const mockChaptersToShow = isFree ? MOCK_CHAPTERS : [];
 
-            return (
-              <Card
-                key={bookTitle}
-                className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm hover:shadow-md transition-all"
-              >
-                <CardContent className="p-6">
-                  <div className="flex gap-6">
-                    {/* Book Cover */}
-                    <div className="flex-shrink-0">
-                      <div className="relative">
-                        <div className="w-24 h-36 relative overflow-hidden rounded-xl shadow-lg">
-                          <img
-                            src={generateBookCover(bookTitle)}
-                            alt={bookTitle}
-                            className="absolute inset-0 w-full h-full object-cover"
-                            onError={(e) => {
-                              const target = e.currentTarget;
-                              target.src = `https://via.placeholder.com/200x300/FFFD63/0A0B1E?text=${encodeURIComponent(bookTitle.split(" ").slice(0, 2).join(" "))}`;
-                            }}
-                          />
-                        </div>
-                        {/* Rank Badge */}
-                        <div className="absolute -top-2 -left-2 w-6 h-6 bg-[#0A0B1E] text-[#FFFD63] rounded-full flex items-center justify-center text-xs font-bold">
-                          {bookIndex + 1}
-                        </div>
+          return (
+            <Card
+              key={bookTitle}
+              className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm hover:shadow-md transition-all"
+            >
+              <CardContent className="p-6">
+                <div className="flex gap-6">
+                  {/* Book Cover */}
+                  <div className="flex-shrink-0">
+                    <div className="relative">
+                      <div className="w-24 h-36 relative overflow-hidden rounded-xl shadow-lg">
+                        <img
+                          src={generateBookCover(bookTitle)}
+                          alt={bookTitle}
+                          className="absolute inset-0 w-full h-full object-cover"
+                          onError={(e) => {
+                            const target = e.currentTarget;
+                            target.src = `https://via.placeholder.com/200x300/FFFD63/0A0B1E?text=${encodeURIComponent(bookTitle.split(" ").slice(0, 2).join(" "))}`;
+                          }}
+                        />
                       </div>
-                    </div>
-
-                    {/* Book Info & Chapters */}
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-start justify-between mb-4">
-                        <div className="flex-1 min-w-0">
-                          <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1 line-clamp-2">
-                            {bookTitle}
-                          </h3>
-                          <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400 mb-2">
-                            <span className="flex items-center gap-1">
-                              <Users className="w-4 h-4" />
-                              Author Name
-                            </span>
-                            <span className="flex items-center gap-1">
-                              <BookOpen className="w-4 h-4" />
-                              {chapters.length +
-                                (isFree ? mockChaptersToShow.length : 0)}{" "}
-                              chapters
-                            </span>
-                          </div>
-                        </div>
-                        <div className="flex-shrink-0 ml-4">
-                          <AIRelevanceScore
-                            score={
-                              Math.round(chapters[0]?.relevanceScore * 100) ||
-                              85
-                            }
-                            size="lg"
-                            showBar={true}
-                            query={query}
-                          />
-                        </div>
+                      {/* Rank Badge */}
+                      <div className="absolute -top-2 -left-2 w-6 h-6 bg-[#0A0B1E] text-[#FFFD63] rounded-full flex items-center justify-center text-xs font-bold">
+                        {bookIndex + 1}
                       </div>
-
-                      {/* Real Chapters */}
-                      <div className="grid gap-3">
-                        {displayChapters
-                          .slice(0, isExpanded ? displayChapters.length : 3)
-                          .map((chapter, index) => (
-                            <ChapterCard
-                              key={chapter.id}
-                              chapter={chapter}
-                              index={index}
-                              query={query}
-                              onClick={() => handleChapterClick(chapter)}
-                              isAccessible={true}
-                            />
-                          ))}
-
-                        {/* Mock Chapters for Free Users */}
-                        {isFree &&
-                          mockChaptersToShow.map((mockChapter, index) => (
-                            <ChapterCard
-                              key={mockChapter.id}
-                              chapter={mockChapter}
-                              index={displayChapters.length + index}
-                              query={query}
-                              onClick={onUpgrade}
-                              isAccessible={false}
-                              isMock={true}
-                            />
-                          ))}
-                      </div>
-
-                      {/* View More / Upgrade Button */}
-                      {isFree ? (
-                        <div className="mt-4 text-center">
-                          <Card className="border-2 border-dashed border-[#FFFD63]/50 bg-[#FFFD63]/5">
-                            <CardContent className="p-4">
-                              <div className="flex items-center justify-center gap-3">
-                                <Crown className="w-5 h-5 text-[#FFFD63]" />
-                                <span className="text-sm font-medium text-gray-900 dark:text-white">
-                                  Unlock{" "}
-                                  {chapters.length -
-                                    1 +
-                                    mockChaptersToShow.length}{" "}
-                                  more chapters from this book
-                                </span>
-                                <Button
-                                  onClick={onUpgrade}
-                                  size="sm"
-                                  className="bg-[#FFFD63] hover:bg-[#FFFD63]/90 text-[#0A0B1E] font-semibold"
-                                >
-                                  Upgrade
-                                </Button>
-                              </div>
-                            </CardContent>
-                          </Card>
-                        </div>
-                      ) : (
-                        chapters.length > 3 &&
-                        !isExpanded && (
-                          <div className="mt-4 text-center">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => toggleBookExpansion(bookTitle)}
-                              className="border-[#FFFD63]/50 text-[#0A0B1E] dark:text-[#FFFD63] hover:bg-[#FFFD63]/10"
-                            >
-                              View all {chapters.length} chapters
-                            </Button>
-                          </div>
-                        )
-                      )}
                     </div>
                   </div>
-                </CardContent>
-              </Card>
-            );
-          },
-        )}
+
+                  {/* Book Info & Chapters */}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="flex-1 min-w-0">
+                        <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1 line-clamp-2">
+                          {bookTitle}
+                        </h3>
+                        <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400 mb-2">
+                          <span className="flex items-center gap-1">
+                            <Users className="w-4 h-4" />
+                            Author Name
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <BookOpen className="w-4 h-4" />
+                            {chapters.length +
+                              (isFree ? mockChaptersToShow.length : 0)}{" "}
+                            chapters
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex-shrink-0 ml-4">
+                        <AIRelevanceScore
+                          score={
+                            Math.round(chapters[0]?.relevanceScore * 100) || 85
+                          }
+                          size="lg"
+                          showBar={true}
+                          query={query}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Real Chapters */}
+                    <div className="grid gap-3">
+                      {displayChapters
+                        .slice(0, isExpanded ? displayChapters.length : 3)
+                        .map((chapter, index) => (
+                          <ChapterCard
+                            key={chapter.id}
+                            chapter={chapter}
+                            index={index}
+                            query={query}
+                            onClick={() => handleChapterClick(chapter)}
+                            isAccessible={true}
+                          />
+                        ))}
+
+                      {/* Mock Chapters for Free Users */}
+                      {isFree &&
+                        mockChaptersToShow.map((mockChapter, index) => (
+                          <ChapterCard
+                            key={mockChapter.id}
+                            chapter={mockChapter}
+                            index={displayChapters.length + index}
+                            query={query}
+                            onClick={onUpgrade}
+                            isAccessible={false}
+                            isMock={true}
+                          />
+                        ))}
+                    </div>
+
+                    {/* View More / Upgrade Button */}
+                    {isFree ? (
+                      <div className="mt-4 text-center">
+                        <Card className="border-2 border-dashed border-[#FFFD63]/50 bg-[#FFFD63]/5">
+                          <CardContent className="p-4">
+                            <div className="flex items-center justify-center gap-3">
+                              <Crown className="w-5 h-5 text-[#FFFD63]" />
+                              <span className="text-sm font-medium text-gray-900 dark:text-white">
+                                Unlock{" "}
+                                {chapters.length -
+                                  1 +
+                                  mockChaptersToShow.length}{" "}
+                                more chapters from this book
+                              </span>
+                              <Button
+                                onClick={onUpgrade}
+                                size="sm"
+                                className="bg-[#FFFD63] hover:bg-[#FFFD63]/90 text-[#0A0B1E] font-semibold"
+                              >
+                                Upgrade
+                              </Button>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </div>
+                    ) : (
+                      chapters.length > 3 &&
+                      !isExpanded && (
+                        <div className="mt-4 text-center">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => toggleBookExpansion(bookTitle)}
+                            className="border-[#FFFD63]/50 text-[#0A0B1E] dark:text-[#FFFD63] hover:bg-[#FFFD63]/10"
+                          >
+                            View all {chapters.length} chapters
+                          </Button>
+                        </div>
+                      )
+                    )}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          );
+        })}
 
         {/* Mock Books for Free Users */}
-        {isFree && mockBooksToShow.map((mockBook, mockIndex) => (
-          <MockBookCard
-            key={`mock-book-${mockIndex}`}
-            book={mockBook}
-            bookIndex={displayBooks.length + mockIndex}
-            query={query}
-            onUpgrade={onUpgrade}
-          />
-        ))}
+        {isFree &&
+          mockBooksToShow.map((mockBook, mockIndex) => (
+            <MockBookCard
+              key={`mock-book-${mockIndex}`}
+              book={mockBook}
+              bookIndex={displayBooks.length + mockIndex}
+              query={query}
+              onUpgrade={onUpgrade}
+            />
+          ))}
       </div>
 
       {/* Marketing CTA for more results */}
@@ -432,7 +440,7 @@ function ChapterCard({
                 ? chapter.chapterTitle
                 : chapter.chapterTitle}
             </h4>
-            <div className={`${!isAccessible ? 'opacity-50' : ''}`}>
+            <div className={`${!isAccessible ? "opacity-50" : ""}`}>
               <AIRelevanceScore
                 score={Math.round(chapter.relevanceScore * 100)}
                 size="sm"
@@ -545,9 +553,9 @@ function MockBookCard({
   book,
   bookIndex,
   query,
-  onUpgrade
+  onUpgrade,
 }: {
-  book: typeof MOCK_BOOKS[0];
+  book: (typeof MOCK_BOOKS)[0];
   bookIndex: number;
   query: string;
   onUpgrade: () => void;
@@ -610,7 +618,9 @@ function MockBookCard({
               </div>
               <div className="flex-shrink-0 ml-4 opacity-50">
                 <AIRelevanceScore
-                  score={Math.round(book.chapters[0]?.relevanceScore * 100) || 85}
+                  score={
+                    Math.round(book.chapters[0]?.relevanceScore * 100) || 85
+                  }
                   size="lg"
                   showBar={true}
                   query={query}

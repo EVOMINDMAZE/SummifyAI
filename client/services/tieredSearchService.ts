@@ -414,6 +414,8 @@ export class TieredSearchService {
           relevanceScore: row.rank,
           snippet: this.extractSnippet(row.chapter_text, query),
           searchType: "fulltext" as const,
+          whyRelevant: `This chapter contains exact text matches for your search terms.`,
+          keyTopics: this.extractTopicsFromText(row.chapter_text || ''),
         })) || []
       );
     } catch (error) {

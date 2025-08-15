@@ -76,7 +76,7 @@ export default function TieredSearchResults({
   const normalBooks = isFree ? allBookEntries.slice(0, 3) : allBookEntries;
   const grayedOutBooks = isFree ? allBookEntries.slice(3) : [];
 
-  const mockBooksToShow = isFree ? MOCK_BOOKS : [];
+  // No longer need mock books - using grayed out real books instead
 
   const handleChapterClick = (result: SearchResult) => {
     navigate(`/chapter/${result.bookTitle.replace(/\s+/g, "-")}/${result.id}`, {

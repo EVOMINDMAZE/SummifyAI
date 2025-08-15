@@ -54,49 +54,8 @@ const MOCK_CHAPTERS = [
   },
 ];
 
-// Mock books for free plan teasing
-const MOCK_BOOKS = [
-  {
-    title: "Leadership in the Digital Age",
-    author: "Dr. Sarah Johnson",
-    chapters: [
-      {
-        id: "mock-book-1-1",
-        chapterTitle: "Transforming Traditional Leadership",
-        relevanceScore: 0.91,
-        whyRelevant:
-          "Explores how digital transformation requires new leadership approaches.",
-        keyTopics: [
-          "Digital Leadership",
-          "Transformation",
-          "Change Management",
-        ],
-      },
-      {
-        id: "mock-book-1-2",
-        chapterTitle: "Building Remote Teams",
-        relevanceScore: 0.88,
-        whyRelevant:
-          "Provides frameworks for leading distributed teams effectively.",
-        keyTopics: ["Remote Work", "Team Building", "Communication"],
-      },
-    ],
-  },
-  {
-    title: "Strategic Thinking for Entrepreneurs",
-    author: "Michael Chen",
-    chapters: [
-      {
-        id: "mock-book-2-1",
-        chapterTitle: "Vision to Execution Framework",
-        relevanceScore: 0.85,
-        whyRelevant:
-          "Demonstrates how to translate strategic vision into actionable plans.",
-        keyTopics: ["Strategy", "Execution", "Planning"],
-      },
-    ],
-  },
-];
+// Keep the mock chapters for individual chapter mocking
+// (now used in grayed out books with generated mock details)
 
 export default function TieredSearchResults({
   searchResponse,

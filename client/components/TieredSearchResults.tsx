@@ -315,12 +315,12 @@ export default function TieredSearchResults({
             <Sparkles className="w-12 h-12 text-[#FFFD63] mx-auto mb-4" />
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
               {userPlan === "free"
-                ? "Want to Unlock More Chapters?"
+                ? "Want to Unlock All Books?"
                 : "Want More Powerful Search?"}
             </h3>
             <p className="text-gray-600 dark:text-gray-400 mb-4">
               {userPlan === "free"
-                ? "Unlock all books and chapters, get AI-powered insights, and access 500 searches per month!"
+                ? `You've seen ${normalBooks.length} books. Unlock ${grayedOutBooks.length}+ more books and get AI-powered insights with 500 searches per month!`
                 : userPlan === "scholar"
                   ? "Upgrade to Professional for word-by-word precision search and 4x more queries!"
                   : "Upgrade to Institution for unlimited searches and team collaboration!"}

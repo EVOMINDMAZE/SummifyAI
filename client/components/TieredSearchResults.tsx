@@ -215,7 +215,7 @@ export default function TieredSearchResults({
                           className="absolute inset-0 w-full h-full object-cover"
                           onError={(e) => {
                             const target = e.currentTarget;
-                            target.src = `https://via.placeholder.com/200x300/FFFD63/0A0B1E?text=${encodeURIComponent(bookTitle.split(" ").slice(0, 2).join(" "))}`;
+                            target.src = `https://dummyimage.com/200x300/FFFD63/0A0B1E&text=${encodeURIComponent(bookTitle.split(" ").slice(0, 2).join(" "))}`;
                           }}
                         />
                       </div>

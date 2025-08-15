@@ -273,60 +273,20 @@ export default function TieredSearchResults({
                           />
                         ))}
 
-                      {/* Mock Chapters for Free Users */}
-                      {isFree &&
-                        mockChaptersToShow.map((mockChapter, index) => (
-                          <ChapterCard
-                            key={mockChapter.id}
-                            chapter={mockChapter}
-                            index={displayChapters.length + index}
-                            query={query}
-                            onClick={onUpgrade}
-                            isAccessible={false}
-                            isMock={true}
-                          />
-                        ))}
                     </div>
 
-                    {/* View More / Upgrade Button */}
-                    {isFree ? (
+                    {/* View More Button */}
+                    {chapters.length > 3 && !isExpanded && (
                       <div className="mt-4 text-center">
-                        <Card className="border-2 border-dashed border-[#FFFD63]/50 bg-[#FFFD63]/5">
-                          <CardContent className="p-4">
-                            <div className="flex items-center justify-center gap-3">
-                              <Crown className="w-5 h-5 text-[#FFFD63]" />
-                              <span className="text-sm font-medium text-gray-900 dark:text-white">
-                                Unlock{" "}
-                                {chapters.length -
-                                  1 +
-                                  mockChaptersToShow.length}{" "}
-                                more chapters from this book
-                              </span>
-                              <Button
-                                onClick={onUpgrade}
-                                size="sm"
-                                className="bg-[#FFFD63] hover:bg-[#FFFD63]/90 text-[#0A0B1E] font-semibold"
-                              >
-                                Upgrade
-                              </Button>
-                            </div>
-                          </CardContent>
-                        </Card>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => toggleBookExpansion(bookTitle)}
+                          className="border-[#FFFD63]/50 text-[#0A0B1E] dark:text-[#FFFD63] hover:bg-[#FFFD63]/10"
+                        >
+                          View all {chapters.length} chapters
+                        </Button>
                       </div>
-                    ) : (
-                      chapters.length > 3 &&
-                      !isExpanded && (
-                        <div className="mt-4 text-center">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => toggleBookExpansion(bookTitle)}
-                            className="border-[#FFFD63]/50 text-[#0A0B1E] dark:text-[#FFFD63] hover:bg-[#FFFD63]/10"
-                          >
-                            View all {chapters.length} chapters
-                          </Button>
-                        </div>
-                      )
                     )}
                   </div>
                 </div>

@@ -386,6 +386,8 @@ export class TieredSearchService {
           relevanceScore: 1 - row.distance,
           snippet: this.extractSnippet(row.chapter_text, query),
           searchType: "chapter" as const,
+          whyRelevant: `This chapter contains detailed information related to your search query.`,
+          keyTopics: this.extractTopicsFromText(row.chapter_text || ''),
         })) || []
       );
     } catch (error) {

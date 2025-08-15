@@ -298,6 +298,11 @@ interface ChapterCardProps {
   isMock?: boolean;
 }
 
+// Type guard to check if it's a SearchResult
+function isSearchResult(chapter: SearchResult | typeof MOCK_CHAPTERS[0]): chapter is SearchResult {
+  return 'bookTitle' in chapter;
+}
+
 function ChapterCard({ chapter, index, query, onClick, isAccessible, isMock }: ChapterCardProps) {
   return (
     <div

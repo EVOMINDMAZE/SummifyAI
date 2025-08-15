@@ -18,22 +18,22 @@ interface TieredSearchResultsProps {
 const MOCK_CHAPTERS = [
   {
     id: 'mock-1',
-    title: 'Advanced Strategies and Implementation',
-    relevanceScore: 92,
+    chapterTitle: 'Advanced Strategies and Implementation',
+    relevanceScore: 0.92,
     whyRelevant: 'This chapter covers advanced techniques and real-world applications that build upon the foundational concepts.',
     keyTopics: ['Strategy', 'Implementation', 'Leadership']
   },
   {
-    id: 'mock-2', 
-    title: 'Case Studies and Practical Examples',
-    relevanceScore: 89,
+    id: 'mock-2',
+    chapterTitle: 'Case Studies and Practical Examples',
+    relevanceScore: 0.89,
     whyRelevant: 'Real-world case studies that demonstrate successful application of these principles in various industries.',
     keyTopics: ['Case Studies', 'Examples', 'Best Practices']
   },
   {
     id: 'mock-3',
-    title: 'Expert Insights and Future Trends',
-    relevanceScore: 87,
+    chapterTitle: 'Expert Insights and Future Trends',
+    relevanceScore: 0.87,
     whyRelevant: 'Forward-thinking analysis and expert perspectives on emerging trends and future developments.',
     keyTopics: ['Trends', 'Innovation', 'Future']
   }

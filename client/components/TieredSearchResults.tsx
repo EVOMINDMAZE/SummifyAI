@@ -502,9 +502,10 @@ function generateBookCover(title: string): string {
   const colors = ["4F46E5", "059669", "DC2626", "D97706", "7C3AED", "DB2777"];
   const colorIndex = title.length % colors.length;
   const encodedTitle = encodeURIComponent(
-    title.split(" ").slice(0, 3).join(" "),
+    title.split(" ").slice(0, 2).join(" "),
   );
-  return `https://via.placeholder.com/200x300/${colors[colorIndex]}/FFFFFF?text=${encodedTitle}`;
+  // Use a more reliable placeholder service with better parameters
+  return `https://dummyimage.com/200x300/${colors[colorIndex]}/ffffff&text=${encodedTitle}`;
 }
 
 function GrayedOutBookCard({

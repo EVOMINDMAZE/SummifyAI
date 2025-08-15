@@ -348,7 +348,7 @@ export class TieredSearchService {
           summarySnippet: row.chapter_summary,
           searchType: "summary" as const,
           whyRelevant: `This chapter summary contains relevant information about your search topic.`,
-          keyTopics: this.extractTopicsFromText(row.chapter_summary || ''),
+          keyTopics: this.extractTopicsFromText(row.chapter_summary || ""),
         })) || []
       );
     } catch (error) {
@@ -387,7 +387,7 @@ export class TieredSearchService {
           snippet: this.extractSnippet(row.chapter_text, query),
           searchType: "chapter" as const,
           whyRelevant: `This chapter contains detailed information related to your search query.`,
-          keyTopics: this.extractTopicsFromText(row.chapter_text || ''),
+          keyTopics: this.extractTopicsFromText(row.chapter_text || ""),
         })) || []
       );
     } catch (error) {
@@ -415,7 +415,7 @@ export class TieredSearchService {
           snippet: this.extractSnippet(row.chapter_text, query),
           searchType: "fulltext" as const,
           whyRelevant: `This chapter contains exact text matches for your search terms.`,
-          keyTopics: this.extractTopicsFromText(row.chapter_text || ''),
+          keyTopics: this.extractTopicsFromText(row.chapter_text || ""),
         })) || []
       );
     } catch (error) {
@@ -521,7 +521,9 @@ export class TieredSearchService {
           ),
           searchType: "fulltext" as const,
           whyRelevant: `This chapter contains text that matches your search terms.`,
-          keyTopics: this.extractTopicsFromText(row.chapter_text || row.chapter_summary || ''),
+          keyTopics: this.extractTopicsFromText(
+            row.chapter_text || row.chapter_summary || "",
+          ),
         })) || []
       );
     } catch (error) {
@@ -534,17 +536,36 @@ export class TieredSearchService {
     if (!text) return [];
 
     // Simple keyword extraction for topic generation
-    const words = text.toLowerCase()
-      .replace(/[^\w\s]/g, ' ')
+    const words = text
+      .toLowerCase()
+      .replace(/[^\w\s]/g, " ")
       .split(/\s+/)
-      .filter(word => word.length > 4)
-      .filter(word => !['this', 'that', 'with', 'from', 'they', 'were', 'been', 'have', 'will', 'chapter', 'book', 'text', 'information', 'content'].includes(word));
+      .filter((word) => word.length > 4)
+      .filter(
+        (word) =>
+          ![
+            "this",
+            "that",
+            "with",
+            "from",
+            "they",
+            "were",
+            "been",
+            "have",
+            "will",
+            "chapter",
+            "book",
+            "text",
+            "information",
+            "content",
+          ].includes(word),
+      );
 
     // Get unique words and return top 3-5
     const uniqueWords = [...new Set(words)];
-    return uniqueWords.slice(0, 4).map(word =>
-      word.charAt(0).toUpperCase() + word.slice(1)
-    );
+    return uniqueWords
+      .slice(0, 4)
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1));
   }
 
   private mergeResults(

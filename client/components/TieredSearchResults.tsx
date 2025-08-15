@@ -174,9 +174,7 @@ export default function TieredSearchResults({
           </h2>
           <div className="flex gap-3 text-sm">
             <Badge variant="outline">
-              {Object.keys(groupedResults).length +
-                (isFree ? mockBooksToShow.length : 0)}{" "}
-              books
+              {Object.keys(groupedResults).length} books
             </Badge>
             <Badge variant="outline">
               {searchResponse.results.length} chapters

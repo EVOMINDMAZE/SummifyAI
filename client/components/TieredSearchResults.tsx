@@ -541,6 +541,104 @@ function generateBookCover(title: string): string {
   return `https://via.placeholder.com/200x300/${colors[colorIndex]}/FFFFFF?text=${encodedTitle}`;
 }
 
+function MockBookCard({
+  book,
+  bookIndex,
+  query,
+  onUpgrade
+}: {
+  book: typeof MOCK_BOOKS[0];
+  bookIndex: number;
+  query: string;
+  onUpgrade: () => void;
+}) {
+  return (
+    <Card className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm opacity-60 relative overflow-hidden">
+      {/* Blur overlay */}
+      <div className="absolute inset-0 bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm z-10 flex items-center justify-center">
+        <div className="text-center">
+          <Crown className="w-8 h-8 text-[#FFFD63] mx-auto mb-2" />
+          <p className="text-sm font-medium text-gray-900 dark:text-white mb-2">
+            Unlock this book
+          </p>
+          <Button
+            onClick={onUpgrade}
+            size="sm"
+            className="bg-[#FFFD63] hover:bg-[#FFFD63]/90 text-[#0A0B1E] font-semibold"
+          >
+            Upgrade Now
+          </Button>
+        </div>
+      </div>
+
+      <CardContent className="p-6">
+        <div className="flex gap-6">
+          {/* Book Cover */}
+          <div className="flex-shrink-0">
+            <div className="relative">
+              <div className="w-24 h-36 relative overflow-hidden rounded-xl shadow-lg">
+                <img
+                  src={generateBookCover(book.title)}
+                  alt={book.title}
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+              </div>
+              {/* Rank Badge */}
+              <div className="absolute -top-2 -left-2 w-6 h-6 bg-gray-400 text-white rounded-full flex items-center justify-center text-xs font-bold">
+                {bookIndex + 1}
+              </div>
+            </div>
+          </div>
+
+          {/* Book Info & Chapters */}
+          <div className="flex-1 min-w-0">
+            <div className="flex items-start justify-between mb-4">
+              <div className="flex-1 min-w-0">
+                <h3 className="text-lg font-bold text-gray-500 dark:text-gray-400 mb-1 line-clamp-2">
+                  {book.title}
+                </h3>
+                <div className="flex items-center gap-4 text-sm text-gray-400 mb-2">
+                  <span className="flex items-center gap-1">
+                    <Users className="w-4 h-4" />
+                    {book.author}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <BookOpen className="w-4 h-4" />
+                    {book.chapters.length} chapters
+                  </span>
+                </div>
+              </div>
+              <div className="flex-shrink-0 ml-4 opacity-50">
+                <AIRelevanceScore
+                  score={Math.round(book.chapters[0]?.relevanceScore * 100) || 85}
+                  size="lg"
+                  showBar={true}
+                  query={query}
+                />
+              </div>
+            </div>
+
+            {/* Mock Chapters */}
+            <div className="grid gap-3">
+              {book.chapters.map((chapter, index) => (
+                <ChapterCard
+                  key={chapter.id}
+                  chapter={chapter}
+                  index={index}
+                  query={query}
+                  onClick={onUpgrade}
+                  isAccessible={false}
+                  isMock={true}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
 function getPlanBadgeColor(plan: string) {
   switch (plan) {
     case "free":

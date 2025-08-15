@@ -231,7 +231,6 @@ export default function TieredSearchResults({
                             isAccessible={true}
                           />
                         ))}
-
                     </div>
 
                     {/* View More Button */}
@@ -472,7 +471,7 @@ function GrayedOutBookCard({
   chapters,
   bookIndex,
   query,
-  onUpgrade
+  onUpgrade,
 }: {
   bookTitle: string;
   chapters: SearchResult[];
@@ -495,7 +494,7 @@ function GrayedOutBookCard({
       relevanceScore: 0.82,
       whyRelevant: `Advanced techniques and applications for ${query}`,
       keyTopics: ["Advanced", "Applications", "Techniques"],
-    }
+    },
   ];
 
   return (

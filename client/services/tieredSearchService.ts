@@ -24,6 +24,8 @@ export interface SearchResult {
   summarySnippet?: string;
   searchType: "summary" | "chapter" | "fulltext";
   aiAnalysis?: string;
+  whyRelevant?: string;
+  keyTopics?: string[];
 }
 
 export interface TieredSearchResponse {

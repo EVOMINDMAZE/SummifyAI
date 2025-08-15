@@ -1,22 +1,24 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import ThemeToggle from "@/components/ThemeToggle";
+import Navigation from "@/components/Navigation";
+import StripeCheckout from "@/components/StripeCheckout";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Check, Star, Zap, Crown } from "lucide-react";
+import { stripeProducts, getProductByName } from "../../src/stripe-config";
 
 export default function Pricing() {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [billingCycle, setBillingCycle] = useState<"monthly" | "annual">(
-    "monthly",
-  );
+  const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
 
   const plans = [
     {
       id: "free",
       name: "Free",
-      monthlyPrice: "Free",
-      annualPrice: "Free",
+      price: "Free",
       subtitle: "Perfect for getting started",
       description: "Ideal for students and casual researchers",
       icon: "🚀",
@@ -29,16 +31,12 @@ export default function Pricing() {
         "Mobile-friendly interface",
       ],
       cta: "Start Free Forever",
-      ctaAction: "signup",
       popular: false,
     },
     {
       id: "scholar",
       name: "Scholar",
-      monthlyPrice: "$19.99",
-      annualPrice: "$199.99",
-      monthlyPriceId: "price_scholar_monthly",
-      annualPriceId: "price_scholar_annual",
+      price: "$19.99",
       subtitle: "Most popular choice",
       description: "For professionals and serious researchers",
       icon: "📚",
@@ -53,17 +51,13 @@ export default function Pricing() {
         "Search analytics dashboard",
       ],
       cta: "Start 14-Day Free Trial",
-      ctaAction: "trial",
       popular: true,
       trial: true,
     },
     {
       id: "professional",
       name: "Professional",
-      monthlyPrice: "$49.99",
-      annualPrice: "$499.99",
-      monthlyPriceId: "price_professional_monthly",
-      annualPriceId: "price_professional_annual",
+      price: "$29.99",
       subtitle: "For power users",
       description: "Advanced features for professional researchers",
       icon: "⚡",
@@ -79,16 +73,12 @@ export default function Pricing() {
         "Advanced reporting dashboard",
       ],
       cta: "Upgrade to Professional",
-      ctaAction: "upgrade",
       popular: false,
     },
     {
-      id: "institution",
-      name: "Institution",
-      monthlyPrice: "$99.99",
-      annualPrice: "$999.99",
-      monthlyPriceId: "price_institution_monthly",
-      annualPriceId: "price_institution_annual",
+      id: "enterprise",
+      name: "Enterprise",
+      price: "$99.99",
       subtitle: "For teams and organizations",
       description: "Enterprise-grade research capabilities",
       icon: "👑",
@@ -105,95 +95,78 @@ export default function Pricing() {
         "Custom training and onboarding",
       ],
       cta: "Contact Sales",
-      ctaAction: "contact",
       popular: false,
       customPricing: true,
     },
   ];
 
-  const handlePlanSelect = async (plan: any) => {
-    if (isProcessing) return;
-    setIsProcessing(true);
-
-    try {
-      if (plan.ctaAction === "signup") {
+  const handlePlanSelect = (planId: string) => {
+    if (planId === "free") {
+      if (!user) {
         navigate("/signup");
-      } else if (plan.ctaAction === "contact") {
-        navigate("/contact");
-      } else if (plan.ctaAction === "trial" || plan.ctaAction === "upgrade") {
-        if (!user) {
-          navigate("/signup");
-          return;
-        }
-
-        // In a real implementation, you would integrate with Stripe here
-        const priceId =
-          billingCycle === "monthly" ? plan.monthlyPriceId : plan.annualPriceId;
-        // Example:
-        // const stripe = await loadStripe(process.env.STRIPE_PUBLISHABLE_KEY);
-        // const response = await fetch('/api/create-checkout-session', {
-        //   method: 'POST',
-        //   headers: { 'Content-Type': 'application/json' },
-        //   body: JSON.stringify({ priceId, userId: user.id })
-        // });
-        // const session = await response.json();
-        // await stripe.redirectToCheckout({ sessionId: session.id });
-
-        alert(
-          `Redirecting to ${plan.name} (${billingCycle}) subscription checkout...`,
-        );
+      } else {
+        navigate("/dashboard");
       }
-    } catch (error) {
-      console.error("Error selecting plan:", error);
-      alert("Something went wrong. Please try again.");
-    } finally {
-      setIsProcessing(false);
+      return;
+    }
+
+    if (planId === "enterprise") {
+      navigate("/contact");
+      return;
+    }
+
+    if (!user) {
+      navigate("/signup");
+      return;
+    }
+
+    // Find the corresponding Stripe product
+    const stripeProduct = getProductByName(planId);
+    if (stripeProduct) {
+      setSelectedProduct(planId);
     }
   };
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-[#FFFD63]/10 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      {/* Navigation */}
-      <nav className="bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="flex justify-between items-center h-16">
-            <Link to="/" className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-[#FFFD63] rounded-lg flex items-center justify-center">
-                <span className="text-[#0A0B1E] font-bold text-lg">S</span>
-              </div>
-              <span className="text-xl font-bold text-gray-900 dark:text-white">
-                SummifyIO
-              </span>
-            </Link>
-            <div className="flex items-center gap-4">
-              <ThemeToggle />
-              {user ? (
-                <Link
-                  to="/dashboard"
-                  className="bg-[#0A0B1E] hover:bg-[#0A0B1E]/90 text-[#FFFD63] px-4 py-2 rounded-lg font-medium transition-colors"
-                >
-                  Dashboard
-                </Link>
-              ) : (
-                <>
-                  <Link
-                    to="/signin"
-                    className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white font-medium"
-                  >
-                    Sign In
-                  </Link>
-                  <Link
-                    to="/signup"
-                    className="bg-[#0A0B1E] hover:bg-[#0A0B1E]/90 text-[#FFFD63] px-4 py-2 rounded-lg font-medium transition-colors"
-                  >
-                    Sign Up
-                  </Link>
-                </>
-              )}
+  const handleCheckoutSuccess = () => {
+    setSelectedProduct(null);
+    navigate("/checkout/success");
+  };
+
+  const handleCheckoutCancel = () => {
+    setSelectedProduct(null);
+  };
+
+  // If a product is selected, show checkout
+  if (selectedProduct) {
+    const stripeProduct = getProductByName(selectedProduct);
+    if (stripeProduct) {
+      return (
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+          <Navigation />
+          <div className="max-w-2xl mx-auto px-4 py-16">
+            <div className="text-center mb-8">
+              <Button
+                variant="ghost"
+                onClick={() => setSelectedProduct(null)}
+                className="mb-4"
+              >
+                ← Back to Plans
+              </Button>
             </div>
+            <StripeCheckout
+              product={stripeProduct}
+              onSuccess={handleCheckoutSuccess}
+              onCancel={handleCheckoutCancel}
+            />
           </div>
         </div>
-      </nav>
+      );
+    }
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-[#FFFD63]/10 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      <Navigation />
 
       {/* Header */}
       <div className="max-w-6xl mx-auto px-6 pt-16 pb-12 text-center">
@@ -204,41 +177,13 @@ export default function Pricing() {
           Unlock the full potential of AI-powered chapter discovery with plans
           designed for every type of researcher
         </p>
-
-        {/* Billing Toggle */}
-        <div className="inline-flex items-center bg-white dark:bg-gray-800 rounded-2xl p-1 shadow-lg border border-gray-200 dark:border-gray-700 mb-8">
-          <button
-            onClick={() => setBillingCycle("monthly")}
-            className={`px-6 py-3 rounded-xl font-medium transition-all ${
-              billingCycle === "monthly"
-                ? "bg-[#FFFD63] text-[#0A0B1E] shadow-md"
-                : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
-            }`}
-          >
-            Monthly
-          </button>
-          <button
-            onClick={() => setBillingCycle("annual")}
-            className={`px-6 py-3 rounded-xl font-medium transition-all relative ${
-              billingCycle === "annual"
-                ? "bg-[#FFFD63] text-[#0A0B1E] shadow-md"
-                : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
-            }`}
-          >
-            Annual
-            <span className="absolute -top-2 -right-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full">
-              Save 20%
-            </span>
-          </button>
-        </div>
       </div>
 
       {/* Pricing Cards */}
       <div className="max-w-7xl mx-auto px-6 pb-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
           {plans.map((plan) => {
-            const currentPrice =
-              billingCycle === "monthly" ? plan.monthlyPrice : plan.annualPrice;
+            const isCurrentPlan = user?.planType === plan.id;
             const isPopular = plan.popular;
 
             return (
@@ -258,6 +203,14 @@ export default function Pricing() {
                   </div>
                 )}
 
+                {isCurrentPlan && (
+                  <div className="absolute top-4 right-4">
+                    <Badge className="bg-green-500 text-white">
+                      Current Plan
+                    </Badge>
+                  </div>
+                )}
+
                 <div className={`p-6 ${isPopular ? "pt-12" : "pt-8"}`}>
                   {/* Icon */}
                   <div
@@ -273,20 +226,13 @@ export default function Pricing() {
                     </h3>
                     <div className="mb-2">
                       <span className="text-4xl font-black text-gray-900 dark:text-white">
-                        {currentPrice}
+                        {plan.price}
                       </span>
-                      {currentPrice !== "Free" && !plan.customPricing && (
+                      {plan.price !== "Free" && !plan.customPricing && (
                         <span className="text-gray-600 dark:text-gray-400 ml-1">
-                          /{billingCycle === "monthly" ? "month" : "year"}
+                          /month
                         </span>
                       )}
-                      {billingCycle === "annual" &&
-                        currentPrice !== "Free" &&
-                        !plan.customPricing && (
-                          <div className="text-sm text-green-600 dark:text-green-400 mt-1">
-                            Save 20% vs monthly
-                          </div>
-                        )}
                     </div>
                     <p className="text-sm font-medium text-amber-600 dark:text-amber-400">
                       {plan.subtitle}
@@ -300,17 +246,7 @@ export default function Pricing() {
                   <div className="space-y-3 mb-8">
                     {plan.features.map((feature, index) => (
                       <div key={index} className="flex items-start gap-3">
-                        <svg
-                          className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0"
-                          fill="currentColor"
-                          viewBox="0 0 20 20"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
+                        <Check className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
                         <span className="text-sm text-gray-700 dark:text-gray-300">
                           {feature}
                         </span>
@@ -319,21 +255,21 @@ export default function Pricing() {
                   </div>
 
                   {/* CTA Button */}
-                  <button
-                    onClick={() => handlePlanSelect(plan)}
-                    disabled={isProcessing}
+                  <Button
+                    onClick={() => handlePlanSelect(plan.id)}
+                    disabled={isCurrentPlan}
                     className={`w-full py-4 px-6 rounded-xl font-bold transition-all duration-300 ${
                       isPopular
                         ? "bg-[#FFFD63] hover:bg-[#FFFD63]/90 text-[#0A0B1E] shadow-lg hover:shadow-xl"
                         : plan.id === "free"
                           ? "bg-gray-100 hover:bg-gray-200 text-gray-900 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white"
                           : "bg-[#0A0B1E] hover:bg-[#0A0B1E]/90 text-white shadow-lg hover:shadow-xl"
-                    } disabled:opacity-50 disabled:cursor-not-allowed`}
+                    } ${isCurrentPlan ? "opacity-50 cursor-not-allowed" : ""}`}
                   >
-                    {isProcessing ? "Processing..." : plan.cta}
-                  </button>
+                    {isCurrentPlan ? "Current Plan" : plan.cta}
+                  </Button>
 
-                  {plan.trial && (
+                  {plan.trial && !isCurrentPlan && (
                     <p className="text-xs text-gray-500 dark:text-gray-400 text-center mt-3">
                       14-day free trial included
                     </p>
@@ -359,7 +295,7 @@ export default function Pricing() {
 
       {/* Feature Comparison Table */}
       <div className="max-w-7xl mx-auto px-6 pb-16">
-        <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-lg p-8">
+        <Card className="bg-white dark:bg-gray-800 rounded-3xl shadow-lg p-8">
           <h2 className="text-3xl font-bold text-center text-gray-900 dark:text-white mb-8">
             Compare all features
           </h2>
@@ -381,7 +317,7 @@ export default function Pricing() {
                     Professional
                   </th>
                   <th className="text-center py-4 text-lg font-bold text-gray-900 dark:text-white">
-                    Institution
+                    Enterprise
                   </th>
                 </tr>
               </thead>
@@ -432,7 +368,7 @@ export default function Pricing() {
                 </tr>
                 <tr>
                   <td className="py-4 font-medium text-gray-900 dark:text-white">
-                    Custom search models
+                    API access
                   </td>
                   <td className="py-4 text-center">❌</td>
                   <td className="py-4 text-center">❌</td>
@@ -441,35 +377,17 @@ export default function Pricing() {
                 </tr>
                 <tr>
                   <td className="py-4 font-medium text-gray-900 dark:text-white">
-                    Export capabilities
+                    Team collaboration
                   </td>
                   <td className="py-4 text-center">❌</td>
-                  <td className="py-4 text-center">✅</td>
-                  <td className="py-4 text-center">✅</td>
-                  <td className="py-4 text-center">✅</td>
-                </tr>
-                <tr>
-                  <td className="py-4 font-medium text-gray-900 dark:text-white">
-                    Advanced filters
-                  </td>
                   <td className="py-4 text-center">❌</td>
-                  <td className="py-4 text-center">✅</td>
-                  <td className="py-4 text-center">✅</td>
-                  <td className="py-4 text-center">✅</td>
-                </tr>
-                <tr>
-                  <td className="py-4 font-medium text-gray-900 dark:text-white">
-                    Analytics dashboard
-                  </td>
                   <td className="py-4 text-center">❌</td>
-                  <td className="py-4 text-center">✅</td>
-                  <td className="py-4 text-center">✅</td>
                   <td className="py-4 text-center">✅</td>
                 </tr>
               </tbody>
             </table>
           </div>
-        </div>
+        </Card>
       </div>
 
       {/* FAQ Section */}
@@ -479,38 +397,44 @@ export default function Pricing() {
         </h2>
 
         <div className="space-y-6">
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-6">
-            <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-2">
-              Can I change my plan anytime?
-            </h3>
-            <p className="text-gray-600 dark:text-gray-400">
-              Yes! You can upgrade or downgrade your plan at any time. Changes
-              take effect immediately, and we'll prorate your billing
-              accordingly.
-            </p>
-          </div>
+          <Card>
+            <CardContent className="p-6">
+              <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-2">
+                Can I change my plan anytime?
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400">
+                Yes! You can upgrade or downgrade your plan at any time. Changes
+                take effect immediately, and we'll prorate your billing
+                accordingly.
+              </p>
+            </CardContent>
+          </Card>
 
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-6">
-            <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-2">
-              What happens if I exceed my search limit?
-            </h3>
-            <p className="text-gray-600 dark:text-gray-400">
-              If you reach your monthly search limit, you can either upgrade
-              your plan or wait until the next billing cycle. We'll send you
-              notifications as you approach your limit.
-            </p>
-          </div>
+          <Card>
+            <CardContent className="p-6">
+              <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-2">
+                What happens if I exceed my search limit?
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400">
+                If you reach your monthly search limit, you can either upgrade
+                your plan or wait until the next billing cycle. We'll send you
+                notifications as you approach your limit.
+              </p>
+            </CardContent>
+          </Card>
 
-          <div className="bg-white dark:bg-gray-800 rounded-xl p-6">
-            <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-2">
-              Do you offer discounts for students or nonprofits?
-            </h3>
-            <p className="text-gray-600 dark:text-gray-400">
-              Yes! We offer special pricing for students and nonprofit
-              organizations. Contact our sales team for more information about
-              available discounts.
-            </p>
-          </div>
+          <Card>
+            <CardContent className="p-6">
+              <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-2">
+                Do you offer discounts for students or nonprofits?
+              </h3>
+              <p className="text-gray-600 dark:text-gray-400">
+                Yes! We offer special pricing for students and nonprofit
+                organizations. Contact our sales team for more information about
+                available discounts.
+              </p>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>

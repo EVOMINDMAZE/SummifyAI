@@ -35,6 +35,7 @@ import Help from "./pages/Help";
 import ChapterDetail from "./pages/ChapterDetail";
 import SearchHistory from "./pages/SearchHistory";
 import AuthTestPage from "./pages/AuthTestPage";
+import CheckoutSuccess from "./pages/CheckoutSuccess";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -102,6 +103,7 @@ const App = () => {
                     element={<ChapterDetail />}
                   />
                   <Route path="/auth-test" element={<AuthTestPage />} />
+                  <Route path="/checkout/success" element={<CheckoutSuccess />} />
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                   <Route path="*" element={<NotFound />} />
                 </Routes>

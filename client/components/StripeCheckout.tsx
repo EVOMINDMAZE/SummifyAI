@@ -1,294 +1,203 @@
 import React, { useState } from "react";
-import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/lib/supabase";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Loader2, CreditCard, Shield } from "lucide-react";
+import { stripeProducts, type StripeProduct } from "../../src/stripe-config";
 
 interface StripeCheckoutProps {
-  plan: "premium";
-  billingCycle: "monthly" | "yearly";
-  onSuccess: () => void;
-  onCancel: () => void;
+  product: StripeProduct;
+  onSuccess?: () => void;
+  onCancel?: () => void;
 }
 
 const StripeCheckout: React.FC<StripeCheckoutProps> = ({
-  plan,
-  billingCycle,
+  product,
   onSuccess,
   onCancel,
 }) => {
-  const stripe = useStripe();
-  const elements = useElements();
-  const { user, updateUser } = useAuth();
-  const [isProcessing, setIsProcessing] = useState(false);
+  const { user } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const monthlyPrice = 19;
-  const yearlyPrice = 199;
-  const amount = billingCycle === "monthly" ? monthlyPrice : yearlyPrice;
-
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
-
-    if (!stripe || !elements || !user) {
+  const handleCheckout = async () => {
+    if (!user) {
+      setError("Please sign in to continue");
       return;
     }
 
-    setIsProcessing(true);
+    setIsLoading(true);
     setError(null);
 
-    const card = elements.getElement(CardElement);
-
-    if (!card) {
-      setError("Card element not found");
-      setIsProcessing(false);
-      return;
-    }
-
     try {
-      // Create payment method
-      const { error: paymentError, paymentMethod } =
-        await stripe.createPaymentMethod({
-          type: "card",
-          card: card,
-          billing_details: {
-            name: user.name,
-            email: user.email,
-          },
-        });
-
-      if (paymentError) {
-        throw paymentError;
+      // Get user session token
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session) {
+        throw new Error("No active session found");
       }
 
-      // Create subscription on backend
-      const response = await fetch("/api/create-subscription", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      // Create checkout session
+      const { data, error } = await supabase.functions.invoke('stripe-checkout', {
+        body: {
+          price_id: product.priceId,
+          mode: product.mode,
+          success_url: `${window.location.origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+          cancel_url: `${window.location.origin}/pricing`,
         },
-        body: JSON.stringify({
-          paymentMethodId: paymentMethod.id,
-          customerId: user.id,
-          priceId:
-            billingCycle === "monthly"
-              ? "price_1ABC123monthly"
-              : "price_1ABC123yearly",
-          customerEmail: user.email,
-          customerName: user.name,
-        }),
+        headers: {
+          Authorization: `Bearer ${session.access_token}`,
+        },
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to create subscription");
+      if (error) {
+        throw new Error(error.message || 'Failed to create checkout session');
       }
 
-      const { clientSecret, subscriptionId } = await response.json();
-
-      // Confirm payment if required
-      if (clientSecret) {
-        const { error: confirmError } =
-          await stripe.confirmCardPayment(clientSecret);
-        if (confirmError) {
-          throw confirmError;
-        }
+      if (!data?.url) {
+        throw new Error('No checkout URL received');
       }
 
-      // Update user subscription status
-      updateUser({
-        tier: "premium",
-        queriesLimit: 999999,
-        subscriptionId: subscriptionId,
-      });
-
-      onSuccess();
+      // Redirect to Stripe Checkout
+      window.location.href = data.url;
     } catch (err: any) {
-      console.error("Payment error:", err);
-
-      // Demo mode fallback
-      const proceedWithDemo = confirm(
-        "Demo Mode: Stripe backend not configured.\n\nSimulate successful payment?",
-      );
-
-      if (proceedWithDemo) {
-        updateUser({
-          tier: "premium",
-          queriesLimit: 999999,
-          subscriptionId: "sub_demo_" + Date.now(),
-        });
-
-        alert(
-          "✅ Payment successful! (Demo mode)\n" +
-            "Premium features activated instantly.",
-        );
-        onSuccess();
-      } else {
-        setError(err.message || "Payment failed. Please try again.");
-      }
+      console.error("Checkout error:", err);
+      setError(err.message || "Something went wrong. Please try again.");
     } finally {
-      setIsProcessing(false);
+      setIsLoading(false);
     }
   };
 
-  const cardElementOptions = {
-    style: {
-      base: {
-        fontSize: "16px",
-        color: "#424770",
-        "::placeholder": {
-          color: "#aab7c4",
-        },
-      },
-      invalid: {
-        color: "#9e2146",
-      },
-    },
+  const getPriceDisplay = () => {
+    switch (product.name) {
+      case 'Scholar':
+        return '$19.99';
+      case 'Professional':
+        return '$29.99';
+      case 'Enterprise':
+        return '$99.99';
+      default:
+        return 'Contact us';
+    }
+  };
+
+  const getFeatures = () => {
+    switch (product.name) {
+      case 'Scholar':
+        return [
+          '500 searches per month',
+          'Advanced AI insights',
+          'Priority processing',
+          'Export results',
+        ];
+      case 'Professional':
+        return [
+          '2,000 searches per month',
+          'Premium AI models',
+          'API access',
+          'Custom models',
+          'Priority support',
+        ];
+      case 'Enterprise':
+        return [
+          'Unlimited searches',
+          'All AI models',
+          'Team collaboration',
+          'White-label options',
+          'Dedicated support',
+        ];
+      default:
+        return [];
+    }
   };
 
   return (
-    <div className="max-w-md mx-auto bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-2xl border border-gray-200 dark:border-gray-700">
-      <div className="text-center mb-6">
-        <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-          Complete Your Subscription
-        </h3>
-        <p className="text-gray-600 dark:text-gray-400">
-          Premium Plan - ${amount}/
-          {billingCycle === "monthly" ? "month" : "year"}
-        </p>
-      </div>
-
-      <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Customer Info */}
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Email
-            </label>
-            <input
-              type="email"
-              value={user?.email || ""}
-              disabled
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Full Name
-            </label>
-            <input
-              type="text"
-              value={user?.name || ""}
-              disabled
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white"
-            />
-          </div>
+    <Card className="w-full max-w-md mx-auto">
+      <CardHeader className="text-center">
+        <CardTitle className="text-2xl font-bold">
+          Upgrade to {product.name}
+        </CardTitle>
+        <div className="text-3xl font-bold text-primary">
+          {getPriceDisplay()}
+          <span className="text-lg font-normal text-muted-foreground">
+            /month
+          </span>
         </div>
-
-        {/* Card Element */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Card Information
-          </label>
-          <div className="p-4 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700">
-            <CardElement options={cardElementOptions} />
-          </div>
+      </CardHeader>
+      
+      <CardContent className="space-y-6">
+        {/* Features */}
+        <div className="space-y-3">
+          <h4 className="font-semibold">What's included:</h4>
+          <ul className="space-y-2">
+            {getFeatures().map((feature, index) => (
+              <li key={index} className="flex items-center gap-2 text-sm">
+                <span className="text-green-500">✓</span>
+                {feature}
+              </li>
+            ))}
+          </ul>
         </div>
 
         {/* Security Notice */}
         <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
           <div className="flex items-center gap-2 text-green-700 dark:text-green-400">
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-              <path
-                fillRule="evenodd"
-                d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
-                clipRule="evenodd"
-              />
-            </svg>
+            <Shield className="w-5 h-5" />
             <span className="text-sm font-medium">Secured by Stripe</span>
           </div>
           <p className="text-sm text-green-600 dark:text-green-400 mt-1">
-            Your payment information is encrypted and secure
+            Your payment information is encrypted and secure. Cancel anytime.
           </p>
         </div>
 
         {/* Error Display */}
         {error && (
-          <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 px-4 py-3 rounded-lg">
-            {error}
-          </div>
+          <Alert variant="destructive">
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
         )}
 
-        {/* Billing Summary */}
-        <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 space-y-2">
-          <div className="flex justify-between">
-            <span className="text-gray-600 dark:text-gray-400">
-              Premium Plan ({billingCycle})
-            </span>
-            <span className="font-medium text-gray-900 dark:text-white">
-              ${amount}
-            </span>
-          </div>
-          {billingCycle === "yearly" && (
-            <div className="flex justify-between text-sm">
-              <span className="text-green-600 dark:text-green-400">
-                Annual discount
-              </span>
-              <span className="text-green-600 dark:text-green-400">-$29</span>
-            </div>
+        {/* Checkout Button */}
+        <Button
+          onClick={handleCheckout}
+          disabled={isLoading}
+          className="w-full h-12 bg-[#FFFD63] hover:bg-yellow-300 text-[#0A0B1E] font-bold"
+        >
+          {isLoading ? (
+            <>
+              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              Processing...
+            </>
+          ) : (
+            <>
+              <CreditCard className="w-4 h-4 mr-2" />
+              Subscribe to {product.name}
+            </>
           )}
-          <div className="border-t border-gray-200 dark:border-gray-600 pt-2 flex justify-between font-bold">
-            <span className="text-gray-900 dark:text-white">Total</span>
-            <span className="text-gray-900 dark:text-white">${amount}</span>
-          </div>
-        </div>
+        </Button>
 
-        {/* Buttons */}
-        <div className="space-y-3">
-          <button
-            type="submit"
-            disabled={!stripe || isProcessing}
-            className="w-full py-3 bg-gradient-to-r from-[#FFFD63] to-yellow-400 hover:from-yellow-400 hover:to-[#FFFD63] text-[#0A0B1E] rounded-lg font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-          >
-            {isProcessing ? (
-              <>
-                <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                    fill="none"
-                  />
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  />
-                </svg>
-                Processing Payment...
-              </>
-            ) : (
-              <>🔒 Subscribe to Premium - ${amount}</>
-            )}
-          </button>
-
-          <button
-            type="button"
+        {/* Cancel Button */}
+        {onCancel && (
+          <Button
+            variant="outline"
             onClick={onCancel}
-            className="w-full py-3 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+            disabled={isLoading}
+            className="w-full"
           >
             Cancel
-          </button>
-        </div>
+          </Button>
+        )}
 
         {/* Terms */}
-        <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
+        <p className="text-xs text-muted-foreground text-center">
           By subscribing, you agree to our Terms of Service and Privacy Policy.
           You can cancel anytime from your account settings.
         </p>
-      </form>
-    </div>
+      </CardContent>
+    </Card>
   );
 };
 

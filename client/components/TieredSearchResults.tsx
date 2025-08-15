@@ -105,6 +105,13 @@ export default function TieredSearchResults({
   // Group search results into books with chapters
   const groupedResults = groupResultsByBook(searchResponse.results);
 
+  // For free users, show real results + mock books
+  const displayBooks = isFree
+    ? Object.entries(groupedResults).slice(0, 1) // Only first real book
+    : Object.entries(groupedResults);
+
+  const mockBooksToShow = isFree ? MOCK_BOOKS : [];
+
   const handleChapterClick = (result: SearchResult) => {
     navigate(`/chapter/${result.bookTitle.replace(/\s+/g, "-")}/${result.id}`, {
       state: {

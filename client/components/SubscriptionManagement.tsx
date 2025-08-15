@@ -34,7 +34,7 @@ import { Badge } => (
                   <Button
                     onClick={() => handlePlanChange(plan.id)}
                     disabled={isCurrentPlan}
-                    className={`w-full py-4 px-6 rounded-xl font-bold transition-all duration-300 ${
+                    className={\`w-full py-4 px-6 rounded-xl font-bold transition-all duration-300 ${
                       isPopular
                         ? "bg-[#FFFD63] hover:bg-[#FFFD63]/90 text-[#0A0B1E] shadow-lg hover:shadow-xl"
                         : plan.id === "free"

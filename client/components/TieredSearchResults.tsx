@@ -182,8 +182,8 @@ export default function TieredSearchResults({
 
       {/* Book Results */}
       <div className="grid gap-4">
-        {Object.entries(groupedResults).map(
-          ([bookTitle, chapters], bookIndex) => {
+        {/* Real Books */}
+        {displayBooks.map(([bookTitle, chapters], bookIndex) => {
             const firstChapter = chapters[0];
             const isExpanded = expandedBooks.has(bookTitle);
 

@@ -117,9 +117,9 @@ export default function Results() {
   const handleShare = async (result: SearchResult) => {
     const success = await shareResult(result);
     if (success) {
-      showNotification("Shared successfully!", "success");
+      showNotification("Link copied to clipboard!", "success");
     } else {
-      showNotification("Failed to share", "error");
+      showNotification("Could not share or copy link. Please try again.", "error");
     }
   };
 

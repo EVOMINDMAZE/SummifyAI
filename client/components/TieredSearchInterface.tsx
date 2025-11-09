@@ -44,19 +44,21 @@ export default function TieredSearchInterface({
   // Restore previous search results if coming back from chapter detail
   useEffect(() => {
     const state = location.state as any;
-    if (state && state.results) {
+    if (state && state.results && state.results.length > 0) {
       setQuery(state.query || "");
       setSearchResponse({
         results: state.results,
         searchTier: state.searchTier,
-        queriesUsed: state.queriesUsed,
-        queriesRemaining: state.queriesRemaining,
-        upgradeRequired: state.upgradeRequired,
-        totalBooksFound: state.totalBooksFound,
-        totalChaptersFound: state.totalChaptersFound,
+        queriesUsed: state.queriesUsed || 0,
+        queriesRemaining: state.queriesRemaining || 0,
+        upgradeRequired: state.upgradeRequired || false,
+        totalBooksFound: state.totalBooksFound || 0,
+        totalChaptersFound: state.totalChaptersFound || 0,
       });
+      // Clear the state from location to prevent re-initialization
+      window.history.replaceState({}, document.title);
     }
-  }, [location.state]);
+  }, []);
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();

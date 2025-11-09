@@ -312,14 +312,7 @@ export class TieredSearchService {
       }
 
       console.log("📡 Calling edge function via supabase.functions.invoke...");
-      const { data: result, error: fnError } = await supabase.functions.invoke("generate-embeddings", {
-        body: { text: trimmedText },
-      });
-
-      if (fnError) {
-        console.error("❌ Edge function error:", fnError.message || String(fnError));
-        throw new Error(`Edge function error: ${fnError.message || String(fnError)}`);
-      }
+      const result = await this.invokeWithRetry("generate-embeddings", { text: trimmedText });
 
       if (!result?.success) {
         throw new Error(result?.error || "Embedding generation failed");
@@ -440,10 +433,21 @@ export class TieredSearchService {
     try {
       console.log("📝 Performing full-text search...");
       // Full-text search using PostgreSQL's text search
-      const { data, error } = await supabase.rpc("search_fulltext", {
+      let { data, error } = await supabase.rpc("search_fulltext", {
         search_query: query,
-        match_count: 20,
+        match_count: 10,
       });
+
+      // If timeout or heavy load, retry with smaller match_count
+      if (error && String(error).toLowerCase().includes("timeout")) {
+        console.warn("⏳ Full-text search timeout, retrying with smaller match_count...");
+        const retry = await supabase.rpc("search_fulltext", {
+          search_query: query,
+          match_count: 5,
+        });
+        data = retry.data;
+        error = retry.error as any;
+      }
 
       if (error) {
         const errorMessage = typeof error === 'object' && error !== null && 'message' in error
@@ -504,18 +508,11 @@ export class TieredSearchService {
       }
 
       console.log("📡 Calling analysis edge function via supabase.functions.invoke...");
-      const { data, error: fnError } = await supabase.functions.invoke("analyze-search-results", {
-        body: {
-          results: resultsToAnalyze,
-          query,
-          analysisLevel,
-        },
+      const data = await this.invokeWithRetry("analyze-search-results", {
+        results: resultsToAnalyze,
+        query,
+        analysisLevel,
       });
-
-      if (fnError) {
-        console.error("❌ Analysis edge function error:", fnError.message || String(fnError));
-        throw new Error(`Analysis edge function error: ${fnError.message || String(fnError)}`);
-      }
 
       const { analyzedResults } = data || {};
 
@@ -538,6 +535,22 @@ export class TieredSearchService {
       console.warn("⚠️ AI analysis error (continuing without analysis):", errorMessage);
       return results; // Return results without AI analysis on error
     }
+  }
+
+  private async invokeWithRetry<T = any>(name: string, body: any, attempts = 2, delayMs = 400): Promise<T> {
+    for (let i = 0; i < attempts; i++) {
+      try {
+        const { data, error } = await supabase.functions.invoke(name, { body });
+        if (error) throw error;
+        return data as T;
+      } catch (err: any) {
+        const msg = err?.message || String(err);
+        console.warn(`⚠️ Function ${name} attempt ${i + 1} failed:`, msg);
+        if (i === attempts - 1) throw new Error(`Failed to send a request to the Edge Function`);
+        await new Promise((res) => setTimeout(res, delayMs * (i + 1)));
+      }
+    }
+    throw new Error(`Failed to call ${name}`);
   }
 
   private extractSnippet(text: string, query: string): string {

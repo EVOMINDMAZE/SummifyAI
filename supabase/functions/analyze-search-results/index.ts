@@ -204,54 +204,55 @@ Return only valid JSON, no other text.`;
 
   const maxTokens = getMaxTokens(analysisLevel, resultsNeedingAnalysis.length);
 
-  const response = await fetch("https://api.x.ai/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${grokApiKey}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      model: "grok-4-fast-reasoning",
-      messages: [
-        {
-          role: "user",
-          content: analysisPrompt,
-        },
-      ],
-      max_tokens: maxTokens,
-      temperature: 0.3,
-    }),
-  });
-
-  const data = await response.json();
-
-  if (!response.ok) {
-    const errorMessage =
-      typeof data === "object" && data !== null && "error" in data
-        ? (data as any).error?.message || JSON.stringify(data)
-        : response.statusText;
-    throw new Error(`Grok API error: ${errorMessage}`);
-  }
-
-  const content = data.choices[0]?.message?.content;
-
-  if (!content) {
-    throw new Error("No analysis content received from OpenAI");
-  }
-
   let newAnalyses: AnalyzedResult[] = [];
 
   try {
-    newAnalyses = JSON.parse(content);
-  } catch {
-    console.error("Failed to parse AI response, using fallback analysis");
-    newAnalyses = resultsNeedingAnalysis.map((result) => ({
-      id: result.id,
-      analysis: "Analysis not available",
-      enhancedScore: result.relevanceScore,
-      keyTopics: [],
-      relevanceReason: "Matches search criteria",
-    }));
+    const response = await fetch("https://api.x.ai/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${grokApiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "grok-4-fast-reasoning",
+        messages: [
+          {
+            role: "user",
+            content: analysisPrompt,
+          },
+        ],
+        max_tokens: maxTokens,
+        temperature: 0.3,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      const errorMessage =
+        typeof data === "object" && data !== null && "error" in data
+          ? (data as any).error?.message || JSON.stringify(data)
+          : response.statusText;
+      console.error(`⚠️ Grok API error: ${errorMessage}`);
+      throw new Error(`Grok API error: ${errorMessage}`);
+    }
+
+    const content = data.choices[0]?.message?.content;
+
+    if (!content) {
+      console.error("⚠️ No analysis content received from Grok");
+      throw new Error("No analysis content received from Grok");
+    }
+
+    try {
+      newAnalyses = JSON.parse(content);
+    } catch (parseError) {
+      console.error("⚠️ Failed to parse AI response, using fallback analysis:", parseError);
+      newAnalyses = generateFallbackAnalyses(resultsNeedingAnalysis, query, analysisLevel);
+    }
+  } catch (grokError) {
+    console.error("⚠️ Grok API call failed, generating fallback analyses:", grokError instanceof Error ? grokError.message : String(grokError));
+    newAnalyses = generateFallbackAnalyses(resultsNeedingAnalysis, query, analysisLevel);
   }
 
   // Cache the new analyses

@@ -47,10 +47,10 @@ serve(async (req) => {
       );
     }
 
-    const openaiApiKey = Deno.env.get("OPENAI_API_KEY");
-    if (!openaiApiKey) {
+    const grokApiKey = Deno.env.get("GROK_API_KEY");
+    if (!grokApiKey) {
       return new Response(
-        JSON.stringify({ error: "OpenAI API key not configured" }),
+        JSON.stringify({ error: "Grok API key not configured" }),
         {
           status: 500,
           headers: { "Content-Type": "application/json", ...corsHeaders },

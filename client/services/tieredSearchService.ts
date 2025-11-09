@@ -311,23 +311,14 @@ export class TieredSearchService {
         headers.Authorization = `Bearer ${session.access_token}`;
       }
 
-      // Construct edge function URL
-      const edgeFunctionUrl = `${supabaseUrl}/functions/v1/generate-embeddings`;
-
-      console.log("📡 Calling edge function via HTTP...");
-      const response = await fetch(edgeFunctionUrl, {
-        method: "POST",
-        headers,
-        body: JSON.stringify({ text: trimmedText }),
+      console.log("📡 Calling edge function via supabase.functions.invoke...");
+      const { data: result, error: fnError } = await supabase.functions.invoke("generate-embeddings", {
+        body: { text: trimmedText },
       });
 
-      const result = await response.json();
-      console.log("📥 Received response:", { status: response.status, success: result?.success });
-
-      if (!response.ok) {
-        const errorMsg = result?.error || result?.details || response.statusText;
-        console.error("❌ Edge function error:", errorMsg);
-        throw new Error(`Edge function error: ${errorMsg}`);
+      if (fnError) {
+        console.error("❌ Edge function error:", fnError.message || String(fnError));
+        throw new Error(`Edge function error: ${fnError.message || String(fnError)}`);
       }
 
       if (!result?.success) {
@@ -512,30 +503,21 @@ export class TieredSearchService {
         headers.Authorization = `Bearer ${session.access_token}`;
       }
 
-      // Construct edge function URL
-      const edgeFunctionUrl = `${supabaseUrl}/functions/v1/analyze-search-results`;
-
-      console.log("📡 Calling analysis edge function via HTTP...");
-      const response = await fetch(edgeFunctionUrl, {
-        method: "POST",
-        headers,
-        body: JSON.stringify({
+      console.log("📡 Calling analysis edge function via supabase.functions.invoke...");
+      const { data, error: fnError } = await supabase.functions.invoke("analyze-search-results", {
+        body: {
           results: resultsToAnalyze,
           query,
           analysisLevel,
-        }),
+        },
       });
 
-      const data = await response.json();
-      console.log("📥 Received response:", { status: response.status });
-
-      if (!response.ok) {
-        const errorMsg = data?.error || data?.details || response.statusText;
-        console.error("❌ Analysis edge function error:", errorMsg);
-        throw new Error(`Analysis edge function error: ${errorMsg}`);
+      if (fnError) {
+        console.error("❌ Analysis edge function error:", fnError.message || String(fnError));
+        throw new Error(`Analysis edge function error: ${fnError.message || String(fnError)}`);
       }
 
-      const { analyzedResults } = data;
+      const { analyzedResults } = data || {};
 
       console.log(`✅ Analysis complete`);
 

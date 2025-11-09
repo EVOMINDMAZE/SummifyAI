@@ -421,7 +421,8 @@ export class TieredSearchService {
         })) || []
       );
     } catch (error) {
-      console.error("Full-text search error:", error);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.error("Full-text search error:", errorMessage);
       return [];
     }
   }

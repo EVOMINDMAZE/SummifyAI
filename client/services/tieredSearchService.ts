@@ -289,20 +289,22 @@ export class TieredSearchService {
         body: JSON.stringify({ text }),
       });
 
+      // Read the body only once
+      const result = await response.json();
+
       if (!response.ok) {
-        const errorText = await response.text();
+        const errorMessage = result.error || result.message || "Unknown error";
         console.error(
           "Embedding API error:",
           response.status,
           response.statusText,
-          errorText,
+          errorMessage,
         );
         throw new Error(
-          `Embedding API failed: ${response.status} ${response.statusText}`,
+          `Embedding API failed: ${response.status} ${response.statusText} - ${errorMessage}`,
         );
       }
 
-      const result = await response.json();
       console.log("Embedding API response:", result);
 
       // Handle the response format from our Netlify function
@@ -319,7 +321,7 @@ export class TieredSearchService {
 
       return embedding;
     } catch (error) {
-      console.error("Embedding generation error:", error);
+      console.error("Embedding generation error:", error instanceof Error ? error.message : String(error));
       throw error; // Re-throw the original error for better debugging
     }
   }

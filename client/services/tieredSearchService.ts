@@ -374,7 +374,7 @@ export class TieredSearchService {
         return [];
       }
 
-      console.log(`🔍 Searching ${candidateIds.length} candidate chapters with embeddings...`);
+      console.log(`��� Searching ${candidateIds.length} candidate chapters with embeddings...`);
       // Search chapter embeddings only for candidates
       const { data, error } = await supabase.rpc("search_chapter_embeddings", {
         query_embedding: queryEmbedding,
@@ -464,9 +464,8 @@ export class TieredSearchService {
 
     const resultsToAnalyze = results.slice(0, 10); // Limit AI analysis for cost control
 
-    // Try Supabase edge function first (optimized path)
     try {
-      console.log(`🤖 Attempting Supabase analysis with ${analysisLevel} level...`);
+      console.log(`🤖 Analyzing ${resultsToAnalyze.length} results with ${analysisLevel} level via Supabase...`);
 
       const response = await supabase.functions.invoke("analyze-search-results", {
         body: {
@@ -482,7 +481,7 @@ export class TieredSearchService {
 
       const { analyzedResults } = response.data;
 
-      console.log(`��� Analysis complete via Supabase with caching`);
+      console.log(`✅ Analysis complete with caching`);
 
       return results.map((result, index) => ({
         ...result,
@@ -492,49 +491,10 @@ export class TieredSearchService {
         whyRelevant: analyzedResults[index]?.relevanceReason || result.whyRelevant,
         keyTopics: analyzedResults[index]?.keyTopics || result.keyTopics,
       }));
-    } catch (supabaseError) {
-      console.warn("⚠️ Supabase edge function unavailable, falling back to Netlify...",
-        supabaseError instanceof Error ? supabaseError.message : String(supabaseError)
-      );
-
-      // Fallback to Netlify function
-      try {
-        console.log(`🤖 Attempting Netlify analysis with ${analysisLevel} level...`);
-
-        const response = await fetch(
-          "/.netlify/functions/analyze-search-results",
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              results: resultsToAnalyze,
-              query,
-              analysisLevel,
-            }),
-          },
-        );
-
-        if (!response.ok) {
-          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-        }
-
-        const { analyzedResults } = await response.json();
-
-        console.log(`✅ Analysis complete via Netlify`);
-
-        return results.map((result, index) => ({
-          ...result,
-          aiAnalysis: analyzedResults[index]?.analysis || undefined,
-          relevanceScore:
-            analyzedResults[index]?.enhancedScore || result.relevanceScore,
-          whyRelevant: analyzedResults[index]?.relevanceReason || result.whyRelevant,
-          keyTopics: analyzedResults[index]?.keyTopics || result.keyTopics,
-        }));
-      } catch (netlifyError) {
-        const errorMessage = netlifyError instanceof Error ? netlifyError.message : String(netlifyError);
-        console.warn("⚠️ AI analysis error (continuing without analysis):", errorMessage);
-        return results; // Return results without AI analysis on error
-      }
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.warn("⚠️ AI analysis error (continuing without analysis):", errorMessage);
+      return results; // Return results without AI analysis on error
     }
   }
 

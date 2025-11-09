@@ -138,25 +138,51 @@ export default function TieredSearchResults({
 
   return (
     <div className="space-y-6">
-      {/* Results Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-            Results for "{query}"
-          </h2>
-          <div className="flex gap-3 text-sm">
-            <Badge variant="outline">
-              {searchResponse.totalBooksFound} books
-            </Badge>
-            <Badge variant="outline">
-              {searchResponse.totalChaptersFound} chapters
+      {/* Results Header - Enhanced */}
+      <div className="space-y-6">
+        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
+          <div className="flex-1">
+            <p className="text-sm font-medium text-[#667eea] dark:text-[#FFFD63] mb-2">
+              Search Results
+            </p>
+            <h1 className="text-4xl lg:text-5xl font-black text-gray-900 dark:text-white mb-4 leading-tight">
+              Results for "{query}"
+            </h1>
+
+            {/* Prominent Stats */}
+            <div className="flex flex-wrap gap-4">
+              <div className="group relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-[#667eea] to-[#FFFD63] rounded-xl blur opacity-20 group-hover:opacity-30 transition-opacity"></div>
+                <div className="relative bg-white dark:bg-gray-800 px-6 py-4 rounded-xl border border-gray-200 dark:border-gray-700">
+                  <div className="text-3xl lg:text-4xl font-black text-[#667eea] dark:text-[#FFFD63]">
+                    {searchResponse.totalBooksFound}
+                  </div>
+                  <div className="text-sm font-semibold text-gray-600 dark:text-gray-400">
+                    Book{searchResponse.totalBooksFound !== 1 ? 's' : ''} Found
+                  </div>
+                </div>
+              </div>
+
+              <div className="group relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-[#FFFD63] to-[#667eea] rounded-xl blur opacity-20 group-hover:opacity-30 transition-opacity"></div>
+                <div className="relative bg-white dark:bg-gray-800 px-6 py-4 rounded-xl border border-gray-200 dark:border-gray-700">
+                  <div className="text-3xl lg:text-4xl font-black text-[#FFFD63] dark:text-[#667eea]">
+                    {searchResponse.totalChaptersFound}
+                  </div>
+                  <div className="text-sm font-semibold text-gray-600 dark:text-gray-400">
+                    Chapter{searchResponse.totalChaptersFound !== 1 ? 's' : ''} Available
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex-shrink-0">
+            <Badge className={`${getPlanBadgeColor(userPlan)} font-semibold px-4 py-2 text-base`}>
+              {searchResponse.searchTier.name} Plan
             </Badge>
           </div>
         </div>
-
-        <Badge className={`${getPlanBadgeColor(userPlan)} font-semibold`}>
-          {searchResponse.searchTier.name} Plan
-        </Badge>
       </div>
 
       {/* Book Results */}

@@ -500,9 +500,8 @@ export class TieredSearchService {
         headers.Authorization = `Bearer ${session.access_token}`;
       }
 
-      // Get the project URL from supabase client config
-      const projectUrl = supabase.supabaseUrl;
-      const edgeFunctionUrl = `${projectUrl}/functions/v1/analyze-search-results`;
+      // Construct edge function URL
+      const edgeFunctionUrl = `${supabaseUrl}/functions/v1/analyze-search-results`;
 
       console.log("📡 Calling analysis edge function via HTTP...");
       const response = await fetch(edgeFunctionUrl, {

@@ -471,7 +471,7 @@ export default function ChapterDetail() {
                   <div className="flex flex-wrap items-center gap-3 mb-4">
                     <div className="flex items-center space-x-3">
                       <AIRelevanceScore
-                        score={chapterDetail.relevanceScore}
+                        score={Math.round(chapterDetail.relevanceScore * 100)}
                         size="lg"
                         showBar={true}
                         query={query}

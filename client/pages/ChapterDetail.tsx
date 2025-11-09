@@ -271,20 +271,57 @@ export default function ChapterDetail() {
     }
   };
 
-  const handleShare = () => {
+  const handleShare = async () => {
     if (!chapterDetail || !bookDetail) return;
 
     const shareText = `Check out "${chapterDetail.title}" from "${bookDetail.title}" by ${bookDetail.author} - ${chapterDetail.relevanceScore}% match for "${query}"`;
+    const shareUrl = window.location.href;
 
-    if (navigator.share) {
-      navigator.share({
-        title: `${chapterDetail.title} - Chapter Discovery`,
-        text: shareText,
-        url: window.location.href,
-      });
-    } else {
-      navigator.clipboard.writeText(shareText);
-      // You could show a toast notification here
+    try {
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: `${chapterDetail.title} - Chapter Discovery`,
+            text: shareText,
+            url: shareUrl,
+          });
+          return;
+        } catch (shareError: any) {
+          // Handle NotAllowedError or other share failures
+          if (shareError.name === "NotAllowedError" || shareError.name === "AbortError") {
+            console.warn("Share was cancelled or denied, falling back to clipboard");
+          } else {
+            console.warn("Share failed, falling back to clipboard:", shareError);
+          }
+        }
+      }
+
+      // Fallback to copying to clipboard
+      try {
+        await navigator.clipboard.writeText(shareUrl);
+        console.log("Link copied to clipboard");
+      } catch (clipboardError) {
+        // Last resort: try old execCommand method
+        const textArea = document.createElement("textarea");
+        textArea.value = shareUrl;
+        textArea.style.position = "fixed";
+        textArea.style.left = "-999999px";
+        textArea.style.top = "-999999px";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+
+        try {
+          document.execCommand("copy");
+          document.body.removeChild(textArea);
+          console.log("Link copied to clipboard using execCommand");
+        } catch (execError) {
+          document.body.removeChild(textArea);
+          console.error("All sharing methods failed:", execError);
+        }
+      }
+    } catch (error) {
+      console.error("Unexpected error in share:", error);
     }
   };
 

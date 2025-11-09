@@ -465,7 +465,8 @@ export class TieredSearchService {
           analyzedResults[index]?.enhancedScore || result.relevanceScore,
       }));
     } catch (error) {
-      console.error("AI analysis error:", error);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.warn("AI analysis error (continuing without analysis):", errorMessage);
       return results; // Return results without AI analysis on error
     }
   }

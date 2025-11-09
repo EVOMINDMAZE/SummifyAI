@@ -105,7 +105,7 @@ async function analyzeResults(
   query: string,
   analysisLevel: string,
   supabase: any,
-  openaiApiKey: string
+  grokApiKey: string
 ): Promise<AnalyzedResult[]> {
   // Check cache for existing analyses
   console.log(`📋 Checking cache for analyses...`);

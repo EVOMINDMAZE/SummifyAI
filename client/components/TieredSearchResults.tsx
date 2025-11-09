@@ -504,6 +504,134 @@ function generateBookCover(title: string): string {
   return `https://dummyimage.com/200x300/${colors[colorIndex]}/ffffff&text=${encodedTitle}`;
 }
 
+function GrayedOutBooksPreview({
+  totalLockedBooks,
+  totalLockedChapters,
+  allGrayedOutBooks,
+  query,
+  onUpgrade,
+}: {
+  totalLockedBooks: number;
+  totalLockedChapters: number;
+  allGrayedOutBooks: [string, SearchResult[]][];
+  query: string;
+  onUpgrade: () => void;
+}) {
+  const avgRelevance = Math.round(
+    allGrayedOutBooks.reduce(
+      (sum, [_, chapters]) => sum + (chapters[0]?.relevanceScore || 0.75),
+      0,
+    ) / allGrayedOutBooks.length * 100
+  );
+
+  return (
+    <Card className="bg-gradient-to-br from-[#0A0B1E]/95 via-[#1a1f4f]/95 to-[#667eea]/5 dark:from-[#0A0B1E] dark:via-[#1a1f4f] dark:to-[#0A0B1E] border border-[#667eea]/30 dark:border-[#FFFD63]/20 rounded-3xl shadow-2xl relative overflow-hidden">
+      {/* Animated gradient background */}
+      <div className="absolute inset-0 opacity-30">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-[#FFFD63] via-[#667eea] to-transparent rounded-full blur-3xl opacity-10"></div>
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-[#667eea] via-[#FFFD63] to-transparent rounded-full blur-3xl opacity-10"></div>
+      </div>
+
+      <CardContent className="p-10 relative z-10">
+        <div className="flex flex-col lg:flex-row gap-10 items-center">
+          {/* Left side - Books Preview */}
+          <div className="flex-shrink-0">
+            <div className="relative w-40 h-52">
+              {/* Stacked book covers effect */}
+              {allGrayedOutBooks.slice(0, 3).map(([bookTitle], idx) => (
+                <div
+                  key={bookTitle}
+                  className="absolute rounded-xl shadow-lg overflow-hidden"
+                  style={{
+                    width: "120px",
+                    height: "180px",
+                    transform: `rotate(${-8 + idx * 4}deg) translate(${idx * 20}px, ${idx * 15}px)`,
+                    zIndex: idx,
+                  }}
+                >
+                  <img
+                    src={generateBookCover(bookTitle)}
+                    alt={bookTitle}
+                    className="w-full h-full object-cover filter grayscale opacity-80"
+                    onError={(e) => {
+                      const target = e.currentTarget;
+                      target.src = `https://dummyimage.com/200x300/999999/FFFFFF`;
+                    }}
+                  />
+                  <div className="absolute inset-0 bg-black/20"></div>
+                </div>
+              ))}
+
+              {/* Lock badge */}
+              <div className="absolute -bottom-4 -right-4 w-16 h-16 bg-gradient-to-br from-[#FFFD63] to-[#FFD700] rounded-full flex items-center justify-center shadow-lg border-4 border-[#0A0B1E]">
+                <Lock className="w-8 h-8 text-[#0A0B1E]" />
+              </div>
+            </div>
+          </div>
+
+          {/* Right side - Content */}
+          <div className="flex-1">
+            <p className="text-[#FFFD63] text-sm font-bold mb-2 uppercase tracking-wider">
+              🔒 Locked Premium Content
+            </p>
+
+            <h2 className="text-3xl lg:text-4xl font-black text-white mb-4 leading-tight">
+              See {totalLockedBooks} More Books
+            </h2>
+
+            <p className="text-gray-300 mb-6 text-base leading-relaxed">
+              You've unlocked content from one book. Upgrade your plan to access all {totalLockedBooks} books with {totalLockedChapters}+ highly relevant chapters for "{query}".
+            </p>
+
+            {/* Stats Grid */}
+            <div className="grid grid-cols-3 gap-3 mb-8">
+              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-[#FFFD63]/20">
+                <div className="text-3xl font-black text-[#FFFD63]">
+                  {totalLockedBooks}
+                </div>
+                <div className="text-xs text-gray-400 mt-1">
+                  Book{totalLockedBooks !== 1 ? 's' : ''}
+                </div>
+              </div>
+
+              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-[#667eea]/20">
+                <div className="text-3xl font-black text-[#667eea]">
+                  {totalLockedChapters}
+                </div>
+                <div className="text-xs text-gray-400 mt-1">
+                  Chapter{totalLockedChapters !== 1 ? 's' : ''}
+                </div>
+              </div>
+
+              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-green-400/20">
+                <div className="text-3xl font-black text-green-400">
+                  {avgRelevance}%
+                </div>
+                <div className="text-xs text-gray-400 mt-1">
+                  Avg Relevance
+                </div>
+              </div>
+            </div>
+
+            {/* CTA Button - Large and prominent */}
+            <Button
+              onClick={onUpgrade}
+              className="w-full bg-gradient-to-r from-[#FFFD63] via-[#FFD700] to-[#FFFD63] hover:from-[#FFD700] hover:via-[#FFFD63] hover:to-[#FFD700] text-[#0A0B1E] font-black py-4 rounded-xl transition-all duration-300 shadow-2xl hover:shadow-3xl hover:scale-105 text-lg"
+            >
+              <Crown className="w-6 h-6 mr-3" />
+              Unlock All {totalLockedBooks} Books Now
+            </Button>
+
+            <p className="text-center text-gray-400 text-xs mt-4">
+              Get 500 searches/month and access to all chapters with Scholar Plan
+            </p>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
 function GrayedOutBookCard({
   bookTitle,
   chapters,

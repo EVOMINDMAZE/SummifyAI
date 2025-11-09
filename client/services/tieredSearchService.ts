@@ -598,21 +598,45 @@ export class TieredSearchService {
       }
 
       return (
-        data?.map((row: any) => ({
-          id: row.id,
-          bookTitle: row.books.title,
-          chapterTitle: row.chapter_title,
-          relevanceScore: 0.5, // Basic relevance score
-          snippet: this.extractSnippet(
-            row.chapter_text || row.chapter_summary,
-            query,
-          ),
-          searchType: "fulltext" as const,
-          whyRelevant: `This chapter contains text that matches your search terms.`,
-          keyTopics: this.extractTopicsFromText(
-            row.chapter_text || row.chapter_summary || "",
-          ),
-        })) || []
+        data?.map((row: any) => {
+          // Calculate relevance score based on match location
+          let relevanceScore = 0.5;
+          const searchLower = query.toLowerCase();
+          const titleLower = (row.chapter_title || "").toLowerCase();
+          const textLower = (row.chapter_text || "").toLowerCase();
+          const summaryLower = (row.chapter_summary || "").toLowerCase();
+
+          // Higher score if match is in title
+          if (titleLower.includes(searchLower)) {
+            relevanceScore = 0.85;
+          }
+          // Medium score if match is early in text
+          else if (textLower.includes(searchLower)) {
+            const index = textLower.indexOf(searchLower);
+            relevanceScore = Math.max(0.6, 0.8 - (index / textLower.length) * 0.2);
+          }
+          // Lower score if match is in summary
+          else if (summaryLower.includes(searchLower)) {
+            const index = summaryLower.indexOf(searchLower);
+            relevanceScore = Math.max(0.5, 0.7 - (index / summaryLower.length) * 0.2);
+          }
+
+          return {
+            id: row.id,
+            bookTitle: row.books.title,
+            chapterTitle: row.chapter_title,
+            relevanceScore,
+            snippet: this.extractSnippet(
+              row.chapter_text || row.chapter_summary,
+              query,
+            ),
+            searchType: "fulltext" as const,
+            whyRelevant: `This chapter contains text that matches your search terms.`,
+            keyTopics: this.extractTopicsFromText(
+              row.chapter_text || row.chapter_summary || "",
+            ),
+          };
+        }) || []
       );
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);

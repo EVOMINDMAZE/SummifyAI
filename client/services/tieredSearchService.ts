@@ -373,7 +373,7 @@ export class TieredSearchService {
         throw new Error(errorMessage);
       }
 
-      return (
+      const results = (
         data?.map((row: any) => ({
           id: row.id,
           bookTitle: row.book_title,
@@ -386,6 +386,9 @@ export class TieredSearchService {
           keyTopics: this.extractTopicsFromText(row.chapter_summary || ""),
         })) || []
       );
+
+      console.log(`✅ Summary search returned ${results.length} results`);
+      return results;
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);
       console.warn("Summary search error (returning empty results):", errorMessage);

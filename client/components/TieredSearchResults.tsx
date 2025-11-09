@@ -71,10 +71,10 @@ export default function TieredSearchResults({
   // Group search results into books with chapters
   const groupedResults = groupResultsByBook(searchResponse.results);
 
-  // For free users, show first 3 books normally, then grayed out books
+  // For free users, show first 1 book normally, then grayed out books
   const allBookEntries = Object.entries(groupedResults);
-  const normalBooks = isFree ? allBookEntries.slice(0, 3) : allBookEntries;
-  const grayedOutBooks = isFree ? allBookEntries.slice(3) : [];
+  const normalBooks = isFree ? allBookEntries.slice(0, 1) : allBookEntries;
+  const grayedOutBooks = isFree ? allBookEntries.slice(1) : [];
 
   // No longer need mock books - using grayed out real books instead
 

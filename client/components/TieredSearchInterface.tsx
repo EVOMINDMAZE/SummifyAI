@@ -30,6 +30,7 @@ export default function TieredSearchInterface({
   onUpgrade,
 }: TieredSearchInterfaceProps) {
   const { user } = useAuth();
+  const location = useLocation();
   const [query, setQuery] = useState("");
   const [searchResponse, setSearchResponse] =
     useState<TieredSearchResponse | null>(null);
@@ -39,6 +40,23 @@ export default function TieredSearchInterface({
   const userPlan = user?.planType || "free";
   const userSearchCount = user?.searchCount || 0;
   const currentTier = SEARCH_TIERS[userPlan];
+
+  // Restore previous search results if coming back from chapter detail
+  useEffect(() => {
+    const state = location.state as any;
+    if (state && state.results) {
+      setQuery(state.query || "");
+      setSearchResponse({
+        results: state.results,
+        searchTier: state.searchTier,
+        queriesUsed: state.queriesUsed,
+        queriesRemaining: state.queriesRemaining,
+        upgradeRequired: state.upgradeRequired,
+        totalBooksFound: state.totalBooksFound,
+        totalChaptersFound: state.totalChaptersFound,
+      });
+    }
+  }, [location.state]);
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();

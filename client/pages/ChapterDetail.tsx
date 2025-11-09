@@ -77,13 +77,46 @@ export default function ChapterDetail() {
 
   // Extract data from navigation state
   useEffect(() => {
-    const state = location.state as LocationState;
-    if (state?.bookGroup && state?.query) {
+    const state = location.state as any;
+
+    // Handle new format from TieredSearchResults (selectedChapter)
+    if (state?.selectedChapter && state?.query) {
+      console.log("✅ Loading chapter from TieredSearchResults format");
+      const chapter = state.selectedChapter;
+      setQuery(state.query);
+
+      setChapterDetail({
+        id: chapter.id,
+        title: chapter.chapterTitle,
+        snippet: chapter.snippet,
+        fullText: chapter.chapter_text,
+        relevanceScore: chapter.relevanceScore,
+        whyRelevant: chapter.whyRelevant,
+        keyTopics: chapter.keyTopics || [],
+        aiSummary: chapter.aiAnalysis,
+      });
+
+      setBookDetail({
+        id: chapter.bookTitle.replace(/\s+/g, "-"),
+        title: chapter.bookTitle,
+        author: "Unknown Author",
+        cover: "",
+        isbn: "",
+        amazonLink: `https://amazon.com/s?k=${encodeURIComponent(chapter.bookTitle)}&tag=summifyai-20`,
+      });
+      setIsLoading(false);
+
+      // Enrich the chapter with additional AI content if needed
+      enrichChapterContent(chapter, state.query);
+    }
+    // Handle old format (bookGroup)
+    else if (state?.bookGroup && state?.query) {
+      console.log("✅ Loading chapter from bookGroup format");
       setQuery(state.query);
 
       // Find the specific chapter
       const chapter = state.bookGroup.topChapters.find(
-        (ch) => ch.id.toString() === chapterId,
+        (ch: ChapterDetail) => ch.id.toString() === chapterId,
       );
 
       if (chapter) {
@@ -109,8 +142,10 @@ export default function ChapterDetail() {
         console.error("Chapter not found in navigation state");
         setIsLoading(false);
       }
-    } else {
-      // Fallback: fetch chapter data directly
+    }
+    // Fallback: fetch chapter data from database
+    else {
+      console.log("⚠️ No navigation state, fetching chapter from database...");
       fetchChapterDetail();
     }
   }, [bookId, chapterId, location.state]);

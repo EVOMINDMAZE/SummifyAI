@@ -303,10 +303,10 @@ export default function TieredSearchResults({
         })}
 
         {/* Combined Locked Books Display for Free Users */}
-        {grayedOutBooks.length > 0 && (
+        {actualLockedBooksCount > 0 && (
           <GrayedOutBooksPreview
-            totalLockedBooks={grayedOutBooks.length}
-            totalLockedChapters={grayedOutBooks.reduce((sum, [_, chapters]) => sum + chapters.length, 0)}
+            totalLockedBooks={actualLockedBooksCount}
+            totalLockedChapters={actualLockedChaptersCount}
             allGrayedOutBooks={grayedOutBooks}
             query={query}
             onUpgrade={onUpgrade}

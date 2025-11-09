@@ -405,8 +405,12 @@ export class TieredSearchService {
       // Get candidate IDs from summary search
       const candidateIds = candidateResults.map((r) => r.id);
 
-      if (candidateIds.length === 0) return [];
+      if (candidateIds.length === 0) {
+        console.log("⚠️ No candidates for chapter embeddings search");
+        return [];
+      }
 
+      console.log(`🔍 Searching ${candidateIds.length} candidate chapters with embeddings...`);
       // Search chapter embeddings only for candidates
       const { data, error } = await supabase.rpc("search_chapter_embeddings", {
         query_embedding: queryEmbedding,
@@ -415,9 +419,14 @@ export class TieredSearchService {
         match_count: 25,
       });
 
-      if (error) throw error;
+      if (error) {
+        const errorMessage = typeof error === 'object' && error !== null && 'message' in error
+          ? (error as any).message
+          : String(error);
+        throw new Error(errorMessage);
+      }
 
-      return (
+      const results = (
         data?.map((row: any) => ({
           id: row.id,
           bookTitle: row.book_title,
@@ -429,6 +438,9 @@ export class TieredSearchService {
           keyTopics: this.extractTopicsFromText(row.chapter_text || ""),
         })) || []
       );
+
+      console.log(`✅ Chapter search returned ${results.length} results`);
+      return results;
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);
       console.warn("Chapter search error (returning empty results):", errorMessage);

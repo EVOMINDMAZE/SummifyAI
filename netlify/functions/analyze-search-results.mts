@@ -159,14 +159,17 @@ Return only valid JSON, no other text.`;
       }),
     });
 
+    // Read response body only once
+    const data = await response.json();
+
     if (!response.ok) {
-      const errorData = await response.json();
+      const errorMessage = typeof data === 'object' && data !== null && 'error' in data
+        ? (data as any).error?.message || JSON.stringify(data)
+        : response.statusText;
       throw new Error(
-        `OpenAI API error: ${errorData.error?.message || response.statusText}`,
+        `OpenAI API error: ${errorMessage}`,
       );
     }
-
-    const data = await response.json();
     const content = data.choices[0]?.message?.content;
 
     if (!content) {

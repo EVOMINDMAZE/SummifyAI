@@ -283,31 +283,22 @@ export class TieredSearchService {
   }
 
   private async generateEmbedding(text: string): Promise<number[]> {
+    const trimmedText = text.trim();
+
+    // Try Supabase edge function first (optimized path)
     try {
-      console.log("🧠 Generating embedding via Supabase edge function...");
+      console.log("🧠 Attempting Supabase edge function...");
 
       const response = await supabase.functions.invoke("generate-embeddings", {
-        body: { text: text.trim() },
+        body: { text: trimmedText },
       });
 
       if (response.error) {
-        const errorMessage = response.error.message || JSON.stringify(response.error);
-        console.error(
-          "Embedding API error:",
-          errorMessage,
-        );
-        throw new Error(
-          `Embedding generation failed: ${errorMessage}`,
-        );
+        throw new Error(response.error.message || JSON.stringify(response.error));
       }
 
       const result = response.data;
-      console.log("✅ Embedding API response:", {
-        cached: result.cached,
-        dimensions: result.dimensions,
-      });
 
-      // Handle the response format from our Supabase edge function
       if (!result.success) {
         throw new Error(result.error || "Embedding generation failed");
       }
@@ -315,16 +306,50 @@ export class TieredSearchService {
       const embedding = result.embedding;
 
       if (!embedding || !Array.isArray(embedding)) {
-        console.error("Invalid embedding in response:", result);
         throw new Error("Invalid embedding data received");
       }
 
-      console.log(`✅ Embedding generated (${result.cached ? "cached" : "fresh"})`);
-
+      console.log(`✅ Embedding generated via Supabase (${result.cached ? "cached" : "fresh"})`);
       return embedding;
-    } catch (error) {
-      console.error("Embedding generation error:", error instanceof Error ? error.message : String(error));
-      throw error; // Re-throw the original error for better debugging
+    } catch (supabaseError) {
+      console.warn("⚠️ Supabase edge function unavailable, falling back to Netlify...",
+        supabaseError instanceof Error ? supabaseError.message : String(supabaseError)
+      );
+
+      // Fallback to Netlify function
+      try {
+        const response = await fetch("/.netlify/functions/generate-embeddings", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ text: trimmedText }),
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          const errorMessage = result.error || result.message || "Unknown error";
+          throw new Error(
+            `Netlify API failed: ${response.status} ${response.statusText} - ${errorMessage}`,
+          );
+        }
+
+        if (!result.success) {
+          throw new Error(result.error || "Embedding generation failed");
+        }
+
+        const embedding = result.embedding;
+
+        if (!embedding || !Array.isArray(embedding)) {
+          throw new Error("Invalid embedding data received");
+        }
+
+        console.log(`✅ Embedding generated via Netlify`);
+        return embedding;
+      } catch (netlifyError) {
+        const errorMessage = netlifyError instanceof Error ? netlifyError.message : String(netlifyError);
+        console.error("❌ Embedding generation error:", errorMessage);
+        throw new Error(`Embedding generation failed: ${errorMessage}`);
+      }
     }
   }
 

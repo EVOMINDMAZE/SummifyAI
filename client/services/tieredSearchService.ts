@@ -716,20 +716,27 @@ export class TieredSearchService {
   ): string {
     const relevancePercentage = Math.round(result.relevanceScore * 100);
 
-    const relevanceReasons: Record<string, string> = {
-      summary: `Found in chapter summary with strong semantic match (${relevancePercentage}% relevance)`,
-      chapter: `Identified in chapter content with deep semantic analysis (${relevancePercentage}% relevance)`,
-      fulltext: `Matches key terms in chapter text (${relevancePercentage}% relevance)`,
-    };
+    // Generate more context-aware fallback text
+    let baseReason = "";
 
-    const searchTypeText = relevanceReasons[result.searchType] || relevanceReasons.summary;
-
-    // For paid users, include more context
-    if (userPlan !== "free") {
-      return `${searchTypeText}. This chapter provides relevant insights related to your search.`;
+    if (result.searchType === "summary") {
+      baseReason = `Strong semantic match found in chapter summary. Key insights align with your search query with ${relevancePercentage}% relevance.`;
+    } else if (result.searchType === "chapter") {
+      baseReason = `Deep content analysis shows this chapter covers relevant topics. ${relevancePercentage}% semantic match across the full chapter text.`;
+    } else if (result.searchType === "fulltext") {
+      baseReason = `Chapter contains direct matches for your search terms. ${relevancePercentage}% text relevance for precise information lookup.`;
+    } else {
+      baseReason = `This chapter is relevant to your search with ${relevancePercentage}% confidence match.`;
     }
 
-    return searchTypeText;
+    // Add tier-specific context
+    if (userPlan === "scholar" || userPlan === "professional" || userPlan === "institution") {
+      return `${baseReason} Premium analysis indicates this content provides valuable context for comprehensive understanding.`;
+    } else if (userPlan === "premium") {
+      return `${baseReason} Analysis indicates substantial relevance for your research needs.`;
+    }
+
+    return baseReason;
   }
 }
 

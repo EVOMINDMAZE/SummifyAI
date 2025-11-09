@@ -1,7 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 
 // Supabase configuration from environment variables with fallbacks
-const supabaseUrl =
+export const supabaseUrl =
   import.meta.env.VITE_SUPABASE_URL ||
   "https://voosuqmkazvjzheipbrl.supabase.co";
 const supabaseAnonKey =

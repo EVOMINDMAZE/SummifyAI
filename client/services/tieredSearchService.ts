@@ -354,7 +354,8 @@ export class TieredSearchService {
         })) || []
       );
     } catch (error) {
-      console.error("Summary search error:", error);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.warn("Summary search error (returning empty results):", errorMessage);
       return [];
     }
   }
@@ -393,7 +394,8 @@ export class TieredSearchService {
         })) || []
       );
     } catch (error) {
-      console.error("Chapter search error:", error);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.warn("Chapter search error (returning empty results):", errorMessage);
       return [];
     }
   }

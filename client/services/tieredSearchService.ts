@@ -492,29 +492,40 @@ export class TieredSearchService {
       // Get current session for authentication
       const { data: { session } } = await supabase.auth.getSession();
 
-      // Prepare headers with auth if available
-      const headers: Record<string, string> = {};
+      // Prepare headers with auth
+      const headers: Record<string, string> = {
+        "Content-Type": "application/json",
+      };
+
       if (session?.access_token) {
         headers.Authorization = `Bearer ${session.access_token}`;
       }
 
-      console.log("📡 Invoking analysis edge function...");
-      const response = await supabase.functions.invoke("analyze-search-results", {
-        body: {
+      // Get the project URL from supabase client config
+      const projectUrl = supabase.supabaseUrl;
+      const edgeFunctionUrl = `${projectUrl}/functions/v1/analyze-search-results`;
+
+      console.log("📡 Calling analysis edge function via HTTP...");
+      const response = await fetch(edgeFunctionUrl, {
+        method: "POST",
+        headers,
+        body: JSON.stringify({
           results: resultsToAnalyze,
           query,
           analysisLevel,
-        },
-        headers,
+        }),
       });
 
-      if (response.error) {
-        const errorMsg = response.error.message || response.error.context?.message || JSON.stringify(response.error);
+      const data = await response.json();
+      console.log("📥 Received response:", { status: response.status });
+
+      if (!response.ok) {
+        const errorMsg = data?.error || data?.details || response.statusText;
         console.error("❌ Analysis edge function error:", errorMsg);
         throw new Error(`Analysis edge function error: ${errorMsg}`);
       }
 
-      const { analyzedResults } = response.data;
+      const { analyzedResults } = data;
 
       console.log(`✅ Analysis complete`);
 

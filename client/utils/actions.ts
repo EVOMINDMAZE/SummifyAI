@@ -22,23 +22,59 @@ export const shareResult = async (result: SearchResult): Promise<boolean> => {
   try {
     if (navigator.share) {
       // Use native sharing if available
-      await navigator.share({
-        title: `${result.topic} - Book Summary`,
-        text: result.summary,
-        url: `${window.location.origin}/results/${result.id}`,
-      });
-      return true;
-    } else {
-      // Fallback to copying link
-      const shareUrl = `${window.location.origin}/results/${result.id}`;
-      await navigator.clipboard.writeText(shareUrl);
+      try {
+        await navigator.share({
+          title: `${result.topic} - Book Summary`,
+          text: result.summary,
+          url: `${window.location.origin}/results/${result.id}`,
+        });
+        return true;
+      } catch (shareError: any) {
+        // Handle NotAllowedError or other share failures
+        if (shareError.name === "NotAllowedError") {
+          console.warn("Share was cancelled or denied, falling back to clipboard");
+          // Fall through to clipboard fallback
+        } else if (shareError.name === "AbortError") {
+          console.warn("Share was aborted by user");
+          return false;
+        } else {
+          console.warn("Share failed, falling back to clipboard:", shareError);
+          // Fall through to clipboard fallback
+        }
+      }
+    }
 
-      // Show a toast or notification here
+    // Fallback to copying link to clipboard
+    const shareUrl = `${window.location.origin}/results/${result.id}`;
+    try {
+      await navigator.clipboard.writeText(shareUrl);
       console.log("Link copied to clipboard");
       return true;
+    } catch (clipboardError) {
+      console.error("Failed to copy to clipboard:", clipboardError);
+      // Last resort: try old execCommand method
+      const textArea = document.createElement("textarea");
+      textArea.value = shareUrl;
+      textArea.style.position = "fixed";
+      textArea.style.left = "-999999px";
+      textArea.style.top = "-999999px";
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+
+      try {
+        document.execCommand("copy");
+        document.body.removeChild(textArea);
+        console.log("Link copied to clipboard using execCommand");
+        return true;
+      } catch (execError) {
+        document.body.removeChild(textArea);
+        console.error("All sharing methods failed:", execError);
+        return false;
+      }
     }
   } catch (error) {
-    console.error("Error sharing:", error);
+    console.error("Unexpected error in shareResult:", error);
     return false;
   }
 };

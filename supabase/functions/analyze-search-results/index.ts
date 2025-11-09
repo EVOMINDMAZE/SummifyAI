@@ -386,15 +386,19 @@ Return only valid JSON, no other text.`;
       };
     }
 
-    return (
-      newAnalysis || {
-        id: result.id,
-        analysis: "Analysis not available",
-        enhancedScore: result.relevanceScore,
-        keyTopics: [],
-        relevanceReason: "Matches search criteria",
-      }
-    );
+    if (newAnalysis) {
+      return newAnalysis;
+    }
+
+    // Generate a descriptive fallback for any missing analyses
+    const fallbackReason = generateRelevanceReason(result, query, analysisLevel);
+    return {
+      id: result.id,
+      analysis: `This chapter from "${result.bookTitle}" relates to your search for "${query}".`,
+      enhancedScore: result.relevanceScore,
+      keyTopics: extractKeyTopicsFromSnippet(result.snippet, query),
+      relevanceReason: fallbackReason,
+    };
   });
 
   return allAnalyses;

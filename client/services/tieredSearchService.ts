@@ -276,8 +276,9 @@ export class TieredSearchService {
         upgradeRequired: false,
       };
     } catch (error) {
-      console.error("Search error:", error);
-      throw new Error("Search failed. Please try again.");
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.error("Search error:", errorMessage);
+      throw new Error(`Search failed: ${errorMessage}`);
     }
   }
 

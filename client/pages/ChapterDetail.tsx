@@ -265,7 +265,10 @@ export default function ChapterDetail() {
   const handleBackToResults = () => {
     const hasSearchResults = sessionStorage.getItem("lastSearchResults");
     if (hasSearchResults) {
-      navigate("/generate");
+      navigate("/tiered-search", {
+        state: JSON.parse(hasSearchResults),
+      });
+      sessionStorage.removeItem("lastSearchResults");
     } else {
       navigate(-1);
     }

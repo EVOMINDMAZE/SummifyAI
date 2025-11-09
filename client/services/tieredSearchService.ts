@@ -402,7 +402,7 @@ export class TieredSearchService {
       const { data, error } = await supabase.rpc("search_chapter_embeddings", {
         query_embedding: queryEmbedding,
         candidate_ids: candidateIds,
-        match_threshold: 0.6,
+        match_threshold: 0.4,  // Lower threshold to catch more matches in chapter content
         match_count: 25,
       });
 

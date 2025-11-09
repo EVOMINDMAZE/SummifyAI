@@ -284,31 +284,30 @@ export class TieredSearchService {
 
   private async generateEmbedding(text: string): Promise<number[]> {
     try {
-      const response = await fetch("/.netlify/functions/generate-embeddings", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text }),
+      console.log("🧠 Generating embedding via Supabase edge function...");
+
+      const response = await supabase.functions.invoke("generate-embeddings", {
+        body: { text: text.trim() },
       });
 
-      // Read the body only once
-      const result = await response.json();
-
-      if (!response.ok) {
-        const errorMessage = result.error || result.message || "Unknown error";
+      if (response.error) {
+        const errorMessage = response.error.message || JSON.stringify(response.error);
         console.error(
           "Embedding API error:",
-          response.status,
-          response.statusText,
           errorMessage,
         );
         throw new Error(
-          `Embedding API failed: ${response.status} ${response.statusText} - ${errorMessage}`,
+          `Embedding generation failed: ${errorMessage}`,
         );
       }
 
-      console.log("Embedding API response:", result);
+      const result = response.data;
+      console.log("✅ Embedding API response:", {
+        cached: result.cached,
+        dimensions: result.dimensions,
+      });
 
-      // Handle the response format from our Netlify function
+      // Handle the response format from our Supabase edge function
       if (!result.success) {
         throw new Error(result.error || "Embedding generation failed");
       }
@@ -319,6 +318,8 @@ export class TieredSearchService {
         console.error("Invalid embedding in response:", result);
         throw new Error("Invalid embedding data received");
       }
+
+      console.log(`✅ Embedding generated (${result.cached ? "cached" : "fresh"})`);
 
       return embedding;
     } catch (error) {

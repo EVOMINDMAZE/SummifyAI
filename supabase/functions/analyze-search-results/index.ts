@@ -71,7 +71,7 @@ serve(async (req) => {
       query,
       analysisLevel,
       supabase,
-      openaiApiKey
+      grokApiKey
     );
 
     return new Response(

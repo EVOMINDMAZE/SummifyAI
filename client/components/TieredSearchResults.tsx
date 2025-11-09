@@ -133,10 +133,10 @@ export default function TieredSearchResults({
           </h2>
           <div className="flex gap-3 text-sm">
             <Badge variant="outline">
-              {Object.keys(groupedResults).length} books
+              {searchResponse.totalBooksFound} books
             </Badge>
             <Badge variant="outline">
-              {searchResponse.results.length} chapters
+              {searchResponse.totalChaptersFound} chapters
             </Badge>
           </div>
         </div>

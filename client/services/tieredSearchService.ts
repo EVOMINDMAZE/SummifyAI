@@ -291,27 +291,34 @@ export class TieredSearchService {
       // Get current session for authentication
       const { data: { session } } = await supabase.auth.getSession();
 
-      // Prepare headers with auth if available
-      const headers: Record<string, string> = {};
+      // Prepare headers with auth
+      const headers: Record<string, string> = {
+        "Content-Type": "application/json",
+      };
+
       if (session?.access_token) {
         headers.Authorization = `Bearer ${session.access_token}`;
       }
 
-      console.log("📡 Invoking edge function...");
-      const response = await supabase.functions.invoke("generate-embeddings", {
-        body: { text: trimmedText },
+      // Get the project URL from supabase client config
+      const projectUrl = supabase.supabaseUrl;
+      const edgeFunctionUrl = `${projectUrl}/functions/v1/generate-embeddings`;
+
+      console.log("📡 Calling edge function via HTTP...");
+      const response = await fetch(edgeFunctionUrl, {
+        method: "POST",
         headers,
+        body: JSON.stringify({ text: trimmedText }),
       });
 
-      // Check for errors
-      if (response.error) {
-        const errorMsg = response.error.message || response.error.context?.message || JSON.stringify(response.error);
+      const result = await response.json();
+      console.log("📥 Received response:", { status: response.status, success: result?.success });
+
+      if (!response.ok) {
+        const errorMsg = result?.error || result?.details || response.statusText;
         console.error("❌ Edge function error:", errorMsg);
         throw new Error(`Edge function error: ${errorMsg}`);
       }
-
-      const result = response.data;
-      console.log("📥 Received response:", { success: result?.success, hasEmbedding: !!result?.embedding });
 
       if (!result?.success) {
         throw new Error(result?.error || "Embedding generation failed");

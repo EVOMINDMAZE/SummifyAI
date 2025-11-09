@@ -186,8 +186,8 @@ export default function TieredSearchResults({
       </div>
 
       {/* Book Results */}
-      <div className="grid gap-4">
-        {/* Normal Books (First 3 for free users, all for paid users) */}
+      <div className="grid gap-6">
+        {/* Normal Books (First 1 for free users, all for paid users) */}
         {normalBooks.map(([bookTitle, chapters], bookIndex) => {
           const firstChapter = chapters[0];
           const isExpanded = expandedBooks.has(bookTitle);
@@ -292,17 +292,16 @@ export default function TieredSearchResults({
           );
         })}
 
-        {/* Grayed Out Real Books for Free Users (Books 4+) */}
-        {grayedOutBooks.map(([bookTitle, chapters], grayIndex) => (
-          <GrayedOutBookCard
-            key={`grayed-${bookTitle}`}
-            bookTitle={bookTitle}
-            chapters={chapters}
-            bookIndex={normalBooks.length + grayIndex}
+        {/* Combined Locked Books Display for Free Users */}
+        {grayedOutBooks.length > 0 && (
+          <GrayedOutBooksPreview
+            totalLockedBooks={grayedOutBooks.length}
+            totalLockedChapters={grayedOutBooks.reduce((sum, [_, chapters]) => sum + chapters.length, 0)}
+            allGrayedOutBooks={grayedOutBooks}
             query={query}
             onUpgrade={onUpgrade}
           />
-        ))}
+        )}
       </div>
 
       {/* Marketing CTA for more results */}

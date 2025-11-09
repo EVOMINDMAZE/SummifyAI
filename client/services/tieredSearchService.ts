@@ -429,13 +429,21 @@ export class TieredSearchService {
 
   private async searchFullText(query: string): Promise<SearchResult[]> {
     try {
+      console.log("📝 Performing full-text search...");
       // Full-text search using PostgreSQL's text search
       const { data, error } = await supabase.rpc("search_fulltext", {
         search_query: query,
         match_count: 20,
       });
 
-      if (error) throw error;
+      if (error) {
+        const errorMessage = typeof error === 'object' && error !== null && 'message' in error
+          ? (error as any).message
+          : String(error);
+        throw new Error(errorMessage);
+      }
+
+      console.log(`✅ Full-text search returned ${data?.length || 0} results`);
 
       return (
         data?.map((row: any) => ({

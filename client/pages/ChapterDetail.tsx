@@ -395,23 +395,24 @@ export default function ChapterDetail() {
             <Card className="sticky top-8 shadow-2xl border-0 bg-gradient-to-br from-white to-gray-50/50 dark:from-gray-800 dark:to-gray-900/50 backdrop-blur-md rounded-3xl overflow-hidden">
               <CardContent className="p-6">
                 {/* Book Cover - Compact Version */}
-                {bookDetail.cover && (
-                  <div className="text-center mb-6">
-                    <div className="relative group">
-                      <div className="aspect-[2/3] w-24 h-36 mx-auto relative overflow-hidden rounded-xl shadow-lg group-hover:shadow-xl transition-all duration-500 border-2 border-white/50 dark:border-gray-700/50">
-                        <img
-                          src={bookDetail.cover}
-                          alt={bookDetail.title}
-                          className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
-                          onError={(e) => {
-                            const target = e.currentTarget;
-                            target.style.display = "none";
-                          }}
-                        />
-                      </div>
+                <div className="text-center mb-6">
+                  <div className="relative group">
+                    <div className="aspect-[2/3] w-24 h-36 mx-auto relative overflow-hidden rounded-xl shadow-lg group-hover:shadow-xl transition-all duration-500 border-2 border-white/50 dark:border-gray-700/50 bg-gradient-to-br from-slate-200 to-slate-300 dark:from-slate-700 dark:to-slate-800 flex items-center justify-center">
+                      <img
+                        src={bookDetail.cover || `https://via.placeholder.com/200x300/667eea/FFFFFF?text=${encodeURIComponent(bookDetail.title.split(" ").slice(0, 3).join(" "))}`}
+                        alt={bookDetail.title}
+                        className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                        onError={(e) => {
+                          const target = e.currentTarget as HTMLImageElement;
+                          if (!target.src.includes("placeholder")) {
+                            // Fallback to placeholder if original cover fails
+                            target.src = `https://via.placeholder.com/200x300/667eea/FFFFFF?text=${encodeURIComponent(bookDetail.title.split(" ").slice(0, 3).join(" "))}`;
+                          }
+                        }}
+                      />
                     </div>
                   </div>
-                )}
+                </div>
 
                 {/* Book Details */}
                 <div className="text-center mb-6">

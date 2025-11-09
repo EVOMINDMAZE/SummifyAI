@@ -302,7 +302,10 @@ export default function Index() {
 
       {/* Hero Section */}
       <div className="bg-[#FFFD63] dark:bg-gray-800 relative z-10">
-        <div className="max-w-6xl mx-auto px-6 pt-20" style={{ paddingBottom: "27px" }}>
+        <div
+          className="max-w-6xl mx-auto px-6 pt-20"
+          style={{ paddingBottom: "27px" }}
+        >
           <div className="text-center">
             {/* Main Heading */}
             <h1 className="text-5xl md:text-7xl font-black text-[#0A0B1E] dark:text-white leading-tight mb-8">
@@ -384,7 +387,15 @@ export default function Index() {
             </div>
 
             {/* CTA Buttons */}
-            <div style={{ display: "flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "center" }} className="gap-4">
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "flex-start",
+                alignItems: "center",
+              }}
+              className="gap-4"
+            >
               {user ? (
                 <>
                   <Link
@@ -442,7 +453,10 @@ export default function Index() {
                     >
                       💡 See How It Works
                     </Link>
-                    <p className="text-xs text-[#0A0B1E]/60 dark:text-gray-500" style={{ marginTop: "50px", paddingBottom: "1px" }}>
+                    <p
+                      className="text-xs text-[#0A0B1E]/60 dark:text-gray-500"
+                      style={{ marginTop: "50px", paddingBottom: "1px" }}
+                    >
                       No credit card required • 10 free searches monthly • Find
                       exact chapters in seconds
                     </p>
@@ -1288,8 +1302,12 @@ export default function Index() {
               >
                 🚀 Start Your Free Trial — Unlock Premium
               </Link>
-              <p className="text-gray-400 text-sm" style={{ padding: "5px 0 10px" }}>
-                ✅&nbsp; No credit card required • ✅&nbsp; 5 free summaries • ✅&nbsp; Cancel anytime
+              <p
+                className="text-gray-400 text-sm"
+                style={{ padding: "5px 0 10px" }}
+              >
+                ✅&nbsp; No credit card required • ✅&nbsp; 5 free summaries •
+                ✅&nbsp; Cancel anytime
               </p>
             </div>
           </div>

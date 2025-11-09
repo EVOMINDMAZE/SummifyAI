@@ -156,7 +156,6 @@ export default function ChapterDetail() {
 
     try {
       setIsLoading(true);
-      const { supabase } = await import("@/lib/supabase");
 
       // Fetch chapter details from database
       const { data: chapterData, error: chapterError } = await supabase

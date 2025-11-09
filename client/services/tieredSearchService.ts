@@ -198,6 +198,8 @@ export class TieredSearchService {
         queriesRemaining: 0,
         upgradeRequired: true,
         upgradeMessage: `You've reached your ${searchTier.maxQueries} monthly search limit. ${searchTier.upgradeMessage || "Upgrade for more searches!"}`,
+        totalBooksFound: 0,
+        totalChaptersFound: 0,
       };
     }
 

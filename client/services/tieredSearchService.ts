@@ -379,7 +379,7 @@ export class TieredSearchService {
           snippet: row.chapter_summary?.substring(0, 200) + "...",
           summarySnippet: row.chapter_summary,
           searchType: "summary" as const,
-          whyRelevant: `This chapter summary contains relevant information about your search topic.`,
+          whyRelevant: "", // Will be populated by AI analysis
           keyTopics: this.extractTopicsFromText(row.chapter_summary || ""),
         })) || []
       );
@@ -539,14 +539,18 @@ export class TieredSearchService {
 
       console.log(`✅ Analysis complete`);
 
-      return results.map((result, index) => ({
-        ...result,
-        aiAnalysis: analyzedResults[index]?.analysis || undefined,
-        relevanceScore:
-          analyzedResults[index]?.enhancedScore || result.relevanceScore,
-        whyRelevant: analyzedResults[index]?.relevanceReason || result.whyRelevant,
-        keyTopics: analyzedResults[index]?.keyTopics || result.keyTopics,
-      }));
+      return results.map((result, index) => {
+        const analyzedResult = analyzedResults[index];
+        const whyRelevant = analyzedResult?.relevanceReason || this.generateFallbackWhyRelevant(result, userPlan);
+
+        return {
+          ...result,
+          aiAnalysis: analyzedResult?.analysis || undefined,
+          relevanceScore: analyzedResult?.enhancedScore || result.relevanceScore,
+          whyRelevant,
+          keyTopics: analyzedResult?.keyTopics || result.keyTopics,
+        };
+      });
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);
       console.warn("⚠️ AI analysis error (continuing without analysis):", errorMessage);
@@ -631,7 +635,7 @@ export class TieredSearchService {
               query,
             ),
             searchType: "fulltext" as const,
-            whyRelevant: `This chapter contains text that matches your search terms.`,
+            whyRelevant: "", // Will be populated by AI analysis
             keyTopics: this.extractTopicsFromText(
               row.chapter_text || row.chapter_summary || "",
             ),

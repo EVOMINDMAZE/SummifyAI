@@ -394,23 +394,37 @@ export default function ChapterDetail() {
           <div className="lg:col-span-1">
             <Card className="sticky top-8 shadow-2xl border-0 bg-gradient-to-br from-white to-gray-50/50 dark:from-gray-800 dark:to-gray-900/50 backdrop-blur-md rounded-3xl overflow-hidden">
               <CardContent className="p-6">
-                {/* Book Cover - Compact Version */}
+                {/* Book Cover - Compact Version with Enhanced Design */}
                 <div className="text-center mb-6">
-                  <div className="relative group">
-                    <div className="aspect-[2/3] w-24 h-36 mx-auto relative overflow-hidden rounded-xl shadow-lg group-hover:shadow-xl transition-all duration-500 border-2 border-white/50 dark:border-gray-700/50 bg-gradient-to-br from-slate-200 to-slate-300 dark:from-slate-700 dark:to-slate-800 flex items-center justify-center">
+                  <div className="relative group inline-block">
+                    {/* Decorative background orbs */}
+                    <div className="absolute -inset-3 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 rounded-2xl blur-xl opacity-0 group-hover:opacity-20 transition-opacity duration-500"></div>
+
+                    {/* Main cover container */}
+                    <div className="aspect-[2/3] w-24 h-36 mx-auto relative overflow-hidden rounded-2xl shadow-2xl group-hover:shadow-[0_20px_40px_rgba(102,126,234,0.4)] transition-all duration-500 border-2 border-gradient-to-br from-white/70 via-white/50 to-white/30 dark:from-white/20 dark:via-white/10 dark:to-white/5 bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100 dark:from-indigo-900/40 dark:via-purple-900/30 dark:to-pink-900/40 flex items-center justify-center backdrop-blur-sm">
+                      {/* Background pattern overlay */}
+                      <div className="absolute inset-0 opacity-30 dark:opacity-20">
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent"></div>
+                      </div>
+
                       <img
                         src={bookDetail.cover || `https://via.placeholder.com/200x300/667eea/FFFFFF?text=${encodeURIComponent(bookDetail.title.split(" ").slice(0, 3).join(" "))}`}
                         alt={bookDetail.title}
-                        className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                        className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-110 drop-shadow-md"
                         onError={(e) => {
                           const target = e.currentTarget as HTMLImageElement;
                           if (!target.src.includes("placeholder")) {
-                            // Fallback to placeholder if original cover fails
                             target.src = `https://via.placeholder.com/200x300/667eea/FFFFFF?text=${encodeURIComponent(bookDetail.title.split(" ").slice(0, 3).join(" "))}`;
                           }
                         }}
                       />
+
+                      {/* Shine effect on hover */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 pointer-events-none"></div>
                     </div>
+
+                    {/* Glow effect on hover */}
+                    <div className="absolute -inset-2 border border-gradient-to-r from-blue-400/0 via-purple-400/0 to-pink-400/0 rounded-2xl group-hover:from-blue-400/20 group-hover:via-purple-400/20 group-hover:to-pink-400/20 transition-all duration-500 pointer-events-none"></div>
                   </div>
                 </div>
 

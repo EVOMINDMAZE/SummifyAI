@@ -243,12 +243,10 @@ export class TieredSearchService {
         }
       }
 
-      // Use full-text search for Professional+ tier OR as fallback when no embeddings
-      if (
-        searchTier.features.find((f) => f.id === "fulltext_search")?.enabled ||
-        !queryEmbedding
-      ) {
-        // Stage 3: Full-text search (Professional+ or fallback)
+      // Use full-text search only as fallback when embeddings unavailable
+      // Skip full-text if we already have good results from embeddings (too slow/unreliable)
+      if (!queryEmbedding && results.length === 0) {
+        // Stage 3: Full-text search (fallback only when no embeddings)
         const fulltextResults = await this.searchFullText(query);
         results = this.mergeResults(results, fulltextResults);
       }
@@ -260,9 +258,14 @@ export class TieredSearchService {
         results = basicResults;
       }
 
-      // Apply AI analysis based on tier
-      if (searchTier.features.find((f) => f.id.includes("ai"))?.enabled) {
-        results = await this.addAIAnalysis(results, query, userPlan);
+      // Apply AI analysis based on tier (gracefully skip if unavailable)
+      if (searchTier.features.find((f) => f.id.includes("ai"))?.enabled && results.length > 0) {
+        try {
+          results = await this.addAIAnalysis(results, query, userPlan);
+        } catch (aiError) {
+          console.warn("AI analysis skipped:", aiError);
+          // Continue without AI analysis
+        }
       }
 
       // Count total books found before limiting results
@@ -432,28 +435,31 @@ export class TieredSearchService {
   private async searchFullText(query: string): Promise<SearchResult[]> {
     try {
       console.log("📝 Performing full-text search...");
-      // Full-text search using PostgreSQL's text search
-      let { data, error } = await supabase.rpc("search_fulltext", {
-        search_query: query,
-        match_count: 10,
+
+      // Timeout safety: if full-text takes too long, skip it
+      let timedOut = false;
+      const timeoutPromise = new Promise<never>((_resolve, reject) => {
+        setTimeout(() => {
+          timedOut = true;
+          reject(new Error("Full-text search timeout"));
+        }, 5000); // 5 second timeout
       });
 
-      // If timeout or heavy load, retry with smaller match_count
-      if (error && String(error).toLowerCase().includes("timeout")) {
-        console.warn("⏳ Full-text search timeout, retrying with smaller match_count...");
-        const retry = await supabase.rpc("search_fulltext", {
+      // Race between the search and timeout
+      const { data, error } = await Promise.race([
+        supabase.rpc("search_fulltext", {
           search_query: query,
           match_count: 5,
-        });
-        data = retry.data;
-        error = retry.error as any;
-      }
+        }),
+        timeoutPromise,
+      ]) as any;
 
       if (error) {
         const errorMessage = typeof error === 'object' && error !== null && 'message' in error
           ? (error as any).message
           : String(error);
-        throw new Error(errorMessage);
+        console.warn("Full-text search skipped:", errorMessage);
+        return []; // Skip full-text on any error
       }
 
       console.log(`✅ Full-text search returned ${data?.length || 0} results`);
@@ -472,8 +478,8 @@ export class TieredSearchService {
       );
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);
-      console.error("Full-text search error:", errorMessage);
-      return [];
+      console.warn("Full-text search unavailable:", errorMessage);
+      return []; // Return empty instead of throwing
     }
   }
 

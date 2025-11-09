@@ -346,9 +346,10 @@ export class TieredSearchService {
     try {
       console.log("📚 Searching chapter summaries with embeddings...");
       // Use Supabase vector similarity search on summary embeddings
+      // Use lower threshold (0.5) to catch more results, especially for common words
       const { data, error } = await supabase.rpc("search_summary_embeddings", {
         query_embedding: queryEmbedding,
-        match_threshold: 0.7,
+        match_threshold: 0.5,
         match_count: 50,
       });
 

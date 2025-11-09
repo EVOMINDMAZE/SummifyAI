@@ -358,6 +358,7 @@ export class TieredSearchService {
     queryEmbedding: number[],
   ): Promise<SearchResult[]> {
     try {
+      console.log("📚 Searching chapter summaries with embeddings...");
       // Use Supabase vector similarity search on summary embeddings
       const { data, error } = await supabase.rpc("search_summary_embeddings", {
         query_embedding: queryEmbedding,
@@ -365,7 +366,12 @@ export class TieredSearchService {
         match_count: 50,
       });
 
-      if (error) throw error;
+      if (error) {
+        const errorMessage = typeof error === 'object' && error !== null && 'message' in error
+          ? (error as any).message
+          : String(error);
+        throw new Error(errorMessage);
+      }
 
       return (
         data?.map((row: any) => ({

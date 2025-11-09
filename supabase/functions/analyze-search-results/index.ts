@@ -29,33 +29,52 @@ interface AnalyzedResult {
   relevanceReason: string;
 }
 
+function generateRelevanceReason(
+  result: SearchResult,
+  query: string,
+  analysisLevel: string
+): string {
+  const queryWords = query.toLowerCase().split(/\s+/);
+  const snippetLower = (result.snippet || "").toLowerCase();
+
+  // Check which query terms appear in the snippet
+  const foundTerms = queryWords.filter(word => snippetLower.includes(word));
+
+  // Generate tier-specific fallback text based on search type and analysis level
+  let relevanceReason = "";
+
+  if (analysisLevel === "premium") {
+    if (foundTerms.length > 0) {
+      relevanceReason = `Found ${foundTerms.length} relevant term${foundTerms.length > 1 ? 's' : ''} ("${foundTerms.join('", "')}") in chapter content related to "${query}". This chapter provides relevant context and examples for deeper understanding.`;
+    } else {
+      relevanceReason = `Chapter content aligns with search query "${query}". Contains comprehensive information and insights for research and learning.`;
+    }
+  } else if (analysisLevel === "advanced") {
+    if (foundTerms.length > 0) {
+      const topTerms = foundTerms.slice(0, 2).join('", "');
+      relevanceReason = `Matches key terms from your search ("${topTerms}") in the context of "${query}". This chapter provides detailed insights and practical analysis relevant to your research.`;
+    } else {
+      relevanceReason = `This chapter is semantically related to "${query}". Contains in-depth content and analysis relevant to your research needs.`;
+    }
+  } else {
+    // Basic level for free users
+    if (foundTerms.length > 0) {
+      relevanceReason = `Found relevant content for "${query}" in this chapter. Chapter contains information matching your search terms.`;
+    } else {
+      relevanceReason = `This chapter is relevant to your search for "${query}". Chapter content addresses topics related to your query.`;
+    }
+  }
+
+  return relevanceReason;
+}
+
 function generateFallbackAnalyses(
   results: SearchResult[],
   query: string,
   analysisLevel: string
 ): AnalyzedResult[] {
   return results.map((result) => {
-    const queryWords = query.toLowerCase().split(/\s+/);
-    const snippetLower = (result.snippet || "").toLowerCase();
-
-    // Check which query terms appear in the snippet
-    const foundTerms = queryWords.filter(word => snippetLower.includes(word));
-
-    // Generate tier-specific fallback text
-    let relevanceReason = "";
-    if (analysisLevel === "premium") {
-      relevanceReason = foundTerms.length > 0
-        ? `Found ${foundTerms.length} relevant term${foundTerms.length > 1 ? 's' : ''} ("${foundTerms.join('", "')}") in chapter content related to "${query}". This chapter provides relevant context and examples for deeper understanding.`
-        : `Chapter content aligns with search query "${query}". Contains relevant information for research and learning purposes.`;
-    } else if (analysisLevel === "advanced") {
-      relevanceReason = foundTerms.length > 0
-        ? `Matches key terms from your search ("${foundTerms.slice(0, 2).join('", "')}") in the context of "${query}". Chapter provides relevant insights and analysis.`
-        : `Semantically related to "${query}". Chapter contains relevant content for your research.`;
-    } else {
-      relevanceReason = foundTerms.length > 0
-        ? `Found in search for "${query}". Contains relevant chapter content.`
-        : `Matches "${query}" topic. Relevant to your search.`;
-    }
+    const relevanceReason = generateRelevanceReason(result, query, analysisLevel);
 
     let analysis = "";
     if (analysisLevel === "premium") {

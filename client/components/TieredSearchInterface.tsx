@@ -58,7 +58,7 @@ export default function TieredSearchInterface({
       // Clear the state from location to prevent re-initialization
       window.history.replaceState({}, document.title);
     }
-  }, []);
+  }, [location.state]);
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();

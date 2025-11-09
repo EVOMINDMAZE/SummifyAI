@@ -79,6 +79,16 @@ export default function TieredSearchResults({
   // No longer need mock books - using grayed out real books instead
 
   const handleChapterClick = (result: SearchResult) => {
+    // Store the current search results page for back navigation
+    sessionStorage.setItem("lastSearchResults", JSON.stringify({
+      query,
+      results: searchResponse.results,
+      totalBooksFound: searchResponse.totalBooksFound,
+      totalChaptersFound: searchResponse.totalChaptersFound,
+      searchTier: searchResponse.searchTier,
+      userPlan,
+    }));
+
     navigate(`/chapter/${result.bookTitle.replace(/\s+/g, "-")}/${result.id}`, {
       state: {
         query,

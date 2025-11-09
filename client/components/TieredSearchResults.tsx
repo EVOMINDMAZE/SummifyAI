@@ -86,6 +86,9 @@ export default function TieredSearchResults({
       totalBooksFound: searchResponse.totalBooksFound,
       totalChaptersFound: searchResponse.totalChaptersFound,
       searchTier: searchResponse.searchTier,
+      queriesUsed: searchResponse.queriesUsed,
+      queriesRemaining: searchResponse.queriesRemaining,
+      upgradeRequired: searchResponse.upgradeRequired,
       userPlan,
     }));
 

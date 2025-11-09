@@ -151,15 +151,67 @@ export default function ChapterDetail() {
   }, [bookId, chapterId, location.state]);
 
   const fetchChapterDetail = async () => {
-    if (!bookId || !chapterId) return;
+    if (!chapterId) return;
 
     try {
       setIsLoading(true);
+      const { supabase } = await import("@/lib/supabase");
 
-      // This would be a real API call to fetch chapter details
-      // For now, we'll show an error since we need the navigation state
-      console.error("No navigation state found - chapter details unavailable");
+      // Fetch chapter details from database
+      const { data: chapterData, error: chapterError } = await supabase
+        .from("chapters")
+        .select(
+          `
+          id,
+          chapter_title,
+          chapter_text,
+          chapter_summary,
+          books (
+            id,
+            title,
+            author
+          )
+        `,
+        )
+        .eq("id", chapterId)
+        .single();
+
+      if (chapterError) {
+        console.error("Error fetching chapter from database:", chapterError);
+        setIsLoading(false);
+        return;
+      }
+
+      if (!chapterData) {
+        console.error("Chapter not found in database");
+        setIsLoading(false);
+        return;
+      }
+
+      // Set chapter detail with fetched data
+      const chapter = chapterData as any;
+      setChapterDetail({
+        id: chapter.id,
+        title: chapter.chapter_title,
+        snippet: chapter.chapter_summary || chapter.chapter_text?.substring(0, 200),
+        fullText: chapter.chapter_text,
+        relevanceScore: 0.5, // Default relevance since we're not searching
+        whyRelevant: "Retrieved from database",
+        keyTopics: [],
+      });
+
+      // Set book detail
+      setBookDetail({
+        id: chapter.books.id,
+        title: chapter.books.title,
+        author: chapter.books.author || "Unknown Author",
+        cover: "",
+        isbn: "",
+        amazonLink: `https://amazon.com/s?k=${encodeURIComponent(chapter.books.title + " " + chapter.books.author)}&tag=summifyai-20`,
+      });
+
       setIsLoading(false);
+      console.log("✅ Chapter loaded from database");
     } catch (error) {
       console.error("Error fetching chapter detail:", error);
       setIsLoading(false);

@@ -436,7 +436,7 @@ export class TieredSearchService {
     query: string,
     userPlan: string,
   ): Promise<SearchResult[]> {
-    // Use GPT-5 nano for cost-efficient analysis
+    // Use gpt-4o-mini for cost-efficient analysis
     const analysisLevel =
       userPlan === "free"
         ? "basic"
@@ -445,28 +445,33 @@ export class TieredSearchService {
           : "premium";
 
     try {
-      const response = await fetch(
-        "/.netlify/functions/analyze-search-results",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            results: results.slice(0, 10), // Limit AI analysis for cost control
-            query,
-            analysisLevel,
-          }),
+      console.log(`🤖 Analyzing ${Math.min(results.length, 10)} results with ${analysisLevel} level...`);
+
+      const response = await supabase.functions.invoke("analyze-search-results", {
+        body: {
+          results: results.slice(0, 10), // Limit AI analysis for cost control
+          query,
+          analysisLevel,
         },
-      );
+      });
 
-      if (!response.ok) return results;
+      if (response.error) {
+        const errorMessage = response.error.message || JSON.stringify(response.error);
+        console.warn("AI analysis error (continuing without analysis):", errorMessage);
+        return results; // Return results without AI analysis on error
+      }
 
-      const { analyzedResults } = await response.json();
+      const { analyzedResults } = response.data;
+
+      console.log(`✅ Analysis complete with caching`);
 
       return results.map((result, index) => ({
         ...result,
         aiAnalysis: analyzedResults[index]?.analysis || undefined,
         relevanceScore:
           analyzedResults[index]?.enhancedScore || result.relevanceScore,
+        whyRelevant: analyzedResults[index]?.relevanceReason || result.whyRelevant,
+        keyTopics: analyzedResults[index]?.keyTopics || result.keyTopics,
       }));
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);

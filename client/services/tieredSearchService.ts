@@ -249,8 +249,9 @@ export class TieredSearchService {
         results = this.mergeResults(results, fulltextResults);
       }
 
-      // If no results and no embeddings, try basic database search
-      if (results.length === 0 && !queryEmbedding) {
+      // If no results after vector search, try basic text search as fallback for all tiers
+      if (results.length === 0) {
+        console.log("📄 No vector results, falling back to basic text search...");
         const basicResults = await this.searchBasicText(query);
         results = basicResults;
       }

@@ -204,14 +204,14 @@ Return only valid JSON, no other text.`;
 
   const maxTokens = getMaxTokens(analysisLevel, resultsNeedingAnalysis.length);
 
-  const response = await fetch("https://api.openai.com/v1/chat/completions", {
+  const response = await fetch("https://api.x.ai/v1/chat/completions", {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${openaiApiKey}`,
+      Authorization: `Bearer ${grokApiKey}`,
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      model: "gpt-4o-mini",
+      model: "grok-4-fast-reasoning",
       messages: [
         {
           role: "user",
@@ -230,7 +230,7 @@ Return only valid JSON, no other text.`;
       typeof data === "object" && data !== null && "error" in data
         ? (data as any).error?.message || JSON.stringify(data)
         : response.statusText;
-    throw new Error(`OpenAI API error: ${errorMessage}`);
+    throw new Error(`Grok API error: ${errorMessage}`);
   }
 
   const content = data.choices[0]?.message?.content;

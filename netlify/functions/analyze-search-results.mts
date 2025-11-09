@@ -82,6 +82,31 @@ export const handler: Handler = async (event) => {
   }
 };
 
+function generateRelevanceReason(
+  result: SearchResult,
+  query: string,
+  analysisLevel: string,
+): string {
+  const queryWords = query.toLowerCase().split(/\s+/);
+  const snippetLower = (result.snippet || "").toLowerCase();
+  const foundTerms = queryWords.filter((w) => snippetLower.includes(w));
+
+  if (analysisLevel === "premium") {
+    return foundTerms.length
+      ? `Found ${foundTerms.length} term(s) ("${foundTerms.join('", "')}") related to "${query}". Provides context and examples.`
+      : `Content aligns with "${query}" and offers comprehensive insights.`;
+  } else if (analysisLevel === "advanced") {
+    return foundTerms.length
+      ? `Matches key terms ("${foundTerms.slice(0, 2).join('", "')}") for "${query}". Detailed, practical analysis.`
+      : `Semantically related to "${query}" with in-depth coverage.`;
+  }
+
+  // basic
+  return foundTerms.length
+    ? `Found relevant content for "${query}" matching your terms.`
+    : `Relevant to your search for "${query}".`;
+}
+
 async function analyzeResults(
   results: SearchResult[],
   query: string,
@@ -192,7 +217,7 @@ Return only valid JSON, no other text.`;
           enhancedScore: analysis?.enhancedScore || result.relevanceScore,
           keyTopics: analysis?.keyTopics || [],
           relevanceReason:
-            analysis?.relevanceReason || "Matches search criteria",
+            analysis?.relevanceReason || generateRelevanceReason(result, query, analysisLevel),
         };
       });
     } catch (parseError) {
@@ -205,7 +230,7 @@ Return only valid JSON, no other text.`;
         analysis: `Relevant content found in "${result.chapterTitle}" from ${result.bookTitle}`,
         enhancedScore: result.relevanceScore,
         keyTopics: extractBasicTopics(result.snippet),
-        relevanceReason: "Content matches search terms",
+        relevanceReason: generateRelevanceReason(result, query, analysisLevel),
       }));
     }
   } catch (apiError) {
@@ -217,7 +242,7 @@ Return only valid JSON, no other text.`;
       analysis: `Content from "${result.chapterTitle}" in ${result.bookTitle}`,
       enhancedScore: result.relevanceScore,
       keyTopics: extractBasicTopics(result.snippet),
-      relevanceReason: "Text-based relevance match",
+      relevanceReason: generateRelevanceReason(result, query, analysisLevel),
     }));
   }
 }

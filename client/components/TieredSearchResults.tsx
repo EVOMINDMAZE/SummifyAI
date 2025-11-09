@@ -76,6 +76,16 @@ export default function TieredSearchResults({
   const normalBooks = isFree ? allBookEntries.slice(0, 1) : allBookEntries;
   const grayedOutBooks = isFree ? allBookEntries.slice(1) : [];
 
+  // Calculate actual locked books based on total found (not limited results)
+  // This shows the user the real power of the app
+  const actualLockedBooksCount = isFree
+    ? Math.max(0, searchResponse.totalBooksFound - 1)
+    : 0;
+
+  const actualLockedChaptersCount = isFree
+    ? Math.max(0, searchResponse.totalChaptersFound - normalBooks.reduce((sum, [_, chapters]) => sum + chapters.length, 0))
+    : 0;
+
   // No longer need mock books - using grayed out real books instead
 
   const handleChapterClick = (result: SearchResult) => {

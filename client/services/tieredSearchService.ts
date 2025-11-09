@@ -482,21 +482,34 @@ export class TieredSearchService {
     try {
       console.log(`🤖 Analyzing ${resultsToAnalyze.length} results with ${analysisLevel} level via Supabase...`);
 
+      // Get current session for authentication
+      const { data: { session } } = await supabase.auth.getSession();
+
+      // Prepare headers with auth if available
+      const headers: Record<string, string> = {};
+      if (session?.access_token) {
+        headers.Authorization = `Bearer ${session.access_token}`;
+      }
+
+      console.log("📡 Invoking analysis edge function...");
       const response = await supabase.functions.invoke("analyze-search-results", {
         body: {
           results: resultsToAnalyze,
           query,
           analysisLevel,
         },
+        headers,
       });
 
       if (response.error) {
-        throw new Error(response.error.message || JSON.stringify(response.error));
+        const errorMsg = response.error.message || response.error.context?.message || JSON.stringify(response.error);
+        console.error("❌ Analysis edge function error:", errorMsg);
+        throw new Error(`Analysis edge function error: ${errorMsg}`);
       }
 
       const { analyzedResults } = response.data;
 
-      console.log(`✅ Analysis complete with caching`);
+      console.log(`✅ Analysis complete`);
 
       return results.map((result, index) => ({
         ...result,

@@ -35,6 +35,8 @@ export interface TieredSearchResponse {
   queriesRemaining: number;
   upgradeRequired: boolean;
   upgradeMessage?: string;
+  totalBooksFound: number;
+  totalChaptersFound: number;
 }
 
 // Define search tiers and their capabilities
@@ -261,6 +263,10 @@ export class TieredSearchService {
         results = await this.addAIAnalysis(results, query, userPlan);
       }
 
+      // Count total books found before limiting results
+      const uniqueBooksBeforeLimiting = new Set(results.map((r) => r.bookTitle)).size;
+      const totalChaptersBeforeLimiting = results.length;
+
       // Limit results based on tier
       const maxResults =
         userPlan === "free" ? 5 : userPlan === "scholar" ? 15 : 25;
@@ -275,6 +281,8 @@ export class TieredSearchService {
             ? -1
             : searchTier.maxQueries - userSearchCount - 1,
         upgradeRequired: false,
+        totalBooksFound: uniqueBooksBeforeLimiting,
+        totalChaptersFound: totalChaptersBeforeLimiting,
       };
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);

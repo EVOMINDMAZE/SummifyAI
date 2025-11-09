@@ -288,18 +288,25 @@ export class TieredSearchService {
     try {
       console.log("🧠 Generating embedding via Supabase edge function...");
 
+      const session = await supabase.auth.getSession();
+
       const response = await supabase.functions.invoke("generate-embeddings", {
         body: { text: trimmedText },
+        headers: session.data.session ? {
+          Authorization: `Bearer ${session.data.session.access_token}`,
+        } : {},
       });
 
       if (response.error) {
-        throw new Error(response.error.message || JSON.stringify(response.error));
+        const errorMsg = response.error.message || response.error.context?.message || JSON.stringify(response.error);
+        console.error("❌ Edge function error:", errorMsg);
+        throw new Error(errorMsg);
       }
 
       const result = response.data;
 
-      if (!result.success) {
-        throw new Error(result.error || "Embedding generation failed");
+      if (!result?.success) {
+        throw new Error(result?.error || "Embedding generation failed");
       }
 
       const embedding = result.embedding;

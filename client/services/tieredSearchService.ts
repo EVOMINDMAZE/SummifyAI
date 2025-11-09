@@ -285,9 +285,8 @@ export class TieredSearchService {
   private async generateEmbedding(text: string): Promise<number[]> {
     const trimmedText = text.trim();
 
-    // Try Supabase edge function first (optimized path)
     try {
-      console.log("🧠 Attempting Supabase edge function...");
+      console.log("🧠 Generating embedding via Supabase edge function...");
 
       const response = await supabase.functions.invoke("generate-embeddings", {
         body: { text: trimmedText },
@@ -309,47 +308,12 @@ export class TieredSearchService {
         throw new Error("Invalid embedding data received");
       }
 
-      console.log(`✅ Embedding generated via Supabase (${result.cached ? "cached" : "fresh"})`);
+      console.log(`✅ Embedding generated (${result.cached ? "cached" : "fresh"})`);
       return embedding;
-    } catch (supabaseError) {
-      console.warn("⚠️ Supabase edge function unavailable, falling back to Netlify...",
-        supabaseError instanceof Error ? supabaseError.message : String(supabaseError)
-      );
-
-      // Fallback to Netlify function
-      try {
-        const response = await fetch("/.netlify/functions/generate-embeddings", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ text: trimmedText }),
-        });
-
-        const result = await response.json();
-
-        if (!response.ok) {
-          const errorMessage = result.error || result.message || "Unknown error";
-          throw new Error(
-            `Netlify API failed: ${response.status} ${response.statusText} - ${errorMessage}`,
-          );
-        }
-
-        if (!result.success) {
-          throw new Error(result.error || "Embedding generation failed");
-        }
-
-        const embedding = result.embedding;
-
-        if (!embedding || !Array.isArray(embedding)) {
-          throw new Error("Invalid embedding data received");
-        }
-
-        console.log(`✅ Embedding generated via Netlify`);
-        return embedding;
-      } catch (netlifyError) {
-        const errorMessage = netlifyError instanceof Error ? netlifyError.message : String(netlifyError);
-        console.error("❌ Embedding generation error:", errorMessage);
-        throw new Error(`Embedding generation failed: ${errorMessage}`);
-      }
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.error("❌ Embedding generation error:", errorMessage);
+      throw new Error(`Embedding generation failed: ${errorMessage}`);
     }
   }
 
@@ -518,7 +482,7 @@ export class TieredSearchService {
 
       const { analyzedResults } = response.data;
 
-      console.log(`✅ Analysis complete via Supabase with caching`);
+      console.log(`��� Analysis complete via Supabase with caching`);
 
       return results.map((result, index) => ({
         ...result,

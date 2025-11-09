@@ -511,7 +511,8 @@ export class TieredSearchService {
         .limit(20);
 
       if (error) {
-        console.error("Basic search error:", error);
+        const errorMessage = error instanceof Error ? error.message : String(error);
+        console.warn("Basic search error (returning empty results):", errorMessage);
         return [];
       }
 
@@ -533,7 +534,8 @@ export class TieredSearchService {
         })) || []
       );
     } catch (error) {
-      console.error("Basic text search error:", error);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.error("Basic text search error:", errorMessage);
       return [];
     }
   }

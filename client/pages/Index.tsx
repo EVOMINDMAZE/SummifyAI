@@ -302,7 +302,7 @@ export default function Index() {
 
       {/* Hero Section */}
       <div className="bg-[#FFFD63] dark:bg-gray-800 relative z-10">
-        <div className="max-w-6xl mx-auto px-6 pt-20 pb-32">
+        <div className="max-w-6xl mx-auto px-6 pt-20" style={{ paddingBottom: "27px" }}>
           <div className="text-center">
             {/* Main Heading */}
             <h1 className="text-5xl md:text-7xl font-black text-[#0A0B1E] dark:text-white leading-tight mb-8">
@@ -384,7 +384,7 @@ export default function Index() {
             </div>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <div style={{ display: "flex", flexDirection: "column", justifyContent: "flex-start", alignItems: "center" }} className="gap-4">
               {user ? (
                 <>
                   <Link
@@ -438,10 +438,11 @@ export default function Index() {
                     <Link
                       to="/how-it-works"
                       className="bg-white text-[#0A0B1E] px-8 py-4 rounded-2xl font-medium hover:bg-gray-50 transition-colors shadow-lg border border-gray-200"
+                      style={{ padding: "16px 32px 13px" }}
                     >
                       💡 See How It Works
                     </Link>
-                    <p className="text-xs text-[#0A0B1E]/60 dark:text-gray-500 mt-2">
+                    <p className="text-xs text-[#0A0B1E]/60 dark:text-gray-500" style={{ marginTop: "50px", paddingBottom: "1px" }}>
                       No credit card required • 10 free searches monthly • Find
                       exact chapters in seconds
                     </p>
@@ -454,39 +455,17 @@ export default function Index() {
 
         {/* Demo Section */}
         <div className="relative -mb-20">
-          <div className="max-w-4xl mx-auto px-6">
-            <div className="bg-gradient-to-br from-yellow-100 to-orange-100 rounded-3xl shadow-2xl border border-yellow-200 p-8">
-              <div className="flex items-center justify-center">
-                <button
-                  onClick={startGuidedTour}
-                  className="flex items-center gap-4 bg-white px-8 py-4 rounded-full shadow-lg hover:shadow-xl transition-shadow"
-                >
-                  <div className="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center">
-                    <svg
-                      className="w-6 h-6 text-white"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M8 5v14l11-7z" />
-                    </svg>
-                  </div>
-                  <span className="text-[#0A0B1E] font-bold text-xl">
-                    Take a 2 min. tour
-                  </span>
-                </button>
-              </div>
-            </div>
-          </div>
+          <div className="max-w-4xl mx-auto px-6" />
         </div>
       </div>
 
       {/* Main Content */}
       <div
         className="bg-white dark:bg-gray-900"
-        style={{ padding: "118px 0 100px" }}
+        style={{ padding: "89px 0 100px" }}
       >
         {/* Trust Signals Section */}
-        <div className="py-16 overflow-hidden">
+        <div className="overflow-hidden" style={{ padding: "42px 0 64px" }}>
           <div className="text-center mb-8">
             <p className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
               Powered by Enterprise-Grade Technology
@@ -1309,9 +1288,8 @@ export default function Index() {
               >
                 🚀 Start Your Free Trial — Unlock Premium
               </Link>
-              <p className="text-gray-400 text-sm">
-                ✅ No credit card required • ✅ 5 free summaries • ✅ Cancel
-                anytime
+              <p className="text-gray-400 text-sm" style={{ padding: "5px 0 10px" }}>
+                ✅&nbsp; No credit card required • ✅&nbsp; 5 free summaries • ✅&nbsp; Cancel anytime
               </p>
             </div>
           </div>

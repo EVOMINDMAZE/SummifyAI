@@ -709,6 +709,28 @@ export class TieredSearchService {
 
     return merged.sort((a, b) => b.relevanceScore - a.relevanceScore);
   }
+
+  private generateFallbackWhyRelevant(
+    result: SearchResult,
+    userPlan: string,
+  ): string {
+    const relevancePercentage = Math.round(result.relevanceScore * 100);
+
+    const relevanceReasons: Record<string, string> = {
+      summary: `Found in chapter summary with strong semantic match (${relevancePercentage}% relevance)`,
+      chapter: `Identified in chapter content with deep semantic analysis (${relevancePercentage}% relevance)`,
+      fulltext: `Matches key terms in chapter text (${relevancePercentage}% relevance)`,
+    };
+
+    const searchTypeText = relevanceReasons[result.searchType] || relevanceReasons.summary;
+
+    // For paid users, include more context
+    if (userPlan !== "free") {
+      return `${searchTypeText}. This chapter provides relevant insights related to your search.`;
+    }
+
+    return searchTypeText;
+  }
 }
 
 export const tieredSearchService = new TieredSearchService();

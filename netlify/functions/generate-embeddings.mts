@@ -48,14 +48,18 @@ export default async (req: Request, context: Context) => {
       }),
     });
 
+    // Read response body only once
+    const data = await response.json();
+
     if (!response.ok) {
-      const errorText = await response.text();
+      const errorMessage = typeof data === 'object' && data !== null && 'error' in data
+        ? (data as any).error?.message || JSON.stringify(data)
+        : JSON.stringify(data);
       throw new Error(
-        `OpenAI API error: ${response.status} ${response.statusText} - ${errorText}`,
+        `OpenAI API error: ${response.status} ${response.statusText} - ${errorMessage}`,
       );
     }
 
-    const data = await response.json();
     const embedding = data.data[0].embedding;
 
     console.log(

@@ -314,14 +314,19 @@ export class TieredSearchService {
         data: { session },
       } = await supabase.auth.getSession();
 
+      // Edge functions require JWT - skip if not authenticated
+      if (!session?.access_token) {
+        console.warn(
+          "⚠️ Skipping embedding generation: User not authenticated (edge functions require JWT)",
+        );
+        throw new Error("Authentication required for embedding generation");
+      }
+
       // Prepare headers with auth
       const headers: Record<string, string> = {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${session.access_token}`,
       };
-
-      if (session?.access_token) {
-        headers.Authorization = `Bearer ${session.access_token}`;
-      }
 
       console.log("📡 Calling edge function via supabase.functions.invoke...");
       const result = await this.invokeWithRetry(
@@ -538,14 +543,19 @@ export class TieredSearchService {
         data: { session },
       } = await supabase.auth.getSession();
 
+      // Edge functions require JWT - skip if not authenticated
+      if (!session?.access_token) {
+        console.warn(
+          "⚠️ Skipping AI analysis: User not authenticated (edge functions require JWT). Using fallback analysis.",
+        );
+        throw new Error("Authentication required for AI analysis");
+      }
+
       // Prepare headers with auth
       const headers: Record<string, string> = {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${session.access_token}`,
       };
-
-      if (session?.access_token) {
-        headers.Authorization = `Bearer ${session.access_token}`;
-      }
 
       console.log(
         "📡 Calling analysis edge function via supabase.functions.invoke...",

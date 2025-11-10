@@ -570,7 +570,9 @@ export class TieredSearchService {
 
     for (let i = 0; i < attempts; i++) {
       try {
-        console.log(`📞 Invoking Netlify function ${functionName} (attempt ${i + 1}/${attempts})...`);
+        console.log(
+          `📞 Invoking Netlify function ${functionName} (attempt ${i + 1}/${attempts})...`,
+        );
         const response = await fetch(netlifyFunctionUrl, {
           method: "POST",
           headers: {
@@ -588,7 +590,10 @@ export class TieredSearchService {
         return data as T;
       } catch (err: any) {
         const msg = err?.message || String(err);
-        console.warn(`⚠️ Function ${functionName} attempt ${i + 1} failed:`, msg);
+        console.warn(
+          `⚠️ Function ${functionName} attempt ${i + 1} failed:`,
+          msg,
+        );
 
         if (i === attempts - 1) {
           throw new Error(`Failed to invoke ${functionName}: ${msg}`);

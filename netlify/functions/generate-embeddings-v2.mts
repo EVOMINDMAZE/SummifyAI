@@ -94,7 +94,7 @@ export const handler: Handler = async (event) => {
     console.log(
       "[generate-embeddings-v2] Success, returning",
       embedding.length,
-      "dimensions"
+      "dimensions",
     );
 
     return {

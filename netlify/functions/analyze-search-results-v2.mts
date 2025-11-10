@@ -53,7 +53,9 @@ export const handler: Handler = async (event) => {
 
     const grokApiKey = process.env.GROK_API_KEY;
     if (!grokApiKey) {
-      console.warn("[analyze-search-results-v2] No Grok API key, using fallback");
+      console.warn(
+        "[analyze-search-results-v2] No Grok API key, using fallback",
+      );
       const fallback = results.slice(0, 10).map((r: any) => ({
         id: r.id,
         analysis: `Chapter from "${r.bookTitle}" contains relevant information about "${query}".`,
@@ -75,35 +77,38 @@ export const handler: Handler = async (event) => {
     console.log(
       "[analyze-search-results-v2] Calling Grok for",
       results.length,
-      "results"
+      "results",
     );
 
     const prompt = `Analyze ${results.length} search results for query: "${query}"\n\nReturn ONLY this JSON array structure (no other text):\n[\n  {"id": <number>, "analysis": "<1-2 sentence summary>", "enhancedScore": <0-1>, "keyTopics": ["topic1", "topic2"], "relevanceReason": "<why it matches>"}\n]\n\nResults:\n${results
       .slice(0, 10)
       .map(
         (r: any, i: number) =>
-          `[${i + 1}] ID:${r.id} "${r.chapterTitle}" - ${r.snippet.substring(0, 80)}`
+          `[${i + 1}] ID:${r.id} "${r.chapterTitle}" - ${r.snippet.substring(0, 80)}`,
       )
       .join("\n")}`;
 
-    const grokResponse = await fetch("https://api.grok.im/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${grokApiKey}`,
-        "Content-Type": "application/json",
+    const grokResponse = await fetch(
+      "https://api.grok.im/v1/chat/completions",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${grokApiKey}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: "grok-4-fast-reasoning",
+          messages: [{ role: "user", content: prompt }],
+          max_tokens: Math.min(200 + results.length * 50, 2000),
+          temperature: 0.3,
+        }),
       },
-      body: JSON.stringify({
-        model: "grok-4-fast-reasoning",
-        messages: [{ role: "user", content: prompt }],
-        max_tokens: Math.min(200 + results.length * 50, 2000),
-        temperature: 0.3,
-      }),
-    });
+    );
 
     if (!grokResponse.ok) {
       console.error(
         "[analyze-search-results-v2] Grok error:",
-        grokResponse.status
+        grokResponse.status,
       );
       throw new Error(`Grok error: ${grokResponse.status}`);
     }
@@ -120,7 +125,7 @@ export const handler: Handler = async (event) => {
       console.log(
         "[analyze-search-results-v2] Parsed",
         analyzedResults.length,
-        "results"
+        "results",
       );
       return {
         statusCode: 200,
@@ -132,7 +137,9 @@ export const handler: Handler = async (event) => {
         }),
       };
     } catch (parseError) {
-      console.error("[analyze-search-results-v2] JSON parse failed, using fallback");
+      console.error(
+        "[analyze-search-results-v2] JSON parse failed, using fallback",
+      );
       const fallback = results.slice(0, 10).map((r: any) => ({
         id: r.id,
         analysis: `Chapter from "${r.bookTitle}" relevant to "${query}".`,

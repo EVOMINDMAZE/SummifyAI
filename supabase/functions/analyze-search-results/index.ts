@@ -80,13 +80,16 @@ function generateFallbackAnalyses(
       analysisLevel,
     );
 
+    // Generate a more detailed analysis based on snippet content
     let analysis = "";
+    const snippetPreview = result.snippet.substring(0, 150);
+
     if (analysisLevel === "premium") {
-      analysis = `This chapter from "${result.bookTitle}" discusses content related to "${query}". ${relevanceReason}`;
+      analysis = `Chapter "${result.chapterTitle}" from "${result.bookTitle}" provides comprehensive information related to "${query}". The chapter contains detailed discussion about relevant topics with examples and context. Key content: ${snippetPreview}... This resource offers valuable insights for deeper understanding and research into your query.`;
     } else if (analysisLevel === "advanced") {
-      analysis = `Relevant chapter covering aspects of "${query}" from "${result.bookTitle}".`;
+      analysis = `Chapter "${result.chapterTitle}" from "${result.bookTitle}" covers important aspects of "${query}". Contains relevant discussion and analysis: ${snippetPreview}... A valuable resource for your research.`;
     } else {
-      analysis = `Chapter related to "${query}".`;
+      analysis = `Chapter "${result.chapterTitle}" from "${result.bookTitle}" is related to "${query}". Content preview: ${snippetPreview}...`;
     }
 
     // Extract potential topics from snippet
@@ -95,7 +98,7 @@ function generateFallbackAnalyses(
     return {
       id: result.id,
       analysis,
-      enhancedScore: Math.min(result.relevanceScore + 0.05, 1), // Slightly boost fallback scores
+      enhancedScore: Math.min(result.relevanceScore + 0.05, 1),
       keyTopics,
       relevanceReason,
     };

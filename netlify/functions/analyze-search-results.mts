@@ -112,8 +112,8 @@ async function analyzeResults(
   query: string,
   analysisLevel: string,
 ): Promise<AnalyzedResult[]> {
-  if (!process.env.OPENAI_API_KEY) {
-    throw new Error("OpenAI API key not configured");
+  if (!process.env.GROK_API_KEY) {
+    throw new Error("Grok API key not configured");
   }
 
   // Prepare analysis prompt based on tier
@@ -165,14 +165,14 @@ ${i + 1}. ID: ${r.id}
 Return only valid JSON, no other text.`;
 
   try {
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+    const response = await fetch("https://api.grok.im/v1/chat/completions", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+        Authorization: `Bearer ${process.env.GROK_API_KEY}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "gpt-5-nano", // Cost-efficient model
+        model: "grok-4-fast-reasoning",
         messages: [
           {
             role: "user",
@@ -180,7 +180,7 @@ Return only valid JSON, no other text.`;
           },
         ],
         max_tokens: getMaxTokens(analysisLevel, results.length),
-        temperature: 0.3, // Lower temperature for consistent analysis
+        temperature: 0.3,
       }),
     });
 
@@ -192,12 +192,12 @@ Return only valid JSON, no other text.`;
         typeof data === "object" && data !== null && "error" in data
           ? (data as any).error?.message || JSON.stringify(data)
           : response.statusText;
-      throw new Error(`OpenAI API error: ${errorMessage}`);
+      throw new Error(`Grok API error: ${errorMessage}`);
     }
     const content = data.choices[0]?.message?.content;
 
     if (!content) {
-      throw new Error("No analysis content received from OpenAI");
+      throw new Error("No analysis content received from Grok");
     }
 
     // Parse JSON response
@@ -234,7 +234,7 @@ Return only valid JSON, no other text.`;
       }));
     }
   } catch (apiError) {
-    console.error("OpenAI API error:", apiError);
+    console.error("Grok API error:", apiError);
 
     // Fallback: return basic analysis without AI
     return results.map((result) => ({

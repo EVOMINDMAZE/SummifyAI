@@ -310,9 +310,18 @@ export class TieredSearchService {
       console.log("🧠 Generating embedding via Supabase edge function...");
 
       // Get current session for authentication
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
+      // Use getSession() first, then getUser() as fallback for more reliability
+      let session = (await supabase.auth.getSession()).data.session;
+
+      if (!session?.access_token) {
+        // Fallback: getUser() can work even if getSession() hasn't restored yet
+        console.log("⚠️ getSession() returned no session, trying getUser()...");
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          // Re-fetch session now that user is confirmed
+          session = (await supabase.auth.getSession()).data.session;
+        }
+      }
 
       // Edge functions require JWT - skip if not authenticated
       if (!session?.access_token) {
@@ -539,9 +548,18 @@ export class TieredSearchService {
       );
 
       // Get current session for authentication
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
+      // Use getSession() first, then getUser() as fallback for more reliability
+      let session = (await supabase.auth.getSession()).data.session;
+
+      if (!session?.access_token) {
+        // Fallback: getUser() can work even if getSession() hasn't restored yet
+        console.log("⚠️ getSession() returned no session, trying getUser()...");
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          // Re-fetch session now that user is confirmed
+          session = (await supabase.auth.getSession()).data.session;
+        }
+      }
 
       // Edge functions require JWT - skip if not authenticated
       if (!session?.access_token) {

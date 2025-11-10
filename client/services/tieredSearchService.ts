@@ -628,6 +628,12 @@ export class TieredSearchService {
         const fullError = JSON.stringify(err, null, 2);
         console.warn(`⚠️ Function ${name} attempt ${i + 1} failed:`, msg);
         console.warn(`Full error details:`, fullError);
+        // If the error indicates that the request couldn't be sent to the Edge Function (network/authorization issue),
+        // return a graceful failure object so callers can fallback instead of throwing an exception that bubbles up to the UI.
+        if (msg.includes("Failed to send a request to the Edge Function") || err?.name === "FunctionsFetchError") {
+          console.warn(`⚠️ Detected FunctionsFetchError for ${name}, returning graceful failure object.`);
+          return { success: false, error: msg } as unknown as T;
+        }
         if (i === attempts - 1) {
           throw new Error(`Failed to invoke ${name}: ${msg}`);
         }

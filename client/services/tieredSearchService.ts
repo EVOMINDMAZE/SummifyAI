@@ -548,7 +548,7 @@ export class TieredSearchService {
         results: resultsToAnalyze,
         query,
         analysisLevel,
-      });
+      }, 2, 400, headers);
 
       const { analyzedResults } = data || {};
 

@@ -188,12 +188,11 @@ Return only valid JSON, no other text.`;
     const data = await response.json();
 
     if (!response.ok) {
-      const errorMessage = typeof data === 'object' && data !== null && 'error' in data
-        ? (data as any).error?.message || JSON.stringify(data)
-        : response.statusText;
-      throw new Error(
-        `OpenAI API error: ${errorMessage}`,
-      );
+      const errorMessage =
+        typeof data === "object" && data !== null && "error" in data
+          ? (data as any).error?.message || JSON.stringify(data)
+          : response.statusText;
+      throw new Error(`OpenAI API error: ${errorMessage}`);
     }
     const content = data.choices[0]?.message?.content;
 
@@ -217,7 +216,8 @@ Return only valid JSON, no other text.`;
           enhancedScore: analysis?.enhancedScore || result.relevanceScore,
           keyTopics: analysis?.keyTopics || [],
           relevanceReason:
-            analysis?.relevanceReason || generateRelevanceReason(result, query, analysisLevel),
+            analysis?.relevanceReason ||
+            generateRelevanceReason(result, query, analysisLevel),
         };
       });
     } catch (parseError) {

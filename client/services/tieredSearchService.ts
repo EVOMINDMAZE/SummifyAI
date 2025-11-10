@@ -253,13 +253,18 @@ export class TieredSearchService {
 
       // If no results after vector search, try basic text search as fallback for all tiers
       if (results.length === 0) {
-        console.log("📄 No vector results, falling back to basic text search...");
+        console.log(
+          "📄 No vector results, falling back to basic text search...",
+        );
         const basicResults = await this.searchBasicText(query);
         results = basicResults;
       }
 
       // Apply AI analysis based on tier (gracefully skip if unavailable)
-      if (searchTier.features.find((f) => f.id.includes("ai"))?.enabled && results.length > 0) {
+      if (
+        searchTier.features.find((f) => f.id.includes("ai"))?.enabled &&
+        results.length > 0
+      ) {
         try {
           results = await this.addAIAnalysis(results, query, userPlan);
         } catch (aiError) {
@@ -269,7 +274,8 @@ export class TieredSearchService {
       }
 
       // Count total books found before limiting results
-      const uniqueBooksBeforeLimiting = new Set(results.map((r) => r.bookTitle)).size;
+      const uniqueBooksBeforeLimiting = new Set(results.map((r) => r.bookTitle))
+        .size;
       const totalChaptersBeforeLimiting = results.length;
 
       // Limit results based on tier
@@ -290,7 +296,8 @@ export class TieredSearchService {
         totalChaptersFound: totalChaptersBeforeLimiting,
       };
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : String(error);
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
       console.error("Search error:", errorMessage);
       throw new Error(`Search failed: ${errorMessage}`);
     }
@@ -303,7 +310,9 @@ export class TieredSearchService {
       console.log("🧠 Generating embedding via Supabase edge function...");
 
       // Get current session for authentication
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
 
       // Prepare headers with auth
       const headers: Record<string, string> = {
@@ -315,7 +324,9 @@ export class TieredSearchService {
       }
 
       console.log("📡 Calling edge function via supabase.functions.invoke...");
-      const result = await this.invokeWithRetry("generate-embeddings", { text: trimmedText });
+      const result = await this.invokeWithRetry("generate-embeddings", {
+        text: trimmedText,
+      });
 
       if (!result?.success) {
         throw new Error(result?.error || "Embedding generation failed");
@@ -330,7 +341,8 @@ export class TieredSearchService {
       console.log(`✅ Embedding generated (${embedding.length} dimensions)`);
       return embedding;
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : String(error);
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
       console.error("❌ Embedding generation error:", errorMessage);
       throw new Error(`Embedding generation failed: ${errorMessage}`);
     }
@@ -351,13 +363,14 @@ export class TieredSearchService {
       });
 
       if (error) {
-        const errorMessage = typeof error === 'object' && error !== null && 'message' in error
-          ? (error as any).message
-          : String(error);
+        const errorMessage =
+          typeof error === "object" && error !== null && "message" in error
+            ? (error as any).message
+            : String(error);
         throw new Error(errorMessage);
       }
 
-      const results = (
+      const results =
         data?.map((row: any) => ({
           id: row.id,
           bookTitle: row.book_title,
@@ -368,14 +381,17 @@ export class TieredSearchService {
           searchType: "summary" as const,
           whyRelevant: "", // Will be populated by AI analysis
           keyTopics: this.extractTopicsFromText(row.chapter_summary || ""),
-        })) || []
-      );
+        })) || [];
 
       console.log(`✅ Summary search returned ${results.length} results`);
       return results;
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : String(error);
-      console.warn("Summary search error (returning empty results):", errorMessage);
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
+      console.warn(
+        "Summary search error (returning empty results):",
+        errorMessage,
+      );
       return [];
     }
   }
@@ -394,23 +410,26 @@ export class TieredSearchService {
         return [];
       }
 
-      console.log(`��� Searching ${candidateIds.length} candidate chapters with embeddings...`);
+      console.log(
+        `��� Searching ${candidateIds.length} candidate chapters with embeddings...`,
+      );
       // Search chapter embeddings only for candidates
       const { data, error } = await supabase.rpc("search_chapter_embeddings", {
         query_embedding: queryEmbedding,
         candidate_ids: candidateIds,
-        match_threshold: 0.4,  // Lower threshold to catch more matches in chapter content
+        match_threshold: 0.4, // Lower threshold to catch more matches in chapter content
         match_count: 25,
       });
 
       if (error) {
-        const errorMessage = typeof error === 'object' && error !== null && 'message' in error
-          ? (error as any).message
-          : String(error);
+        const errorMessage =
+          typeof error === "object" && error !== null && "message" in error
+            ? (error as any).message
+            : String(error);
         throw new Error(errorMessage);
       }
 
-      const results = (
+      const results =
         data?.map((row: any) => ({
           id: row.id,
           bookTitle: row.book_title,
@@ -420,14 +439,17 @@ export class TieredSearchService {
           searchType: "chapter" as const,
           whyRelevant: `This chapter contains detailed information related to your search query.`,
           keyTopics: this.extractTopicsFromText(row.chapter_text || ""),
-        })) || []
-      );
+        })) || [];
 
       console.log(`✅ Chapter search returned ${results.length} results`);
       return results;
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : String(error);
-      console.warn("Chapter search error (returning empty results):", errorMessage);
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
+      console.warn(
+        "Chapter search error (returning empty results):",
+        errorMessage,
+      );
       return [];
     }
   }
@@ -446,18 +468,19 @@ export class TieredSearchService {
       });
 
       // Race between the search and timeout
-      const { data, error } = await Promise.race([
+      const { data, error } = (await Promise.race([
         supabase.rpc("search_fulltext", {
           search_query: query,
           match_count: 5,
         }),
         timeoutPromise,
-      ]) as any;
+      ])) as any;
 
       if (error) {
-        const errorMessage = typeof error === 'object' && error !== null && 'message' in error
-          ? (error as any).message
-          : String(error);
+        const errorMessage =
+          typeof error === "object" && error !== null && "message" in error
+            ? (error as any).message
+            : String(error);
         console.warn("Full-text search skipped:", errorMessage);
         return []; // Skip full-text on any error
       }
@@ -477,7 +500,8 @@ export class TieredSearchService {
         })) || []
       );
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : String(error);
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
       console.warn("Full-text search unavailable:", errorMessage);
       return []; // Return empty instead of throwing
     }
@@ -499,10 +523,14 @@ export class TieredSearchService {
     const resultsToAnalyze = results.slice(0, 10); // Limit AI analysis for cost control
 
     try {
-      console.log(`🤖 Analyzing ${resultsToAnalyze.length} results with ${analysisLevel} level via Supabase...`);
+      console.log(
+        `🤖 Analyzing ${resultsToAnalyze.length} results with ${analysisLevel} level via Supabase...`,
+      );
 
       // Get current session for authentication
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
 
       // Prepare headers with auth
       const headers: Record<string, string> = {
@@ -513,7 +541,9 @@ export class TieredSearchService {
         headers.Authorization = `Bearer ${session.access_token}`;
       }
 
-      console.log("📡 Calling analysis edge function via supabase.functions.invoke...");
+      console.log(
+        "📡 Calling analysis edge function via supabase.functions.invoke...",
+      );
       const data = await this.invokeWithRetry("analyze-search-results", {
         results: resultsToAnalyze,
         query,
@@ -526,24 +556,36 @@ export class TieredSearchService {
 
       return results.map((result, index) => {
         const analyzedResult = analyzedResults[index];
-        const whyRelevant = analyzedResult?.relevanceReason || this.generateFallbackWhyRelevant(result, userPlan);
+        const whyRelevant =
+          analyzedResult?.relevanceReason ||
+          this.generateFallbackWhyRelevant(result, userPlan);
 
         return {
           ...result,
           aiAnalysis: analyzedResult?.analysis || undefined,
-          relevanceScore: analyzedResult?.enhancedScore || result.relevanceScore,
+          relevanceScore:
+            analyzedResult?.enhancedScore || result.relevanceScore,
           whyRelevant,
           keyTopics: analyzedResult?.keyTopics || result.keyTopics,
         };
       });
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : String(error);
-      console.warn("⚠️ AI analysis error (continuing without analysis):", errorMessage);
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
+      console.warn(
+        "⚠️ AI analysis error (continuing without analysis):",
+        errorMessage,
+      );
       return results; // Return results without AI analysis on error
     }
   }
 
-  private async invokeWithRetry<T = any>(name: string, body: any, attempts = 2, delayMs = 400): Promise<T> {
+  private async invokeWithRetry<T = any>(
+    name: string,
+    body: any,
+    attempts = 2,
+    delayMs = 400,
+  ): Promise<T> {
     for (let i = 0; i < attempts; i++) {
       try {
         const { data, error } = await supabase.functions.invoke(name, { body });
@@ -552,7 +594,8 @@ export class TieredSearchService {
       } catch (err: any) {
         const msg = err?.message || String(err);
         console.warn(`⚠️ Function ${name} attempt ${i + 1} failed:`, msg);
-        if (i === attempts - 1) throw new Error(`Failed to send a request to the Edge Function`);
+        if (i === attempts - 1)
+          throw new Error(`Failed to send a request to the Edge Function`);
         await new Promise((res) => setTimeout(res, delayMs * (i + 1)));
       }
     }
@@ -597,8 +640,12 @@ export class TieredSearchService {
         .limit(20);
 
       if (error) {
-        const errorMessage = error instanceof Error ? error.message : String(error);
-        console.warn("Basic search error (returning empty results):", errorMessage);
+        const errorMessage =
+          error instanceof Error ? error.message : String(error);
+        console.warn(
+          "Basic search error (returning empty results):",
+          errorMessage,
+        );
         return [];
       }
 
@@ -618,12 +665,18 @@ export class TieredSearchService {
           // Medium score if match is early in text
           else if (textLower.includes(searchLower)) {
             const index = textLower.indexOf(searchLower);
-            relevanceScore = Math.max(0.6, 0.8 - (index / textLower.length) * 0.2);
+            relevanceScore = Math.max(
+              0.6,
+              0.8 - (index / textLower.length) * 0.2,
+            );
           }
           // Lower score if match is in summary
           else if (summaryLower.includes(searchLower)) {
             const index = summaryLower.indexOf(searchLower);
-            relevanceScore = Math.max(0.5, 0.7 - (index / summaryLower.length) * 0.2);
+            relevanceScore = Math.max(
+              0.5,
+              0.7 - (index / summaryLower.length) * 0.2,
+            );
           }
 
           return {
@@ -644,7 +697,8 @@ export class TieredSearchService {
         }) || []
       );
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : String(error);
+      const errorMessage =
+        error instanceof Error ? error.message : String(error);
       console.error("Basic text search error:", errorMessage);
       return [];
     }
@@ -731,7 +785,11 @@ export class TieredSearchService {
     }
 
     // Add tier-specific context
-    if (userPlan === "scholar" || userPlan === "professional" || userPlan === "institution") {
+    if (
+      userPlan === "scholar" ||
+      userPlan === "professional" ||
+      userPlan === "institution"
+    ) {
       return `${baseReason} Premium analysis indicates this content provides valuable context for comprehensive understanding.`;
     } else if (userPlan === "premium") {
       return `${baseReason} Analysis indicates substantial relevance for your research needs.`;

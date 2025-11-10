@@ -2,7 +2,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { corsHeaders } from "../_shared/cors.ts";
 
-const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
+const grokApiKey = Deno.env.get('GROK_API_KEY');
 const supabaseUrl = Deno.env.get('SUPABASE_URL');
 const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
 
@@ -34,8 +34,8 @@ serve(async (req) => {
   }
 
   try {
-    if (!openAIApiKey) {
-      throw new Error('OPENAI_API_KEY is not configured');
+    if (!grokApiKey) {
+      throw new Error('GROK_API_KEY is not configured');
     }
 
     const { chapters, userQuery }: BatchAnalysisRequest = await req.json();
@@ -95,14 +95,14 @@ Be specific in explanations. Mention actual concepts and frameworks.
 `;
 
       try {
-        const openAIResponse = await fetch('https://api.openai.com/v1/chat/completions', {
+        const grokResponse = await fetch('https://api.grok.im/v1/chat/completions', {
           method: 'POST',
           headers: {
-            'Authorization': `Bearer ${openAIApiKey}`,
+            'Authorization': `Bearer ${grokApiKey}`,
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            model: 'gpt-3.5-turbo',
+            model: 'grok-4-fast-reasoning',
             messages: [
               {
                 role: 'system',
@@ -118,8 +118,8 @@ Be specific in explanations. Mention actual concepts and frameworks.
           }),
         });
 
-        if (!openAIResponse.ok) {
-          console.error(`OpenAI API error for batch ${i / batchSize + 1}:`, await openAIResponse.text());
+        if (!grokResponse.ok) {
+          console.error(`Grok API error for batch ${i / batchSize + 1}:`, await grokResponse.text());
           // Add fallback analyses for this batch
           batch.forEach(chapter => {
             results.push({
@@ -133,8 +133,8 @@ Be specific in explanations. Mention actual concepts and frameworks.
           continue;
         }
 
-        const openAIResult = await openAIResponse.json();
-        const analysisText = openAIResult.choices[0]?.message?.content;
+        const grokResult = await grokResponse.json();
+        const analysisText = grokResult.choices[0]?.message?.content;
 
         if (analysisText) {
           try {

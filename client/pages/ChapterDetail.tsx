@@ -209,49 +209,6 @@ export default function ChapterDetail() {
     }
   };
 
-  const enrichChapterContent = async (
-    chapter: ChapterDetail,
-    userQuery: string,
-  ) => {
-    if (!chapter || !userQuery) return;
-
-    setIsEnriching(true);
-    try {
-      const response = await fetch("/api/enrich", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          chapterId: chapter.id,
-          userQuery: userQuery,
-          chapterText: chapter.snippet,
-          chapterTitle: chapter.title,
-          bookTitle: bookDetail?.title,
-          bookAuthor: bookDetail?.author,
-        }),
-      });
-
-      if (response.ok) {
-        const enrichmentData = await response.json();
-
-        setChapterDetail((prev) => ({
-          ...prev!,
-          coreLeadershipPrinciples:
-            enrichmentData.coreLeadershipPrinciples || [],
-          practicalApplications: enrichmentData.practicalApplications || [],
-          aiSummary: enrichmentData.aiSummary,
-          recommendations: enrichmentData.recommendations || [],
-        }));
-
-        console.log("✅ Chapter enrichment completed");
-      }
-    } catch (error) {
-      console.error("Chapter enrichment failed:", error);
-    } finally {
-      setIsEnriching(false);
-    }
-  };
 
   const handleBackToResults = () => {
     const hasSearchResults = sessionStorage.getItem("lastSearchResults");

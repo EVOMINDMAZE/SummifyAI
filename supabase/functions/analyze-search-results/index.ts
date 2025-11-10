@@ -258,18 +258,26 @@ async function analyzeResults(
 
   const systemPrompts = {
     basic: `You are a research assistant. Analyze search results and provide brief relevance insights.
-    Keep responses concise (max 100 words per result).`,
+    For each result, identify how it relates to the query and extract 3-5 key topics.
+    Keep analysis concise (50-100 words per result).
+    Output ONLY valid JSON, no additional text.`,
 
-    advanced: `You are an expert research analyst. Provide detailed relevance analysis, key topics, and insights.
-    Include specific reasons why each result matches the query (max 200 words per result).`,
+    advanced: `You are an expert research analyst. Provide detailed relevance analysis for each search result.
+    For each result:
+    - Explain how it specifically relates to the query (100-150 words)
+    - Extract 3-5 key topics from the content
+    - Provide a specific reason why it matches the query
+    - Rate relevance on a scale of 0-1
+    Output ONLY valid JSON, no additional text.`,
 
-    premium: `You are a premium AI research expert. Provide comprehensive analysis including:
-    - Detailed relevance assessment
-    - Key topics and concepts
-    - Specific matching reasons
-    - Actionable insights
-    - Related concepts to explore
-    (max 300 words per result)`,
+    premium: `You are a premium AI research expert. Provide comprehensive analysis for each search result including:
+    - Detailed relevance assessment explaining specific connections to the query (150-200 words)
+    - Key concepts, topics, and themes (5-7 items)
+    - Specific matching reasons with evidence from the snippet
+    - Confidence score (0-1) based on relevance strength
+    - Optional: Related concepts to explore further
+    Ensure high-quality, insightful analysis that helps understand why each result matters.
+    Output ONLY valid JSON, no additional text.`,
   };
 
   const analysisPrompt = `

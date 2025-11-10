@@ -285,31 +285,37 @@ ${systemPrompts[analysisLevel as keyof typeof systemPrompts]}
 
 User Query: "${query}"
 
-Analyze these search results and return a JSON array with this exact structure:
+Analyze these ${resultsNeedingAnalysis.length} search results and return a JSON array with this exact structure. Be thorough, specific, and insightful:
+
 [
   {
-    "id": number,
-    "analysis": "detailed analysis text",
-    "enhancedScore": number (0-1, refined relevance score),
-    "keyTopics": ["topic1", "topic2", "topic3"],
-    "relevanceReason": "specific reason why this matches the query"
+    "id": <number - match the ID exactly>,
+    "analysis": "<comprehensive analysis of how this chapter relates to the query - should be 1-3 sentences explaining the connection and why it's valuable>",
+    "enhancedScore": <number between 0 and 1 - refined relevance score based on content quality and match>,
+    "keyTopics": [<3-7 key topics extracted from the chapter content and query>],
+    "relevanceReason": "<specific, detailed reason why this chapter matches the search query - reference specific concepts or themes>"
   }
 ]
 
-Search Results:
+IMPORTANT:
+- Return ONLY the JSON array, no other text
+- Ensure all strings are properly escaped
+- Match IDs exactly as provided
+- Make "analysis" substantive and helpful (2-3 sentences minimum for premium, 1-2 for advanced, 1 for basic)
+- Extract topics that are most relevant to the query
+
+Search Results to Analyze:
 ${resultsNeedingAnalysis
   .map(
     (r, i) => `
-${i + 1}. ID: ${r.id}
-   Book: ${r.bookTitle}
-   Chapter: ${r.chapterTitle}
-   Content: ${r.snippet}
-   Current Score: ${r.relevanceScore}
+[${i + 1}] ID: ${r.id}
+Book: "${r.bookTitle}"
+Chapter: "${r.chapterTitle}"
+Content Preview: ${r.snippet.substring(0, 200)}...
+Current Relevance Score: ${(r.relevanceScore * 100).toFixed(1)}%
 `,
   )
-  .join("\n")}
-
-Return only valid JSON, no other text.`;
+  .join("\n")}`;
 
   const maxTokens = getMaxTokens(analysisLevel, resultsNeedingAnalysis.length);
 

@@ -21,11 +21,11 @@ export default async (req: Request, context: Context) => {
       );
     }
 
-    // Get OpenAI API key from Netlify environment variables
-    const openaiApiKey = Netlify.env.get("OPENAI_API_KEY");
-    if (!openaiApiKey) {
+    // Get Grok API key from Netlify environment variables
+    const grokApiKey = Netlify.env.get("GROK_API_KEY");
+    if (!grokApiKey) {
       return new Response(
-        JSON.stringify({ error: "OpenAI API key not configured" }),
+        JSON.stringify({ error: "Grok API key not configured" }),
         {
           status: 500,
           headers: { "Content-Type": "application/json" },
@@ -54,14 +54,14 @@ Provide a JSON response with detailed analysis:
 
 Focus on being specific about the practical value and direct relevance to the user's search query.`;
 
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+    const response = await fetch("https://api.grok.im/v1/chat/completions", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${openaiApiKey}`,
+        Authorization: `Bearer ${grokApiKey}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "gpt-4o",
+        model: "grok-4-fast-reasoning",
         messages: [
           {
             role: "system",
@@ -77,7 +77,7 @@ Focus on being specific about the practical value and direct relevance to the us
 
     if (!response.ok) {
       throw new Error(
-        `OpenAI API error: ${response.status} ${response.statusText}`,
+        `Grok API error: ${response.status} ${response.statusText}`,
       );
     }
 

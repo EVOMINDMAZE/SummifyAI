@@ -521,119 +521,39 @@ export default function ChapterDetail() {
               </CardContent>
             </Card>
 
-            {/* AI Generated Content */}
-            {isEnriching ? (
-              <Card className="shadow-2xl border-0 bg-gradient-to-br from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 rounded-3xl overflow-hidden">
-                <CardContent className="p-8 text-center">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-yellow-500 mx-auto mb-4"></div>
-                  <p className="text-yellow-700 dark:text-yellow-300">
-                    Generating AI insights for this chapter...
+            {/* Full Chapter Text */}
+            {chapterDetail.fullText && (
+              <Card
+                id="full-chapter-content"
+                className="shadow-2xl border-0 bg-white dark:bg-gray-800 rounded-3xl overflow-hidden scroll-mt-8"
+              >
+                <CardContent className="p-8">
+                  <h3 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
+                    <BookOpen className="w-5 h-5 mr-2 text-blue-500" />
+                    Full Chapter Text
+                  </h3>
+                  <div className="prose prose-sm dark:prose-invert max-w-none max-h-96 overflow-y-auto">
+                    <p className="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap text-sm">
+                      {chapterDetail.fullText}
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* AI Summary */}
+            {chapterDetail.aiSummary && (
+              <Card className="shadow-2xl border-0 bg-gradient-to-br from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20 rounded-3xl overflow-hidden">
+                <CardContent className="p-8">
+                  <h3 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
+                    <Lightbulb className="w-5 h-5 mr-2 text-purple-500" />
+                    AI Summary
+                  </h3>
+                  <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                    {chapterDetail.aiSummary}
                   </p>
                 </CardContent>
               </Card>
-            ) : (
-              <>
-                {/* Core Principles */}
-                {chapterDetail.coreLeadershipPrinciples &&
-                  chapterDetail.coreLeadershipPrinciples.length > 0 && (
-                    <Card className="shadow-2xl border-0 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-3xl overflow-hidden">
-                      <CardContent className="p-8">
-                        <h3 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
-                          <TrendingUp className="w-5 h-5 mr-2 text-green-500" />
-                          Core Principles
-                        </h3>
-                        <div className="space-y-3">
-                          {chapterDetail.coreLeadershipPrinciples.map(
-                            (principle, index) => (
-                              <div
-                                key={index}
-                                className="flex items-start space-x-3 p-4 bg-white/70 dark:bg-gray-800/70 rounded-xl"
-                              >
-                                <CheckCircle className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
-                                <p className="text-gray-700 dark:text-gray-300">
-                                  {principle}
-                                </p>
-                              </div>
-                            ),
-                          )}
-                        </div>
-                      </CardContent>
-                    </Card>
-                  )}
-
-                {/* Practical Applications */}
-                {chapterDetail.practicalApplications &&
-                  chapterDetail.practicalApplications.length > 0 && (
-                    <Card className="shadow-2xl border-0 bg-gradient-to-br from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 rounded-3xl overflow-hidden">
-                      <CardContent className="p-8">
-                        <h3 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
-                          <Target className="w-5 h-5 mr-2 text-orange-500" />
-                          Practical Applications
-                        </h3>
-                        <div className="space-y-3">
-                          {chapterDetail.practicalApplications.map(
-                            (application, index) => (
-                              <div
-                                key={index}
-                                className="flex items-start space-x-3 p-4 bg-white/70 dark:bg-gray-800/70 rounded-xl"
-                              >
-                                <div className="w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
-                                  {index + 1}
-                                </div>
-                                <p className="text-gray-700 dark:text-gray-300">
-                                  {application}
-                                </p>
-                              </div>
-                            ),
-                          )}
-                        </div>
-                      </CardContent>
-                    </Card>
-                  )}
-
-                {/* AI Summary */}
-                {chapterDetail.aiSummary && (
-                  <Card className="shadow-2xl border-0 bg-gradient-to-br from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20 rounded-3xl overflow-hidden">
-                    <CardContent className="p-8">
-                      <h3 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
-                        <Lightbulb className="w-5 h-5 mr-2 text-purple-500" />
-                        AI Summary
-                      </h3>
-                      <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                        {chapterDetail.aiSummary}
-                      </p>
-                    </CardContent>
-                  </Card>
-                )}
-
-                {/* Recommendations */}
-                {chapterDetail.recommendations &&
-                  chapterDetail.recommendations.length > 0 && (
-                    <Card className="shadow-2xl border-0 bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 rounded-3xl overflow-hidden">
-                      <CardContent className="p-8">
-                        <h3 className="font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
-                          <Star className="w-5 h-5 mr-2 text-blue-500" />
-                          Next Steps
-                        </h3>
-                        <div className="space-y-3">
-                          {chapterDetail.recommendations.map(
-                            (recommendation, index) => (
-                              <div
-                                key={index}
-                                className="flex items-start space-x-3 p-4 bg-white/70 dark:bg-gray-800/70 rounded-xl"
-                              >
-                                <Star className="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" />
-                                <p className="text-gray-700 dark:text-gray-300">
-                                  {recommendation}
-                                </p>
-                              </div>
-                            ),
-                          )}
-                        </div>
-                      </CardContent>
-                    </Card>
-                  )}
-              </>
             )}
           </div>
         </div>

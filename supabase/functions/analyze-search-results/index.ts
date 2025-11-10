@@ -32,20 +32,20 @@ interface AnalyzedResult {
 function generateRelevanceReason(
   result: SearchResult,
   query: string,
-  analysisLevel: string
+  analysisLevel: string,
 ): string {
   const queryWords = query.toLowerCase().split(/\s+/);
   const snippetLower = (result.snippet || "").toLowerCase();
 
   // Check which query terms appear in the snippet
-  const foundTerms = queryWords.filter(word => snippetLower.includes(word));
+  const foundTerms = queryWords.filter((word) => snippetLower.includes(word));
 
   // Generate tier-specific fallback text based on search type and analysis level
   let relevanceReason = "";
 
   if (analysisLevel === "premium") {
     if (foundTerms.length > 0) {
-      relevanceReason = `Found ${foundTerms.length} relevant term${foundTerms.length > 1 ? 's' : ''} ("${foundTerms.join('", "')}") in chapter content related to "${query}". This chapter provides relevant context and examples for deeper understanding.`;
+      relevanceReason = `Found ${foundTerms.length} relevant term${foundTerms.length > 1 ? "s" : ""} ("${foundTerms.join('", "')}") in chapter content related to "${query}". This chapter provides relevant context and examples for deeper understanding.`;
     } else {
       relevanceReason = `Chapter content aligns with search query "${query}". Contains comprehensive information and insights for research and learning.`;
     }
@@ -71,10 +71,14 @@ function generateRelevanceReason(
 function generateFallbackAnalyses(
   results: SearchResult[],
   query: string,
-  analysisLevel: string
+  analysisLevel: string,
 ): AnalyzedResult[] {
   return results.map((result) => {
-    const relevanceReason = generateRelevanceReason(result, query, analysisLevel);
+    const relevanceReason = generateRelevanceReason(
+      result,
+      query,
+      analysisLevel,
+    );
 
     let analysis = "";
     if (analysisLevel === "premium") {
@@ -105,15 +109,16 @@ function extractKeyTopicsFromSnippet(snippet: string, query: string): string[] {
   const topics = new Set<string>();
 
   // Add query terms themselves as topics
-  queryTerms.forEach(term => {
+  queryTerms.forEach((term) => {
     if (term.length > 3) {
       topics.add(term.charAt(0).toUpperCase() + term.slice(1));
     }
   });
 
   // Extract capitalized words as potential topics
-  const capitalizedWords = snippet.match(/\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+)?\b/g) || [];
-  capitalizedWords.slice(0, 3).forEach(word => {
+  const capitalizedWords =
+    snippet.match(/\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+)?\b/g) || [];
+  capitalizedWords.slice(0, 3).forEach((word) => {
     if (word.length > 4 && topics.size < 5) {
       topics.add(word);
     }
@@ -136,7 +141,7 @@ serve(async (req) => {
         {
           status: 400,
           headers: { "Content-Type": "application/json", ...corsHeaders },
-        }
+        },
       );
     }
 
@@ -147,7 +152,7 @@ serve(async (req) => {
         {
           status: 500,
           headers: { "Content-Type": "application/json", ...corsHeaders },
-        }
+        },
       );
     }
 
@@ -164,7 +169,7 @@ serve(async (req) => {
       query,
       analysisLevel,
       supabase,
-      grokApiKey
+      grokApiKey,
     );
 
     return new Response(
@@ -176,7 +181,7 @@ serve(async (req) => {
       {
         status: 200,
         headers: { "Content-Type": "application/json", ...corsHeaders },
-      }
+      },
     );
   } catch (error) {
     console.error("Analysis error:", error.message);
@@ -188,7 +193,7 @@ serve(async (req) => {
       {
         status: 500,
         headers: { "Content-Type": "application/json", ...corsHeaders },
-      }
+      },
     );
   }
 });
@@ -198,7 +203,7 @@ async function analyzeResults(
   query: string,
   analysisLevel: string,
   supabase: any,
-  grokApiKey: string
+  grokApiKey: string,
 ): Promise<AnalyzedResult[]> {
   // Check cache for existing analyses
   console.log(`📋 Checking cache for analyses...`);
@@ -245,7 +250,7 @@ async function analyzeResults(
 
   // Generate analyses for remaining results
   console.log(
-    `🧠 Generating analysis for ${resultsNeedingAnalysis.length} results...`
+    `🧠 Generating analysis for ${resultsNeedingAnalysis.length} results...`,
   );
 
   const systemPrompts = {
@@ -289,7 +294,7 @@ ${i + 1}. ID: ${r.id}
    Chapter: ${r.chapterTitle}
    Content: ${r.snippet}
    Current Score: ${r.relevanceScore}
-`
+`,
   )
   .join("\n")}
 
@@ -340,12 +345,26 @@ Return only valid JSON, no other text.`;
     try {
       newAnalyses = JSON.parse(content);
     } catch (parseError) {
-      console.error("⚠️ Failed to parse AI response, using fallback analysis:", parseError);
-      newAnalyses = generateFallbackAnalyses(resultsNeedingAnalysis, query, analysisLevel);
+      console.error(
+        "⚠️ Failed to parse AI response, using fallback analysis:",
+        parseError,
+      );
+      newAnalyses = generateFallbackAnalyses(
+        resultsNeedingAnalysis,
+        query,
+        analysisLevel,
+      );
     }
   } catch (grokError) {
-    console.error("⚠️ Grok API call failed, generating fallback analyses:", grokError instanceof Error ? grokError.message : String(grokError));
-    newAnalyses = generateFallbackAnalyses(resultsNeedingAnalysis, query, analysisLevel);
+    console.error(
+      "⚠️ Grok API call failed, generating fallback analyses:",
+      grokError instanceof Error ? grokError.message : String(grokError),
+    );
+    newAnalyses = generateFallbackAnalyses(
+      resultsNeedingAnalysis,
+      query,
+      analysisLevel,
+    );
   }
 
   // Cache the new analyses
@@ -365,7 +384,7 @@ Return only valid JSON, no other text.`;
 
       if (error) {
         console.warn(
-          `⚠️ Failed to cache analysis for chapter ${analysis.id}: ${error.message}`
+          `⚠️ Failed to cache analysis for chapter ${analysis.id}: ${error.message}`,
         );
       }
     }
@@ -391,7 +410,11 @@ Return only valid JSON, no other text.`;
     }
 
     // Generate a descriptive fallback for any missing analyses
-    const fallbackReason = generateRelevanceReason(result, query, analysisLevel);
+    const fallbackReason = generateRelevanceReason(
+      result,
+      query,
+      analysisLevel,
+    );
     return {
       id: result.id,
       analysis: `This chapter from "${result.bookTitle}" relates to your search for "${query}".`,
@@ -406,10 +429,6 @@ Return only valid JSON, no other text.`;
 
 function getMaxTokens(analysisLevel: string, resultCount: number): number {
   const baseTokens =
-    analysisLevel === "basic"
-      ? 100
-      : analysisLevel === "advanced"
-        ? 200
-        : 300;
+    analysisLevel === "basic" ? 100 : analysisLevel === "advanced" ? 200 : 300;
   return Math.min(baseTokens * resultCount + 100, 4000);
 }

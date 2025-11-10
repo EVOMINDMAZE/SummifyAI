@@ -307,47 +307,15 @@ export class TieredSearchService {
     const trimmedText = text.trim();
 
     try {
-      console.log("🧠 Generating embedding via Supabase edge function...");
+      console.log("🧠 Generating embedding via Netlify function...");
 
-      // Get current session for authentication
-      // Retry with delays to ensure session is fully initialized
-      let session = null;
-      for (let i = 0; i < 5; i++) {
-        const { data: { session: s } } = await supabase.auth.getSession();
-        if (s?.access_token) {
-          session = s;
-          console.log("✅ Session found on attempt", i + 1);
-          break;
-        }
-        if (i < 4) {
-          console.log(`⏳ Waiting for session (attempt ${i + 1}/5)...`);
-          await new Promise(res => setTimeout(res, 300));
-        }
-      }
-
-      // Edge functions require JWT - skip if not authenticated
-      if (!session?.access_token) {
-        console.warn(
-          "⚠️ Skipping embedding generation: User not authenticated after retries",
-        );
-        throw new Error("Authentication required for embedding generation");
-      }
-
-      // Prepare headers with auth
-      const headers: Record<string, string> = {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${session.access_token}`,
-      };
-
-      console.log("📡 Calling edge function via supabase.functions.invoke...");
-      const result = await this.invokeWithRetry(
-        "generate-embeddings",
+      const result = await this.invokeNetlifyFunction(
+        "generate-embeddings-v2",
         {
           text: trimmedText,
         },
         2,
         400,
-        headers,
       );
 
       if (!result?.success) {

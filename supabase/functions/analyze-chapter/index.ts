@@ -2,7 +2,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { corsHeaders } from "../_shared/cors.ts";
 
-const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
+const grokApiKey = Deno.env.get('GROK_API_KEY');
 const supabaseUrl = Deno.env.get('SUPABASE_URL');
 const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
 
@@ -30,8 +30,8 @@ serve(async (req) => {
   }
 
   try {
-    if (!openAIApiKey) {
-      throw new Error('OPENAI_API_KEY is not configured');
+    if (!grokApiKey) {
+      throw new Error('GROK_API_KEY is not configured');
     }
 
     if (!supabaseUrl || !supabaseServiceKey) {
@@ -77,15 +77,15 @@ Guidelines:
 Be specific in your "whyRelevant" explanation. Mention actual concepts, frameworks, or methodologies from the chapter that relate to the query.
 `;
 
-    // Call OpenAI API for analysis
-    const openAIResponse = await fetch('https://api.openai.com/v1/chat/completions', {
+    // Call Grok API for analysis
+    const grokResponse = await fetch('https://api.grok.im/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${openAIApiKey}`,
+        'Authorization': `Bearer ${grokApiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-3.5-turbo',
+        model: 'grok-4-fast-reasoning',
         messages: [
           {
             role: 'system',
@@ -101,14 +101,14 @@ Be specific in your "whyRelevant" explanation. Mention actual concepts, framewor
       }),
     });
 
-    if (!openAIResponse.ok) {
-      const errorText = await openAIResponse.text();
-      console.error('OpenAI API error:', errorText);
-      throw new Error(`OpenAI API error: ${openAIResponse.status}`);
+    if (!grokResponse.ok) {
+      const errorText = await grokResponse.text();
+      console.error('Grok API error:', errorText);
+      throw new Error(`Grok API error: ${grokResponse.status}`);
     }
 
-    const openAIResult = await openAIResponse.json();
-    const analysisText = openAIResult.choices[0]?.message?.content;
+    const grokResult = await grokResponse.json();
+    const analysisText = grokResult.choices[0]?.message?.content;
 
     if (!analysisText) {
       throw new Error('No analysis returned from OpenAI');
@@ -128,7 +128,7 @@ Be specific in your "whyRelevant" explanation. Mention actual concepts, framewor
         confidence: Math.min(100, Math.max(0, parsedAnalysis.confidence || 50))
       };
     } catch (parseError) {
-      console.error('Failed to parse OpenAI response as JSON:', parseError);
+      console.error('Failed to parse Grok response as JSON:', parseError);
       // Fallback analysis if JSON parsing fails
       analysis = {
         chapterId,

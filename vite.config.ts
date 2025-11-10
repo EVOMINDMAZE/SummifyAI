@@ -39,6 +39,9 @@ export default defineConfig(({ mode }) => {
       "import.meta.env.VITE_OPENAI_MODEL": JSON.stringify(
         env.VITE_OPENAI_MODEL,
       ),
+      "import.meta.env.VITE_GROK_API_KEY": JSON.stringify(
+        env.VITE_GROK_API_KEY,
+      ),
     },
   };
 });

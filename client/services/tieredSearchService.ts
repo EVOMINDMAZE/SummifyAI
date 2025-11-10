@@ -324,9 +324,15 @@ export class TieredSearchService {
       }
 
       console.log("📡 Calling edge function via supabase.functions.invoke...");
-      const result = await this.invokeWithRetry("generate-embeddings", {
-        text: trimmedText,
-      }, 2, 400, headers);
+      const result = await this.invokeWithRetry(
+        "generate-embeddings",
+        {
+          text: trimmedText,
+        },
+        2,
+        400,
+        headers,
+      );
 
       if (!result?.success) {
         throw new Error(result?.error || "Embedding generation failed");
@@ -544,11 +550,17 @@ export class TieredSearchService {
       console.log(
         "📡 Calling analysis edge function via supabase.functions.invoke...",
       );
-      const data = await this.invokeWithRetry("analyze-search-results", {
-        results: resultsToAnalyze,
-        query,
-        analysisLevel,
-      }, 2, 400, headers);
+      const data = await this.invokeWithRetry(
+        "analyze-search-results",
+        {
+          results: resultsToAnalyze,
+          query,
+          analysisLevel,
+        },
+        2,
+        400,
+        headers,
+      );
 
       const { analyzedResults } = data || {};
 

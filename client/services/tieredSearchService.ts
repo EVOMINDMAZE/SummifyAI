@@ -618,56 +618,51 @@ export class TieredSearchService {
       const errorMessage =
         error instanceof Error ? error.message : String(error);
       console.warn(
-        "⚠�� AI analysis error (continuing without analysis):",
+        "⚠️ AI analysis error (continuing without analysis):",
         errorMessage,
       );
       return results; // Return results without AI analysis on error
     }
   }
 
-  private async invokeWithRetry<T = any>(
-    name: string,
+  private async invokeNetlifyFunction<T = any>(
+    functionName: string,
     body: any,
     attempts = 2,
     delayMs = 400,
-    headers?: Record<string, string>,
   ): Promise<T> {
+    // Use Netlify functions (no JWT issues, always works)
+    const netlifyFunctionUrl = `/.netlify/functions/${functionName}`;
+
     for (let i = 0; i < attempts; i++) {
       try {
-        console.log(`📞 Invoking ${name} (attempt ${i + 1}/${attempts})...`);
-        const { data, error } = await supabase.functions.invoke(name, {
-          body,
-          headers,
+        console.log(`📞 Invoking Netlify function ${functionName} (attempt ${i + 1}/${attempts})...`);
+        const response = await fetch(netlifyFunctionUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(body),
         });
-        if (error) {
-          console.error(`❌ Function ${name} error:`, error);
-          throw error;
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
-        console.log(`✅ Function ${name} succeeded`);
+
+        const data = await response.json();
+        console.log(`✅ Netlify function ${functionName} succeeded`);
         return data as T;
       } catch (err: any) {
         const msg = err?.message || String(err);
-        const fullError = JSON.stringify(err, null, 2);
-        console.warn(`⚠️ Function ${name} attempt ${i + 1} failed:`, msg);
-        console.warn(`Full error details:`, fullError);
-        // If the error indicates that the request couldn't be sent to the Edge Function (network/authorization issue),
-        // return a graceful failure object so callers can fallback instead of throwing an exception that bubbles up to the UI.
-        if (
-          msg.includes("Failed to send a request to the Edge Function") ||
-          err?.name === "FunctionsFetchError"
-        ) {
-          console.warn(
-            `⚠️ Detected FunctionsFetchError for ${name}, returning graceful failure object.`,
-          );
-          return { success: false, error: msg } as unknown as T;
-        }
+        console.warn(`⚠️ Function ${functionName} attempt ${i + 1} failed:`, msg);
+
         if (i === attempts - 1) {
-          throw new Error(`Failed to invoke ${name}: ${msg}`);
+          throw new Error(`Failed to invoke ${functionName}: ${msg}`);
         }
         await new Promise((res) => setTimeout(res, delayMs * (i + 1)));
       }
     }
-    throw new Error(`Failed to call ${name}`);
+    throw new Error(`Failed to call ${functionName}`);
   }
 
   private extractSnippet(text: string, query: string): string {

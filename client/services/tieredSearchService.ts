@@ -326,7 +326,7 @@ export class TieredSearchService {
       console.log("📡 Calling edge function via supabase.functions.invoke...");
       const result = await this.invokeWithRetry("generate-embeddings", {
         text: trimmedText,
-      });
+      }, 2, 400, headers);
 
       if (!result?.success) {
         throw new Error(result?.error || "Embedding generation failed");
@@ -586,10 +586,14 @@ export class TieredSearchService {
     body: any,
     attempts = 2,
     delayMs = 400,
+    headers?: Record<string, string>,
   ): Promise<T> {
     for (let i = 0; i < attempts; i++) {
       try {
-        const { data, error } = await supabase.functions.invoke(name, { body });
+        const { data, error } = await supabase.functions.invoke(name, {
+          body,
+          headers,
+        });
         if (error) throw error;
         return data as T;
       } catch (err: any) {

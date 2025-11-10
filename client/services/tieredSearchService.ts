@@ -590,17 +590,25 @@ export class TieredSearchService {
   ): Promise<T> {
     for (let i = 0; i < attempts; i++) {
       try {
+        console.log(`📞 Invoking ${name} (attempt ${i + 1}/${attempts})...`);
         const { data, error } = await supabase.functions.invoke(name, {
           body,
           headers,
         });
-        if (error) throw error;
+        if (error) {
+          console.error(`❌ Function ${name} error:`, error);
+          throw error;
+        }
+        console.log(`✅ Function ${name} succeeded`);
         return data as T;
       } catch (err: any) {
         const msg = err?.message || String(err);
+        const fullError = JSON.stringify(err, null, 2);
         console.warn(`⚠️ Function ${name} attempt ${i + 1} failed:`, msg);
-        if (i === attempts - 1)
-          throw new Error(`Failed to send a request to the Edge Function`);
+        console.warn(`Full error details:`, fullError);
+        if (i === attempts - 1) {
+          throw new Error(`Failed to invoke ${name}: ${msg}`);
+        }
         await new Promise((res) => setTimeout(res, delayMs * (i + 1)));
       }
     }

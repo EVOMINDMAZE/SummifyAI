@@ -90,9 +90,9 @@ export default function ChapterDetail() {
         id: chapter.id,
         title: chapter.chapterTitle,
         snippet: chapter.snippet,
-        fullText: chapter.chapter_text,
+        fullText: chapter.chapter_text || chapter.fullText,
         relevanceScore: chapter.relevanceScore,
-        whyRelevant: chapter.whyRelevant,
+        whyRelevant: chapter.whyRelevant || `This chapter is relevant to your search for "${state.query}".`,
         keyTopics: chapter.keyTopics || [],
         aiSummary: chapter.aiAnalysis,
       });
@@ -106,9 +106,6 @@ export default function ChapterDetail() {
         amazonLink: `https://amazon.com/s?k=${encodeURIComponent(chapter.bookTitle)}&tag=summifyai-20`,
       });
       setIsLoading(false);
-
-      // Enrich the chapter with additional AI content if needed
-      enrichChapterContent(chapter, state.query);
     }
     // Handle old format (bookGroup)
     else if (state?.bookGroup && state?.query) {

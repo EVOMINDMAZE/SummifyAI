@@ -108,26 +108,42 @@ function generateFallbackAnalyses(
 function extractKeyTopicsFromSnippet(snippet: string, query: string): string[] {
   if (!snippet) return [];
 
-  const queryTerms = query.toLowerCase().split(/\s+/);
   const topics = new Set<string>();
+  const queryTerms = query.toLowerCase().split(/\s+/).filter(t => t.length > 2);
 
-  // Add query terms themselves as topics
+  // 1. Add relevant query terms as primary topics
+  const snippetLower = snippet.toLowerCase();
   queryTerms.forEach((term) => {
-    if (term.length > 3) {
+    if (snippetLower.includes(term) && term.length > 3) {
       topics.add(term.charAt(0).toUpperCase() + term.slice(1));
     }
   });
 
-  // Extract capitalized words as potential topics
+  // 2. Extract noun phrases and capitalized terms
   const capitalizedWords =
-    snippet.match(/\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+)?\b/g) || [];
-  capitalizedWords.slice(0, 3).forEach((word) => {
-    if (word.length > 4 && topics.size < 5) {
-      topics.add(word);
+    snippet.match(/\b[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*/g) || [];
+
+  capitalizedWords.forEach((word) => {
+    const cleanWord = word.trim();
+    // Only add meaningful topics (longer than 4 chars, not generic)
+    if (
+      cleanWord.length > 4 &&
+      !["The", "This", "That", "From", "With"].includes(cleanWord) &&
+      topics.size < 7
+    ) {
+      topics.add(cleanWord);
     }
   });
 
-  return Array.from(topics).slice(0, 5);
+  // 3. Extract common noun phrases related to the query
+  const nounPhrases = snippet.match(/\b(?:the\s+)?[A-Z][a-z]+(?:\s+(?:of|for|in|and)\s+[A-Z][a-z]+)*/gi) || [];
+  nounPhrases.slice(0, 2).forEach((phrase) => {
+    if (topics.size < 7 && phrase.length > 5) {
+      topics.add(phrase.trim());
+    }
+  });
+
+  return Array.from(topics).slice(0, 7);
 }
 
 serve(async (req) => {

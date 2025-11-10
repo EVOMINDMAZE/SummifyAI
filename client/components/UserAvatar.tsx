@@ -46,11 +46,15 @@ export default function UserAvatar({
     const firstName = user.firstName?.trim();
     const lastName = user.lastName?.trim();
 
+    // Prefer full name if available
     if (firstName && lastName) {
       return `${firstName} ${lastName}`;
     } else if (firstName) {
       return firstName;
+    } else if (lastName) {
+      return lastName;
     } else if (user.email) {
+      // Only use email as last resort
       return user.email.split("@")[0];
     }
 

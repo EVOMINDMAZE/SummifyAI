@@ -155,8 +155,24 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
           const fullName =
             supabaseUser.user_metadata?.full_name || supabaseUser.email || "";
-          const [firstName, ...lastNameParts] = fullName.split(" ");
-          const lastName = lastNameParts.join(" ");
+          const nameParts = fullName.trim().split(/\s+/);
+
+          // If 3+ parts, treat last part as last name, rest as first name
+          // If 2 parts, split normally
+          // If 1 part, use as first name
+          let firstName = "";
+          let lastName = "";
+
+          if (nameParts.length >= 3) {
+            firstName = nameParts.slice(0, -1).join(" ");
+            lastName = nameParts[nameParts.length - 1];
+          } else if (nameParts.length === 2) {
+            firstName = nameParts[0];
+            lastName = nameParts[1];
+          } else if (nameParts.length === 1) {
+            firstName = nameParts[0];
+            lastName = "";
+          }
 
           const { error: createError } = await supabase
             .from("profiles")

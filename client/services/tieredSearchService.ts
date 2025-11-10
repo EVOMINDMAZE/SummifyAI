@@ -396,7 +396,7 @@ export class TieredSearchService {
       const candidateIds = candidateResults.map((r) => r.id);
 
       if (candidateIds.length === 0) {
-        console.log("⚠️ No candidates for chapter embeddings search");
+        console.log("��️ No candidates for chapter embeddings search");
         return [];
       }
 
@@ -431,7 +431,7 @@ export class TieredSearchService {
           keyTopics: this.extractTopicsFromText(row.chapter_text || ""),
         })) || [];
 
-      console.log(`✅ Chapter search returned ${results.length} results`);
+      console.log(`�� Chapter search returned ${results.length} results`);
       return results;
     } catch (error) {
       const errorMessage =
@@ -514,44 +514,11 @@ export class TieredSearchService {
 
     try {
       console.log(
-        `🤖 Analyzing ${resultsToAnalyze.length} results with ${analysisLevel} level via Supabase...`,
+        `🤖 Analyzing ${resultsToAnalyze.length} results with ${analysisLevel} level via Netlify...`,
       );
 
-      // Get current session for authentication
-      // Retry with delays to ensure session is fully initialized
-      let session = null;
-      for (let i = 0; i < 5; i++) {
-        const { data: { session: s } } = await supabase.auth.getSession();
-        if (s?.access_token) {
-          session = s;
-          console.log("✅ Session found on attempt", i + 1);
-          break;
-        }
-        if (i < 4) {
-          console.log(`⏳ Waiting for session (attempt ${i + 1}/5)...`);
-          await new Promise(res => setTimeout(res, 300));
-        }
-      }
-
-      // Edge functions require JWT - skip if not authenticated
-      if (!session?.access_token) {
-        console.warn(
-          "⚠️ Skipping AI analysis: User not authenticated after retries. Using fallback analysis.",
-        );
-        throw new Error("Authentication required for AI analysis");
-      }
-
-      // Prepare headers with auth
-      const headers: Record<string, string> = {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${session.access_token}`,
-      };
-
-      console.log(
-        "📡 Calling analysis edge function via supabase.functions.invoke...",
-      );
-      const data = await this.invokeWithRetry(
-        "analyze-search-results",
+      const data = await this.invokeNetlifyFunction(
+        "analyze-search-results-v2",
         {
           results: resultsToAnalyze,
           query,
@@ -559,7 +526,6 @@ export class TieredSearchService {
         },
         2,
         400,
-        headers,
       );
 
       const { analyzedResults } = data || {};

@@ -300,7 +300,7 @@ Return only valid JSON, no other text.`;
   let newAnalyses: AnalyzedResult[] = [];
 
   try {
-    const response = await fetch("https://api.x.ai/v1/chat/completions", {
+    const response = await fetch("https://api.grok.im/v1/chat/completions", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${grokApiKey}`,

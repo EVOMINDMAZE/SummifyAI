@@ -129,13 +129,7 @@ export default function ChapterDetail() {
         });
         setIsLoading(false);
 
-        // Enrich the chapter with additional AI content if needed
-        if (
-          !chapter.coreLeadershipPrinciples ||
-          chapter.coreLeadershipPrinciples.length === 0
-        ) {
-          enrichChapterContent(chapter, state.query);
-        }
+        // Note: AI enrichment is already handled by the tieredSearchService on search results
       } else {
         console.error("Chapter not found in navigation state");
         setIsLoading(false);

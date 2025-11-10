@@ -545,10 +545,23 @@ export default function ChapterDetail() {
                   Chapter Overview
                 </h3>
                 <div className="prose prose-lg dark:prose-invert max-w-none">
-                  <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                    {chapterDetail.fullText || chapterDetail.snippet}
+                  <p className="text-gray-700 dark:text-gray-300 leading-relaxed line-clamp-6">
+                    {chapterDetail.aiSummary || chapterDetail.snippet || "Chapter content summary will appear here..."}
                   </p>
                 </div>
+                {(chapterDetail.fullText && chapterDetail.fullText.length > 500) && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="mt-4 text-xs"
+                    onClick={() => {
+                      const element = document.getElementById("full-chapter-content");
+                      element?.scrollIntoView({ behavior: "smooth" });
+                    }}
+                  >
+                    Read Full Chapter
+                  </Button>
+                )}
               </CardContent>
             </Card>
 

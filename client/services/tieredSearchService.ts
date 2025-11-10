@@ -565,8 +565,9 @@ export class TieredSearchService {
     attempts = 2,
     delayMs = 400,
   ): Promise<T> {
-    // Use Netlify functions (no JWT issues, always works)
-    const netlifyFunctionUrl = `/.netlify/functions/${functionName}`;
+    // Use /api/ prefix to leverage netlify.toml redirect rule
+    // /api/* redirects to /.netlify/functions/:splat (works locally and in production)
+    const netlifyFunctionUrl = `/api/${functionName}`;
 
     for (let i = 0; i < attempts; i++) {
       try {

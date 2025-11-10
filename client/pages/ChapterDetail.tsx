@@ -73,7 +73,6 @@ export default function ChapterDetail() {
   );
   const [bookDetail, setBookDetail] = useState<BookDetail | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isEnriching, setIsEnriching] = useState(false);
   const [query, setQuery] = useState<string>("");
 
   // Extract data from navigation state

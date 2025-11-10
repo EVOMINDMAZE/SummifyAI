@@ -554,8 +554,9 @@ export class TieredSearchService {
 
       console.log(`✅ Analysis complete`);
 
-      return results.map((result, index) => {
-        const analyzedResult = analyzedResults[index];
+      return results.map((result) => {
+        // Match analyzedResult by ID, not by index (since only first 10 are analyzed)
+        const analyzedResult = analyzedResults?.find((a) => a.id === result.id);
         const whyRelevant =
           analyzedResult?.relevanceReason ||
           this.generateFallbackWhyRelevant(result, userPlan);

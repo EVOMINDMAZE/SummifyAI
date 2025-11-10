@@ -310,25 +310,25 @@ export class TieredSearchService {
       console.log("🧠 Generating embedding via Supabase edge function...");
 
       // Get current session for authentication
-      // Use getSession() first, then getUser() as fallback for more reliability
-      let session = (await supabase.auth.getSession()).data.session;
-
-      if (!session?.access_token) {
-        // Fallback: getUser() can work even if getSession() hasn't restored yet
-        console.log("⚠️ getSession() returned no session, trying getUser()...");
-        const {
-          data: { user },
-        } = await supabase.auth.getUser();
-        if (user) {
-          // Re-fetch session now that user is confirmed
-          session = (await supabase.auth.getSession()).data.session;
+      // Retry with delays to ensure session is fully initialized
+      let session = null;
+      for (let i = 0; i < 5; i++) {
+        const { data: { session: s } } = await supabase.auth.getSession();
+        if (s?.access_token) {
+          session = s;
+          console.log("✅ Session found on attempt", i + 1);
+          break;
+        }
+        if (i < 4) {
+          console.log(`⏳ Waiting for session (attempt ${i + 1}/5)...`);
+          await new Promise(res => setTimeout(res, 300));
         }
       }
 
       // Edge functions require JWT - skip if not authenticated
       if (!session?.access_token) {
         console.warn(
-          "⚠️ Skipping embedding generation: User not authenticated (edge functions require JWT)",
+          "⚠️ Skipping embedding generation: User not authenticated after retries",
         );
         throw new Error("Authentication required for embedding generation");
       }

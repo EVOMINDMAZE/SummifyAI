@@ -1,7 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { corsHeaders } from "../_shared/cors.ts";
 
-const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
+const grokApiKey = Deno.env.get('GROK_API_KEY');
 
 interface TopicAnalysisRequest {
   topic: string;
@@ -41,7 +41,7 @@ serve(async (req) => {
       topic.toLowerCase().includes(broad) && topic.split(' ').length <= 2
     );
 
-    if (!isBroadTopic || !openAIApiKey) {
+    if (!isBroadTopic || !grokApiKey) {
       // Return immediately for specific topics or when AI is not available
       return new Response(
         JSON.stringify({
@@ -86,14 +86,14 @@ Guidelines:
 `;
 
     try {
-      const openAIResponse = await fetch('https://api.openai.com/v1/chat/completions', {
+      const grokResponse = await fetch('https://api.grok.im/v1/chat/completions', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${openAIApiKey}`,
+          'Authorization': `Bearer ${grokApiKey}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          model: 'gpt-3.5-turbo',
+          model: 'grok-4-fast-reasoning',
           messages: [
             {
               role: 'system',
@@ -109,12 +109,12 @@ Guidelines:
         }),
       });
 
-      if (!openAIResponse.ok) {
-        throw new Error(`OpenAI API error: ${openAIResponse.status}`);
+      if (!grokResponse.ok) {
+        throw new Error(`Grok API error: ${grokResponse.status}`);
       }
 
-      const openAIResult = await openAIResponse.json();
-      const analysisText = openAIResult.choices[0]?.message?.content;
+      const grokResult = await grokResponse.json();
+      const analysisText = grokResult.choices[0]?.message?.content;
 
       if (analysisText) {
         const analysis = JSON.parse(analysisText);

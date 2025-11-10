@@ -316,7 +316,9 @@ export class TieredSearchService {
       if (!session?.access_token) {
         // Fallback: getUser() can work even if getSession() hasn't restored yet
         console.log("⚠️ getSession() returned no session, trying getUser()...");
-        const { data: { user } } = await supabase.auth.getUser();
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
         if (user) {
           // Re-fetch session now that user is confirmed
           session = (await supabase.auth.getSession()).data.session;
@@ -554,7 +556,9 @@ export class TieredSearchService {
       if (!session?.access_token) {
         // Fallback: getUser() can work even if getSession() hasn't restored yet
         console.log("⚠️ getSession() returned no session, trying getUser()...");
-        const { data: { user } } = await supabase.auth.getUser();
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
         if (user) {
           // Re-fetch session now that user is confirmed
           session = (await supabase.auth.getSession()).data.session;
@@ -648,8 +652,13 @@ export class TieredSearchService {
         console.warn(`Full error details:`, fullError);
         // If the error indicates that the request couldn't be sent to the Edge Function (network/authorization issue),
         // return a graceful failure object so callers can fallback instead of throwing an exception that bubbles up to the UI.
-        if (msg.includes("Failed to send a request to the Edge Function") || err?.name === "FunctionsFetchError") {
-          console.warn(`⚠️ Detected FunctionsFetchError for ${name}, returning graceful failure object.`);
+        if (
+          msg.includes("Failed to send a request to the Edge Function") ||
+          err?.name === "FunctionsFetchError"
+        ) {
+          console.warn(
+            `⚠️ Detected FunctionsFetchError for ${name}, returning graceful failure object.`,
+          );
           return { success: false, error: msg } as unknown as T;
         }
         if (i === attempts - 1) {

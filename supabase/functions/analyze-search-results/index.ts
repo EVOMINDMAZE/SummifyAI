@@ -109,7 +109,10 @@ function extractKeyTopicsFromSnippet(snippet: string, query: string): string[] {
   if (!snippet) return [];
 
   const topics = new Set<string>();
-  const queryTerms = query.toLowerCase().split(/\s+/).filter(t => t.length > 2);
+  const queryTerms = query
+    .toLowerCase()
+    .split(/\s+/)
+    .filter((t) => t.length > 2);
 
   // 1. Add relevant query terms as primary topics
   const snippetLower = snippet.toLowerCase();
@@ -136,7 +139,10 @@ function extractKeyTopicsFromSnippet(snippet: string, query: string): string[] {
   });
 
   // 3. Extract common noun phrases related to the query
-  const nounPhrases = snippet.match(/\b(?:the\s+)?[A-Z][a-z]+(?:\s+(?:of|for|in|and)\s+[A-Z][a-z]+)*/gi) || [];
+  const nounPhrases =
+    snippet.match(
+      /\b(?:the\s+)?[A-Z][a-z]+(?:\s+(?:of|for|in|and)\s+[A-Z][a-z]+)*/gi,
+    ) || [];
   nounPhrases.slice(0, 2).forEach((phrase) => {
     if (topics.size < 7 && phrase.length > 5) {
       topics.add(phrase.trim());

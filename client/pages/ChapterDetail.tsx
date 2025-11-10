@@ -91,7 +91,9 @@ export default function ChapterDetail() {
         snippet: chapter.snippet,
         fullText: chapter.chapter_text || chapter.fullText,
         relevanceScore: chapter.relevanceScore,
-        whyRelevant: chapter.whyRelevant || `This chapter is relevant to your search for "${state.query}".`,
+        whyRelevant:
+          chapter.whyRelevant ||
+          `This chapter is relevant to your search for "${state.query}".`,
         keyTopics: chapter.keyTopics || [],
         aiSummary: chapter.aiAnalysis,
       });
@@ -183,7 +185,8 @@ export default function ChapterDetail() {
       setChapterDetail({
         id: chapter.id,
         title: chapter.chapter_title,
-        snippet: chapter.chapter_summary || chapter.chapter_text?.substring(0, 200),
+        snippet:
+          chapter.chapter_summary || chapter.chapter_text?.substring(0, 200),
         fullText: chapter.chapter_text,
         relevanceScore: 0.5, // Default relevance since we're not searching
         whyRelevant: "Retrieved from database",
@@ -207,7 +210,6 @@ export default function ChapterDetail() {
       setIsLoading(false);
     }
   };
-
 
   const handleBackToResults = () => {
     const hasSearchResults = sessionStorage.getItem("lastSearchResults");
@@ -238,10 +240,18 @@ export default function ChapterDetail() {
           return;
         } catch (shareError: any) {
           // Handle NotAllowedError or other share failures
-          if (shareError.name === "NotAllowedError" || shareError.name === "AbortError") {
-            console.warn("Share was cancelled or denied, falling back to clipboard");
+          if (
+            shareError.name === "NotAllowedError" ||
+            shareError.name === "AbortError"
+          ) {
+            console.warn(
+              "Share was cancelled or denied, falling back to clipboard",
+            );
           } else {
-            console.warn("Share failed, falling back to clipboard:", shareError);
+            console.warn(
+              "Share failed, falling back to clipboard:",
+              shareError,
+            );
           }
         }
       }
@@ -355,7 +365,10 @@ export default function ChapterDetail() {
                       </div>
 
                       <img
-                        src={bookDetail.cover || `https://via.placeholder.com/200x300/667eea/FFFFFF?text=${encodeURIComponent(bookDetail.title.split(" ").slice(0, 3).join(" "))}`}
+                        src={
+                          bookDetail.cover ||
+                          `https://via.placeholder.com/200x300/667eea/FFFFFF?text=${encodeURIComponent(bookDetail.title.split(" ").slice(0, 3).join(" "))}`
+                        }
                         alt={bookDetail.title}
                         className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-110 drop-shadow-md"
                         onError={(e) => {
@@ -502,22 +515,27 @@ export default function ChapterDetail() {
                 </h3>
                 <div className="prose prose-lg dark:prose-invert max-w-none">
                   <p className="text-gray-700 dark:text-gray-300 leading-relaxed line-clamp-6">
-                    {chapterDetail.aiSummary || chapterDetail.snippet || "Chapter content summary will appear here..."}
+                    {chapterDetail.aiSummary ||
+                      chapterDetail.snippet ||
+                      "Chapter content summary will appear here..."}
                   </p>
                 </div>
-                {(chapterDetail.fullText && chapterDetail.fullText.length > 500) && (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="mt-4 text-xs"
-                    onClick={() => {
-                      const element = document.getElementById("full-chapter-content");
-                      element?.scrollIntoView({ behavior: "smooth" });
-                    }}
-                  >
-                    Read Full Chapter
-                  </Button>
-                )}
+                {chapterDetail.fullText &&
+                  chapterDetail.fullText.length > 500 && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="mt-4 text-xs"
+                      onClick={() => {
+                        const element = document.getElementById(
+                          "full-chapter-content",
+                        );
+                        element?.scrollIntoView({ behavior: "smooth" });
+                      }}
+                    >
+                      Read Full Chapter
+                    </Button>
+                  )}
               </CardContent>
             </Card>
 

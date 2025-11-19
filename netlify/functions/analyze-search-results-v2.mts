@@ -88,22 +88,19 @@ export const handler: Handler = async (event) => {
       )
       .join("\n")}`;
 
-    const grokResponse = await fetch(
-      "https://api.x.ai/v1/chat/completions",
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${grokApiKey}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          model: "grok-4-fast-reasoning",
-          messages: [{ role: "user", content: prompt }],
-          max_tokens: Math.min(200 + results.length * 50, 2000),
-          temperature: 0.3,
-        }),
+    const grokResponse = await fetch("https://api.x.ai/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${grokApiKey}`,
+        "Content-Type": "application/json",
       },
-    );
+      body: JSON.stringify({
+        model: "grok-4-fast-reasoning",
+        messages: [{ role: "user", content: prompt }],
+        max_tokens: Math.min(200 + results.length * 50, 2000),
+        temperature: 0.3,
+      }),
+    });
 
     if (!grokResponse.ok) {
       console.error(

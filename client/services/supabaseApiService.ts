@@ -104,7 +104,9 @@ export async function searchDatabase(query: string): Promise<SearchResults> {
     console.error("❌ Search failed:", error);
 
     if (isEdgeFunctionFetchError(error)) {
-      console.warn("⚠️ Edge Function unreachable, falling back to tiered search");
+      console.warn(
+        "⚠️ Edge Function unreachable, falling back to tiered search",
+      );
       return performTieredSearchFallback(query, startTime);
     }
 
@@ -309,8 +311,10 @@ function mapTieredResponseToSearchResults(
   const books: BookGroup[] = Array.from(grouped.entries()).map(
     ([bookTitle, chapters], index) => {
       const averageScore =
-        chapters.reduce((sum, chapter) => sum + (chapter.relevanceScore || 0), 0) /
-          (chapters.length || 1);
+        chapters.reduce(
+          (sum, chapter) => sum + (chapter.relevanceScore || 0),
+          0,
+        ) / (chapters.length || 1);
 
       const topChapters: EnrichedChapter[] = chapters.map((chapter) => {
         const relevance = Math.round((chapter.relevanceScore || 0) * 100);
@@ -367,7 +371,7 @@ function isEdgeFunctionFetchError(error: unknown): boolean {
   return (
     normalized.includes("failed to send a request to the edge function") ||
     normalized.includes("functionsfetcherror") ||
-    normalized.includes("edge function") && normalized.includes("network")
+    (normalized.includes("edge function") && normalized.includes("network"))
   );
 }
 

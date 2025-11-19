@@ -357,11 +357,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             console.log("✅ User profile set successfully");
           } else {
             // Set basic user data even if profile fetch fails
+            // Try to get name from metadata first
+            const fullName = session.user.user_metadata?.full_name || "";
+            const { firstName, lastName } = parseUserNames(fullName);
+
             const basicUser: User = {
               id: session.user.id,
               email: session.user.email || "",
-              firstName: "",
-              lastName: "",
+              firstName: firstName,
+              lastName: lastName,
               searchCount: 0,
               monthlySearchLimit: 3,
               searchCountResetDate: new Date().toISOString().split("T")[0],

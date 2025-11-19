@@ -6,10 +6,6 @@ import { handler as analyzeSearchResults } from '../netlify/functions/analyze-se
 
 dotenv.config();
 
-console.log('[LocalServer] Environment Check:');
-console.log('OPENAI_API_KEY:', process.env.OPENAI_API_KEY ? 'Set (' + process.env.OPENAI_API_KEY.substring(0, 3) + '... length ' + process.env.OPENAI_API_KEY.length + ')' : 'Not Set');
-console.log('GROK_API_KEY:', process.env.GROK_API_KEY ? 'Set (' + process.env.GROK_API_KEY.substring(0, 3) + '... length ' + process.env.GROK_API_KEY.length + ')' : 'Not Set');
-
 const app = express();
 app.use(cors());
 // Handle raw body for some functions if needed, but JSON is mostly used

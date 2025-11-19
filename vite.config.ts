@@ -12,6 +12,13 @@ export default defineConfig(({ mode }) => {
     server: {
       host: "::",
       port: 5173, // Standard Vite port
+      proxy: {
+        "/api": {
+          target: "http://localhost:9999",
+          changeOrigin: true,
+          secure: false,
+        },
+      },
     },
     build: {
       outDir: "dist",

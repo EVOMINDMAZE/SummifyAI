@@ -89,7 +89,7 @@ export const handler: Handler = async (event) => {
       .join("\n")}`;
 
     const grokResponse = await fetch(
-      "https://api.grok.im/v1/chat/completions",
+      "https://api.x.ai/v1/chat/completions",
       {
         method: "POST",
         headers: {

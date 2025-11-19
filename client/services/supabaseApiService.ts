@@ -1,5 +1,10 @@
 import { supabase } from "@/lib/supabase";
 import type { BookGroup, EnrichedChapter, SearchResults } from "@/lib/supabase";
+import { tieredSearchService } from "@/services/tieredSearchService";
+import type {
+  TieredSearchResponse,
+  SearchResult as TieredSearchResult,
+} from "@/services/tieredSearchService";
 
 // Real AI-powered search using existing search-books Edge Function
 export async function searchDatabase(query: string): Promise<SearchResults> {
@@ -97,6 +102,11 @@ export async function searchDatabase(query: string): Promise<SearchResults> {
     return transformSearchResults(searchResponse, query, startTime);
   } catch (error) {
     console.error("❌ Search failed:", error);
+
+    if (isEdgeFunctionFetchError(error)) {
+      console.warn("⚠️ Edge Function unreachable, falling back to tiered search");
+      return performTieredSearchFallback(query, startTime);
+    }
 
     // Try deep search as fallback
     if (!error.message.includes("deep search")) {
@@ -262,6 +272,103 @@ function transformSearchResults(
     books,
     processingTime: Date.now() - startTime,
   };
+}
+
+async function performTieredSearchFallback(
+  query: string,
+  startTime: number,
+): Promise<SearchResults> {
+  try {
+    const tieredResponse = await tieredSearchService.performSearch(
+      query,
+      "free",
+      0,
+    );
+    return mapTieredResponseToSearchResults(tieredResponse, query, startTime);
+  } catch (fallbackError) {
+    console.error("❌ Tiered search fallback failed:", fallbackError);
+    throw fallbackError;
+  }
+}
+
+function mapTieredResponseToSearchResults(
+  response: TieredSearchResponse,
+  query: string,
+  startTime: number,
+): SearchResults {
+  const grouped = new Map<string, TieredSearchResult[]>();
+
+  response.results.forEach((result) => {
+    const key = result.bookTitle || "Unknown Title";
+    if (!grouped.has(key)) {
+      grouped.set(key, []);
+    }
+    grouped.get(key)!.push(result);
+  });
+
+  const books: BookGroup[] = Array.from(grouped.entries()).map(
+    ([bookTitle, chapters], index) => {
+      const averageScore =
+        chapters.reduce((sum, chapter) => sum + (chapter.relevanceScore || 0), 0) /
+          (chapters.length || 1);
+
+      const topChapters: EnrichedChapter[] = chapters.map((chapter) => {
+        const relevance = Math.round((chapter.relevanceScore || 0) * 100);
+        return {
+          id: chapter.id,
+          title: chapter.chapterTitle,
+          snippet: chapter.summarySnippet || chapter.snippet || "",
+          relevanceScore: relevance,
+          whyRelevant:
+            chapter.whyRelevant ||
+            `This chapter contains concepts related to "${query}".`,
+          keyTopics: chapter.keyTopics || [],
+          coreLeadershipPrinciples: [],
+          practicalApplications: [],
+          aiExplanation: chapter.aiAnalysis || chapter.whyRelevant || "",
+        };
+      });
+
+      return {
+        id: `${bookTitle}-${index}`,
+        title: bookTitle,
+        author: "",
+        cover: `https://ui-avatars.com/api/?name=${encodeURIComponent(
+          bookTitle,
+        )}&background=0A0B1E&color=FFFD63`,
+        isbn: "",
+        averageRelevance: Math.round(averageScore * 100),
+        topChapters,
+      };
+    },
+  );
+
+  const totalChapters = books.reduce(
+    (sum, book) => sum + book.topChapters.length,
+    0,
+  );
+
+  return {
+    query,
+    searchType: "tiered_fallback",
+    totalBooks: books.length,
+    totalChapters,
+    books,
+    processingTime: Date.now() - startTime,
+  };
+}
+
+function isEdgeFunctionFetchError(error: unknown): boolean {
+  if (!(error instanceof Error)) {
+    return false;
+  }
+
+  const normalized = error.message.toLowerCase();
+  return (
+    normalized.includes("failed to send a request to the edge function") ||
+    normalized.includes("functionsfetcherror") ||
+    normalized.includes("edge function") && normalized.includes("network")
+  );
 }
 
 // Health check function
